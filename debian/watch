@@ -1,2 +1,2 @@
 version=3
-https://raw.github.com/IgnorantGuru/spacefm/master/packages/(.*)/spacefm-(.*).tar.xz debian uupdate
+https://github.com/IgnorantGuru/spacefm/tags .*/v(\d[\d\.]+)\.tar\.gz debian uupdate
