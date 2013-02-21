@@ -1,0 +1,24 @@
+Source: spacefm
+Section: utils
+Priority: optional
+Maintainer: Mateusz Łukasik <mati75@linuxmint.pl>
+Build-Depends: debhelper (>= 9), autotools-dev, 
+ libgtk2.0-dev (>= 2.24), libcairo2-dev, libpango1.0-dev, 
+ libx11-dev, intltool, pkg-config,  libglib2.0-dev, 
+ libstartup-notification0-dev, libdbus-1-dev, 
+ libgdk-pixbuf2.0-dev, libudev-dev, hicolor-icon-theme
+Standards-Version: 3.9.4
+Homepage: http://ignorantguru.github.com/spacefm/
+Vcs-Git: git://github.com/mati75/spacefm.git
+Vcs-Browser: https://github.com/mati75/spacefm.git
+
+Package: spacefm
+Architecture: any
+Depends: dbus, desktop-file-utils, bash, shared-mime-info, libgtk2.0-bin, 
+ ${misc:Depends}, ${shlibs:Depends}
+Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
+Suggests: udevil, pmount, eject, lsof, wget, ktsuss, gksu
+Conflicts: spacefm-hal
+Description: A multi-panel tabbed file manager with built-in VFS, udev-based
+ device manager, customizable menu system, and bash integration.
+
