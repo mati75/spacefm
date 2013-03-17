@@ -18,7 +18,14 @@ Depends: dbus, desktop-file-utils, bash, shared-mime-info, libgtk2.0-bin,
  ${misc:Depends}, ${shlibs:Depends}
 Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
 Suggests: udevil, pmount, eject, lsof, wget, ktsuss, gksu
-Conflicts: spacefm-hal
+Conflicts: spacefm-hal, spacefm-gtk3
 Description: A multi-panel tabbed file manager with built-in VFS, udev-based
  device manager, customizable menu system, and bash integration.
-
+ .
+ SpaceFM was developed from a fork of the legacy PCManFM file manager. When 
+ PCManFM reached version 0.5.2 (aka 'the legacy version'), the original author 
+ (Hon Jen Yee) abandoned it for a major rewrite which made later versions 
+ (the 0.9.x series) dependent on gvfs and other components. At about this same 
+ time, PCManFM-Mod was created as a minor fork of the legacy version which added 
+ features, addressed bugs, and kept the legacy version alive for those who 
+ prefered it for its light dependencies and added features.
