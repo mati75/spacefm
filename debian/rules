@@ -5,3 +5,8 @@
 
 override_dh_auto_configure:
 	dh_auto_configure -- --disable-pixmaps
+
+override_dh_installman:
+	cp debian/spacefm.1 debian/spacefm-auth.1
+	dh_installman debian/spacefm.1
+	dh_installman debian/spacefm-auth.1
