@@ -1,5 +1,5 @@
 #!/bin/sh
-# postrm script for pcmanfm-mod
+# postrm script for spacefm-gtk3
 #
 # see: dh_installdeb(1)
 

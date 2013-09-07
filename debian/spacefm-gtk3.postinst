@@ -1,5 +1,5 @@
 #!/bin/sh
-# postinst script for pcmanfm-mod
+# postinst script for spacefm-gtk3
 #
 # see: dh_installdeb(1)
 

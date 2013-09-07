@@ -34,9 +34,7 @@ override_dh_install:
 	dh_install --fail-missing
 
 override_dh_installman:
-	cp debian/spacefm.1 debian/spacefm-auth.1
-	dh_installman debian/spacefm.1
-	dh_installman debian/spacefm-auth.1
+	dh_installman
 
 override_dh_auto_clean:
 	rm -rf debian/build-gtk2 debian/build-gtk3
