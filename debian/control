@@ -38,7 +38,7 @@ Architecture: all
 Depends: ${misc:Depends}
 Replaces: spacefm (<< 0.8.7-1)
 Breaks: spacefm (<< 0.8.7-1), spacefm-gtk3 (<< 0.8.7-1)
-Recommends: spacefm-gtk3 | spacefm-gtk2
+Recommends: spacefm-gtk3 | spacefm
 Description: Multi-panel tabbed file manager - common files
  SpaceFM is tabbed file manager with built-in VFS, udev-based
  device manager, customizable menu system and bash integration.

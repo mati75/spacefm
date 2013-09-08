@@ -1,3 +1,11 @@
+spacefm (0.8.7-2) UNRELEASED; urgency=low
+
+  * debian/control:
+   + Replace spacefm-gtk2 with spacefm in recommends for spacefm-common 
+     binary package. (Closes: #722126)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Sep 2013 12:58:56 +0200
+
 spacefm (0.8.7-1) unstable; urgency=low
 
   * Initial release. (Closes: #691811)
