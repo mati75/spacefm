@@ -1,3 +1,10 @@
+spacefm (0.8.7-3) UNRELEASED; urgency=low
+
+  * debian/control:
+   + don't build on unsupported architectures.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 10 Sep 2013 15:17:14 +0200
+
 spacefm (0.8.7-2) unstable; urgency=low
 
   * debian/control:

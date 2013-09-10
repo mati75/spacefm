@@ -12,7 +12,7 @@ Vcs-Git: git://github.com/mati75/spacefm.git
 Vcs-Browser: https://github.com/mati75/spacefm.git
 
 Package: spacefm
-Architecture: linux-any
+Architecture: linux-any !mips !mipsel
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}), 
  dbus, desktop-file-utils, shared-mime-info, libgtk2.0-bin
 Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
@@ -47,7 +47,7 @@ Description: Multi-panel tabbed file manager - common files
  GTK+3 (spacefm-gtk3) versions.
 
 Package: spacefm-gtk3
-Architecture: linux-any
+Architecture: linux-any !mips !mipsel
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
  dbus, desktop-file-utils, shared-mime-info, libgtk-3-bin
 Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
