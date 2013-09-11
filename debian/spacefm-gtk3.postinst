@@ -22,8 +22,8 @@ case "$1" in
     configure)
         update-mime-database /usr/share/mime > /dev/null
         update-desktop-database -q
-        gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor
-        gtk-update-icon-cache -q -t -f /usr/share/icons/Faenza
+        gtk-update-icon-cache-3.0 -q -t -f /usr/share/icons/hicolor
+        gtk-update-icon-cache-3.0 -q -t -f /usr/share/icons/Faenza
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
