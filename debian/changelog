@@ -1,10 +1,9 @@
-spacefm (0.8.7-3) UNRELEASED; urgency=low
+spacefm (0.8.7-3) unstable; urgency=low
 
-  * debian/control:
-   + don't build on unsupported architectures.
-  * Update debian/spacefm-gtk3.postinst. (Closes: #722461)
+  * Update postinst and postrm scripts. (Closes: #722461)
+  * Add fix_linux-inotify-syscalls.h.patch for fix FTBFS on m68k, mips and hppa.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 10 Sep 2013 15:17:14 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 12 Sep 2013 11:32:52 +0200
 
 spacefm (0.8.7-2) unstable; urgency=low
 
