@@ -21,8 +21,10 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        if [ -x /usr/bin/update-mime-database ] && [ -x /usr/bin/update-desktop-database ]; then
         update-mime-database /usr/share/mime > /dev/null
         update-desktop-database -q
+        fi
     ;;
 
     *)
