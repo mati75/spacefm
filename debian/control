@@ -16,7 +16,7 @@ Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}), 
  dbus, desktop-file-utils, shared-mime-info, libgtk2.0-bin
 Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
-Suggests: udevil, pmount, eject, lsof, wget, ktsuss, gksu
+Suggests: udevil, eject, lsof, wget, ktsuss, gksu
 Replaces: spacefm-gtk3
 Conflicts: spacefm-hal, spacefm-gtk3
 Description: Multi-panel tabbed file manager - GTK2 version
@@ -51,7 +51,7 @@ Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
  dbus, desktop-file-utils, shared-mime-info, libgtk-3-bin
 Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
-Suggests: udevil, pmount, eject, lsof, wget, ktsuss, gksu
+Suggests: udevil, eject, lsof, wget, ktsuss, gksu
 Replaces: spacefm
 Conflicts: spacefm-hal, spacefm
 Description: Multi-panel tabbed file manager - GTK3 version  

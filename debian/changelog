@@ -1,16 +1,19 @@
 spacefm (0.8.7-3) unstable; urgency=low
 
   * Update postinst and postrm scripts. (Closes: #722461)
-  * Add fix_linux-inotify-syscalls.h.patch for fix FTBFS on m68k, mips and hppa.
+  * Update debian/rules: 
+    + fix FTBFS on m68k, mips and hppa.
+  * Update debian/control:
+    + remove pmount from suggests.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 12 Sep 2013 11:32:52 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 14 Sep 2013 16:14:07 +0200
 
 spacefm (0.8.7-2) unstable; urgency=low
 
   * debian/control:
-   + Replace spacefm-gtk2 with spacefm in recommends for spacefm-common 
+   + Replace spacefm-gtk2 with spacefm in recommends for spacefm-common
      binary package. (Closes: #722126)
-  * Add lintian override for spelling-error-in-binary in spacefm and 
+  * Add lintian override for spelling-error-in-binary in spacefm and
     spacefm-gtk3 packages.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Sep 2013 14:36:40 +0200
