@@ -1,4 +1,5 @@
 #!/usr/bin/make -f
+DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
 
 FLAVORS = gtk2 gtk3
 
@@ -7,6 +8,10 @@ CONFIGURE_FLAGS_gtk3 = --with-gtk3
 CONFIGURE_COMMON_FLAGS += --disable-pixmaps
 
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
+
+ifeq ($(DEB_BUILD_ARCH),mips mipsel)
+	CONFIGURE_COMMON_FLAGS += --disable-pixmaps --disable-inotify
+endif
 
 %:
 	dh $@ 
