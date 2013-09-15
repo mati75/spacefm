@@ -9,8 +9,14 @@ CONFIGURE_COMMON_FLAGS += --disable-pixmaps
 
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 
-ifeq ($(DEB_BUILD_ARCH),hppa mips mipsel)
-	CONFIGURE_COMMON_FLAGS += --disable-pixmaps --disable-inotify
+ifneq ($(DEB_BUILD_ARCH),hppa)
+	CONFIGURE_COMMON_FLAGS += --disable-inotify
+endif
+ifneq ($(DEB_BUILD_ARCH),mips)
+	CONFIGURE_COMMON_FLAGS += --disable-inotify
+endif
+ifneq ($(DEB_BUILD_ARCH),mipsel)
+	CONFIGURE_COMMON_FLAGS += --disable-inotify
 endif
 
 %:

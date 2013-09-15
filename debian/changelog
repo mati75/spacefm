@@ -1,7 +1,7 @@
 spacefm (0.8.7-3) unstable; urgency=low
 
   * Update postinst and postrm scripts. (Closes: #722461)
-  * Update debian/rules: 
+  * Update debian/rules:
     + fix FTBFS on m68k, mips and hppa.
   * Update debian/control:
     + remove pmount from suggests.
