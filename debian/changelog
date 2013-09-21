@@ -1,12 +1,12 @@
 spacefm (0.8.7-3) unstable; urgency=low
 
   * Update postinst and postrm scripts. (Closes: #722461)
-  * Update debian/rules:
+  * Add debian/patches/fix_included_inotify.patch:
     + fix FTBFS on m68k, mips and hppa.
   * Update debian/control:
     + remove pmount from suggests.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 14 Sep 2013 16:14:07 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 19 Sep 2013 12:54:22 +0200
 
 spacefm (0.8.7-2) unstable; urgency=low
 

@@ -1,0 +1,15 @@
+Description: Remove the definitions of inotify for fix FTBFS on m68k, mips and hppa.
+Author: Mateusz Łukasik <mati75@linuxmint.pl>
+
+--- a/src/vfs/vfs-file-monitor.h
++++ b/src/vfs/vfs-file-monitor.h
+@@ -27,8 +27,7 @@
+ 
+ #ifdef USE_INOTIFY
+ #include <unistd.h>
+-#include "linux-inotify.h"
+-#include "inotify-syscalls.h"
++#include <sys/inotify.h>
+ #else /* Use FAM|gamin */
+ #include <fam.h>
+ #endif
