@@ -1,6 +1,7 @@
 spacefm (0.8.7-3) unstable; urgency=low
 
-  * Update postinst and postrm scripts. (Closes: #722461)
+  * Update postinst and postrm scripts to fix an
+    install issue detected by piuparts. (Closes: #722461)
   * Add debian/patches/fix_included_inotify.patch:
     + fix FTBFS on m68k, mips and hppa.
   * Update debian/control:
