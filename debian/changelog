@@ -1,3 +1,14 @@
+spacefm (0.8.7-5) UNRELEASED; urgency=low
+
+  * *.install:
+    + move all doc and ui files to common package.
+  * debian/rules:
+    + Use xz to compress packages.
+  * Update postinst script to show message about
+    updating icons cache. 
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 10 Oct 2013 15:43:29 +0200
+
 spacefm (0.8.7-3) unstable; urgency=low
 
   * Update postinst and postrm scripts to fix an
