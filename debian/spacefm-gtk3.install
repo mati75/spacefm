@@ -1,4 +1,2 @@
 debian/tmp/gtk3/usr/bin/* /usr/bin
 debian/tmp/gtk3/usr/share/applications/* /usr/share/applications/
-debian/tmp/gtk3/usr/share/spacefm/ui/* /usr/share/spacefm/ui/
-debian/tmp/gtk3/usr/share/doc/* usr/share/doc/

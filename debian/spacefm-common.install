@@ -1,3 +1,5 @@
 debian/tmp/gtk2/usr/share/icons/* /usr/share/icons/
 debian/tmp/gtk2/usr/share/locale/* /usr/share/locale/
 debian/tmp/gtk2/usr/share/mime/* /usr/share/mime/
+debian/tmp/gtk2/usr/share/spacefm/ui/* /usr/share/spacefm/ui/
+debian/tmp/gtk2/usr/share/doc/* usr/share/doc/
