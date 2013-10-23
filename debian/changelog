@@ -3,7 +3,7 @@ spacefm (0.9.0-1) unstable; urgency=low
   * New upstream release:
     + remove debian/patches/fix_included_inotify.patch - include upstream,
     + repack upstream sources, remove distro directory.
-  * Instal all doc and ui files in spacefm-common package.
+  * Install all doc and ui files in spacefm-common package.
   * debian/rules:
     + Use xz to compress packages.
   * Update postinst script to show message about updating icons cache.
