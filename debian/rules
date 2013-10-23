@@ -31,11 +31,7 @@ override_dh_builddeb:
 
 override_dh_install:
 	find debian/tmp -name \*.la -delete
-	rm -rf debian/tmp/gtk3/usr/share/icons/
-	rm -rf debian/tmp/gtk3/usr/share/locale/
-	rm -rf debian/tmp/gtk3/usr/share/mime/
-	rm -rf debian/tmp/gtk3/usr/share/spacefm/ui/
-	rm -rf debian/tmp/gtk3/usr/share/doc/
+	sh debian/clean_gtk3.sh
 	dh_install --fail-missing
 
 override_dh_installman:
