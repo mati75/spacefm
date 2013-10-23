@@ -1,13 +1,14 @@
-spacefm (0.8.7-5) UNRELEASED; urgency=low
+spacefm (0.9.0-1) UNRELEASED; urgency=low
 
-  * *.install:
+  * New upstream release:
+    + remove debian/patches/fix_included_inotify.patch - include upstream,
+    + repack upstream sources, remove distro directory.
+  *.install:
     + move all doc and ui files to common package.
   * debian/rules:
     + Use xz to compress packages.
-  * Update postinst script to show message about
-    updating icons cache. 
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 10 Oct 2013 15:43:29 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 23 Oct 2013 07:47:33 +0200
 
 spacefm (0.8.7-3) unstable; urgency=low
 
