@@ -1,17 +1,14 @@
 spacefm (0.9.0-1) unstable; urgency=low
 
   * New upstream release:
-    + remove debian/patches/fix_included_inotify.patch, included upstream.
+    + remove debian/patches/fix_included_inotify.patch - include upstream,
     + repack upstream sources, remove distro directory.
-  * Install all doc and ui files into spacefm-common package.
+  * Install all doc and ui files in spacefm-common package.
   * debian/rules:
-    + use xz to compress packages.
-  * Update postinst script to show a message about updating icons cache.
-  * debian/rules:
-    + call dh with "--with autotools_dev" in debian/rules to fix
-      FTBFS on arm64. (Closes: #727508)
+    + Use xz to compress packages.
+  * Update postinst script to show message about updating icons cache.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 24 Oct 2013 09:00:30 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 23 Oct 2013 09:05:09 +0200
 
 spacefm (0.8.7-3) unstable; urgency=low
 

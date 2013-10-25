@@ -9,9 +9,10 @@ CONFIGURE_COMMON_FLAGS += --disable-pixmaps
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 
 %:
-	dh $@ 
+	dh $@ --with autotools_dev
 
 override_dh_auto_configure: $(FLAVORS:%=doconfigure-%)
+	dh_autotools-dev_updateconfig
 
 doconfigure-%:
 	dh_auto_configure --builddirectory=debian/build-$* -- $(CONFIGURE_FLAGS_$*) $(CONFIGURE_COMMON_FLAGS)
@@ -38,4 +39,5 @@ override_dh_installman:
 	dh_installman
 
 override_dh_auto_clean:
+	dh_autotools-dev_restoreconfig
 	rm -rf debian/build-gtk2 debian/build-gtk3
