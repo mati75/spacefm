@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
     configure)
-	echo "Icons cache is now configured. Please wait"
+	echo "Icons cache is now configured. Please wait..."
         if [ -x /usr/bin/update-mime-database ] && [ -x /usr/bin/update-desktop-database ]; then
         update-mime-database /usr/share/mime > /dev/null
         update-desktop-database -q
