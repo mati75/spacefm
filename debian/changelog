@@ -1,3 +1,18 @@
+spacefm (0.9.0-4) UNRELEASED; urgency=low
+
+  * debian/rules:
+    + add script to find Ubuntu and patch desktop file.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 05 Nov 2013 20:28:26 +0100
+
+spacefm (0.9.0-3) unstable; urgency=low
+
+  * debian/control:
+    + bump version in Breaks and Replaces to really fix upgrade issue.
+    (Closes: #728158)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 31 Oct 2013 20:46:45 +0100
+
 spacefm (0.9.0-2) unstable; urgency=high
 
   * debian/control:

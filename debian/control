@@ -5,7 +5,8 @@ Maintainer: Mateusz Łukasik <mati75@linuxmint.pl>
 Build-Depends: debhelper (>= 9), autotools-dev, libgtk2.0-dev (>= 2.24), 
  libcairo2-dev, libpango1.0-dev, libx11-dev, intltool, pkg-config, 
  libglib2.0-dev, libstartup-notification0-dev, libdbus-1-dev, 
- libgdk-pixbuf2.0-dev, libudev-dev, hicolor-icon-theme, libgtk-3-dev
+ libgdk-pixbuf2.0-dev, libudev-dev, hicolor-icon-theme, libgtk-3-dev,
+ lsb-release
 Standards-Version: 3.9.5.0
 Homepage: http://ignorantguru.github.com/spacefm/
 Vcs-Git: git://github.com/mati75/spacefm.git
@@ -19,7 +20,7 @@ Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu
 Replaces: spacefm-gtk3, spacefm (<< 0.9.0-1)
 Conflicts: spacefm-hal, spacefm-gtk3
-Breaks: spacefm (<< 0.8.7-3)
+Breaks: spacefm (<< 0.9)
 Description: Multi-panel tabbed file manager - GTK2 version
  SpaceFM is tabbed file manager with built-in VFS, udev-based
  device manager, customizable menu system and bash integration.
@@ -37,8 +38,8 @@ Description: Multi-panel tabbed file manager - GTK2 version
 Package: spacefm-common
 Architecture: all
 Depends: ${misc:Depends}
-Replaces: spacefm (<< 0.8.7-3)
-Breaks: spacefm (<< 0.8.7-3), spacefm-gtk3 (<< 0.8.7-3)
+Replaces: spacefm (<< 0.9)
+Breaks: spacefm (<< 0.9), spacefm-gtk3 (<< 0.9)
 Recommends: spacefm-gtk3 | spacefm
 Description: Multi-panel tabbed file manager - common files
  SpaceFM is tabbed file manager with built-in VFS, udev-based
@@ -53,9 +54,9 @@ Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}
  dbus, desktop-file-utils, shared-mime-info, libgtk-3-bin
 Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu
-Replaces: spacefm, spacefm-gtk3 (<< 0.8.7-3)
+Replaces: spacefm, spacefm-gtk3
 Conflicts: spacefm-hal, spacefm
-Breaks: spacefm-gtk3 (<< 0.8.7-3)
+Breaks: spacefm-gtk3 (<< 0.9)
 Description: Multi-panel tabbed file manager - GTK3 version  
  SpaceFM is tabbed file manager with built-in VFS, udev-based
  device manager, customizable menu system and bash integration.

@@ -33,6 +33,7 @@ override_dh_builddeb:
 override_dh_install:
 	find debian/tmp -name \*.la -delete
 	sh debian/clean_gtk3.sh
+	sh debian/ubuntu-unity.sh
 	dh_install --fail-missing
 
 override_dh_installman:
