@@ -1,9 +1,11 @@
-spacefm (0.9.0-4) UNRELEASED; urgency=low
+spacefm (0.9.1-1) unstable; urgency=low
 
+  * New upstream release. (LP: #1247918)
   * debian/rules:
-    + add script to find Ubuntu and patch desktop file.
+    + add a script which detects whether the package is built on Ubuntu
+      to patch the desktop file to fix issue with the Unity global menu
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 05 Nov 2013 20:28:26 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 06 Nov 2013 16:54:34 +0100
 
 spacefm (0.9.0-3) unstable; urgency=low
 
