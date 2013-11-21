@@ -16,8 +16,8 @@ Package: spacefm
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}), 
  dbus, desktop-file-utils, shared-mime-info, libgtk2.0-bin
-Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
-Suggests: udevil, eject, lsof, wget, ktsuss, gksu
+Recommends: udisks | udisks2, hicolor-icon-theme | faenza-icon-theme
+Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs
 Replaces: spacefm-gtk3, spacefm (<< 0.9.0-1)
 Conflicts: spacefm-hal, spacefm-gtk3
 Breaks: spacefm (<< 0.9)
@@ -57,8 +57,8 @@ Package: spacefm-gtk3
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
  dbus, desktop-file-utils, shared-mime-info, libgtk-3-bin
-Recommends: udisks | udisks2, sshfs, hicolor-icon-theme | faenza-icon-theme
-Suggests: udevil, eject, lsof, wget, ktsuss, gksu
+Recommends: udisks | udisks2, hicolor-icon-theme | faenza-icon-theme
+Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs
 Replaces: spacefm, spacefm-gtk3
 Conflicts: spacefm-hal, spacefm
 Breaks: spacefm-gtk3 (<< 0.9)
