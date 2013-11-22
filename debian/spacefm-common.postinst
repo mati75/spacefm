@@ -30,8 +30,7 @@ case "$1" in
 	if [ -x /usr/bin/gtk-update-icon-cache-3.0 ]; then
 	gtk-update-icon-cache-3.0 -q -t -f /usr/share/icons/hicolor
 	gtk-update-icon-cache-3.0 -q -t -f /usr/share/icons/Faenza
-	elif
-	if [ -x /usr/bin/gtk-update-icon-cache ]; then
+	elif [ -x /usr/bin/gtk-update-icon-cache ]; then
 	gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor
 	gtk-update-icon-cache -q -t -f /usr/share/icons/Faenza
 	fi
