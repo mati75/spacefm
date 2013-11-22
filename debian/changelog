@@ -1,9 +1,22 @@
+spacefm (0.9.1-2) UNRELEASED; urgency=low
+
+  * debian/spacefm-common.postinst:
+    + Initial generating icons cache. (Closes: #729552)
+  * debian/spacefm{,-gtk3}.postinst:
+    + Remove generating icons cache from script.
+  * debian/control:
+    + Add long description by omegaphil.
+    + Move sshfs to suggests.
+    + Update spacefm-common depends.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 22 Nov 2013 18:21:23 +0100
+
 spacefm (0.9.1-1) unstable; urgency=low
 
   * New upstream release. (LP: #1247918)
   * debian/rules:
     + add a script which detects whether the package is built on Ubuntu
-      to patch the desktop file to fix issue with the Unity global menu
+      to patch the desktop file to fix issue with the Unity global menu.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 06 Nov 2013 16:54:34 +0100
 
