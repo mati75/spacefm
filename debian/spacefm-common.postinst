@@ -1,5 +1,5 @@
 #!/bin/sh
-# postinst script for spacefm-gtk3
+# postinst script for spacefm-common
 #
 # see: dh_installdeb(1)
 
@@ -20,10 +20,21 @@ set -e
 
 case "$1" in
     configure)
-        if [ -x /usr/bin/update-mime-database ] && [ -x /usr/bin/update-desktop-database ]; then
-        update-mime-database /usr/share/mime > /dev/null
-        update-desktop-database -q
-        fi
+	echo "Icons cache is now configured. Please wait..."
+	if [ -e /usr/share/icons/Faenza/icon-theme.cache ]; then
+	rm /usr/share/icons/Faenza/icon-theme.cache
+	fi
+	if [ -e /usr/share/icons/hicolor/icon-theme.cache ]; then
+	rm /usr/share/icons/hicolor/icon-theme.cache
+	fi
+	if [ -x /usr/bin/gtk-update-icon-cache-3.0 ]; then
+	gtk-update-icon-cache-3.0 -q -t -f /usr/share/icons/hicolor
+	gtk-update-icon-cache-3.0 -q -t -f /usr/share/icons/Faenza
+	elif
+	if [ -x /usr/bin/gtk-update-icon-cache ]; then
+	gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor
+	gtk-update-icon-cache -q -t -f /usr/share/icons/Faenza
+	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

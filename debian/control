@@ -15,7 +15,7 @@ Vcs-Browser: https://github.com/mati75/spacefm.git
 Package: spacefm
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}), 
- dbus, desktop-file-utils, shared-mime-info, libgtk2.0-bin
+ dbus, desktop-file-utils, shared-mime-info
 Recommends: udisks | udisks2, hicolor-icon-theme | faenza-icon-theme
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs
 Replaces: spacefm-gtk3, spacefm (<< 0.9.0-1)
@@ -41,7 +41,7 @@ Description: Multi-panel tabbed file manager - GTK2 version
 
 Package: spacefm-common
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, libgtk2.0-bin | libgtk-3-bin
 Replaces: spacefm (<< 0.9)
 Breaks: spacefm (<< 0.9), spacefm-gtk3 (<< 0.9)
 Recommends: spacefm | spacefm-gtk3
@@ -56,7 +56,7 @@ Description: Multi-panel tabbed file manager - common files
 Package: spacefm-gtk3
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
- dbus, desktop-file-utils, shared-mime-info, libgtk-3-bin
+ dbus, desktop-file-utils, shared-mime-info
 Recommends: udisks | udisks2, hicolor-icon-theme | faenza-icon-theme
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs
 Replaces: spacefm, spacefm-gtk3
