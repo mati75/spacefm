@@ -1,15 +1,16 @@
-spacefm (0.9.1-2) UNRELEASED; urgency=low
+spacefm (0.9.1+git20131124.29dbeba902-1) unstable; urgency=low
 
+  * Merged lastest upstream bugfix git tree.
   * debian/spacefm-common.postinst:
-    + Initial generating icons cache. (Closes: #729552)
+    + add initial generating of icon cache. (Closes: #729552)
   * debian/spacefm{,-gtk3}.postinst:
-    + Remove generating icons cache from script.
+    + remove generating icons cache from script.
   * debian/control:
-    + Add long description by omegaphil.
-    + Move sshfs to suggests.
-    + Update spacefm-common depends.
+    + add long description by omegaphil.
+    + move sshfs to suggests.
+    + update spacefm-common depends.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 22 Nov 2013 18:21:23 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 28 Nov 2013 17:46:47 +0100
 
 spacefm (0.9.1-1) unstable; urgency=low
 

@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
     configure)
-	echo "Icons cache is now configured. Please wait..."
+	echo "Icons cache is now being configured. Please wait..."
 	if [ -e /usr/share/icons/Faenza/icon-theme.cache ]; then
 	rm /usr/share/icons/Faenza/icon-theme.cache
 	fi
