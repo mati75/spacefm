@@ -1,3 +1,9 @@
+spacefm (0.9.2-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 18 Dec 2013 13:53:48 +0100
+
 spacefm (0.9.1+git20131124.29dbeba902-1) unstable; urgency=low
 
   * Merged lastest upstream bugfix git tree.
