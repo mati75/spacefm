@@ -1,6 +1,8 @@
 spacefm (0.9.2-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Add spacefm-common.dirs for run triggers to update icons cache.
+  * Remove spacefm-common.postinst no longer needed.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 18 Dec 2013 13:53:48 +0100
 
