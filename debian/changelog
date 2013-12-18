@@ -5,6 +5,8 @@ spacefm (0.9.2-1) UNRELEASED; urgency=medium
   * Remove spacefm-common.postinst no longer needed.
   * debian/control:
     + update packages depends.
+    + add virtual package spacefm-hal.
+  * Update spacefm{,-gtk3).lintian-overrides.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 18 Dec 2013 13:53:48 +0100
 
