@@ -1,8 +1,8 @@
-spacefm (0.9.2-1) UNRELEASED; urgency=medium
+spacefm (0.9.2-1) unstable; urgency=medium
 
   * New upstream release.
   * Add spacefm-common.dirs for run triggers to update icons cache.
-  * Remove spacefm-common.postinst no longer needed.
+  * Remove spacefm-common.postinst, no longer needed.
   * debian/control:
     + update packages depends.
     + add virtual package spacefm-hal.
@@ -10,7 +10,7 @@ spacefm (0.9.2-1) UNRELEASED; urgency=medium
   * Add debian/patches/fix_memory_leak.patch from upstream to fix memory
     leak on draw selection rectangle on desktop.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 18 Dec 2013 13:53:48 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 18 Dec 2013 20:48:25 +0100
 
 spacefm (0.9.1+git20131124.29dbeba902-1) unstable; urgency=low
 
