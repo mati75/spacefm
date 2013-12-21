@@ -1,9 +1,10 @@
 #!/usr/bin/make -f
 
-FLAVORS = gtk2 gtk3
+FLAVORS = gtk2 gtk3 hal
 
 CONFIGURE_FLAGS_gtk2 = --with-gtk2
 CONFIGURE_FLAGS_gtk3 = --with-gtk3
+CONFIGURE_FLAGS_hal = --with-gtk2 --enable-hal
 CONFIGURE_COMMON_FLAGS += --disable-pixmaps
 
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
@@ -41,4 +42,4 @@ override_dh_installman:
 
 override_dh_auto_clean:
 	dh_autotools-dev_restoreconfig
-	rm -rf debian/build-gtk2 debian/build-gtk3
+	rm -rf debian/build-gtk2 debian/build-gtk3 debian/build-gtk3

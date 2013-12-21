@@ -1,0 +1,3 @@
+debian/tmp/hal/usr/bin/* /usr/bin
+debian/tmp/hal/usr/share/applications/* /usr/share/applications/
+debian/tmp/hal/usr/share/spacefm/mount.rules usr/share/spacefm/mount.rules
