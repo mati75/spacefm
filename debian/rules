@@ -1,4 +1,5 @@
 #!/usr/bin/make -f
+DISTRO := $(shell dpkg-vendor --query vendor)
 
 FLAVORS = gtk2 gtk3
 
@@ -33,7 +34,9 @@ override_dh_builddeb:
 override_dh_install:
 	find debian/tmp -name \*.la -delete
 	sh debian/clean_gtk3.sh
-	sh debian/ubuntu-unity.sh
+	ifeq ($(DISTRO),Ubuntu)
+		sh debian/ubuntu-unity.sh
+	endif
 	dh_install --fail-missing
 
 override_dh_installman:
