@@ -1,0 +1,107 @@
+spacefm (0.9.3-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+  * debian/rules:
+    + fix build on Ubuntu derivatives.
+  * debian/control:
+    + remove lsb-release from build depends.
+  * Install spacefm-mansrc-en.html in spacefm-common.
+  * Update debian/copyright. 
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 10 Jan 2014 17:44:03 +0100
+
+spacefm (0.9.2-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Add spacefm-common.dirs for run triggers to update icons cache.
+  * Remove spacefm-common.postinst, no longer needed.
+  * debian/control:
+    + update packages depends.
+    + add virtual package spacefm-hal.
+  * Update spacefm{,-gtk3).lintian-overrides.
+  * Add debian/patches/fix_memory_leak.patch from upstream to fix memory
+    leak on draw selection rectangle on desktop.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 18 Dec 2013 20:48:25 +0100
+
+spacefm (0.9.1+git20131124.29dbeba902-1) unstable; urgency=low
+
+  * Merged lastest upstream bugfix git tree.
+  * debian/spacefm-common.postinst:
+    + add initial generating of icon cache. (Closes: #729552)
+  * debian/spacefm{,-gtk3}.postinst:
+    + remove generating icons cache from script.
+  * debian/control:
+    + add long description by omegaphil.
+    + move sshfs to suggests.
+    + update spacefm-common depends.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 28 Nov 2013 17:46:47 +0100
+
+spacefm (0.9.1-1) unstable; urgency=low
+
+  * New upstream release. (LP: #1247918)
+  * debian/rules:
+    + add a script which detects whether the package is built on Ubuntu
+      to patch the desktop file to fix issue with the Unity global menu.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 06 Nov 2013 16:54:34 +0100
+
+spacefm (0.9.0-3) unstable; urgency=low
+
+  * debian/control:
+    + bump version in Breaks and Replaces to really fix upgrade issue.
+    (Closes: #728158)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 31 Oct 2013 20:46:45 +0100
+
+spacefm (0.9.0-2) unstable; urgency=high
+
+  * debian/control:
+    + update Breaks and Replaces to fix upgrade issue
+      for spacefm-common package. (Closes: #728158)
+    + Bump standards to 3.9.5.0 (no changes required).
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 29 Oct 2013 07:45:56 +0100
+
+spacefm (0.9.0-1) unstable; urgency=low
+
+  * New upstream release:
+    + remove debian/patches/fix_included_inotify.patch, included upstream.
+    + repack upstream sources, remove distro directory.
+  * Install all doc and ui files into spacefm-common package.
+  * debian/rules:
+    + use xz to compress packages.
+  * Update postinst script to show a message about updating icons cache.
+  * debian/rules:
+    + call dh with "--with autotools_dev" in debian/rules to fix
+      FTBFS on arm64. (Closes: #727508)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 24 Oct 2013 09:00:30 +0200
+
+spacefm (0.8.7-3) unstable; urgency=low
+
+  * Update postinst and postrm scripts to fix an
+    install issue detected by piuparts. (Closes: #722461)
+  * Add debian/patches/fix_included_inotify.patch:
+    + fix FTBFS on m68k, mips and hppa.
+  * Update debian/control:
+    + remove pmount from suggests.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 19 Sep 2013 12:54:22 +0200
+
+spacefm (0.8.7-2) unstable; urgency=low
+
+  * debian/control:
+   + Replace spacefm-gtk2 with spacefm in recommends for spacefm-common
+     binary package. (Closes: #722126)
+  * Add lintian override for spelling-error-in-binary in spacefm and
+    spacefm-gtk3 packages.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 08 Sep 2013 14:36:40 +0200
+
+spacefm (0.8.7-1) unstable; urgency=low
+
+  * Initial release. (Closes: #691811)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Mon, 24 Jun 2013 15:01:40 +0200
