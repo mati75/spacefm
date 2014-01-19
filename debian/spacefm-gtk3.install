@@ -1,2 +1,0 @@
-debian/tmp/gtk3/usr/bin/* /usr/bin
-debian/tmp/gtk3/usr/share/applications/* /usr/share/applications/

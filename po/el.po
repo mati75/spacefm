@@ -1,0 +1,7180 @@
+# SpaceFM PO Template    http://ignorantguru.github.io/spacefm/
+# This file is distributed under the same copyright and license as the SpaceFM
+# package.
+# 
+# Translators:
+# George Vasilakos <forfolias@gmail.com>, 2009
+# sng <sng@hellug.gr>, 2014
+# sng <sng@hellug.gr>, 2014
+# sng <sng@hellug.gr>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: SpaceFM\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-12-06 13:31+0000\n"
+"PO-Revision-Date: 2014-01-16 23:30+0000\n"
+"Last-Translator: sng <sng@hellug.gr>\n"
+"Language-Team: Greek (http://www.transifex.com/projects/p/spacefm/language/el/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../data/spacefm-folder-handler.desktop.in.h:1
+msgid "SpaceFM Open Folder"
+msgstr "Άνοιγμα φακέλου του SpaceFM"
+
+#: ../data/spacefm-folder-handler.desktop.in.h:2
+msgid "Open folder"
+msgstr "Άνοιγμα φακέλου"
+
+#: ../data/spacefm-find.desktop.in.h:1
+msgid "SpaceFM File Search"
+msgstr "Αναζήτηση αρχείων του "
+
+#: ../data/spacefm-find.desktop.in.h:2
+msgid "Search for files and folders"
+msgstr "Αναζήτηση για αρχεία και φακέλους"
+
+#: ../data/spacefm.desktop.in.h:1
+msgid "SpaceFM"
+msgstr "SpaceFM"
+
+#: ../data/spacefm.desktop.in.h:2
+msgid "File Manager"
+msgstr "Διαχειριστής αρχείων"
+
+#: ../data/spacefm.desktop.in.h:3
+msgid "Browse the file system"
+msgstr "Περιήγηση του συστήματος αρχείων"
+
+#: ../data/ui/about-dlg.ui.h:1
+msgid "by IgnorantGuru"
+msgstr "από τον IgnorantGuru"
+
+#: ../data/ui/about-dlg.ui.h:2
+msgid "Copyright (C) 2013    GPL3+"
+msgstr "Copyright (C) 2013    GPL3+"
+
+#: ../data/ui/about-dlg.ui.h:3
+msgid ""
+"SpaceFM - Copyright (C) 2013   GPL3+\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.\n"
+"\n"
+"USE AT YOUR OWN RISK.  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"\n"
+"The 'exo' libraries and source code used by this software are licensed under the GNU General Public License and the GNU Lesser General Public License version 3 (LGPL3).\n"
+"\n"
+"You should have received a copy of the GNU General Public License and the GNU Lesser General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
+msgstr ""
+
+#: ../data/ui/about-dlg.ui.h:12
+msgid ""
+"IgnorantGuru <ignorantguru@gmx.com>\n"
+"\n"
+"Contributors:\n"
+"    BwackNinja <BwackNinja@gmail.com>\n"
+"    OmegaPhil <OmegaPhil+SpaceFM@gmail.com>\n"
+"\n"
+"Artwork:\n"
+"    SpaceFM icons and logo by Goran Simovic\n"
+"\n"
+"Thanks to SpaceFM users for valuable feedback and to SpaceFM translators and\n"
+"packagers!\n"
+"\n"
+"Special thanks to:\n"
+"    Jean-Philippe Fleury\n"
+"    Hasufell\n"
+"    Vladimir Kudrya\n"
+"\n"
+"SpaceFM is developed on geany, gcc, and git, with a little help from gdb.\n"
+"\n"
+"Source code taken from other projects:\n"
+" * pcmanfm-mod: IgnorantGuru\n"
+" * pcmanfm v0.5.2: Hon Jen Yee (PCMan)\n"
+" * libmd5-rfc: Aladdin Enterprises\n"
+" * Working area detection: Gary Kramlich\n"
+" * ExoIconView: os-cillation e.K, Anders Carlsson, Benedikt Meurer\n"
+" * Text and icon renderer uses code from Jonathan Blandford\n"
+" * Desktop icons use code from Brian Tarricone\n"
+" * HAL support (deprecated): gnome-vfs, thunar-vfs, libexo, gnome-mount"
+msgstr ""
+
+#: ../data/ui/about-dlg.ui.h:40
+msgid ""
+"SpaceFM icons and logo by Goran Simovic\n"
+"\n"
+"Additional icons were taken from the Tango Desktop Project icon set"
+msgstr ""
+
+#: ../data/ui/about-dlg.ui.h:43
+msgid "translator-credits"
+msgstr "Ριζόπουλος Γιώργος <georgerizopoulos28@gmail.com>\nΒασιλάκος Γιώργος <forfolias@linuxteam.cs.teilar.gr>\nΓεωργαράς Σπύρος <sng@hellug.gr>"
+
+#: ../data/ui/appchooserdlg.ui.h:1
+msgid "Choose Application"
+msgstr "Επιλογή εφαρμογής"
+
+#: ../data/ui/appchooserdlg.ui.h:2
+msgid "Please choose an application or enter a command:"
+msgstr "Παρακαλώ επιλέξτε μια εφαρμογή ή εισάγετε μία εντολή:"
+
+#: ../data/ui/appchooserdlg.ui.h:3
+msgid "File Type:"
+msgstr "Τύπος αρχείου:"
+
+#: ../data/ui/appchooserdlg.ui.h:4
+msgid "_Associated Apps"
+msgstr "_Συσχετισμένες εφαρμογές"
+
+#: ../data/ui/appchooserdlg.ui.h:5
+msgid "A_ll Apps"
+msgstr "Ό_λες οι εφαρμογές"
+
+#: ../data/ui/appchooserdlg.ui.h:6
+msgid "_Command:"
+msgstr "_Εντολή:"
+
+#: ../data/ui/appchooserdlg.ui.h:7 ../src/settings.c:10095
+#: ../src/ptk/ptk-file-misc.c:2122 ../src/item-prop.c:1646
+msgid "_Browse"
+msgstr "_Περιήγηση"
+
+#: ../data/ui/appchooserdlg.ui.h:8
+msgid "Opened in Terminal"
+msgstr "Άνοιγμα στο τερματικό"
+
+#: ../data/ui/appchooserdlg.ui.h:9
+msgid "_Set as default application for this file type"
+msgstr "_Ορισμός ως προκαθορισμένη εφαρμογή για αυτόν τον τύπο αρχείου"
+
+#: ../data/ui/file_properties.ui.h:1
+msgid "File Properties"
+msgstr "Ιδιότητες αρχείου"
+
+#: ../data/ui/file_properties.ui.h:2
+msgid "<b>File _Name:</b>"
+msgstr "<b>Ό_νομα αρχείου:</b>"
+
+#: ../data/ui/file_properties.ui.h:3
+msgid "<b>_Location:</b>"
+msgstr "<b>_Τοποθεσία:</b>"
+
+#: ../data/ui/file_properties.ui.h:4
+msgid "<b>Link _Target:</b>"
+msgstr "<b>Προορισμός _συνδέσμου:</b>"
+
+#: ../data/ui/file_properties.ui.h:5 ../src/ptk/ptk-file-misc.c:2174
+msgid "<b>Type:</b>"
+msgstr "<b>Τύπος:</b>"
+
+#: ../data/ui/file_properties.ui.h:6
+msgid "<b>Opens _With:</b>"
+msgstr "<b>Ανοί_γει με:</b>"
+
+#: ../data/ui/file_properties.ui.h:7
+msgid "<b>Total Size:</b>"
+msgstr "<b>Συνολικό μέγεθος:</b>"
+
+#: ../data/ui/file_properties.ui.h:8
+msgid "<b>Size On Disk:</b>"
+msgstr "<b>Μέγεθος στον δίσκο:</b>"
+
+#: ../data/ui/file_properties.ui.h:9
+msgid "<b>Count:</b>"
+msgstr "<b>Μετρητής:</b>"
+
+#: ../data/ui/file_properties.ui.h:10
+msgid "<b>_Modified:</b>"
+msgstr "<b>Τ_ροποποιήθηκε:</b>"
+
+#: ../data/ui/file_properties.ui.h:11
+msgid "<b>_Accessed:</b>"
+msgstr "<b>_Προσπελάστηκε:</b>"
+
+#: ../data/ui/file_properties.ui.h:12 ../src/settings.c:10902
+msgid "_Info"
+msgstr "_Πληροφορίες"
+
+#: ../data/ui/file_properties.ui.h:13
+msgid "<b>_Owner:</b>"
+msgstr "<b>_Ιδιοκτήτης:</b>"
+
+#: ../data/ui/file_properties.ui.h:14
+msgid "<b>_Group:</b>"
+msgstr "<b>_Ομάδα:</b>"
+
+#: ../data/ui/file_properties.ui.h:15
+msgid "<b>Owner:</b>"
+msgstr "<b>Ιδιοκτήτης:</b>"
+
+#: ../data/ui/file_properties.ui.h:16
+msgid "<b>Group:</b>"
+msgstr "<b>Ομάδα:</b>"
+
+#: ../data/ui/file_properties.ui.h:17
+msgid "<b>Other:</b>"
+msgstr "<b>Άλλοι:</b>"
+
+#: ../data/ui/file_properties.ui.h:18
+msgid "Read"
+msgstr "Ανάγνωση"
+
+#: ../data/ui/file_properties.ui.h:19
+msgid "Write"
+msgstr "Εγγραφή"
+
+#: ../data/ui/file_properties.ui.h:20
+msgid "Execute"
+msgstr "Εκτέλεση"
+
+#: ../data/ui/file_properties.ui.h:21
+msgid "Set UID"
+msgstr "Ορισμός UID"
+
+#: ../data/ui/file_properties.ui.h:22
+msgid "Set GID"
+msgstr "Ορισμός GID"
+
+#: ../data/ui/file_properties.ui.h:23
+msgid "Sticky"
+msgstr "Επισήμανση"
+
+#: ../data/ui/file_properties.ui.h:24
+msgid "Recursive (apply changes to folders and their contents)"
+msgstr "Αναδρομικά (εφαρμογή αλλαγών στους φακέλους και τα περιεχόμενά τους)"
+
+#: ../data/ui/file_properties.ui.h:25 ../src/settings.c:10905
+msgid "_Permissions"
+msgstr "_Δικαιώματα"
+
+#: ../data/ui/find-files.ui.h:1 ../data/ui/find-files2.ui.h:1
+msgid "Bytes"
+msgstr "Bytes"
+
+#: ../data/ui/find-files.ui.h:2 ../data/ui/find-files2.ui.h:2
+#: ../data/ui/prefdlg.ui.h:21 ../data/ui/prefdlg2.ui.h:21
+msgid "KB"
+msgstr "KB"
+
+#: ../data/ui/find-files.ui.h:3 ../data/ui/find-files2.ui.h:3
+msgid "MB"
+msgstr "MB"
+
+#: ../data/ui/find-files.ui.h:4 ../data/ui/find-files2.ui.h:4
+msgid "GB"
+msgstr "GB"
+
+#: ../data/ui/find-files.ui.h:5 ../data/ui/find-files2.ui.h:5
+msgid "Any"
+msgstr "Οποτεδήποτε"
+
+#: ../data/ui/find-files.ui.h:6 ../data/ui/find-files2.ui.h:6
+msgid "Within One Day"
+msgstr "Την τελευταία μέρα"
+
+#: ../data/ui/find-files.ui.h:7 ../data/ui/find-files2.ui.h:7
+msgid "Within One Week"
+msgstr "Την τελευταία εβδομάδα"
+
+#: ../data/ui/find-files.ui.h:8 ../data/ui/find-files2.ui.h:8
+msgid "Within One Month"
+msgstr "Τον τελευταίο μήνα"
+
+#: ../data/ui/find-files.ui.h:9 ../data/ui/find-files2.ui.h:9
+msgid "Within One Year"
+msgstr "Το τελευταίο έτος"
+
+#: ../data/ui/find-files.ui.h:10 ../data/ui/find-files2.ui.h:10
+msgid "Within Selected Date Range"
+msgstr "Σε επιλεγμένες ημερομηνίες"
+
+#: ../data/ui/find-files.ui.h:11 ../data/ui/find-files2.ui.h:11
+msgid "Find Files"
+msgstr "Αναζήτηση αρχείων"
+
+#: ../data/ui/find-files.ui.h:12 ../data/ui/find-files2.ui.h:12
+#: ../src/ptk/ptk-file-task.c:2401
+msgid "<b>Filename:</b>"
+msgstr "<b>Όνομα αρχείου:</b>"
+
+#: ../data/ui/find-files.ui.h:13 ../data/ui/find-files2.ui.h:13
+msgid "Case Sensitive"
+msgstr "Ευαισθησία ανάμεσα σε κεφαλαία και μικρά γράμματα"
+
+#: ../data/ui/find-files.ui.h:14 ../data/ui/find-files2.ui.h:14
+msgid "Video Files (avi, mpg,...)"
+msgstr "Αρχεία video (avi, mpg,...)"
+
+#: ../data/ui/find-files.ui.h:15 ../data/ui/find-files2.ui.h:15
+msgid "Audio Files (mp3, ogg,...)"
+msgstr "Μουσικά αρχεία (mp3, ogg,...)"
+
+#: ../data/ui/find-files.ui.h:16 ../data/ui/find-files2.ui.h:16
+msgid "Image Files (jpg, png,...)"
+msgstr "Αρχεία εικόνων (jpg, png,...)"
+
+#: ../data/ui/find-files.ui.h:17 ../data/ui/find-files2.ui.h:17
+msgid "Plain Text Files"
+msgstr "Αρχεία απλού κειμένου"
+
+#: ../data/ui/find-files.ui.h:18 ../data/ui/find-files2.ui.h:18
+msgid "All Files and Folders"
+msgstr "Όλα τα αρχεία και οι φάκελοι"
+
+#: ../data/ui/find-files.ui.h:19 ../data/ui/find-files2.ui.h:19
+msgid "<b>File Types to Search</b>"
+msgstr "<b>Τύποι αρχείων προς αναζήτηση</b>"
+
+#: ../data/ui/find-files.ui.h:20 ../data/ui/find-files2.ui.h:20
+msgid "Search in subfolders"
+msgstr "Αναζήτηση σε υποφακέλους"
+
+#: ../data/ui/find-files.ui.h:21 ../data/ui/find-files2.ui.h:21
+msgid "Search hidden files"
+msgstr "Αναζήτηση κρυφών αρχείων"
+
+#: ../data/ui/find-files.ui.h:22 ../data/ui/find-files2.ui.h:22
+msgid "<b>Places to Search</b>"
+msgstr "<b>Τοποθεσίες προς αναζήτηση</b>"
+
+#: ../data/ui/find-files.ui.h:23 ../data/ui/find-files2.ui.h:23
+msgid "General"
+msgstr "Γενικά"
+
+#: ../data/ui/find-files.ui.h:24 ../data/ui/find-files2.ui.h:24
+msgid "File Contains:"
+msgstr "Το αρχείο περιέχει:"
+
+#: ../data/ui/find-files.ui.h:25 ../data/ui/find-files2.ui.h:25
+msgid "Use Regular Expression"
+msgstr "Χρήση Κανονικής Έκφρασης"
+
+#: ../data/ui/find-files.ui.h:26 ../data/ui/find-files2.ui.h:26
+msgid "<b>File Content</b>"
+msgstr "<b>Περιεχόμενο αρχείου</b>"
+
+#: ../data/ui/find-files.ui.h:27 ../data/ui/find-files2.ui.h:27
+msgid "Content"
+msgstr "Περιεχόμενο"
+
+#: ../data/ui/find-files.ui.h:28 ../data/ui/find-files2.ui.h:28
+msgid "Greater Than:"
+msgstr "Μεγαλύτερο από:"
+
+#: ../data/ui/find-files.ui.h:29 ../data/ui/find-files2.ui.h:29
+msgid "Smaller Than:"
+msgstr "Μικρότερο από:"
+
+#: ../data/ui/find-files.ui.h:30 ../data/ui/find-files2.ui.h:30
+msgid "<b>File Size</b>"
+msgstr "<b>Μέγεθος αρχείου</b>"
+
+#: ../data/ui/find-files.ui.h:31 ../data/ui/find-files2.ui.h:31
+msgid "<b>Last Modified</b>"
+msgstr "<b>Τελευταία τροποποίηση</b>"
+
+#: ../data/ui/find-files.ui.h:32 ../data/ui/find-files2.ui.h:32
+msgid "Size & Date"
+msgstr "Μέγεθος & ημερομηνία"
+
+#: ../data/ui/find-files.ui.h:33 ../data/ui/find-files2.ui.h:33
+msgid "<b>Search Result:</b>"
+msgstr "<b>Αποτέλεσμα Αναζήτησης:</b>"
+
+#: ../data/ui/find-files.ui.h:34 ../data/ui/find-files2.ui.h:34
+msgid "Search Again"
+msgstr "Αναζήτηση ξανά"
+
+#: ../data/ui/godlg.ui.h:1
+msgid "Go to folder"
+msgstr "Μετάβαση στο φάκελο"
+
+#: ../data/ui/prefdlg.ui.h:1 ../data/ui/prefdlg2.ui.h:1
+msgid "Open In Current Tab"
+msgstr "Άνοιγμα στην τρέχουσα καρτέλα"
+
+#: ../data/ui/prefdlg.ui.h:2 ../data/ui/prefdlg2.ui.h:2
+msgid "Open In New Tab"
+msgstr "Άνοιγμα σε νέα καρτέλα"
+
+#: ../data/ui/prefdlg.ui.h:3 ../data/ui/prefdlg2.ui.h:3
+msgid "Stretch"
+msgstr "Τέντωμα"
+
+#: ../data/ui/prefdlg.ui.h:4 ../data/ui/prefdlg2.ui.h:4
+msgid "Fit"
+msgstr "Ταίριασμα"
+
+#: ../data/ui/prefdlg.ui.h:5 ../data/ui/prefdlg2.ui.h:5
+msgid "Center"
+msgstr "Κεντράρισμα"
+
+#: ../data/ui/prefdlg.ui.h:6 ../data/ui/prefdlg2.ui.h:6
+msgid "Tile"
+msgstr "Παράθεση"
+
+#: ../data/ui/prefdlg.ui.h:7 ../data/ui/prefdlg2.ui.h:7
+msgid "Zoom"
+msgstr "Μεγέθυνση"
+
+#: ../data/ui/prefdlg.ui.h:8 ../data/ui/prefdlg2.ui.h:8
+msgid "Automatic"
+msgstr "Αυτόματα"
+
+#: ../data/ui/prefdlg.ui.h:9 ../data/ui/prefdlg2.ui.h:9
+msgid "Copy (Ctrl+Drag)"
+msgstr "Αντιγραφή (Ctrl+Drag)"
+
+#: ../data/ui/prefdlg.ui.h:10 ../data/ui/prefdlg2.ui.h:10
+msgid "Move (Shift+Drag)"
+msgstr "Μετακίνηση (Shift+Drag)"
+
+#: ../data/ui/prefdlg.ui.h:11 ../data/ui/prefdlg2.ui.h:11
+msgid "Link (Ctrl+Shift+Drag)"
+msgstr "Σύνδεση (Ctrl+Shift+Drag)"
+
+#: ../data/ui/prefdlg.ui.h:12 ../data/ui/prefdlg2.ui.h:12
+msgid "Preferences"
+msgstr "Ρυθμίσεις"
+
+#: ../data/ui/prefdlg.ui.h:13 ../data/ui/prefdlg2.ui.h:13
+msgid "Small Icons:"
+msgstr "Μικρά εικονίδια:"
+
+#: ../data/ui/prefdlg.ui.h:14 ../data/ui/prefdlg2.ui.h:14
+msgid "Large Icons:"
+msgstr "Μεγάλα εικονίδια:"
+
+#: ../data/ui/prefdlg.ui.h:15 ../data/ui/prefdlg2.ui.h:15
+msgid "Toolbar Icons:"
+msgstr "Εικονίδια μπάρας:"
+
+#: ../data/ui/prefdlg.ui.h:16 ../data/ui/prefdlg2.ui.h:16
+msgid "<b>Display</b>"
+msgstr "<b>Εμφάνιση</b>"
+
+#: ../data/ui/prefdlg.ui.h:17 ../data/ui/prefdlg2.ui.h:17
+msgid "Single click opens files"
+msgstr "Μονό κλικ για άνοιγμα αρχείων"
+
+#: ../data/ui/prefdlg.ui.h:18 ../data/ui/prefdlg2.ui.h:18
+msgid "Bookmarks:"
+msgstr "Σελιδοδείκτες:"
+
+#: ../data/ui/prefdlg.ui.h:19 ../data/ui/prefdlg2.ui.h:19
+msgid "Show Thumbnails"
+msgstr "Εμφάνιση μικρογραφιών"
+
+#: ../data/ui/prefdlg.ui.h:20 ../data/ui/prefdlg2.ui.h:20
+msgid "Max Pic Size To Thumbnail:"
+msgstr "Μέγιστο μέγεθος μικρογραφιών:"
+
+#: ../data/ui/prefdlg.ui.h:22 ../data/ui/prefdlg2.ui.h:22
+msgid "<b>Behavior</b>"
+msgstr "<b>Συμπεριφορά</b>"
+
+#: ../data/ui/prefdlg.ui.h:23 ../data/ui/prefdlg2.ui.h:23
+msgid "_General"
+msgstr "_Γενικά"
+
+#: ../data/ui/prefdlg.ui.h:24 ../data/ui/prefdlg2.ui.h:24
+msgid "Always show the tab bar"
+msgstr "Εμφάνιση πάντα της μπάρας καρτελών"
+
+#: ../data/ui/prefdlg.ui.h:25 ../data/ui/prefdlg2.ui.h:25
+msgid "Hide 'Close Tab' buttons"
+msgstr "Απόκρυψη των κουμπιών 'Κλείσιμο καρτέλας'"
+
+#: ../data/ui/prefdlg.ui.h:26 ../data/ui/prefdlg2.ui.h:26
+msgid "Confirm delete/remove"
+msgstr "Επιβεβαίωση διαγραφής/μετονομασίας"
+
+#: ../data/ui/prefdlg.ui.h:27 ../data/ui/prefdlg2.ui.h:27
+msgid "Click runs executables"
+msgstr "Το κλικ εκτελεί τα εκτελέσιμα"
+
+#: ../data/ui/prefdlg.ui.h:28 ../data/ui/prefdlg2.ui.h:28
+msgid "SI File Sizes (1K = 1000) (requires restart)"
+msgstr "Μέγεθος αρχείων SI (1K = 1000) (απαιτείται επανεκκίνηση)"
+
+#: ../data/ui/prefdlg.ui.h:29 ../data/ui/prefdlg2.ui.h:29
+msgid "Show root user indicator color"
+msgstr "Εμφάνιση χρωματικής ένδειξης για χρήστη Root"
+
+#: ../data/ui/prefdlg.ui.h:30 ../data/ui/prefdlg2.ui.h:30
+msgid "Default Drag Action:"
+msgstr "Προκαθορισμένη ενέργεια συρσίματος:"
+
+#: ../data/ui/prefdlg.ui.h:31 ../data/ui/prefdlg2.ui.h:31
+msgid "I_nterface"
+msgstr "Δ_ιεπαφή"
+
+#: ../data/ui/prefdlg.ui.h:32 ../data/ui/prefdlg2.ui.h:32
+msgid "Wallpaper:"
+msgstr "Εικόνα:"
+
+#: ../data/ui/prefdlg.ui.h:33 ../data/ui/prefdlg2.ui.h:33
+msgid "Please select an image file"
+msgstr "Παρακαλώ επιλέξτε ένα αρχείο εικόνας"
+
+#: ../data/ui/prefdlg.ui.h:34 ../data/ui/prefdlg2.ui.h:34
+msgid "Mode:"
+msgstr "Τρόπος:"
+
+#: ../data/ui/prefdlg.ui.h:35 ../data/ui/prefdlg2.ui.h:35
+msgid "Background:"
+msgstr "Φόντο:"
+
+#: ../data/ui/prefdlg.ui.h:36 ../data/ui/prefdlg2.ui.h:36
+msgid "Text:"
+msgstr "Κείμενο:"
+
+#: ../data/ui/prefdlg.ui.h:37 ../data/ui/prefdlg2.ui.h:37
+msgid "Shadow:"
+msgstr "Σκίαση:"
+
+#: ../data/ui/prefdlg.ui.h:38 ../data/ui/prefdlg2.ui.h:38
+msgid "Font:"
+msgstr "Γραμματοσειρά:"
+
+#: ../data/ui/prefdlg.ui.h:39 ../data/ui/prefdlg2.ui.h:39
+msgid "Top:"
+msgstr "Πάνω:"
+
+#: ../data/ui/prefdlg.ui.h:40 ../data/ui/prefdlg2.ui.h:40
+msgid "Left:"
+msgstr "Αριστερά:"
+
+#: ../data/ui/prefdlg.ui.h:41 ../data/ui/prefdlg2.ui.h:41
+msgid "Right:"
+msgstr "Δεξιά:"
+
+#: ../data/ui/prefdlg.ui.h:42 ../data/ui/prefdlg2.ui.h:42
+msgid "Bottom:"
+msgstr "Κάτω:"
+
+#: ../data/ui/prefdlg.ui.h:43 ../data/ui/prefdlg2.ui.h:43
+msgid "Pad:"
+msgstr "Γέμισμα:"
+
+#: ../data/ui/prefdlg.ui.h:44 ../data/ui/prefdlg2.ui.h:44
+msgid "<b>Margins</b>"
+msgstr "<b>Περιθόρια</b>"
+
+#: ../data/ui/prefdlg.ui.h:45 ../data/ui/prefdlg2.ui.h:45
+msgid "Single click opens"
+msgstr "Άνοιγμα με μονό κλικ"
+
+#: ../data/ui/prefdlg.ui.h:46 ../data/ui/prefdlg2.ui.h:46
+msgid "Right click shows WM menu"
+msgstr "Το δεξί κλικ εμφανίζει το μενού του Διαχειριστή Παραθύρων"
+
+#: ../data/ui/prefdlg.ui.h:47 ../data/ui/prefdlg2.ui.h:47
+msgid "Open folders using associated MIME application"
+msgstr "Άνοιγμα φακέλων με την συσχετισμένη εφαρμογή MIME"
+
+#: ../data/ui/prefdlg.ui.h:48 ../data/ui/prefdlg2.ui.h:48
+msgid "_Desktop"
+msgstr "_Επιφάνεια εργασίας"
+
+#: ../data/ui/prefdlg.ui.h:49 ../data/ui/prefdlg2.ui.h:49
+msgid "_Volume Management"
+msgstr "_Διαχείριση τόμων"
+
+#: ../data/ui/prefdlg.ui.h:50 ../data/ui/prefdlg2.ui.h:50
+msgid "Terminal:"
+msgstr "Τερματικό:"
+
+#: ../data/ui/prefdlg.ui.h:51 ../data/ui/prefdlg2.ui.h:51
+msgid "Terminal SU:"
+msgstr "SU σε τερματικό:"
+
+#: ../data/ui/prefdlg.ui.h:52 ../data/ui/prefdlg2.ui.h:52
+msgid "Graphical SU:"
+msgstr "Γραφικό SU:"
+
+#: ../data/ui/prefdlg.ui.h:53 ../data/ui/prefdlg2.ui.h:53
+msgid "Filename Encoding:"
+msgstr "Κωδικοποίηση χαρακτήρων αρχείων:"
+
+#: ../data/ui/prefdlg.ui.h:54 ../data/ui/prefdlg2.ui.h:54
+msgid "Editor:"
+msgstr "Επεξεργαστής κειμένου:"
+
+#: ../data/ui/prefdlg.ui.h:55 ../data/ui/prefdlg2.ui.h:55
+msgid "Run editor in terminal"
+msgstr "Εκτέλεση του επεξεργαστή κειμένου σε τερματικό"
+
+#: ../data/ui/prefdlg.ui.h:56 ../data/ui/prefdlg2.ui.h:56
+msgid "Root's Editor:"
+msgstr "Επεξεργαστής κειμένου του Root:"
+
+#: ../data/ui/prefdlg.ui.h:57 ../data/ui/prefdlg2.ui.h:57
+msgid "Run root's editor in terminal"
+msgstr "Εκτέλεση του επεξεργαστή κειμένου του Root σε τερματικό"
+
+#: ../data/ui/prefdlg.ui.h:58 ../data/ui/prefdlg2.ui.h:58
+msgid "Date Format:"
+msgstr "Μορφή ημερομηνίας:"
+
+#: ../data/ui/prefdlg.ui.h:59 ../data/ui/prefdlg2.ui.h:59
+msgid "(requires reload)"
+msgstr "(απαιτείται επανεκκίνηση)"
+
+#: ../data/ui/prefdlg.ui.h:60 ../data/ui/prefdlg2.ui.h:60
+msgid "Date Display"
+msgstr "Εμφάνιση ημερομηνίας"
+
+#: ../data/ui/prefdlg.ui.h:61 ../data/ui/prefdlg2.ui.h:61
+msgid "_Advanced"
+msgstr "_Για προχωρημένους"
+
+#: ../src/cust-dialog.c:394
+#, c-format
+msgid "Too many columns (>%d) in %s"
+msgstr "Πάρα πολλές στήλες (>%d) στο %s"
+
+#: ../src/cust-dialog.c:631 ../src/cust-dialog.c:1648
+#: ../src/cust-dialog.c:1662 ../src/cust-dialog.c:1881 ../src/item-prop.c:794
+#, c-format
+msgid "error reading file %s: %s"
+msgstr "σφάλμα ανάγνωσης αρχείου %s: %s"
+
+#: ../src/cust-dialog.c:639 ../src/cust-dialog.c:1682
+#: ../src/cust-dialog.c:1895 ../src/item-prop.c:806
+#, c-format
+msgid "file '%s' contents are not valid UTF-8"
+msgstr "τα περιεχόμενα του αρχείου '%s' δεν είναι έγκυρο UTF-8"
+
+#: ../src/cust-dialog.c:693
+#, c-format
+msgid "Cannot set missing element '%s'"
+msgstr "Το στοιχείο '%s' δεν υπάρχει"
+
+#: ../src/cust-dialog.c:819 ../src/cust-dialog.c:908
+#, c-format
+msgid "file '%s' is not a regular file"
+msgstr "το αρχείο '%s' δεν είναι απλό αρχείο"
+
+#: ../src/cust-dialog.c:991 ../src/cust-dialog.c:1327
+#: ../src/cust-dialog.c:3426
+msgid "Dynamic resize requires width and height > 0"
+msgstr "Η δυναμική αλλαγή μεγέθους απαιτεί να είναι πλάτος και ύψος > 0"
+
+#: ../src/cust-dialog.c:1300
+#, c-format
+msgid "internal command %s requires an argument"
+msgstr "η εσωτερική εντολή %s απαιτεί μία παράμετρο"
+
+#: ../src/cust-dialog.c:1348
+#, c-format
+msgid "element '%s' does not exist"
+msgstr "το στοιχείο '%s' δεν υπάρχει"
+
+#: ../src/cust-dialog.c:1392
+#, c-format
+msgid "internal command press is invalid for non-button %s"
+msgstr "η εσωτερική εντολή press δεν είναι έγκυρη για το %s (δεν είναι κουμπί)"
+
+#: ../src/cust-dialog.c:1426
+#, c-format
+msgid "internal command un/select is invalid for %s"
+msgstr "η εσωτερική εντολή un/select δεν είναι έγκυρη για το %s"
+
+#: ../src/cust-dialog.c:1460 ../src/cust-dialog.c:1609
+#: ../src/cust-dialog.c:1616
+#, c-format
+msgid "error writing file %s: %s"
+msgstr "Σφάλμα εγγραφής αρχείου %s: %s"
+
+#: ../src/cust-dialog.c:1589
+#, c-format
+msgid "'%s' is not an internal command"
+msgstr "Η '%s' δεν είναι εσωτερική εντολή"
+
+#: ../src/cust-dialog.c:1635
+#, c-format
+msgid "error creating file %s: %s"
+msgstr "Σφάλμα δημιουργίας αρχείου %s: %s"
+
+#: ../src/cust-dialog.c:1751
+#, c-format
+msgid "pipe '%s' data is not valid UTF-8"
+msgstr "τα δεδομένα του pipe '%s' δεν είναι έγκυρο UTF-8"
+
+#: ../src/cust-dialog.c:1787 ../src/ptk/ptk-file-task.c:1406
+msgid "[ SNIP - additional output above has been trimmed from this log ]\n"
+msgstr ""
+
+#: ../src/cust-dialog.c:1892
+msgid "( file contents are not valid UTF-8 )"
+msgstr "( τα περιεχόμενα του αρχείου δεν είναι έγκυρο UTF-8 )"
+
+#: ../src/cust-dialog.c:2021
+#, c-format
+msgid "prefix '%s' is not a valid variable name"
+msgstr "το prefix '%s' δεν είναι έγκυρο όνομα μεταβλητής"
+
+#. pack timeout button first
+#: ../src/cust-dialog.c:2298 ../src/cust-dialog.c:3584
+#: ../src/cust-dialog.c:3639
+msgid "Pause"
+msgstr "Παύση"
+
+#: ../src/cust-dialog.c:2978
+#, c-format
+msgid "file '%s' is not a regular file or a pipe"
+msgstr ""
+
+#: ../src/cust-dialog.c:3692
+#, c-format
+msgid ""
+"SpaceFM Dialog creates a custom GTK dialog based on the GUI elements you\n"
+"specify on the command line, features run-time internal/external commands which\n"
+"can modify elements, and outputs evaluatable/parsable results.\n"
+msgstr "Το SpaceFM Dialog δημιουργεί διαλόγους GTK βάσει γραφικών (GUI) στοιχείων που\nκαθορίζονται στην γραμμή εντολών, υποστηρίζει εσωτερικές και εξωτερικές εντολές\nοι οποίες έχουν την δυνατότητα να τροποποιούν τα καθορισμένα στοιχεία, και εξά-\nγει αποτελέσματα σε μορφή που μπορούν να χρησιμοποιηθούν από άλλα προγράμματα.\n"
+
+#: ../src/cust-dialog.c:3693
+#, c-format
+msgid "Usage:\n"
+msgstr "Χρήση:\n"
+
+#: ../src/cust-dialog.c:3694
+#, c-format
+msgid "    spacefm --dialog|-g {ELEMENT [OPTIONS] [ARGUMENTS...]} ...\n"
+msgstr "    spacefm --dialog|-g {ΣΤΟΙΧΕΙΟ [ΕΠΙΛΟΓΕΣ] [ΠΑΡΑΜΕΤΡΟΙ...]} ...\n"
+
+#: ../src/cust-dialog.c:3695
+#, c-format
+msgid "Example:\n"
+msgstr "Παράδειγμα:\n"
+
+#: ../src/cust-dialog.c:3696
+#, c-format
+msgid "    spacefm -g --label \"A message\" --button ok\n"
+msgstr "    spacefm -g --label \"A message\" --button ok\n"
+
+#: ../src/cust-dialog.c:3697
+#, c-format
+msgid ""
+"\n"
+"ELEMENT:       OPTIONS & ARGUMENTS:\n"
+msgstr "\nΣΤΟΙΧΕΙΟ:      ΕΠΙΛΟΓΕΣ & ΠΑΡΑΜΕΤΡΟΙ:\n"
+
+#: ../src/cust-dialog.c:3698
+#, c-format
+msgid "--------       --------------------\n"
+msgstr "---------      ----------------------\n"
+
+#: ../src/cust-dialog.c:3709
+#, c-format
+msgid ""
+"\n"
+"The following arguments may be used as shown above:\n"
+msgstr "\nΠαραπάνω μπορούν να χρησιμοποιηθούν οι ακόλουθες παράμετροι:\n"
+
+#: ../src/cust-dialog.c:3710
+#, c-format
+msgid "    STOCK    %s\n"
+msgstr "    STOCK    %s\n"
+
+#: ../src/cust-dialog.c:3711
+#, c-format
+msgid "    ICON     An icon name, eg:  gtk-open\n"
+msgstr "    ICON     Το όνομα ενός εικονιδίου, π.χ. gtk-open\n"
+
+#: ../src/cust-dialog.c:3712
+#, c-format
+msgid ""
+"    @FILE    A text file from which to read a value.  In some cases this file\n"
+"             is monitored, so writing a new value to the file will update the\n"
+"             element.  In other cases, the file specifies an initial value.\n"
+msgstr "    @FILE    Αρχείο κειμένου από το οποίο θα διαβαστεί μια τιμή. Σε ορισμένες\n             περιπτώσεις τα περιεχόμενα του αρχείου παρακολουθούνται, έτσι\n             ώστε αν γραφτεί μια νέα τιμή στο αρχείο, το στοιχείο θα ενημερωθεί\n             Σε άλλες περιπτώσεις, το αρχείο καθορίζει μια αρχική τιμή.\n"
+
+#: ../src/cust-dialog.c:3713
+#, c-format
+msgid "    SAVEFILE A viewer's or editor's contents are saved to this file.\n"
+msgstr "    SAVEFILE Τα περιεχόμενα μιας εφαρμογής προβολής ή επεξεργασίας δεδομένων\n             (π.χ. επεξεργαστής κειμένου), θα αποθηκευτούν σε αυτό το αρχείο.\n"
+
+#: ../src/cust-dialog.c:3714
+#, c-format
+msgid ""
+"    COMMAND  An internal command or executable followed by arguments. Separate\n"
+"             multiple commands with a -- argument.\n"
+"             The following substitutions may be used in COMMANDs:\n"
+"                 %%n           Name of the current element\n"
+"                 %%v           Value of the current element\n"
+"                 %%NAME        Value of element named NAME (eg: %%input1)\n"
+"                 %%(command)   stdout from a bash command line\n"
+"                 %%%%           %%\n"
+msgstr "    COMMAND  Μία εσωτερική εντολή με τις κατάλληλες παραμέτρους. Διαδοχικές\n             εντολές χωρίζονται με διπλή παύλα (--).\n             Στο COMMAND μπορούν να χρησιμοποιηθούν τα ακόλουθα:\n                 %%n           Όνομα του τρέχοντος στοιχείου\n                 %%v           Τιμή του τρέχοντος στοιχείου\n                 %%NAME        Τιμή του στοιχείου με όνομα NAME (π.χ. %%input1)\n                 %%(command)   Το stdout μιας εντολής (command) του bash\n                 %%%%           %%\n"
+
+#: ../src/cust-dialog.c:3715
+#, c-format
+msgid ""
+"    LABEL    The following escape sequences in LABEL are unescaped:\n"
+"                 \\n   newline\n"
+"                 \\t   tab\n"
+"                 \\\"   \"\n"
+"                 \\\\   \\\n"
+"             In --label elements only, if the first character in LABEL is a\n"
+"             tilde (~), pango markup may be used.  For example:\n"
+"                 --label '~This is plain. <b>This is bold.</b>'\n"
+msgstr "    LABEL    Οι παρακάτω ακολουθίες χαρακτήρων μεταφράζονται σε:\n                 \\n   αλλαγή γραμμής\n                 \\t   στηλοθέτης\n                 \\\"   \"\n                 \\\\   \\\n             Στο στοιχείο --label, αν ο πρώτος χαρακτήρας του LABEL είναι μία\n             πεσπιρώμενη (~), μπορεί να χρησιμοποιηθεί pango markup.\n             Για παράδειγμα:\n                 --label '~This is plain. <b>This is bold.</b>'\n"
+
+#: ../src/cust-dialog.c:3717
+#, c-format
+msgid ""
+"\n"
+"In addition to the OPTIONS listed above, --compact or --expand options may be\n"
+"added to any element.  Also, a --font option may be used with most element\n"
+"types to change the element's font and font size.  For example:\n"
+"    --input --font \"Times New Roman 16\" \"Default Text\"\n"
+msgstr "\nΣυμπληρωματικά στις ΕΠΙΛΟΓΕΣ που αναφέρονται παραπάνω, σε ένα στοιχείο μπορούν\nνα προστεθούν και οι επιλογές --compact ή --expand. Στα περισσότερα στοιχεία\nμπορεί επίσης να χρησιμοποιηθεί η επιλογή --font, για να αλλαχθεί η γραμματο-\nσειρά και το μέγεθος κειμένου του στοιχείου. Για παράδειγμα:\n    --input --font \"Times New Roman 16\" \"Default Text\"\n"
+
+#: ../src/cust-dialog.c:3719
+#, c-format
+msgid ""
+"\n"
+"INTERNAL COMMANDS:\n"
+msgstr "\nΕΣΩΤΕΡΙΚΕΣ ΕΝΤΟΛΕΣ:\n"
+
+#: ../src/cust-dialog.c:3730
+#, c-format
+msgid ""
+"\n"
+"EXAMPLE WITH COMMANDS:\n"
+msgstr "\nΠΑΡΑΔΕΙΓΜΑ ΜΕ ΕΝΤΟΛΕΣ:\n"
+
+#: ../src/cust-dialog.c:3731
+#, c-format
+msgid ""
+"    spacefm -g --label \"Enter some text and press Enter:\" \\\n"
+"               --input \"\" set label2 %%v -- echo '# %%n = %%v' \\\n"
+"               --label \\\n"
+"               --button ok\n"
+msgstr "    spacefm -g --label \"Enter some text and press Enter:\" \\\n               --input \"\" set label2 %%v -- echo '# %%n = %%v' \\\n               --label \\\n               --button ok\n"
+
+#: ../src/cust-dialog.c:3733
+#, c-format
+msgid ""
+"\n"
+"EXAMPLE SCRIPT:\n"
+msgstr "\nΕΝΔΕΙΚΤΙΚΟ SCRIPT:\n"
+
+#: ../src/cust-dialog.c:3734
+#, c-format
+msgid ""
+"    #!/bin/bash\n"
+"    # This script shows a Yes/No dialog\n"
+"    # Use QUOTED eval to read variables output by SpaceFM Dialog:\n"
+"    eval \"`spacefm -g --label \"Are you sure?\" --button yes --button no`\"\n"
+"    if [[ \"$dialog_pressed\" == \"button1\" ]]; then\n"
+"        echo \"User pressed Yes - take some action\"\n"
+"    else\n"
+"        echo \"User did NOT press Yes - abort\"\n"
+"    fi\n"
+msgstr "    #!/bin/bash\n    # This script shows a Yes/No dialog\n    # Use QUOTED eval to read variables output by SpaceFM Dialog:\n    eval \"`spacefm -g --label \"Are you sure?\" --button yes --button no`\"\n    if [[ \"$dialog_pressed\" == \"button1\" ]]; then\n        echo \"User pressed Yes - take some action\"\n    else\n        echo \"User did NOT press Yes - abort\"\n    fi\n"
+
+#: ../src/cust-dialog.c:3735
+#, c-format
+msgid ""
+"\n"
+"For full documentation and examples see the SpaceFM User's Manual:\n"
+msgstr "\nΓια περισσότερες πληροφορίες και παραδείγματα, ανατρέξτε στο Εγχειρίδιο\nΧρήστη του SpaceFM:\n"
+
+#: ../src/cust-dialog.c:3762
+#, c-format
+msgid "spacefm: argument is not valid UTF-8\n"
+msgstr "spacefm: η παράμετρος δεν είναι έγκυρο UTF-8\n"
+
+#: ../src/cust-dialog.c:3809
+msgid "invalid dialog option"
+msgstr "μη έγκυρη επιλογή διαλόγου"
+
+#: ../src/cust-dialog.h:12
+msgid "Set window title"
+msgstr "Ορισμός του τίτλου του παραθύρου"
+
+#: ../src/cust-dialog.h:14
+msgid "Set window icon"
+msgstr "Ορισμός του εικονιδίου του παραθύρου"
+
+#: ../src/cust-dialog.h:16
+msgid "Add a text label"
+msgstr "Προσθήκη ετικέτας κειμένου"
+
+#: ../src/cust-dialog.h:18
+msgid "Add STOCK dialog button, or LABEL button with ICON"
+msgstr ""
+
+#: ../src/cust-dialog.h:20
+msgid "Add STOCK button, or LABEL button with ICON anywhere"
+msgstr ""
+
+#: ../src/cust-dialog.h:22
+msgid "Add a text entry"
+msgstr "Προσθήκη πεδίου εισαγωγής κειμένου"
+
+#: ../src/cust-dialog.h:24
+msgid "Add a large text entry"
+msgstr "Προσθήκη πεδίου εισαγωγής κειμένου πολλαπλών γραμμών"
+
+#: ../src/cust-dialog.h:26
+msgid "Add a password entry"
+msgstr "Προσθήκη πεδίου εισαγωγής κωδικού πρόσβασης"
+
+#: ../src/cust-dialog.h:28
+msgid "Add a file or pipe viewer"
+msgstr ""
+
+#: ../src/cust-dialog.h:30
+msgid "Add multi-line text editor"
+msgstr "Προσθήκη επεξεργαστή κειμένου"
+
+#: ../src/cust-dialog.h:32
+msgid "Add a checkbox option"
+msgstr ""
+
+#: ../src/cust-dialog.h:34
+msgid "Add a radio option"
+msgstr ""
+
+#: ../src/cust-dialog.h:36
+msgid "Add an icon"
+msgstr "Προσθήκη εικονιδίου"
+
+#: ../src/cust-dialog.h:38
+msgid "Add an image"
+msgstr "Προσθήκη εικόνας"
+
+#: ../src/cust-dialog.h:44
+msgid "Add a progress bar"
+msgstr ""
+
+#: ../src/cust-dialog.h:46
+msgid "Add a horizontal line separator"
+msgstr "Προσθήκη μιας οριζόντιας διαχωριστικής γραμμής"
+
+#: ../src/cust-dialog.h:48
+msgid "Add a vertical line separator"
+msgstr "Προσθήκη μιας κατακόρυφης διαχωριστικής γραμμής"
+
+#: ../src/cust-dialog.h:50
+msgid "Automatically close window after DELAY seconds"
+msgstr "Αυτόματο κλείσιμο του παραθύρου μετά από DELAY δευτερόλεπτα"
+
+#: ../src/cust-dialog.h:52
+msgid "Add a drop-down list.  COMMAND run when clicked."
+msgstr ""
+
+#: ../src/cust-dialog.h:54
+msgid "Add a combo list.  COMMAND run when Enter pressed."
+msgstr ""
+
+#. ^HIDE   hidden column (must be first) for data return  (int or double or
+#. string no progress)
+#. use --colwidth=W inside column list
+#: ../src/cust-dialog.h:58
+msgid "Add a list box.  COMMAND run when double-clicked."
+msgstr ""
+
+#: ../src/cust-dialog.h:60
+msgid "Add a list box with multiple selections"
+msgstr ""
+
+#: ../src/cust-dialog.h:62
+msgid "Options: [--save] [--dir] [--multi] [--filter F[:F...]]"
+msgstr "Επιλογές: [--save] [--dir] [--multi] [--filter F[:F...]]"
+
+#: ../src/cust-dialog.h:64
+msgid "Set base variable name  (Default: \"dialog\")"
+msgstr ""
+
+#: ../src/cust-dialog.h:66
+msgid "Set minimum width, height, padding (-1 = don't change)"
+msgstr "Ορισμός του ελάχιστου πλάτους, ύψους και γεμίσματος\n               (-1 = καμία αλλαγή)"
+
+#: ../src/cust-dialog.h:68
+msgid "Add following widgets to a horizontal box"
+msgstr "Προσθήκη των ακόλουθων γραφικών συστατικών σε ένα\n               οριζόντιο κουτί"
+
+#: ../src/cust-dialog.h:70
+msgid "Add following widgets to a vertical box"
+msgstr "Προσθήκη των ακόλουθων γραφικών συστατικών σε ένα\n               κατακόρυφο κουτί"
+
+#: ../src/cust-dialog.h:72
+msgid "Close the current box of widgets"
+msgstr "Κλείσιμο του τρέχοντος κουτιού γραφικών συστατικών"
+
+#: ../src/cust-dialog.h:74
+msgid "Run COMMAND when a key combination is pressed"
+msgstr "Εκτέλεση του COMMAND όταν πατηθεί ένας συνδυασμός πλήκτρων"
+
+#: ../src/cust-dialog.h:76
+msgid "Run COMMAND on window close attempt"
+msgstr "Εκτέλεση του COMMAND πριν το κλείσιμο του παραθύρου"
+
+#: ../src/cust-dialog.h:78
+msgid "Read commands from FILE or PIPE.  COMMAND for init."
+msgstr "Ανάγνωση εντολών από το FILE ή το PIPE. Το COMMAND δίνει\n               την αρχική τιμή."
+
+#: ../src/cust-dialog.h:141
+msgid "No operation - does nothing but evaluate arguments"
+msgstr "Καμία ενέργεια - υπολογισμός/ανάθεση τιμών σε μεταβλητές"
+
+#. exit status ?
+#: ../src/cust-dialog.h:143
+msgid "Close the dialog"
+msgstr "Κλείσιμο του διαλόγου"
+
+#: ../src/cust-dialog.h:145
+msgid "Press button named BUTTON-NAME"
+msgstr "Πίεση του κουμπιού με όνομα BUTTON-NAME"
+
+#: ../src/cust-dialog.h:147
+msgid "Set element NAME to VALUE"
+msgstr "Θέτει το στοιχείο NAME σε τιμή VALUE"
+
+#. also do for inputs?
+#: ../src/cust-dialog.h:149
+msgid "Select item VALUE (or first/all) in element NAME"
+msgstr "Επιλέγει το αντικείμενο VALUE (ή first/all) στο στοιχείο NAME"
+
+#: ../src/cust-dialog.h:151
+msgid "Unselect item VALUE (or all) in element NAME"
+msgstr "Αποπιλέγει το αντικείμενο VALUE (ή all) στο στοιχείο NAME"
+
+#: ../src/cust-dialog.h:153
+msgid "Focus element NAME, or raise dialog window"
+msgstr "Εστίαση του στοιχείου NAME, ή ανύψωση του παραθύρου"
+
+#: ../src/cust-dialog.h:155
+msgid "Hide element NAME"
+msgstr "Απόκρυψη του στοιχείου NAME"
+
+#: ../src/cust-dialog.h:157
+msgid "Show element NAME if previously hidden"
+msgstr "Εμφάνιση του στοιχείου NAME αν ήταν πριν κρυφό"
+
+#: ../src/cust-dialog.h:159
+msgid "Disable element NAME"
+msgstr "Απενεργοποίηση του στοιχείου NAME"
+
+#: ../src/cust-dialog.h:161
+msgid "Enable element NAME if previously disabled"
+msgstr "Ενεργοποίηση του στοιχείου NAME αν ήταν απενεργοποιημένο"
+
+#: ../src/cust-dialog.h:163
+msgid "Save files and write source output to FILE"
+msgstr "Αποθήκευση αρχείων και εγγραφή της εξόδου του source στο FILE"
+
+#: ../src/main.c:127
+msgid "Open folders in new tab of last window (default)"
+msgstr "Άνοιγμα φακέλων σε νέα καρτέλα του τελευταίου\n                                   παραθύρου (προεπιλογή)"
+
+#: ../src/main.c:128
+msgid "Open folder in current tab of last used window"
+msgstr "Άνοιγμα φακέλου στην τρέχουσα καρτέλα του\n                                   τελευταία χρησιμοποιημένου παραθύρου"
+
+#: ../src/main.c:129
+msgid "Don't load saved tabs"
+msgstr "Να μην φορτωθούν οι αποθηκευμένες καρτέλες"
+
+#: ../src/main.c:130
+msgid "Open folders in new window"
+msgstr "Άνοιγμα φακέλων σε νέο παράθυρο"
+
+#: ../src/main.c:131
+msgid "Open folders in panel 'P' (1-4)"
+msgstr "Άνοιγμα φακέλων στο πάνελ 'P' (1-4)"
+
+#: ../src/main.c:132
+msgid "Launch desktop manager daemon"
+msgstr "Εκκίνηση του δαίμονα διαχείρισης της\n                                   επιφάνειας εργασίας"
+
+#: ../src/main.c:133
+msgid "Show desktop settings"
+msgstr "Εμφάνιση των ρυθμίσεων της επιφάνειας\n                                   εργασίας"
+
+#: ../src/main.c:134
+msgid "Show Preferences ('N' is the Pref tab number)"
+msgstr ""
+
+#: ../src/main.c:135
+msgid "Run as a daemon"
+msgstr "Εκτέλεση σε κατάσταση δαίμονα"
+
+#: ../src/main.c:136
+msgid "Use DIR as configuration directory"
+msgstr "Χρήση του DIR ως καταλόγου ρυθμίσεων"
+
+#: ../src/main.c:137
+msgid "Show File Search"
+msgstr "Εμφάνιση της Αναζήτησης αρχείων"
+
+#: ../src/main.c:144
+msgid "Set desktop wallpaper to FILE"
+msgstr ""
+
+#: ../src/main.c:146
+msgid "Show a custom dialog (See -g help)"
+msgstr "Εμφάνιση ενός προσαρμοσμένου διαλόγου\n                                   (Δείτε το -g help)"
+
+#: ../src/main.c:147
+msgid "Send a socket command (See -s help)"
+msgstr "Αποστολή μιας εντολής socket\n                                   (Δείτε το -s help)"
+
+#: ../src/main.c:148 ../src/main.c:149
+msgid "No function - for compatibility only"
+msgstr "Καμία ενέργεια - για λόγους συμβατότητας μόνο"
+
+#: ../src/main.c:150
+msgid "Show version information"
+msgstr "Εμφάνιση πληροφοριών έκδοσης"
+
+#: ../src/main.c:160
+msgid "[DIR | FILE | URL]..."
+msgstr "[DIR | FILE | URL]..."
+
+#: ../src/main.c:465
+msgid "Option --config-dir ignored - an instance is already running"
+msgstr "Η επιλογή --config-dir αγνοήθηκε - το πρόγραμμα εκτελείται ήδη"
+
+#: ../src/main.c:477
+msgid "Option --config-dir contains invalid chars - cannot start"
+msgstr "Η επιλογή --config-dir περιέχει μη έγκυρους χαρακτήρες - η εκκίνηση είναι αδύνατη"
+
+#: ../src/main.c:601
+#, c-format
+msgid "spacefm: --socket-cmd requires an argument\n"
+msgstr "spacefm: η εντολή --socket-cmd απαιτεί μια παράμετρο\n"
+
+#: ../src/main.c:608
+#, c-format
+msgid "spacefm: could not create socket\n"
+msgstr "spacefm: αδύνατη η δημιουργία socket\n"
+
+#: ../src/main.c:623
+#, c-format
+msgid ""
+"spacefm: could not connect to socket (not running? or DISPLAY not set?)\n"
+msgstr ""
+
+#: ../src/main.c:666
+#, c-format
+msgid "spacefm: invalid response from socket\n"
+msgstr "spacefm: μη έγκυρη απάντηση από το socket\n"
+
+#. TRANSLATOR:  These three lines should be limited to 80 chars each
+#: ../src/main.c:676
+msgid ""
+"SpaceFM socket commands permit external processes (such as command scripts)\n"
+"to read and set GUI property values and execute methods inside running SpaceFM\n"
+"windows.  To handle events see View|Events in the main menu bar."
+msgstr ""
+
+#: ../src/main.c:678
+msgid "Usage:"
+msgstr "Χρήση:"
+
+#: ../src/main.c:680
+msgid "Example:"
+msgstr "Παράδειγμα:"
+
+#: ../src/main.c:683
+msgid ""
+"METHODS\n"
+"-------"
+msgstr "ΜΕΘΟΔΟΙ\n-------"
+
+#: ../src/main.c:685
+msgid "Sets a property"
+msgstr "Ορίζει μια ιδιότητα"
+
+#: ../src/main.c:688
+msgid "Gets a property"
+msgstr "Επιστρέφει μια ιδιότητα"
+
+#: ../src/main.c:691
+msgid "Sets a task property"
+msgstr "Ορίζει μια ιδιότητα εργασίας"
+
+#: ../src/main.c:694
+msgid "Gets a task property"
+msgstr "Επιστρέφει μια ιδιότητα εργασίας"
+
+#: ../src/main.c:697
+msgid "Starts a new task"
+msgstr "Εκκινεί μια νέα εργασία"
+
+#: ../src/main.c:700
+msgid "Activates a menu item by emitting its shortcut key"
+msgstr ""
+
+#: ../src/main.c:703
+msgid "Shows custom submenu named MENUNAME as a popup menu"
+msgstr ""
+
+#: ../src/main.c:706
+msgid "Add asynchronous handler COMMAND to EVENT"
+msgstr ""
+
+#: ../src/main.c:709
+msgid "Add synchronous handler COMMAND to EVENT, replacing default handler"
+msgstr ""
+
+#: ../src/main.c:712
+msgid "Remove handler COMMAND from EVENT"
+msgstr ""
+
+#: ../src/main.c:715
+msgid "Shows this help reference.  (Also see manual link below.)"
+msgstr "Εμφάνιση αυτής της οθόνης βοήθειας. (Δείτε επίσης παρακάτω το δεσμό\n    για το εγχειρίδιο)"
+
+#: ../src/main.c:717
+msgid ""
+"OPTIONS\n"
+"-------"
+msgstr "ΕΠΙΛΟΓΕΣ\n--------"
+
+#: ../src/main.c:718
+msgid ""
+"Add options after METHOD to specify a specific window, panel, and/or tab."
+msgstr "Μετά την ΜΕΘΟΔΟ μπορείτε να προσθέσετε τις επιλογές που θα καθορίσουν το\nπαράθυρο, το πάνελ και/ή την καρτέλα."
+
+#: ../src/main.c:719
+msgid ""
+"Otherwise the current tab of the current panel in the last window is used."
+msgstr "Διαφορετικά θα χρησιμοποιηθεί η τρέχουσα καρτέλα του εστιασμένου πάνελ του\nτελευταίου παραθύρου."
+
+#: ../src/main.c:722
+msgid "Specify window.  eg:"
+msgstr "Ορισμός παραθύρου\n    Π.χ."
+
+#: ../src/main.c:724
+msgid "Specify panel 1-4.  eg:"
+msgstr "Ορισμός πάνελ 1-4\n    Π.χ."
+
+#: ../src/main.c:726
+msgid "Specify tab 1-...  eg:"
+msgstr "Ορισμός καρτέλας 1-...\n    Π.χ."
+
+#: ../src/main.c:728
+msgid ""
+"PROPERTIES\n"
+"----------"
+msgstr "ΙΔΙΟΤΗΤΕΣ\n---------"
+
+#: ../src/main.c:729
+msgid "Set properties with METHOD 'set', or get the value with 'get'."
+msgstr "Ορίστε την τιμή των ιδιοτήτων με την ΜΕΘΟΔΟ 'set', ή επιστρέψτε την τιμή\nμε την ΜΕΘΟΔΟ 'get'."
+
+#: ../src/main.c:731
+msgid "eg '800x600'"
+msgstr "π.χ. '800x600'"
+
+#: ../src/main.c:732
+msgid "eg '100x50'"
+msgstr "π.χ. '100x50'"
+
+#: ../src/main.c:735
+msgid "eg '1024x768'  (read-only)"
+msgstr "π.χ. '1024x768'  (για ανάγνωση μόνο)"
+
+#: ../src/main.c:736 ../src/main.c:737 ../src/main.c:738 ../src/main.c:739
+#: ../src/main.c:755 ../src/main.c:756 ../src/main.c:757
+msgid "eg '100'"
+msgstr "π.χ. '100'"
+
+#: ../src/main.c:744
+msgid "Open DIR or default in a new tab"
+msgstr "Ανοίγει το DIR ή τον προεπιλεγμένο\n                                         φάκελο σε νέα καρτέλα"
+
+#: ../src/main.c:765
+msgid "eg 'Current Status: Example'"
+msgstr ""
+
+#: ../src/main.c:767
+msgid "DIR            eg '/etc'"
+msgstr "DIR            π.χ. '/etc'"
+
+#: ../src/main.c:768
+msgid "[FILENAME...]"
+msgstr "[ΟΝΟΜΑ ΑΡΧΕΙΟΥ...]"
+
+#: ../src/main.c:769
+msgid "[PATTERN]      eg '*.jpg'"
+msgstr "[ΜΟΤΙΒΟ]      π.χ. '*.jpg'"
+
+#: ../src/main.c:770 ../src/main.c:771
+msgid "eg 'Some\\nlines\\nof text'"
+msgstr "π.χ. 'Κάποιες\\nγραμμές\\nκειμένου'"
+
+#: ../src/main.c:772 ../src/main.c:773
+msgid "eg '~/copy-file-contents-to-clipboard.txt'"
+msgstr "π.χ. '~/copy-file-contents-to-clipboard.txt'"
+
+#: ../src/main.c:774
+msgid "FILE...  Files copied to clipboard"
+msgstr "FILE...  Αρχεία που αντιγράφηκαν στο πρόχειρο"
+
+#: ../src/main.c:775
+msgid "FILE...  Files cut to clipboard"
+msgstr "FILE...  Αρχεία που αποκόπηκαν στο πρόχειρο"
+
+#: ../src/main.c:777
+msgid ""
+"TASK PROPERTIES\n"
+"---------------"
+msgstr "ΙΔΙΟΤΗΤΕΣ ΕΡΓΑΣΙΑΣ\n------------------"
+
+#: ../src/main.c:778
+msgid "contents of Status task column  (read-only)"
+msgstr ""
+
+#: ../src/main.c:779
+msgid "eg 'gtk-open'"
+msgstr "π.χ. 'gtk-open'"
+
+#: ../src/main.c:780
+msgid "text to show in Count task column"
+msgstr ""
+
+#: ../src/main.c:781
+msgid "text to show in Folder task column"
+msgstr ""
+
+#: ../src/main.c:782
+msgid "text to show in Item task column"
+msgstr ""
+
+#: ../src/main.c:783
+msgid "text to show in To task column"
+msgstr ""
+
+#: ../src/main.c:784
+msgid "progress percent (1..100) or '' to pulse"
+msgstr ""
+
+#: ../src/main.c:785
+msgid "text to show in Total task column"
+msgstr ""
+
+#: ../src/main.c:786
+msgid "text to show in Current task column"
+msgstr ""
+
+#: ../src/main.c:787
+msgid "text to show in CRemain task column"
+msgstr ""
+
+#: ../src/main.c:788
+msgid "text to show in Average task column"
+msgstr ""
+
+#: ../src/main.c:789
+msgid "text to show in Remain task column"
+msgstr ""
+
+#: ../src/main.c:790
+msgid "contents of Elapsed task column (read-only)"
+msgstr ""
+
+#: ../src/main.c:791
+msgid "contents of Started task column (read-only)"
+msgstr ""
+
+#: ../src/main.c:793
+msgid "COMMAND  command to show a custom task dialog\n"
+msgstr ""
+
+#: ../src/main.c:795
+msgid ""
+"TASK TYPES\n"
+"----------"
+msgstr "ΤΥΠΟΙ ΕΡΓΑΣΙΩΝ\n--------------"
+
+#: ../src/main.c:797
+msgid "Run COMMAND in DIR"
+msgstr ""
+
+#: ../src/main.c:799
+msgid "Copy|Move|Link FILE(s) or DIR(s) to TARGET dir"
+msgstr ""
+
+#: ../src/main.c:800
+msgid "Recursively delete FILE(s) or DIR(s)"
+msgstr ""
+
+#: ../src/main.c:801
+msgid "Open FILE in user's or root's text editor"
+msgstr ""
+
+#: ../src/main.c:802
+msgid "Open URL in user's web browser"
+msgstr ""
+
+#: ../src/main.c:804
+msgid ""
+"EVENTS\n"
+"------"
+msgstr "ΓΕΓΟΝΟΤΑ\n--------"
+
+#: ../src/main.c:805
+#, c-format
+msgid "Instance start        %e"
+msgstr "Εκκίνηση διεργασίας   %e"
+
+#: ../src/main.c:806
+#, c-format
+msgid "Instance exit         %e"
+msgstr "Έξοδος διεργασίας     %e"
+
+#: ../src/main.c:807
+msgid "Window new            %e %w %p %t"
+msgstr "Νέο παράθυρο         %e %w %p %t"
+
+#: ../src/main.c:808
+msgid "Window focus          %e %w %p %t"
+msgstr "Εστίαση παραθύρου     %e %w %p %t"
+
+#: ../src/main.c:809
+msgid "Window move/resize    %e %w %p %t"
+msgstr "Μετακίνηση/αλλαγή\n                                  μεγέθους παραθύρου  %e %w %p %t"
+
+#: ../src/main.c:810
+msgid "Mouse click           %e %w %p %t %b %m %f"
+msgstr "Κλικ                  %e %w %p %t %b %m %f"
+
+#: ../src/main.c:811
+msgid "Window keypress       %e %w %p %t %k %m"
+msgstr "Πάτημα πλήκτρου       %e %w %p %t %k %m"
+
+#: ../src/main.c:812
+msgid "Window close          %e %w %p %t"
+msgstr "Κλείσιμο παραθύρου    %e %w %p %t"
+
+#: ../src/main.c:813
+msgid "Panel focus           %e %w %p %t"
+msgstr "Εστίαση πάνελ         %e %w %p %t"
+
+#: ../src/main.c:814
+msgid "Panel show/hide       %e %w %p %t %f %v"
+msgstr "Εμφάν./απόκρ. πάνελ   %e %w %p %t %f %v"
+
+#: ../src/main.c:815
+msgid "Selection changed     %e %w %p %t"
+msgstr "Αλλαγή επιλογής       %e %w %p %t"
+
+#: ../src/main.c:816
+msgid "Tab new               %e %w %p %t"
+msgstr "Νέα καρτέλα           %e %w %p %t"
+
+#: ../src/main.c:817
+msgid "Tab focus             %e %w %p %t"
+msgstr "Εστίαση καρτέλας      %e %w %p %t"
+
+#: ../src/main.c:818
+msgid "Tab close             %e %w %p %t"
+msgstr "Κλείσιμο καρτέλας     %e %w %p %t"
+
+#: ../src/main.c:819
+msgid "Device change         %e %f %v"
+msgstr "Αλλαγή συσκευής       %e %f %v"
+
+#: ../src/main.c:821
+msgid "Event COMMAND Substitution Variables:"
+msgstr ""
+
+#: ../src/main.c:822
+msgid "event type (evt_start|evt_exit|...)"
+msgstr "τύπος γεγονότος (evt_start|evt_exit|...)"
+
+#: ../src/main.c:823
+msgid "window ID"
+msgstr "αναγνωριστικό παραθύρου"
+
+#: ../src/main.c:824
+msgid "panel number (1-4)"
+msgstr "αριθμός πάνελ (1-4)"
+
+#: ../src/main.c:825
+msgid "tab number (1-...)"
+msgstr "αριθμός καρτέλας (1-...)"
+
+#: ../src/main.c:826
+msgid "mouse button (0=double 1=left 2=middle 3=right ...)"
+msgstr "κουμπί ποντικιού (0=διπλό 1=αριστερό 2=μεσαίο 3=δεξί ...)"
+
+#: ../src/main.c:827
+msgid "key code  (eg 0x63)"
+msgstr "κωδικός πλήκτρου  (π.χ. 0x63)"
+
+#: ../src/main.c:828
+msgid "modifier key (eg 0x4  used with clicks and keypresses)"
+msgstr ""
+
+#: ../src/main.c:829
+msgid "focus element (panelN|filelist|devices|bookmarks|dirtree|pathbar)"
+msgstr ""
+
+#: ../src/main.c:830
+msgid "focus element is visible (0 or 1, or device state change)"
+msgstr ""
+
+#: ../src/main.c:832
+msgid "Examples"
+msgstr "Παραδείγματα"
+
+#: ../src/main.c:848
+msgid "These files have been copied to the clipboard"
+msgstr "Αυτά τα αρχεία έχουν αντιγραφεί στο πρόχειρο"
+
+#: ../src/main.c:859
+msgid "For full documentation and examples see the SpaceFM User's Manual:"
+msgstr "Για περισσότερες πληροφορίες και παραδείγματα, ανατρέξτε στο Εγχειρίδιο\nΧρήστη του SpaceFM:"
+
+#: ../src/main.c:1206
+#, c-format
+msgid ""
+"spacefm: Error: Unable to save session\n"
+"       %s\n"
+msgstr "spacefm: Σφάλμα: Αδύνατη η αποθήκευση της συνεδρίας\n%s\n"
+
+#: ../src/main.c:1260
+msgid "File doesn't exist"
+msgstr "Το αρχείο δεν υπάρχει"
+
+#: ../src/main.c:1262 ../src/main.c:1338 ../src/main.c:1340 ../src/main.c:1464
+#: ../src/main.c:1466 ../src/main.c:1599 ../src/settings.c:4840
+#: ../src/settings.c:8152 ../src/ptk/ptk-file-browser.c:2401
+#: ../src/ptk/ptk-file-browser.c:2427 ../src/ptk/ptk-file-browser.c:5982
+#: ../src/ptk/ptk-file-browser.c:5989 ../src/ptk/ptk-console-output.c:232
+#: ../src/ptk/ptk-file-misc.c:2752 ../src/ptk/ptk-file-misc.c:3404
+#: ../src/ptk/ptk-file-misc.c:3484 ../src/ptk/ptk-file-misc.c:3578
+#: ../src/ptk/ptk-file-misc.c:3739 ../src/ptk/ptk-file-properties.c:891
+#: ../src/ptk/ptk-file-properties.c:902 ../src/vfs/vfs-file-task.c:1512
+#: ../src/item-prop.c:974
+#, c-format
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: ../src/main.c:1338 ../src/main.c:1464
+msgid ""
+"Error: Unable to initialize inotify file change monitor.\n"
+"\n"
+"Do you have an inotify-capable kernel?"
+msgstr ""
+
+#: ../src/main.c:1340 ../src/main.c:1466
+msgid ""
+"Error: Unable to establish connection with FAM.\n"
+"\n"
+"Do you have \"FAM\" or \"Gamin\" installed and running?"
+msgstr "Σφάλμα: Αδύνατη η δημιουργία σύνδεσης με το FAM.\n\nΈχετε \"FAM\" ή \"Gamin\" εγκατεστημένο και σε λειτουργία?"
+
+#: ../src/main.c:1392
+msgid "--dialog must be first option"
+msgstr "Το --dialog πρέπει να είναι η πρώτη επιλογή"
+
+#: ../src/main.c:1399
+msgid "--socket-cmd must be first option"
+msgstr "Το --socket-cmd πρέπει να είναι η πρώτη επιλογή"
+
+#: ../src/main.c:1407
+msgid "This build of SpaceFM has desktop integration disabled"
+msgstr ""
+
+#: ../src/main.c:1595
+msgid "Don't know how to open the file"
+msgstr "Δεν γνωρίζετε πως να ανοίξετε το αρχείο"
+
+#: ../src/main.c:1597
+#, c-format
+msgid ""
+"Unable to open file:\n"
+"\"%s\"\n"
+"%s"
+msgstr "Αδύνατο το άνοιγμα του αρχείου:\n\"%s\"\n%s"
+
+#: ../src/main-window.c:404 ../src/settings.c:10146
+msgid "_Show"
+msgstr "_Εμφάνιση"
+
+#: ../src/main-window.c:405 ../src/item-prop.c:1710
+msgid "_Add"
+msgstr "_Προσθήκη"
+
+#: ../src/main-window.c:459 ../src/settings.c:6063
+msgid "Choose Plugin File"
+msgstr "Επιλέξτε το αρχείο του πρόσθετου"
+
+#. get url
+#: ../src/main-window.c:470 ../src/settings.c:6075
+msgid "Enter Plugin URL"
+msgstr "Εισάγετε το URL του πρόσθετου"
+
+#: ../src/main-window.c:470 ../src/settings.c:6075
+msgid ""
+"Enter SpaceFM Plugin URL:\n"
+"\n"
+"(wget will be used to download the plugin file)"
+msgstr ""
+
+#: ../src/main-window.c:490
+#, c-format
+msgid ""
+"This plugin's filename is invalid.  Please rename it using alpha-numeric "
+"ASCII characters and try again."
+msgstr ""
+
+#: ../src/main-window.c:492
+msgid "Invalid Plugin Filename"
+msgstr "Μη έγκυρο όνομα αρχείου πρόσθετου"
+
+#: ../src/main-window.c:515
+#, c-format
+msgid ""
+"There is already a plugin installed as '%s'.  Overwrite ?\n"
+"\n"
+"Tip: You can also rename this plugin file to install it under a different name."
+msgstr "Υπάρχει ήδη ένα πρόσθετο με όνομα '%s'. Να αντικατασταθεί;\n\nΣυμβουλή: Μπορείτε να μετονομάστε το αρχείο αυτού του πρόσθετου ώστε να εγκατασταθεί με διαφορετικό όνομα."
+
+#: ../src/main-window.c:517
+msgid "Overwrite Plugin ?"
+msgstr "Να αντικατασταθεί το πρόσθετο;"
+
+#: ../src/main-window.c:538 ../src/settings.c:6083
+msgid "Error Creating Temp Directory"
+msgstr "Σφάλμα δημιουργίας προσωρινού καταλόγου"
+
+#: ../src/main-window.c:539 ../src/settings.c:6084
+msgid "Unable to create temporary directory"
+msgstr "Αδύνατη η δημιουργία του προσωρινού καταλόγου"
+
+#: ../src/main-window.c:785
+#, c-format
+msgid ""
+"Error: Unable to save session file\n"
+"\n"
+"( %s )"
+msgstr "Σφάλμα: Αδύνατη η αποθήκευση του αρχείου συνεδρίας\n\n( %s )"
+
+#: ../src/main-window.c:787
+msgid "Save Session Error"
+msgstr "Σφάλμα αποθήκευσης συνεδρίας"
+
+#. root task
+#: ../src/main-window.c:818
+msgid "Open Root Window"
+msgstr "Άνοιγμα παραθύρου Root"
+
+#: ../src/main-window.c:848 ../src/vfs/vfs-file-task.c:1544
+msgid "Terminal Not Available"
+msgstr "Το τερματικό δεν είναι διαθέσιμο"
+
+#: ../src/main-window.c:849
+msgid "Please set your terminal program in View|Preferences|Advanced"
+msgstr ""
+
+#: ../src/main-window.c:860
+msgid "Open Terminal"
+msgstr "Άνοιγμα τερματικού"
+
+#: ../src/main-window.c:1180
+msgid "Design Mode Help"
+msgstr "Βοήθεια της Λειτουργίας Σχεδίασης"
+
+#: ../src/main-window.c:1180
+msgid ""
+"Design Mode allows you to change the name, shortcut key and icon of menu items, show help for an item, and add your own custom commands to most menus.\n"
+"\n"
+"To open the design menu, simply right-click on a menu item.\n"
+"\n"
+"To use Design Mode on a submenu, you must first close the submenu (by clicking on it).  The Bookmarks menu does not support Design Mode.\n"
+"\n"
+"To modify a toolbar, click the leftmost tool icon to open the toolbar config menu and select Help."
+msgstr ""
+
+#: ../src/main-window.c:1870 ../src/settings.c:4734 ../src/settings.c:5036
+#: ../src/settings.c:5908 ../src/settings.c:6025
+#, c-format
+msgid "New _Command"
+msgstr ""
+
+#: ../src/main-window.c:1978
+#, c-format
+msgid "Show Panel %d"
+msgstr "Εμφάνιση του πάνελ %d"
+
+#: ../src/main-window.c:2006 ../src/settings.c:7278 ../src/settings.c:10068
+#: ../src/settings.c:10084 ../src/settings.c:10581
+msgid "_File"
+msgstr "_Αρχείο"
+
+#: ../src/main-window.c:2009 ../src/settings.c:10670
+msgid "_View"
+msgstr "_Προβολή"
+
+#: ../src/main-window.c:2012 ../src/settings.c:11014
+msgid "_Devices"
+msgstr "_Συσκευές"
+
+#: ../src/main-window.c:2016 ../src/settings.c:10438 ../src/settings.c:10646
+#: ../src/settings.c:11025
+msgid "_Bookmarks"
+msgstr "Σελι_δοδείκτες"
+
+#: ../src/main-window.c:2022
+msgid "_Plugins"
+msgstr "Π_ρόσθετα"
+
+#: ../src/main-window.c:2026
+msgid "_Tools"
+msgstr "_Εργαλεία"
+
+#. Help
+#: ../src/main-window.c:2029 ../src/settings.c:995 ../src/settings.c:7289
+#: ../src/settings.c:7813 ../src/settings.c:8094 ../src/settings.c:9770
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../src/main-window.c:2316
+#, c-format
+msgid ""
+"Error: Unable to save session file.  Do you want to exit without saving?\n"
+"\n"
+"( %s )"
+msgstr "Σφάλμα: Αδύνατη η αποθήκευση του αρχείου συνεδρίας. Θέλετε να γίνει τερματισμός χωρίς αποθήκευση;\n\n( %s )"
+
+#: ../src/main-window.c:2325
+msgid "SpaceFM Error"
+msgstr "Σφάλμα του "
+
+#: ../src/main-window.c:2341
+msgid "Stop all tasks running in this window?"
+msgstr ""
+
+#: ../src/main-window.c:2350
+msgid "Aborting tasks..."
+msgstr ""
+
+#: ../src/main-window.c:3567
+#, c-format
+msgid " %s free / %s   "
+msgstr " %s ελεύθερα / %s   "
+
+#: ../src/main-window.c:3620
+#, c-format
+msgid "   Link → %s"
+msgstr "   Σύνδεσμός → %s"
+
+#: ../src/main-window.c:3622
+#, c-format
+msgid "   Link → %s/"
+msgstr "   Σύνδεσμός → %s/"
+
+#: ../src/main-window.c:3625
+#, c-format
+msgid "   !Link → %s/ (missing)"
+msgstr ""
+
+#: ../src/main-window.c:3633
+#, c-format
+msgid "   Link → %s (%s)"
+msgstr "   Σύνδεσμός → %s (%s)"
+
+#: ../src/main-window.c:3636
+#, c-format
+msgid "   !Link → %s (missing)"
+msgstr ""
+
+#: ../src/main-window.c:3643
+#, c-format
+msgid "   !Link → ( error reading target )"
+msgstr ""
+
+#: ../src/main-window.c:3690
+msgid "hidden"
+msgid_plural "hidden"
+msgstr[0] "κρυφό"
+msgstr[1] "κρυφά"
+
+#: ../src/main-window.c:3693
+#, c-format
+msgid "%s%d visible (%s)   %s"
+msgid_plural "%s%d visible (%s)   %s"
+msgstr[0] "%s%d ορατό (%s)   %s"
+msgstr[1] "%s%d ορατά (%s)   %s"
+
+#: ../src/main-window.c:3698
+#, c-format
+msgid "%s%d item   %s"
+msgid_plural "%s%d items   %s"
+msgstr[0] "%s%d αντικείμενο   %s"
+msgstr[1] "%s%d αντικείμενα   %s"
+
+#: ../src/main-window.c:3934
+msgid "Device manager key shortcuts are disabled in HAL mode"
+msgstr ""
+
+#. If you change "Status", also change it in on_task_button_press_event
+#: ../src/main-window.c:4150 ../src/main-window.c:5612
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: ../src/main-window.c:4150
+msgid "#"
+msgstr "#"
+
+#: ../src/main-window.c:4150 ../src/ptk/ptk-file-misc.c:2077
+#: ../src/find-files.c:918
+msgid "Folder"
+msgstr "Φάκελος"
+
+#: ../src/main-window.c:4150
+msgid "Item"
+msgstr "Αντικείμενο"
+
+#: ../src/main-window.c:4151
+msgid "To"
+msgstr ""
+
+#: ../src/main-window.c:4151
+msgid "Progress"
+msgstr ""
+
+#: ../src/main-window.c:4151
+msgid "Total"
+msgstr ""
+
+#: ../src/main-window.c:4152
+msgid "Started"
+msgstr ""
+
+#: ../src/main-window.c:4152
+msgid "Elapsed"
+msgstr ""
+
+#: ../src/main-window.c:4152
+msgid "Current"
+msgstr ""
+
+#: ../src/main-window.c:4152
+msgid "CRemain"
+msgstr ""
+
+#: ../src/main-window.c:4153
+msgid "Average"
+msgstr ""
+
+#: ../src/main-window.c:4153
+msgid "Remain"
+msgstr ""
+
+#: ../src/main-window.c:4166
+msgid "Reorder Columns Help"
+msgstr ""
+
+#: ../src/main-window.c:4166
+msgid ""
+"To change the order of the columns, drag the column header to the desired "
+"location."
+msgstr ""
+
+#: ../src/main-window.c:5724
+msgid "moving"
+msgstr ""
+
+#: ../src/main-window.c:5725
+msgid "copying"
+msgstr ""
+
+#: ../src/main-window.c:5726
+msgid "trashing"
+msgstr ""
+
+#: ../src/main-window.c:5727
+msgid "deleting"
+msgstr ""
+
+#: ../src/main-window.c:5728
+msgid "linking"
+msgstr ""
+
+#: ../src/main-window.c:5729
+msgid "changing"
+msgstr ""
+
+#: ../src/main-window.c:5730
+msgid "running"
+msgstr ""
+
+#: ../src/main-window.c:5836
+#, c-format
+msgid "%d error %s"
+msgstr "%d σφάλμα %s"
+
+#: ../src/main-window.c:5837
+#, c-format
+msgid "%d errors %s"
+msgstr "%d σφάλματα %s"
+
+#: ../src/main-window.c:5853 ../src/ptk/ptk-file-task.c:1690
+#, c-format
+msgid "paused"
+msgstr ""
+
+#: ../src/main-window.c:5855 ../src/ptk/ptk-file-task.c:1692
+#, c-format
+msgid "queued"
+msgstr ""
+
+#: ../src/main-window.c:6122 ../src/ptk/ptk-file-browser.c:295
+#: ../src/edit-bookmarks.c:196 ../src/find-files.c:903
+msgid "Name"
+msgstr "Όνομα"
+
+#: ../src/main-window.c:6122 ../src/ptk/ptk-file-browser.c:295
+#: ../src/find-files.c:924
+msgid "Size"
+msgstr "Μέγεθος"
+
+#: ../src/main-window.c:6122 ../src/ptk/ptk-file-browser.c:295
+#: ../src/find-files.c:928
+msgid "Type"
+msgstr "Τύπος"
+
+#: ../src/main-window.c:6123 ../src/ptk/ptk-file-browser.c:296
+msgid "Permission"
+msgstr "Δικαιώματα"
+
+#: ../src/main-window.c:6123 ../src/ptk/ptk-file-browser.c:296
+msgid "Owner"
+msgstr "Ιδιοκτήτης"
+
+#: ../src/main-window.c:6123 ../src/ptk/ptk-file-browser.c:296
+msgid "Modified"
+msgstr "Τροποποιήθηκε"
+
+#: ../src/main-window.c:6135
+msgid "spacefm: invalid socket command\n"
+msgstr "spacefm: μη έγκυρη εντολή socket\n"
+
+#: ../src/main-window.c:6164
+#, c-format
+msgid "spacefm: invalid option '%s'\n"
+msgstr "spacefm: μη έγκυρη επιλογή '%s'\n"
+
+#: ../src/main-window.c:6167
+#, c-format
+msgid "spacefm: option %s requires an argument\n"
+msgstr "spacefm: η επιλογή %s απαιτεί μία παράμετρο\n"
+
+#: ../src/main-window.c:6177
+msgid "spacefm: invalid window\n"
+msgstr "spacefm: μη έγκυρο παράθυρο\n"
+
+#: ../src/main-window.c:6197
+#, c-format
+msgid "spacefm: invalid window %s\n"
+msgstr "spacefm: μη έγκυρο παράθυρο %s\n"
+
+#: ../src/main-window.c:6207
+#, c-format
+msgid "spacefm: invalid panel %d\n"
+msgstr "spacefm: μη έγκυρο πάνελ %d\n"
+
+#: ../src/main-window.c:6214
+#, c-format
+msgid "spacefm: panel %d is not visible\n"
+msgstr "spacefm: το πάνελ %d δεν είναι ορατό\n"
+
+#: ../src/main-window.c:6227
+#, c-format
+msgid "spacefm: invalid tab %d\n"
+msgstr "spacefm: μη έγκυρη καρτέλα %d\n"
+
+#: ../src/main-window.c:6239
+msgid "spacefm: command set requires an argument\n"
+msgstr "spacefm: η εντολή set απαιτεί μια παράμετρο\n"
+
+#: ../src/main-window.c:6265 ../src/main-window.c:6572
+#, c-format
+msgid "spacefm: invalid %s value\n"
+msgstr ""
+
+#: ../src/main-window.c:6298 ../src/main-window.c:6450
+msgid "spacefm: invalid slider value\n"
+msgstr ""
+
+#: ../src/main-window.c:6327
+msgid "spacefm: invalid panel number\n"
+msgstr "spacefm: μη έγκυρος αριθμός πάνελ\n"
+
+#: ../src/main-window.c:6368
+msgid "spacefm: invalid tab number\n"
+msgstr "spacefm: μη έγκυρος αριθμός καρτέλας\n"
+
+#: ../src/main-window.c:6421 ../src/main-window.c:6741
+#: ../src/main-window.c:6868 ../src/main-window.c:7136
+#, c-format
+msgid "spacefm: invalid property %s\n"
+msgstr ""
+
+#: ../src/main-window.c:6470
+msgid "spacefm: invalid column width\n"
+msgstr "spacefm: μη έγκυρο πλάτος στήλης\n"
+
+#: ../src/main-window.c:6506 ../src/main-window.c:6533
+#: ../src/main-window.c:6934
+#, c-format
+msgid "spacefm: invalid column name '%s'\n"
+msgstr ""
+
+#: ../src/main-window.c:6628
+msgid "spacefm: text is not valid UTF-8\n"
+msgstr "spacefm: το κείμενο δεν είναι έγκυορ UTF-8\n"
+
+#: ../src/main-window.c:6645
+#, c-format
+msgid "spacefm: %s requires a file path\n"
+msgstr ""
+
+#: ../src/main-window.c:6651
+#, c-format
+msgid "spacefm: error reading file '%s'\n"
+msgstr "spacefm: σφάλμα ανάγνωσης του αρχείου '%s'\n"
+
+#: ../src/main-window.c:6657
+#, c-format
+msgid "spacefm: file '%s' does not contain valid UTF-8 text\n"
+msgstr "spacefm: το αρχείο '%s' δεν περιέχει έγκυρο κείμενο UTF-8\n"
+
+#: ../src/main-window.c:6698
+#, c-format
+msgid "spacefm: %s requires a directory path\n"
+msgstr ""
+
+#: ../src/main-window.c:6704
+#, c-format
+msgid "spacefm: directory '%s' does not exist\n"
+msgstr "spacefm: ο κατάλογος '%s' δεν υπάρχει\n"
+
+#: ../src/main-window.c:6750 ../src/main-window.c:7621
+#: ../src/main-window.c:7647
+#, c-format
+msgid "spacefm: command %s requires an argument\n"
+msgstr "spacefm: η εντολή %s απαιτεί μια παράμετρο\n"
+
+#: ../src/main-window.c:7144 ../src/main-window.c:7274
+#: ../src/main-window.c:7378 ../src/main-window.c:7435
+#: ../src/main-window.c:7486 ../src/main-window.c:7687
+#, c-format
+msgid "spacefm: %s requires two arguments\n"
+msgstr "spacefm: το %s απαιτεί δύο παράμετρους\n"
+
+#: ../src/main-window.c:7172 ../src/main-window.c:7302
+#, c-format
+msgid "spacefm: invalid task '%s'\n"
+msgstr "spacefm: μη έγκυρη εργασία '%s'\n"
+
+#: ../src/main-window.c:7177
+#, c-format
+msgid "spacefm: internal task %s is read-only\n"
+msgstr "spacefm: spacefm: η εσωτερική εργασία '%s' είναι μόνο για ανάγνωση\n"
+
+#: ../src/main-window.c:7229
+#, c-format
+msgid "spacefm: task property '%s' is read-only\n"
+msgstr "spacefm: η ιδιότητα της εργασίας '%s' είναι μόνο για ανάγνωση\n"
+
+#: ../src/main-window.c:7246
+#, c-format
+msgid "spacefm: invalid queue_state '%s'\n"
+msgstr ""
+
+#: ../src/main-window.c:7264 ../src/main-window.c:7365
+#, c-format
+msgid "spacefm: invalid task property '%s'\n"
+msgstr "spacefm: μη έγκυρη ιδιότητα εργασίας '%s'\n"
+
+#: ../src/main-window.c:7421 ../src/main-window.c:7523
+#: ../src/main-window.c:7544
+#, c-format
+msgid "spacefm: no such directory '%s'\n"
+msgstr "spacefm: ο κατάλογος '%s' δεν υπάρχει\n"
+
+#: ../src/main-window.c:7428 ../src/main-window.c:7479
+#: ../src/main-window.c:7530
+#, c-format
+msgid "spacefm: invalid %s task option '%s'\n"
+msgstr ""
+
+#: ../src/main-window.c:7495
+#, c-format
+msgid "spacefm: no such file '%s'\n"
+msgstr "spacefm: το αρχείο '%s' δεν υπάρχει\n"
+
+#: ../src/main-window.c:7563
+#, c-format
+msgid "spacefm: relative path '%s' requires %s option --dir DIR\n"
+msgstr ""
+
+#: ../src/main-window.c:7587
+#, c-format
+msgid "spacefm: task type %s requires FILE argument(s)\n"
+msgstr ""
+
+#: ../src/main-window.c:7612
+#, c-format
+msgid "spacefm: invalid task type '%s'\n"
+msgstr "spacefm: μη έγκυρος τύπος εργασίας '%s'\n"
+
+#: ../src/main-window.c:7636
+#, c-format
+msgid "spacefm: invalid keycode '%s'\n"
+msgstr "spacefm: μη έγκυρο keycode '%s'\n"
+
+#: ../src/main-window.c:7654
+#, c-format
+msgid "spacefm: custom submenu '%s' not found\n"
+msgstr ""
+
+#: ../src/main-window.c:7666
+#, c-format
+msgid "spacefm: menu '%s' context hidden or disabled\n"
+msgstr ""
+
+#: ../src/main-window.c:7693
+#, c-format
+msgid "spacefm: invalid event type '%s'\n"
+msgstr "spacefm: μη έγκυρος τύπος γεγονότος '%s'\n"
+
+#: ../src/main-window.c:7719
+#, c-format
+msgid "spacefm: event handler not found\n"
+msgstr ""
+
+#: ../src/main-window.c:7730
+#, c-format
+msgid "spacefm: invalid socket method '%s'\n"
+msgstr ""
+
+#: ../src/pref-dialog.c:159 ../src/pref-dialog.c:171 ../src/settings.c:9049
+#: ../src/settings.c:9119 ../src/settings.c:9187
+msgid "Default"
+msgstr "Προεπιλογή"
+
+#: ../src/pref-dialog.c:191
+msgid "Choose Desktop Font"
+msgstr ""
+
+#: ../src/pref-dialog.c:192
+msgid "Example Item 0123456789"
+msgstr "Παράδειγμα αντικειμένου 0123456789"
+
+#. task
+#: ../src/pref-dialog.c:772 ../src/pref-dialog.c:773
+msgid "Save Root Settings"
+msgstr "Αποθήκευση ρυθμίσεων του Root"
+
+#: ../src/pref-dialog.c:772
+msgid ""
+"You will now be asked for your root password to save the root settings for "
+"this user to a file in /etc/spacefm/  Supplying the password in the next "
+"window is recommended.  Because SpaceFM runs some commands as root via su, "
+"these settings are best protected by root."
+msgstr "Τώρα θα σας ζητηθεί ο κωδικός πρόσβασης του root για να αποθηκευτούν οι ρυθμίσεις αυτού του χρήστη σε ένα αρχείο στο /etc/spacefm/. Επειδή το SpaceFM εκτελεί κάποιες εντολές ως root μέσω του su, αυτές οι ρυθμίσεις είναι καλύτερα προστατευμένες από τον root."
+
+#. also in aboutdlg.ui
+#: ../src/settings.c:129
+#, c-format
+msgid ""
+"Enter program or bash command line:\n"
+"\n"
+"Use:\n"
+"\t%%F\tselected files  or  %%f first selected file\n"
+"\t%%N\tselected filenames  or  %%n first selected filename\n"
+"\t%%d\tcurrent directory\n"
+"\t%%v\tselected device (eg /dev/sda1)\n"
+"\t%%m\tdevice mount point (eg /media/dvd);  %%l device label\n"
+"\t%%b\tselected bookmark\n"
+"\t%%t\tselected task directory;  %%p task pid\n"
+"\t%%a\tmenu item value\n"
+"\t$fm_panel, $fm_tab, $fm_command, etc"
+msgstr ""
+
+#: ../src/settings.c:131
+msgid ""
+"Enter an icon name, icon file path, or stock item name:\n"
+"\n"
+"Not all icons may work due to various issues."
+msgstr ""
+
+#: ../src/settings.c:133
+msgid ""
+"Enter menu item name:\n"
+"\n"
+"Precede a character with an underscore (_) to underline that character as a shortcut key if desired."
+msgstr ""
+
+#: ../src/settings.c:134
+msgid ""
+"Enter new menu item name:\n"
+"\n"
+"Precede a character with an underscore (_) to underline that character as a shortcut key if desired.\n"
+"\n"
+"TIP: To change this menu item later, right-click on the menu item to open the design menu."
+msgstr ""
+
+#: ../src/settings.c:366
+msgid "custom tmp_dir contains invalid chars - reverting to /tmp"
+msgstr ""
+
+#: ../src/settings.c:372
+msgid "custom tmp_dir does not exist - reverting to /tmp"
+msgstr ""
+
+#: ../src/settings.c:861 ../src/settings.c:9481
+msgid "Ignore _Hide Policy"
+msgstr "Α_γνόηση Πολιτικής απόκρυψης"
+
+#: ../src/settings.c:868 ../src/settings.c:9564
+msgid "Ignore _No Policy"
+msgstr "Αγ_νόηση της NOPOLICY"
+
+#: ../src/settings.c:878 ../src/settings.c:10114
+msgid "_FAQ"
+msgstr "_FAQ"
+
+#: ../src/settings.c:888 ../src/settings.c:893 ../src/settings.c:10257
+#: ../src/settings.c:10277
+msgid "_Stop"
+msgstr "_Σταμάτημα"
+
+#: ../src/settings.c:900 ../src/settings.c:10290
+msgid "Show _Manager"
+msgstr "Ε_μφάνιση Διαχειριστή"
+
+#: ../src/settings.c:907 ../src/settings.c:10295
+msgid "Auto-_Hide Manager"
+msgstr "Αυτόματη απόκρυ_ψη του Διαχειριστή"
+
+#: ../src/settings.c:914 ../src/settings.c:10360
+msgid "Err_ors"
+msgstr "Σ_φάλματα"
+
+#: ../src/settings.c:921 ../src/settings.c:10236
+msgid "Current Re_main"
+msgstr ""
+
+#: ../src/settings.c:928 ../src/settings.c:10248
+msgid "A_verage Remain"
+msgstr ""
+
+#: ../src/settings.c:935 ../src/settings.c:10186
+msgid "_Folder"
+msgstr "_Φακέλου"
+
+#: ../src/settings.c:965 ../src/settings.c:10337
+msgid "_Detailed Stats"
+msgstr ""
+
+#: ../src/settings.c:976 ../src/settings.c:9220
+msgid "Remo_ve / Eject"
+msgstr "Αφαίρεση / Ε_ξαγωγή"
+
+#. Note: this is the last config version which should require menu_label
+#. changes of this nature due to defaults no longer being saved
+#. in session file
+#. New > Import >
+#: ../src/settings.c:987 ../src/settings.c:7266 ../src/settings.c:10078
+msgid "_Import"
+msgstr "Ε_ισαγωγή"
+
+#: ../src/settings.c:988 ../src/settings.c:10170
+msgid "_Task Manager"
+msgstr "Διαχειρισ_τής Εργασιών"
+
+#. for rename dialog
+#: ../src/settings.c:991 ../src/settings.c:9719
+msgid "F_ilename"
+msgstr "Όνο_μα αρχείου"
+
+#: ../src/settings.c:992 ../src/settings.c:9730
+msgid "Typ_e"
+msgstr "_Τύπος"
+
+#: ../src/settings.c:993 ../src/settings.c:9734
+msgid "Ta_rget"
+msgstr "Π_ροοροσμός"
+
+#: ../src/settings.c:994 ../src/settings.c:9738
+msgid "Te_mplate"
+msgstr "_Πρότυπο"
+
+#. General
+#: ../src/settings.c:1095
+msgid ""
+"# SpaceFM Session File\n"
+"\n"
+"# THIS FILE IS NOT DESIGNED TO BE EDITED - it will be read and OVERWRITTEN\n"
+"\n"
+"# If you delete all session* files, SpaceFM will be reset to factory defaults.\n"
+"\n"
+msgstr "# SpaceFM Session File\n\n# THIS FILE IS NOT DESIGNED TO BE EDITED - it will be read and OVERWRITTEN\n\n# If you delete all session* files, SpaceFM will be reset to factory defaults.\n\n"
+
+#: ../src/settings.c:1267
+#, c-format
+msgid "Error saving file"
+msgstr "Σφάλμα αποθήκευσης αρχείου"
+
+#: ../src/settings.c:1351
+#, c-format
+msgid "SpaceFM Error: Unable to autosave session file ( %s )\n"
+msgstr "Σφάλμα του SpaceFM: Σφάλμα: Αδύνατη η αυτόματη αποθήκευση του αρχείου συνεδρίας ( %s )\n"
+
+#: ../src/settings.c:2784
+msgid ""
+"Error reading root settings from /etc/spacefm/  Commands run as root may "
+"present a security risk"
+msgstr ""
+
+#: ../src/settings.c:2786
+msgid ""
+"No root settings found in /etc/spacefm/  Setting a root editor in "
+"Preferences should remove this warning on startup.   Otherwise commands run "
+"as root may present a security risk."
+msgstr ""
+
+#: ../src/settings.c:3693
+#, c-format
+msgid ""
+"An error occured copying command files\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../src/settings.c:3695 ../src/settings.c:3730
+msgid "Copy Command Error"
+msgstr ""
+
+#: ../src/settings.c:3728
+#, c-format
+msgid ""
+"An error occured copying command data files\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../src/settings.c:4101
+#, c-format
+msgid "Error reading plugin file %s"
+msgstr ""
+
+#: ../src/settings.c:4179
+#, c-format
+msgid ""
+"The imported plugin folder does not contain a valid plugin.\n"
+"\n"
+"(%s/)"
+msgstr "Ο εισηγμένος φάκελος πρόσθετου δεν περιέχει ένα έγκυρο πρόσθετο.\n\n(%s/)"
+
+#: ../src/settings.c:4219
+#, c-format
+msgid ""
+"The '%s' plugin has been copied to the design clipboard.  Use View|Design Mode to paste it into a menu.\n"
+"\n"
+"Because it has not been installed, this plugin will not appear in the Plugins menu."
+msgstr ""
+
+#: ../src/settings.c:4221
+#, c-format
+msgid ""
+"The '%s' plugin has been copied to the design clipboard.  Use View|Design Mode to paste it into a menu.\n"
+"\n"
+"Because it has not been installed, this plugin will not appear in the Plugins menu, and its contents are not protected by root (once pasted it will be saved with normal ownership).\n"
+"\n"
+"If this plugin contains su commands or will be run as root, installing it to and running it only from the Plugins menu is recommended to improve your system security."
+msgstr ""
+
+#: ../src/settings.c:4252
+#, c-format
+msgid ""
+"Uninstall the '%s' plugin?\n"
+"\n"
+"( %s )"
+msgstr "Να γίνει απεγκατάσταση του πρόσθετου '%s';\n\n( %s )"
+
+#: ../src/settings.c:4255 ../src/settings.c:4263
+msgid "Uninstall Plugin"
+msgstr "Απεγκατάσταση πρόσθετου"
+
+#. task
+#: ../src/settings.c:4300
+msgid "Install Plugin"
+msgstr "Εγκατάσταση πρόσθετου"
+
+#: ../src/settings.c:4500
+msgid "Save As Plugin File"
+msgstr "Αποθήκευση ως αρχείο πρόσθετου"
+
+#. tar and delete tmp files
+#. task
+#: ../src/settings.c:4568
+msgid "Export Plugin"
+msgstr "Εξαγωγή πρόσθετου"
+
+#: ../src/settings.c:4602
+msgid "Export Error"
+msgstr "Σφάλμα εξαγωγής"
+
+#: ../src/settings.c:4603
+msgid "Unable to create temporary files"
+msgstr "Αδύνατη η δημιουργία προσωρινών αρχείων"
+
+#: ../src/settings.c:4736
+msgid "Change Menu Name"
+msgstr ""
+
+#: ../src/settings.c:5176
+msgid "Editor Not Set"
+msgstr "Δεν έχει οριστεί επεξεργαστή κειμένου"
+
+#: ../src/settings.c:5177
+msgid "Please set your editor in View|Preferences|Advanced"
+msgstr ""
+
+#: ../src/settings.c:5187
+msgid "Root Editor Not Set"
+msgstr "Δεν έχει οριστεί επεξεργαστή κειμένου για τον Root"
+
+#: ../src/settings.c:5188
+msgid "Please set root's editor in View|Preferences|Advanced"
+msgstr ""
+
+#. task
+#: ../src/settings.c:5209
+#, c-format
+msgid "Edit %s"
+msgstr "Επεξεργασία του %s"
+
+#: ../src/settings.c:5389
+msgid "User's Manual Not Found"
+msgstr "Το εγχειρίδιο χρήσης δεν βρέθηκε"
+
+#: ../src/settings.c:5391
+msgid ""
+"Read the user's manual online?\n"
+"\n"
+"The local copy of the SpaceFM user's manual was not found.  Click Yes to read it online, or click No and then set the correct location in Help|Options|Manual Location."
+msgstr ""
+
+#: ../src/settings.c:5422
+msgid "Help Not Available"
+msgstr ""
+
+#: ../src/settings.c:5422
+msgid "This plugin does not include a README file."
+msgstr "Αυτό το πρόσθετο δεν περιέχει αρχείο README."
+
+#: ../src/settings.c:5424
+msgid "Creation Failed"
+msgstr ""
+
+#: ../src/settings.c:5424
+msgid "An error occured creating a README file for this command."
+msgstr ""
+
+#: ../src/settings.c:5446
+msgid "Manual Opened ?"
+msgstr ""
+
+#: ../src/settings.c:5446
+msgid ""
+"The SpaceFM user's manual should have opened in your browser.  If it didn't open, or if you would like to use a different browser, set your browser in Help|Options|Browser.\n"
+"\n"
+"This message will not repeat."
+msgstr ""
+
+#: ../src/settings.c:5465
+msgid "( none )"
+msgstr "( κανένα )"
+
+#: ../src/settings.c:5588
+#, c-format
+msgid ""
+"\t%s\n"
+"\tKeycode: %#4x  Modifier: %#x\n"
+"\n"
+"%s is already assigned to '%s'.\n"
+"\n"
+"Press a different key or click Set to replace the current key assignment."
+msgstr ""
+
+#: ../src/settings.c:5599
+#, c-format
+msgid ""
+"\t%s\n"
+"\tKeycode: %#4x  Modifier: %#x"
+msgstr ""
+
+#: ../src/settings.c:5627
+#, c-format
+msgid ""
+"Press your key combination for menu item '%s' then click Set.  To remove the"
+" current key assignment, click Unset."
+msgstr ""
+
+#: ../src/settings.c:5639
+msgid "Cancel"
+msgstr "Άκυρο"
+
+#: ../src/settings.c:5645
+msgid "Unset"
+msgstr "Αφαίρεση"
+
+#: ../src/settings.c:5658
+msgid "Set"
+msgstr "Ορισμός"
+
+#: ../src/settings.c:5672
+msgid "Set Key"
+msgstr "Ορισμός πλήκτρου"
+
+#: ../src/settings.c:5752
+msgid "Change Icon"
+msgstr "Αλλαγή εικονιδίου"
+
+#: ../src/settings.c:5852
+msgid "Edit Command Line"
+msgstr ""
+
+#: ../src/settings.c:5878
+msgid "Choose Custom Executable"
+msgstr ""
+
+#: ../src/settings.c:5889
+msgid "Run As User"
+msgstr "Εκτέλεση ως χρήστης"
+
+#: ../src/settings.c:5889
+msgid ""
+"Run this command as username:\n"
+"\n"
+"( Leave blank for current user )"
+msgstr ""
+
+#: ../src/settings.c:5897
+#, c-format
+msgid ""
+"You are adding a custom command to the Default menu item.  This item will automatically have a pre-context - it will only appear when the MIME type of the first selected file matches the current type '%s'.\n"
+"\n"
+"Add commands or menus here which you only want to appear for this one MIME type."
+msgstr ""
+
+#: ../src/settings.c:5898
+msgid "New Context Command"
+msgstr ""
+
+#: ../src/settings.c:5909
+msgid "Set Menu Name"
+msgstr ""
+
+#: ../src/settings.c:5945 ../src/item-prop.c:1209
+msgid "Choose Folder"
+msgstr ""
+
+#: ../src/settings.c:5991
+#, c-format
+msgid ""
+"You are adding a custom submenu to the Default menu item.  This item will automatically have a pre-context - it will only appear when the MIME type of the first selected file matches the current type '%s'.\n"
+"\n"
+"Add commands or menus here which you only want to appear for this one MIME type."
+msgstr ""
+
+#: ../src/settings.c:5991
+msgid "(none)"
+msgstr ""
+
+#: ../src/settings.c:6000
+msgid "Set Submenu Name"
+msgstr ""
+
+#: ../src/settings.c:6000
+msgid ""
+"Enter submenu name:\n"
+"\n"
+"Precede a character with an underscore (_) to underline that character as a shortcut key if desired."
+msgstr ""
+
+#: ../src/settings.c:6000
+msgid "New _Submenu"
+msgstr ""
+
+#: ../src/settings.c:6174
+msgid "( no name )"
+msgstr "( χωρίς όνομα )"
+
+#: ../src/settings.c:6177
+#, c-format
+msgid ""
+"Permanently remove the '%s' SUBMENU AND ALL ITEMS WITHIN IT?\n"
+"\n"
+"This action will delete all settings and files associated with these items."
+msgstr ""
+
+#: ../src/settings.c:6182
+#, c-format
+msgid ""
+"Permanently remove the '%s' item?\n"
+"\n"
+"This action will delete all settings and files associated with this item."
+msgstr ""
+
+#: ../src/settings.c:6196
+msgid "Confirm Remove"
+msgstr "Επιβεβαίωση αφαίρεσης"
+
+#: ../src/settings.c:6220 ../src/item-prop.c:700 ../src/item-prop.c:712
+msgid "Are you sure?"
+msgstr "Είστε σίγουροι;"
+
+#: ../src/settings.c:6221 ../src/settings.c:6225 ../src/settings.c:6229
+msgid "Dialog Message"
+msgstr ""
+
+#: ../src/settings.c:6221 ../src/settings.c:6225 ../src/settings.c:6229
+msgid ""
+"Enter the message to be displayed in this dialog:\n"
+"\n"
+"Use:\n"
+"\t\\n\tnewline\n"
+"\t\\t\ttab"
+msgstr ""
+
+#. Show Tool
+#. dev settings
+#: ../src/settings.c:6862 ../src/settings.c:9447
+msgid "S_how"
+msgstr "Ε_μφάνιση"
+
+#. Cut
+#. EDIT
+#: ../src/settings.c:7194 ../src/settings.c:10750
+msgid "Cu_t"
+msgstr "_Αποκοπή"
+
+#. Copy
+#: ../src/settings.c:7201 ../src/settings.c:9746 ../src/settings.c:10753
+msgid "_Copy"
+msgstr "Αντι_γραφή"
+
+#. Paste
+#: ../src/settings.c:7208 ../src/settings.c:10756
+msgid "_Paste"
+msgstr "_Επικόλληση"
+
+#. Remove
+#. gtk_widget_add_accelerator( newitem, "activate", accel_group,
+#. GDK_k, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+#. Remove
+#. list buttons
+#: ../src/settings.c:7218 ../src/ptk/ptk-file-menu.c:2200
+#: ../src/item-prop.c:1703
+msgid "_Remove"
+msgstr "Αφαί_ρεση"
+
+#. Export
+#: ../src/settings.c:7225
+msgid "E_xport"
+msgstr "Ε_ξαγωγή"
+
+#. // New submenu
+#: ../src/settings.c:7231 ../src/settings.c:9689 ../src/settings.c:10010
+#: ../src/settings.c:10576
+msgid "_New"
+msgstr "_Νέο"
+
+#. New > Bookmark
+#: ../src/settings.c:7244 ../src/settings.c:9252
+msgid "_Bookmark"
+msgstr "_Σελιδοδείκτης"
+
+#. New > Application
+#: ../src/settings.c:7248
+msgid "_Application"
+msgstr "Εφ_αρμογή"
+
+#. New > Command
+#: ../src/settings.c:7252
+msgid "_Command"
+msgstr "_Εντολή"
+
+#. New > Submenu
+#: ../src/settings.c:7258
+msgid "Sub_menu"
+msgstr "Υπο_μενού"
+
+#. New > Separator
+#: ../src/settings.c:7262
+msgid "S_eparator"
+msgstr "Δια_χωριστικό"
+
+#: ../src/settings.c:7281 ../src/settings.c:10071 ../src/settings.c:10087
+msgid "_URL"
+msgstr "_URL"
+
+#. Key
+#: ../src/settings.c:7296
+msgid "_Key Shortcut"
+msgstr "_Πλήκτρο συντόμευσης"
+
+#. edit as user
+#: ../src/settings.c:7312
+msgid "_Edit Script"
+msgstr ""
+
+#. edit as root
+#: ../src/settings.c:7320
+msgid "E_dit As Root"
+msgstr ""
+
+#. edit command line
+#: ../src/settings.c:7332
+msgid "_Edit Command"
+msgstr ""
+
+#. Properties
+#: ../src/settings.c:7339 ../src/settings.c:9438
+msgid "_Properties"
+msgstr "_Ιδιότητες"
+
+#: ../src/settings.c:7745
+msgid "Set Icon"
+msgstr ""
+
+#: ../src/settings.c:8103 ../src/settings.c:9695 ../src/settings.c:10775
+msgid "_Edit"
+msgstr "_Επεξεργασία"
+
+#: ../src/settings.c:8113 ../src/settings.c:8326 ../src/settings.c:10500
+#: ../src/settings.c:10628
+msgid "_Default"
+msgstr "Προεπιλο_γή"
+
+#: ../src/settings.c:8153
+msgid "Your input is invalid because it contains linefeeds"
+msgstr ""
+
+#: ../src/settings.c:8329
+msgid "_OK"
+msgstr ""
+
+#: ../src/settings.c:8465
+msgid "_Unset"
+msgstr ""
+
+#: ../src/settings.c:8960
+msgid "_Left Toolbar"
+msgstr "_Αριστερή εργαλειοθήκη"
+
+#: ../src/settings.c:8964
+msgid "_Right Toolbar"
+msgstr "_Δεξιά εργαλειοθήκη"
+
+#: ../src/settings.c:8968 ../src/settings.c:11030
+msgid "_Side Toolbar"
+msgstr "_Πλευρική εργαλειοθήκη"
+
+#. xset_set( "panel_left", "lbl", _("_Left") );
+#. xset_set( "panel_right", "lbl", _("_Right") );
+#. xset_set( "panel_top", "lbl", _("_Top") );
+#. xset_set( "panel_bottom", "lbl", _("_Bottom") );
+#: ../src/settings.c:8972 ../src/settings.c:8975 ../src/settings.c:9911
+#: ../src/settings.c:10875
+msgid "_Hide"
+msgstr "Απόκρυ_ψη"
+
+#: ../src/settings.c:8978
+msgid "Configure Toolbar"
+msgstr ""
+
+#: ../src/settings.c:8982
+msgid "H_elp"
+msgstr "_Βοήθεια"
+
+#. toolitems left
+#. toolitems right
+#. toolitems side
+#: ../src/settings.c:8986 ../src/settings.c:9056 ../src/settings.c:9125
+msgid "Tree"
+msgstr "Δένδρο"
+
+#: ../src/settings.c:8992 ../src/settings.c:9062 ../src/settings.c:9131
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+#: ../src/settings.c:8998 ../src/settings.c:9068 ../src/settings.c:9137
+msgid "Devices"
+msgstr "Συσκευές"
+
+#: ../src/settings.c:9004 ../src/settings.c:9074 ../src/settings.c:9143
+msgid "New Tab"
+msgstr "Νέα καρτέλα"
+
+#: ../src/settings.c:9009 ../src/settings.c:9079 ../src/settings.c:9148
+msgid "New Tab Here"
+msgstr "Νέα καρτέλα εδώ"
+
+#: ../src/settings.c:9014 ../src/settings.c:9084 ../src/settings.c:9153
+msgid "Back"
+msgstr "Πίσω"
+
+#: ../src/settings.c:9019 ../src/settings.c:9089 ../src/settings.c:9158
+msgid "Back Menu"
+msgstr "Πίσω μενού"
+
+#: ../src/settings.c:9024 ../src/settings.c:9094 ../src/settings.c:9163
+msgid "Forward"
+msgstr "Μπροστά"
+
+#: ../src/settings.c:9029 ../src/settings.c:9099 ../src/settings.c:9168
+msgid "Forward Menu"
+msgstr "Εμπρός μενού"
+
+#: ../src/settings.c:9034 ../src/settings.c:9104 ../src/settings.c:9173
+msgid "Up"
+msgstr "Πάνω"
+
+#: ../src/settings.c:9039 ../src/settings.c:9109 ../src/settings.c:9178
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+#: ../src/settings.c:9044 ../src/settings.c:9114 ../src/settings.c:9183
+msgid "Home"
+msgstr "Προσωπικός φάκελος"
+
+#: ../src/settings.c:9192
+msgid "Mount"
+msgstr "Προσάρτηση"
+
+#: ../src/settings.c:9196
+msgid "Mount & Open"
+msgstr "Προσάρτηση & άνοιγμα"
+
+#: ../src/settings.c:9200
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: ../src/settings.c:9224 ../src/settings.c:9276
+#: ../src/ptk/ptk-location-view.c:3046 ../src/ptk/ptk-location-view.c:3357
+msgid "_Unmount"
+msgstr "_Αποπροσάρτηση"
+
+#: ../src/settings.c:9228
+msgid "Re_load"
+msgstr "Επανα_φόρτωση"
+
+#: ../src/settings.c:9232
+msgid "_Sync"
+msgstr "_Συγχρονισμός"
+
+#: ../src/settings.c:9236 ../src/settings.c:9701 ../src/settings.c:10484
+#: ../src/find-files.c:275
+msgid "_Open"
+msgstr "Άνοι_γμα"
+
+#: ../src/settings.c:9240
+msgctxt "Devices|Open|"
+msgid "_Tab"
+msgstr "Καρ_τέλα"
+
+#: ../src/settings.c:9244 ../src/settings.c:9271
+#: ../src/ptk/ptk-location-view.c:3039 ../src/ptk/ptk-location-view.c:3351
+msgid "_Mount"
+msgstr "_Προσάρτηση"
+
+#: ../src/settings.c:9248
+msgid "Re_/mount"
+msgstr "Επανα/προσά_ρτηση"
+
+#: ../src/settings.c:9265 ../src/settings.c:10940
+msgid "_Root"
+msgstr "_Ως Root"
+
+#: ../src/settings.c:9281
+msgid "_Label"
+msgstr "Ε_τικέτα"
+
+#: ../src/settings.c:9331
+msgid "_Check"
+msgstr "Έ_λεγχος"
+
+#: ../src/settings.c:9335
+msgid "_Edit fstab"
+msgstr "_Επεξεργασία του fstab"
+
+#: ../src/settings.c:9339
+msgid "Edit u_devil.conf"
+msgstr "Επε_ξεργασία του u_devil.conf"
+
+#: ../src/settings.c:9343
+msgid "_Format"
+msgstr "Μορ_φοποίηση"
+
+#: ../src/settings.c:9403
+msgid "_Backup"
+msgstr "Α_ντίγραφο ασφαλείας"
+
+#: ../src/settings.c:9425
+msgid "_Restore"
+msgstr "Επα_ναφορά"
+
+#: ../src/settings.c:9430
+msgid "_From File"
+msgstr "Από _αρχείο"
+
+#: ../src/settings.c:9435 ../src/settings.c:9801
+msgid "File _Info"
+msgstr "_Πληροφορίες αρχείου"
+
+#: ../src/settings.c:9441
+msgid "Setti_ngs"
+msgstr "Ρυ_θμίσεις"
+
+#: ../src/settings.c:9452
+msgid "_Internal Drives"
+msgstr "_Εσωτερικοί οδηγοί"
+
+#: ../src/settings.c:9457
+msgid "_Empty Drives"
+msgstr "_Κενοί οδηγοί"
+
+#: ../src/settings.c:9462
+msgid "_Partition Tables"
+msgstr "Πίνακες δια_μερισμάτων"
+
+#: ../src/settings.c:9466
+msgid "Mounted _Networks"
+msgstr "Προσαρτημένα _δύκτυα"
+
+#: ../src/settings.c:9471
+msgid "Mounted _Files"
+msgstr "Προσαρτημένα _αρχεία"
+
+#: ../src/settings.c:9476
+msgid "_Volumes..."
+msgstr "_Τόμοι..."
+
+#: ../src/settings.c:9477
+msgid "Show/Hide Volumes"
+msgstr "Εμφάνιση/απόκρυψη τόμων"
+
+#: ../src/settings.c:9478
+msgid ""
+"To force showing or hiding of some volumes, overriding other settings, you can specify the devices, volume labels, or device IDs in the space-separated list below.\n"
+"\n"
+"Example:  +/dev/sdd1 -Label With Space +ata-OCZ-part4\n"
+"This would cause /dev/sdd1 and the OCZ device to be shown, and the volume with label \"Label With Space\" to be hidden.\n"
+"\n"
+"There must be a space between entries and a plus or minus sign directly before each item.  This list is case-sensitive.\n"
+"\n"
+msgstr ""
+
+#: ../src/settings.c:9485
+msgid "_Display Name"
+msgstr "Τ_ρόπος εμφάνισης"
+
+#: ../src/settings.c:9487
+msgid "Set Display Name Format"
+msgstr "Ορισμός του Τρόπου εμφάνισης"
+
+#: ../src/settings.c:9488
+#, c-format
+msgid ""
+"Enter device display name format:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice filename (eg sdd1)\n"
+"\t%%s\ttotal size (eg 800G)\n"
+"\t%%t\tfstype (eg ext4)\n"
+"\t%%l\tvolume label (eg Label or [no media])\n"
+"\t%%m\tmount point if mounted, or ---\n"
+"\t%%i\tdevice ID\n"
+msgstr ""
+
+#: ../src/settings.c:9494
+msgid "_Auto Mount"
+msgstr "_Αυτόματη προσάρτηση"
+
+#: ../src/settings.c:9499
+msgid "Mount _Optical"
+msgstr "Προσάρτηση _οπτικού μέσου"
+
+#: ../src/settings.c:9504
+msgid "_Mount Removable"
+msgstr "Προσάρτηση αφαιρούμενου _μέσου"
+
+#: ../src/settings.c:9509
+msgid "Open _Tab"
+msgstr "Άνοιγμα καρ_τέλας"
+
+#: ../src/settings.c:9514
+msgid "_Unmount On Exit"
+msgstr "Αποπροσάρτηση στην Έ_ξοδο"
+
+#: ../src/settings.c:9522
+msgid "Auto _Run"
+msgstr "Αυτόματη _εκτέλεση"
+
+#: ../src/settings.c:9528
+msgid "On _Mount"
+msgstr "Με την _προσάρτηση"
+
+#: ../src/settings.c:9530
+msgid "Auto Run On Mount"
+msgstr "Αυτόματη εκτέλεση κατά την προσάρτηση"
+
+#: ../src/settings.c:9531
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically after a removable drive or data disc is auto-mounted:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice (eg /dev/sda1)\n"
+"\t%%l\tdevice label\n"
+"\t%%m\tdevice mount point (eg /media/disk)"
+msgstr ""
+
+#: ../src/settings.c:9534
+msgid "On _Audio CD"
+msgstr "Σε CD ή_χου"
+
+#: ../src/settings.c:9536
+msgid "Auto Run On Audio CD"
+msgstr "Αυτόματη εκτέλεση κατά την εισαγωγή CD ήχου"
+
+#: ../src/settings.c:9537
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically when an audio CD is inserted in a qualified device:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice (eg /dev/sda1)\n"
+"\t%%l\tdevice label\n"
+"\t%%m\tdevice mount point (eg /media/disk)"
+msgstr ""
+
+#: ../src/settings.c:9540
+msgid "On _Video DVD"
+msgstr "Σε _βίντεο DVD"
+
+#: ../src/settings.c:9542
+msgid "Auto Run On Video DVD"
+msgstr "Αυτόματη εκτέλεση κατά την εισαγωγή βίντεο DVD"
+
+#: ../src/settings.c:9543
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically when a video DVD is auto-mounted:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice (eg /dev/sda1)\n"
+"\t%%l\tdevice label\n"
+"\t%%m\tdevice mount point (eg /media/disk)"
+msgstr ""
+
+#: ../src/settings.c:9546
+msgid "On _Insert"
+msgstr "Με την ε_ισαγωή"
+
+#: ../src/settings.c:9548
+msgid "Auto Run On Insert"
+msgstr "Αυτόματη εκτέλεση κατά την εισαγωγή"
+
+#: ../src/settings.c:9549
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically when any device is inserted:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice added (eg /dev/sda1)\n"
+"\t%%l\tdevice label\n"
+"\t%%m\tdevice mount point (eg /media/disk)"
+msgstr ""
+
+#: ../src/settings.c:9552
+msgid "On _Unmount"
+msgstr "Με την α_ποπροσάρτηση"
+
+#: ../src/settings.c:9554
+msgid "Auto Run On Unmount"
+msgstr "Αυτόματη εκτέλεση κατά την αποπροσάρτηση"
+
+#: ../src/settings.c:9555
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically when any device is unmounted by any means:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice unmounted (eg /dev/sda1)\n"
+"\t%%l\tdevice label\n"
+"\t%%m\tdevice mount point (eg /media/disk)"
+msgstr ""
+
+#: ../src/settings.c:9558
+msgid "On _Remove"
+msgstr "Με την αφαί_ρεση"
+
+#: ../src/settings.c:9560
+msgid "Auto Run On Remove"
+msgstr "Αυτόματη εκτέλεση κατά την αφαίρεση"
+
+#: ../src/settings.c:9561
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically when any device is removed (ejection of media does not qualify):\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice removed (eg /dev/sda1)\n"
+"\t%%l\tdevice label\n"
+"\t%%m\tdevice mount point (eg /media/disk)"
+msgstr ""
+
+#: ../src/settings.c:9568
+msgid "Mount _Volumes..."
+msgstr "Προσάρτηση _τόμων..."
+
+#: ../src/settings.c:9569
+msgid "Auto-Mount Volumes"
+msgstr "Αυτόματη προσάρτηση τόμων"
+
+#: ../src/settings.c:9570
+msgid ""
+"To force or prevent automounting of some volumes, overriding other settings, you can specify the devices, volume labels, or device IDs in the space-separated list below.\n"
+"\n"
+"Example:  +/dev/sdd1 -Label With Space +ata-OCZ-part4\n"
+"This would cause /dev/sdd1 and the OCZ device to be auto-mounted when detected, and the volume with label \"Label With Space\" to be ignored.\n"
+"\n"
+"There must be a space between entries and a plus or minus sign directly before each item.  This list is case-sensitive.\n"
+"\n"
+msgstr ""
+
+#: ../src/settings.c:9573
+msgid "_Mount Options"
+msgstr ""
+
+#: ../src/settings.c:9574
+msgid ""
+"Enter your comma- or space-separated list of default mount options below (to be used for all mounts).\n"
+"\n"
+"In addition to regular options, you can also specify options to be added or removed for a specific filesystem type by using the form OPTION+FSTYPE or OPTION-FSTYPE.\n"
+"\n"
+"Example:  nosuid, sync+vfat, sync+ntfs, noatime, noatime-ext4\n"
+"This will add nosuid and noatime for all filesystem types, add sync for vfat and ntfs only, and remove noatime for ext4.\n"
+"\n"
+"Note: Some options, such as nosuid, may be added by the mount program even if you don't include them.  Options in fstab take precedence.  pmount ignores options set here."
+msgstr ""
+
+#: ../src/settings.c:9576
+msgid "Default Mount Options"
+msgstr ""
+
+#: ../src/settings.c:9584
+msgid "Re/mount With Options"
+msgstr ""
+
+#: ../src/settings.c:9585
+msgid ""
+"Device will be (re)mounted using the options below.\n"
+"\n"
+"In addition to regular options, you can also specify options to be added or removed for a specific filesystem type by using the form OPTION+FSTYPE or OPTION-FSTYPE.\n"
+"\n"
+"Example:  nosuid, sync+vfat, sync+ntfs, noatime, noatime-ext4\n"
+"This will add nosuid and noatime for all filesystem types, add sync for vfat and ntfs only, and remove noatime for ext4.\n"
+"\n"
+"Note: Some options, such as nosuid, may be added by the mount program even if you don't include them.  Options in fstab take precedence.  pmount ignores options set here."
+msgstr ""
+
+#: ../src/settings.c:9589
+msgid "Mount _Command"
+msgstr ""
+
+#: ../src/settings.c:9590
+#, c-format
+msgid ""
+"Enter the command to mount a device:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice file ( eg /dev/sda5 )\n"
+"\t%%o\tvolume-specific mount options\n"
+"\n"
+"udevil:\t/usr/bin/udevil mount -o %%o %%v\n"
+"pmount:\t/usr/bin/pmount %%v\n"
+"Udisks2:\t/usr/bin/udisksctl mount -b %%v -o %%o\n"
+"Udisks1:\t/usr/bin/udisks --mount %%v --mount-options %%o\n"
+"\n"
+"Leave blank for auto-detection."
+msgstr ""
+
+#: ../src/settings.c:9592
+msgid "Mount Command"
+msgstr "Εντολή προσάρτησης"
+
+#: ../src/settings.c:9596
+msgid "_Unmount Command"
+msgstr ""
+
+#: ../src/settings.c:9597
+#, c-format
+msgid ""
+"Enter the command to unmount a device:\n"
+"\n"
+"Use:\n"
+"\t%%v\tdevice file ( eg /dev/sda5 )\n"
+"\n"
+"udevil:\t/usr/bin/udevil umount %%v\n"
+"pmount:\t/usr/bin/pumount %%v\n"
+"Udisks1:\t/usr/bin/udisks --unmount %%v\n"
+"Udisks2:\t/usr/bin/udisksctl unmount -b %%v\n"
+"\n"
+"Leave blank for auto-detection."
+msgstr ""
+
+#: ../src/settings.c:9599
+msgid "Unmount Command"
+msgstr "Εντολή αποπροσάρτησης"
+
+#: ../src/settings.c:9616 ../src/settings.c:9711 ../src/settings.c:11088
+#: ../src/settings.c:11100
+msgid "_Icon"
+msgstr "Ε_ικονίδιο"
+
+#: ../src/settings.c:9621
+msgid "Audio CD"
+msgstr "CD ήχου"
+
+#: ../src/settings.c:9627
+msgid "Optical Mounted"
+msgstr ""
+
+#: ../src/settings.c:9632
+msgid "Optical Has Media"
+msgstr ""
+
+#: ../src/settings.c:9637
+msgid "Optical No Media"
+msgstr ""
+
+#: ../src/settings.c:9642
+msgid "Floppy Mounted"
+msgstr ""
+
+#: ../src/settings.c:9647
+msgid "Floppy Unmounted"
+msgstr ""
+
+#: ../src/settings.c:9652
+msgid "Removable Mounted"
+msgstr ""
+
+#: ../src/settings.c:9657
+msgid "Removable Unmounted"
+msgstr ""
+
+#: ../src/settings.c:9662
+msgid "Internal Mounted"
+msgstr ""
+
+#: ../src/settings.c:9667
+msgid "Internal Unmounted"
+msgstr ""
+
+#: ../src/settings.c:9672
+msgid "Mounted Network"
+msgstr "Προσαρτημένο δίκτυο"
+
+#: ../src/settings.c:9677
+msgid "Mounted File"
+msgstr "Προσαρτημένο αρχείο"
+
+#: ../src/settings.c:9692 ../src/settings.c:10759
+#: ../src/ptk/ptk-file-misc.c:701 ../src/ptk/ptk-file-misc.c:1237
+#: ../src/ptk/ptk-file-misc.c:2146
+msgid "_Rename"
+msgstr "_Μετονομασία"
+
+#: ../src/settings.c:9698
+msgid "Re_move"
+msgstr ""
+
+#: ../src/settings.c:9704
+msgctxt "Bookmarks|Open|"
+msgid "_Tab"
+msgstr "Καρ_τέλα"
+
+#: ../src/settings.c:9707
+msgid "_Settings"
+msgstr ""
+
+#. do not set a default icon for book_icon
+#. Rename/Move Dialog
+#: ../src/settings.c:9716 ../src/settings.c:10699 ../src/settings.c:11106
+msgid "_Name"
+msgstr "Ό_νομα"
+
+#: ../src/settings.c:9723
+msgid "_Parent"
+msgstr "Γ_ονέας"
+
+#: ../src/settings.c:9726 ../src/ptk/ptk-file-misc.c:1066
+msgid "P_ath"
+msgstr "_Διαδρομή"
+
+#: ../src/settings.c:9742
+msgid "_Option"
+msgstr "_Επιλογή"
+
+#: ../src/settings.c:9750 ../src/settings.c:10589
+#: ../src/ptk/ptk-file-misc.c:1247 ../src/ptk/ptk-file-misc.c:1258
+msgid "_Link"
+msgstr "_Σύνδεση"
+
+#: ../src/settings.c:9754 ../src/ptk/ptk-file-misc.c:2497
+msgid "Copy _Target"
+msgstr "Αντιγραφή _προορισμού"
+
+#: ../src/settings.c:9757
+msgid "Lin_k Target"
+msgstr "Αντιγραφή _συνδέσμου"
+
+#: ../src/settings.c:9760
+msgid "_As Root"
+msgstr "_Ως Root"
+
+#: ../src/settings.c:9764 ../src/settings.c:10300 ../src/settings.c:10352
+#: ../src/settings.c:10449 ../src/settings.c:10478 ../src/settings.c:11056
+#: ../src/settings.c:11062 ../src/settings.c:11069 ../src/settings.c:11075
+#: ../src/settings.c:11082 ../src/settings.c:11092
+msgid "_Font"
+msgstr "_Γραμματοσειρά"
+
+#: ../src/settings.c:9767
+msgid "Move Dialog Font"
+msgstr "Γραμματοσειρά του διαλόγου μετακίνησης"
+
+#: ../src/settings.c:9768
+msgid "/home/user/Example Filename.ext"
+msgstr ""
+
+#: ../src/settings.c:9773
+msgid "_Confirm Create"
+msgstr "Επι_βεβαίωση δημιουργίας"
+
+#: ../src/settings.c:9781
+msgid "Highlight _Bar"
+msgstr ""
+
+#: ../src/settings.c:9782
+msgid "Status Bar Highlight Color"
+msgstr ""
+
+#: ../src/settings.c:9786
+msgid "Highlight _Text"
+msgstr ""
+
+#: ../src/settings.c:9787
+msgid "Status Bar Text Highlight Color"
+msgstr ""
+
+#: ../src/settings.c:9791
+msgid "_Middle Click"
+msgstr ""
+
+#: ../src/settings.c:9795 ../src/settings.c:10780
+msgid "Copy _Name"
+msgstr "Αντιγραφή _ονόματος"
+
+#: ../src/settings.c:9798 ../src/settings.c:10783
+msgid "Copy _Path"
+msgstr "Αντιγραφή _διαδρομής"
+
+#: ../src/settings.c:9805
+msgid "_Hide Panel"
+msgstr "Απόκρυ_ψη πάνελ"
+
+#: ../src/settings.c:9821
+msgid "New _Window"
+msgstr "Νέο _παράθυρο"
+
+#: ../src/settings.c:9824
+msgid "R_oot Window"
+msgstr "Παράθυρ_ο Root"
+
+#: ../src/settings.c:9827
+msgid "_File Search"
+msgstr "Αναζ_ήτηση αρχείων"
+
+#: ../src/settings.c:9830
+msgid "_Terminal"
+msgstr "_Τερματικό"
+
+#. discovery notification
+#: ../src/settings.c:9833
+msgid "_Root Terminal"
+msgstr "Τερματικό _Root"
+
+#: ../src/settings.c:9836
+msgid "_Save Session"
+msgstr "Απο_θήκευση συνεδρίας"
+
+#: ../src/settings.c:9839
+msgid "Save Ta_bs"
+msgstr "Αποθήκευση _καρτελών"
+
+#: ../src/settings.c:9843
+msgid "E_xit"
+msgstr "Έ_ξοδος"
+
+#: ../src/settings.c:9874 ../src/settings.c:9912 ../src/settings.c:10526
+#: ../src/settings.c:10832 ../src/settings.c:10870
+msgid "Panel _1"
+msgstr "Πάνελ  _1"
+
+#: ../src/settings.c:9879 ../src/settings.c:9914 ../src/settings.c:10527
+#: ../src/settings.c:10833 ../src/settings.c:10871
+msgid "Panel _2"
+msgstr "Πάνελ  _2"
+
+#: ../src/settings.c:9883 ../src/settings.c:9915 ../src/settings.c:10528
+#: ../src/settings.c:10834 ../src/settings.c:10872
+msgid "Panel _3"
+msgstr "Πάνελ  _3"
+
+#: ../src/settings.c:9887 ../src/settings.c:9916 ../src/settings.c:10529
+#: ../src/settings.c:10835 ../src/settings.c:10873
+msgid "Panel _4"
+msgstr "Πάνελ  _4"
+
+#: ../src/settings.c:9891
+msgid "Panel _Bar"
+msgstr "Μπάρα πάνελ"
+
+#: ../src/settings.c:9896 ../src/settings.c:10615
+msgid "_Go"
+msgstr "Μετά_βαση"
+
+#: ../src/settings.c:9902 ../src/settings.c:10507 ../src/settings.c:10524
+#: ../src/settings.c:10655 ../src/settings.c:10813 ../src/settings.c:10830
+#: ../src/settings.c:10851 ../src/settings.c:10868
+msgid "_Prev"
+msgstr "_Προηγούμενο"
+
+#: ../src/settings.c:9904 ../src/settings.c:10508 ../src/settings.c:10525
+#: ../src/settings.c:10656 ../src/settings.c:10814 ../src/settings.c:10831
+#: ../src/settings.c:10852 ../src/settings.c:10869
+msgid "_Next"
+msgstr "Επόμε_νο"
+
+#: ../src/settings.c:9918
+msgid "_Events"
+msgstr "_Γεγονότα"
+
+#: ../src/settings.c:9924
+msgid "_Instance"
+msgstr ""
+
+#: ../src/settings.c:9929
+msgid "_Startup"
+msgstr ""
+
+#: ../src/settings.c:9931
+msgid "Set Instance Startup Command"
+msgstr ""
+
+#: ../src/settings.c:9932
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically when a SpaceFM instance starts:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_start)\n"
+msgstr ""
+
+#: ../src/settings.c:9935
+msgid "_Exit"
+msgstr ""
+
+#: ../src/settings.c:9937
+msgid "Set Instance Exit Command"
+msgstr ""
+
+#: ../src/settings.c:9938
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically when a SpaceFM instance exits:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_exit)\n"
+msgstr ""
+
+#: ../src/settings.c:9941
+msgid "_Window"
+msgstr ""
+
+#: ../src/settings.c:9946
+msgctxt "View|Events|Window|"
+msgid "_New"
+msgstr "_Νέο"
+
+#: ../src/settings.c:9948
+msgid "Set New Window Command"
+msgstr ""
+
+#: ../src/settings.c:9949
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a new SpaceFM window is opened:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_win_new)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command."
+msgstr ""
+
+#: ../src/settings.c:9952 ../src/settings.c:9987 ../src/settings.c:10016
+msgid "_Focus"
+msgstr ""
+
+#: ../src/settings.c:9954
+msgid "Set Window Focus Command"
+msgstr ""
+
+#: ../src/settings.c:9955
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a SpaceFM window gets focus:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_win_focus)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command."
+msgstr ""
+
+#: ../src/settings.c:9958
+msgid "_Move/Resize"
+msgstr ""
+
+#: ../src/settings.c:9960
+msgid "Set Window Move/Resize Command"
+msgstr ""
+
+#: ../src/settings.c:9961
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a SpaceFM window is moved or resized:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_win_move)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command.\n"
+"\n"
+"Note: This command may be run multiple times during resize."
+msgstr ""
+
+#: ../src/settings.c:9964
+msgid "_Click"
+msgstr ""
+
+#: ../src/settings.c:9966
+msgid "Set Click Command"
+msgstr ""
+
+#: ../src/settings.c:9967
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever the mouse is clicked:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_win_click)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\t%%b\tbutton  (mouse button pressed)\n"
+"\t%%m\tmodifier  (modifier keys)\n"
+"\t%%f\tfocus  (element which received the click)\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command when no asterisk prefix is used.\n"
+"\n"
+"Prefix your command with an asterisk (*) and conditionally return exit status 0 to inhibit the default handler.  For example:\n"
+"*if [ \"%%b\" != \"2\" ]; then exit 1; fi; spacefm -g --label \"\\nMiddle button was clicked in %%f\" --button ok &"
+msgstr ""
+
+#: ../src/settings.c:9970
+msgid "_Keypress"
+msgstr ""
+
+#: ../src/settings.c:9972
+msgid "Set Window Keypress Command"
+msgstr ""
+
+#: ../src/settings.c:9973
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a key is pressed:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_win_key)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\t%%k\tkey code  (key pressed)\n"
+"\t%%m\tmodifier  (modifier keys)\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command when no asterisk prefix is used.\n"
+"\n"
+"Prefix your command with an asterisk (*) and conditionally return exit status 0 to inhibit the default handler.  For example:\n"
+"*if [ \"%%k\" != \"0xffc5\" ]; then exit 1; fi; spacefm -g --label \"\\nKey F8 was pressed.\" --button ok &"
+msgstr ""
+
+#: ../src/settings.c:9976
+msgid "Cl_ose"
+msgstr ""
+
+#: ../src/settings.c:9978
+msgid "Set Window Close Command"
+msgstr ""
+
+#: ../src/settings.c:9979
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a SpaceFM window is closed:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_win_close)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command."
+msgstr ""
+
+#: ../src/settings.c:9982
+msgid "_Panel"
+msgstr "_Πάνελ"
+
+#: ../src/settings.c:9989
+msgid "Set Panel Focus Command"
+msgstr ""
+
+#: ../src/settings.c:9990
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a panel gets focus:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_pnl_focus)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command."
+msgstr ""
+
+#: ../src/settings.c:9993
+msgctxt "View|Events|Panel|"
+msgid "_Show"
+msgstr "_Εμφάνιση"
+
+#: ../src/settings.c:9995
+msgid "Set Panel Show Command"
+msgstr ""
+
+#: ../src/settings.c:9996
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a panel or panel element is shown or hidden:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_pnl_show)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\t%%f\tfocus  (element shown or hidden)\n"
+"\t%%v\tvisible  (1 or 0)\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command."
+msgstr ""
+
+#: ../src/settings.c:9999
+msgid "S_elect"
+msgstr ""
+
+#: ../src/settings.c:10001
+msgid "Set Panel Select Command"
+msgstr ""
+
+#: ../src/settings.c:10002
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever the file selection changes:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_pnl_sel)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command.\n"
+"\n"
+"Prefix your command with an asterisk (*) and conditionally return exit status 0 to inhibit the default handler."
+msgstr ""
+
+#: ../src/settings.c:10005
+msgctxt "View|Events|"
+msgid "_Tab"
+msgstr "Καρ_τέλα"
+
+#: ../src/settings.c:10012
+msgid "Set New Tab Command"
+msgstr ""
+
+#: ../src/settings.c:10013
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a new tab is opened:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_tab_new)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command."
+msgstr ""
+
+#: ../src/settings.c:10018
+msgid "Set Tab Focus Command"
+msgstr ""
+
+#: ../src/settings.c:10019
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a tab gets focus:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_tab_focus)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\ttab\n"
+"\n"
+"Exported bash variables (eg $fm_pwd, etc) can be used in this command."
+msgstr ""
+
+#: ../src/settings.c:10022
+msgctxt "View|Events|Tab|"
+msgid "_Close"
+msgstr "_Κλείσιμο"
+
+#: ../src/settings.c:10024
+msgid "Set Tab Close Command"
+msgstr ""
+
+#: ../src/settings.c:10025
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a tab is closed:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_tab_close)\n"
+"\t%%w\twindow id  (see spacefm -s help)\n"
+"\t%%p\tpanel\n"
+"\t%%t\tclosed tab"
+msgstr ""
+
+#: ../src/settings.c:10028
+msgid "_Device"
+msgstr ""
+
+#: ../src/settings.c:10030
+msgid "Set Device Command"
+msgstr ""
+
+#: ../src/settings.c:10031
+#, c-format
+msgid ""
+"Enter program or bash command line to be run automatically whenever a device state changes:\n"
+"\n"
+"Use:\n"
+"\t%%e\tevent type  (evt_device)\n"
+"\t%%f\tdevice file\n"
+"\t%%v\tchange  (added|removed|changed)\n"
+msgstr ""
+
+#: ../src/settings.c:10034
+msgid "Wi_ndow Title"
+msgstr "_Τίτλος παραθύρου"
+
+#: ../src/settings.c:10036
+msgid "Set Window Title Format"
+msgstr ""
+
+#: ../src/settings.c:10037
+#, c-format
+msgid ""
+"Set window title format:\n"
+"\n"
+"Use:\n"
+"\t%%n\tcurrent folder name (eg bin)\n"
+"\t%%d\tcurrent folder path (eg /usr/bin)\n"
+"\t%%p\tcurrent panel number (1-4)\n"
+"\t%%t\tcurrent tab number\n"
+"\t%%P\ttotal number of panels visible\n"
+"\t%%T\ttotal number of tabs in current panel\n"
+"\t*\tasterisk shown if tasks running in window"
+msgstr ""
+
+#: ../src/settings.c:10041
+msgid "_Window Icon"
+msgstr "_Εικονίδιο παραθύρου"
+
+#: ../src/settings.c:10043
+msgid "Set Window Icon"
+msgstr ""
+
+#: ../src/settings.c:10044
+msgid ""
+"Enter an icon name, icon file path, or stock item name:\n"
+"\n"
+"Not all icons may work due to various issues.\n"
+"\n"
+"Provided alternate SpaceFM icons:\n"
+"\tspacefm-[48|128]-[cube|pyramid]-[blue|green|red]\n"
+"\tspacefm-48-folder-[blue|red]\n"
+"\n"
+"For example: spacefm-48-pyramid-green"
+msgstr ""
+
+#: ../src/settings.c:10046
+msgid "_Fullscreen"
+msgstr "Πλήρης ο_θόνη"
+
+#: ../src/settings.c:10049
+msgid "_Design Mode"
+msgstr "_Λειτουργία Σχεδίασης"
+
+#: ../src/settings.c:10052
+msgid "_Preferences"
+msgstr "_Ρυθμίσεις"
+
+#: ../src/settings.c:10055
+msgid "_Tool"
+msgstr "Ε_ργαλεία"
+
+#. Plugins
+#: ../src/settings.c:10062
+msgid "_Install"
+msgstr "_Εγκατάσταση"
+
+#: ../src/settings.c:10090
+msgid "_Verbose"
+msgstr "_Εμφάνιση λεπτομεριών"
+
+#: ../src/settings.c:10097
+msgid "In_cluded"
+msgstr ""
+
+#: ../src/settings.c:10111
+msgid "_User's Manual"
+msgstr "Ε_γχειρίδιο χρήσης"
+
+#: ../src/settings.c:10117
+msgid "_Homepage"
+msgstr "_Αρχική σελίδα"
+
+#: ../src/settings.c:10120
+msgid "SpaceFM _News"
+msgstr "_Νέα του SpaceFM"
+
+#: ../src/settings.c:10123
+msgid "_Get Plugins"
+msgstr "_Λήψη πρόσθετων"
+
+#: ../src/settings.c:10126
+msgid "_Options"
+msgstr "_Επιλογές"
+
+#: ../src/settings.c:10131
+msgid "_Browser"
+msgstr "_Περιηγητής"
+
+#: ../src/settings.c:10133
+msgid "Choose HTML Browser"
+msgstr ""
+
+#: ../src/settings.c:10134
+#, c-format
+msgid ""
+"Enter browser name or bash command line to be used to display HTML files and URLs:\n"
+"\n"
+"Use:\n"
+"\t%%u\turl\n"
+"\n"
+"(Leave blank for automatic browser detection)"
+msgstr ""
+
+#: ../src/settings.c:10137
+msgid "_Manual Location"
+msgstr "_Τοποθεσία του Εγχειριδίου χρήσης"
+
+#: ../src/settings.c:10139
+msgid "Choose User's Manual Location"
+msgstr "Επιλέξτε την τοποθεσία του Εγχειριδίου χρήσης"
+
+#: ../src/settings.c:10140
+msgid ""
+"Enter local file path or remote URL for the SpaceFM User's Manual:\n"
+"\n"
+"(Leave blank for default)\n"
+msgstr ""
+
+#: ../src/settings.c:10143
+msgid "_About"
+msgstr "_Περί"
+
+#: ../src/settings.c:10175
+msgid "_Status"
+msgstr ""
+
+#. column position
+#. column width
+#: ../src/settings.c:10181
+msgid "_Count"
+msgstr ""
+
+#: ../src/settings.c:10192
+msgid "_Item"
+msgstr ""
+
+#: ../src/settings.c:10198
+msgid "_To"
+msgstr ""
+
+#: ../src/settings.c:10204
+msgid "_Progress"
+msgstr ""
+
+#: ../src/settings.c:10211
+msgid "T_otal"
+msgstr ""
+
+#: ../src/settings.c:10218
+msgid "Sta_rted"
+msgstr ""
+
+#: ../src/settings.c:10223
+msgid "_Elapsed"
+msgstr ""
+
+#: ../src/settings.c:10230
+msgid "C_urrent Speed"
+msgstr ""
+
+#: ../src/settings.c:10242
+msgid "_Average Speed"
+msgstr ""
+
+#: ../src/settings.c:10254
+msgid "Reor_der"
+msgstr ""
+
+#: ../src/settings.c:10260 ../src/settings.c:10280
+#: ../src/ptk/ptk-file-task.c:550 ../src/ptk/ptk-file-task.c:835
+msgid "Pa_use"
+msgstr "_Παύση"
+
+#: ../src/settings.c:10263 ../src/settings.c:10283
+msgid "_Queue"
+msgstr ""
+
+#: ../src/settings.c:10266 ../src/settings.c:10286
+msgid "_Resume"
+msgstr ""
+
+#: ../src/settings.c:10269
+msgid "Sho_w Output"
+msgstr ""
+
+#: ../src/settings.c:10272
+msgid "_All Tasks"
+msgstr ""
+
+#: ../src/settings.c:10303
+msgid "Task Manager Font"
+msgstr "Γραμματοσειρά του Διαχειριστή Εργασιών"
+
+#: ../src/settings.c:10304
+msgid "copying  File  1:15  65.2 M  30.2 M/s"
+msgstr ""
+
+#: ../src/settings.c:10307
+msgid "_Columns"
+msgstr "_Στήλες"
+
+#: ../src/settings.c:10312
+msgid "_Popups"
+msgstr ""
+
+#: ../src/settings.c:10317
+msgid "Popup _All Tasks"
+msgstr ""
+
+#: ../src/settings.c:10322
+msgid "Stay On _Top"
+msgstr ""
+
+#: ../src/settings.c:10327
+msgid "A_bove Others"
+msgstr ""
+
+#: ../src/settings.c:10332
+msgid "All _Workspaces"
+msgstr ""
+
+#: ../src/settings.c:10342
+msgid "_Overwrite Option"
+msgstr ""
+
+#: ../src/settings.c:10347
+msgid "_Error Option"
+msgstr ""
+
+#: ../src/settings.c:10355
+msgid "Task Popup Font (affects new tasks)"
+msgstr ""
+
+#: ../src/settings.c:10356
+msgid "Example Output 0123456789"
+msgstr ""
+
+#: ../src/settings.c:10365
+msgid "Stop If _First"
+msgstr ""
+
+#: ../src/settings.c:10370
+msgid "Stop On _Any"
+msgstr ""
+
+#: ../src/settings.c:10375
+msgid "_Continue"
+msgstr ""
+
+#: ../src/settings.c:10380
+msgid "Qu_eue"
+msgstr ""
+
+#: ../src/settings.c:10385
+msgid "_Queue New Tasks"
+msgstr ""
+
+#: ../src/settings.c:10390
+msgid "_Smart Queue"
+msgstr ""
+
+#: ../src/settings.c:10395
+msgid "_Pause On Error"
+msgstr ""
+
+#: ../src/settings.c:10405
+msgid "Arrange _Icons"
+msgstr ""
+
+#: ../src/settings.c:10410
+msgid "By _Name"
+msgstr ""
+
+#: ../src/settings.c:10413
+msgid "By _Type"
+msgstr ""
+
+#: ../src/settings.c:10416
+msgid "By _Date"
+msgstr ""
+
+#: ../src/settings.c:10419
+msgid "By _Size"
+msgstr ""
+
+#: ../src/settings.c:10422
+msgid "_Custom"
+msgstr ""
+
+#: ../src/settings.c:10425 ../src/settings.c:10711
+msgid "_Ascending"
+msgstr "_Αύξουσα"
+
+#: ../src/settings.c:10428
+msgid "D_escending"
+msgstr ""
+
+#: ../src/settings.c:10431
+msgid "Desktop _Settings"
+msgstr ""
+
+#: ../src/settings.c:10434 ../src/settings.c:10648
+msgid "De_vices"
+msgstr "_Συσκεύες"
+
+#: ../src/settings.c:10442
+msgid "_Desktop Folder"
+msgstr ""
+
+#: ../src/settings.c:10452
+msgid "Editor Font"
+msgstr "Επεξεργαστής γραμματοσειράς"
+
+#: ../src/settings.c:10453 ../src/settings.c:10482
+msgid "Example Input 0123456789"
+msgstr "Παράδειγμα εισόδου 0123456789"
+
+#: ../src/settings.c:10481
+msgid "Input Font"
+msgstr "Γραμματοσειρά εισόδου"
+
+#: ../src/settings.c:10488
+msgid "E_xecute"
+msgstr "_Εκτέλεση"
+
+#: ../src/settings.c:10491
+msgid "Edi_t"
+msgstr "_Επεξεργασία"
+
+#: ../src/settings.c:10494
+msgid "Edit As _Root"
+msgstr "Επεξεργασία _ως Root"
+
+#: ../src/settings.c:10497
+msgid "_Choose..."
+msgstr "Επιλογή ε_φαρμογής"
+
+#. virtual
+#: ../src/settings.c:10502
+msgid "In _Tab"
+msgstr "Σε καρ_τέλα"
+
+#: ../src/settings.c:10506
+msgid "N_ew"
+msgstr "_Νέα"
+
+#: ../src/settings.c:10509 ../src/settings.c:10659 ../src/settings.c:10815
+#: ../src/settings.c:10853
+msgid "Tab _1"
+msgstr "Καρτέλα _1"
+
+#: ../src/settings.c:10510 ../src/settings.c:10660 ../src/settings.c:10816
+#: ../src/settings.c:10854
+msgid "Tab _2"
+msgstr "Καρτέλα _2"
+
+#: ../src/settings.c:10511 ../src/settings.c:10661 ../src/settings.c:10817
+#: ../src/settings.c:10855
+msgid "Tab _3"
+msgstr "Καρτέλα _3"
+
+#: ../src/settings.c:10512 ../src/settings.c:10662 ../src/settings.c:10818
+#: ../src/settings.c:10856
+msgid "Tab _4"
+msgstr "Καρτέλα _4"
+
+#: ../src/settings.c:10513 ../src/settings.c:10663 ../src/settings.c:10819
+#: ../src/settings.c:10857
+msgid "Tab _5"
+msgstr "Καρτέλα _5"
+
+#: ../src/settings.c:10514 ../src/settings.c:10664 ../src/settings.c:10820
+#: ../src/settings.c:10858
+msgid "Tab _6"
+msgstr "Καρτέλα _6"
+
+#: ../src/settings.c:10515 ../src/settings.c:10665 ../src/settings.c:10821
+#: ../src/settings.c:10859
+msgid "Tab _7"
+msgstr "Καρτέλα _7"
+
+#: ../src/settings.c:10516 ../src/settings.c:10666 ../src/settings.c:10822
+#: ../src/settings.c:10860
+msgid "Tab _8"
+msgstr "Καρτέλα _8"
+
+#: ../src/settings.c:10517 ../src/settings.c:10667 ../src/settings.c:10823
+#: ../src/settings.c:10861
+msgid "Tab _9"
+msgstr "Καρτέλα _9"
+
+#: ../src/settings.c:10518 ../src/settings.c:10668 ../src/settings.c:10824
+#: ../src/settings.c:10862
+msgid "Tab 1_0"
+msgstr "Καρτέλα 1_0"
+
+#: ../src/settings.c:10520
+msgid "In _Panel"
+msgstr "Σε πάνελ"
+
+#: ../src/settings.c:10531 ../src/settings.c:10550
+msgid "_Extract"
+msgstr "_Αποσυμπίεση"
+
+#: ../src/settings.c:10534 ../src/settings.c:10554
+msgid "Extract _To"
+msgstr "Α_ποσυμπίεση σε Φάκελο"
+
+#: ../src/settings.c:10537 ../src/settings.c:10557
+msgid "_List Contents"
+msgstr "_Εμφάνιση περιεχομένων"
+
+#: ../src/settings.c:10543
+msgid "_Archive Default"
+msgstr "Προεπι_λεγμένη ενέργεια"
+
+#: ../src/settings.c:10547
+msgid "_Open With App"
+msgstr "Άνοιγμα με ε_φαρμογή"
+
+#: ../src/settings.c:10560
+msgid "_Create Subfolder"
+msgstr "Δημιουργία _υποφακέλου"
+
+#: ../src/settings.c:10564
+msgid "_Write Access"
+msgstr "_Δικαίωμα εγγραφής"
+
+#: ../src/settings.c:10567
+msgid "_Mount ISO"
+msgstr "_Προσάρτηση ISO"
+
+#: ../src/settings.c:10570
+msgid "_Auto-Mount ISO"
+msgstr "_Αυτόματη προσάρτηση ISO"
+
+#: ../src/settings.c:10585
+msgid "Fol_der"
+msgstr "_Φάκελος"
+
+#: ../src/settings.c:10593
+msgctxt "New|"
+msgid "_Bookmark"
+msgstr "_Σελιδοδείκτης"
+
+#: ../src/settings.c:10597
+msgid "_Archive"
+msgstr "Σ_υμπιεσμένο αρχείο"
+
+#: ../src/settings.c:10604
+msgctxt "New|"
+msgid "_Tab"
+msgstr "Καρ_τέλα"
+
+#: ../src/settings.c:10606
+msgid "Tab _Here"
+msgstr "Καρτέλα ε_δώ"
+
+#: ../src/settings.c:10609
+msgid "_Desktop Application"
+msgstr ""
+
+#: ../src/settings.c:10620
+msgid "_Back"
+msgstr "Πί_σω"
+
+#: ../src/settings.c:10622
+msgid "_Forward"
+msgstr "_Εμπρός"
+
+#: ../src/settings.c:10624
+msgid "_Up"
+msgstr "_Πάνω"
+
+#: ../src/settings.c:10626
+msgid "_Home"
+msgstr "Προσωπικός _φάκελος"
+
+#: ../src/settings.c:10631
+msgid "_Set Default"
+msgstr "Ορισμός ως προεπι_λογή"
+
+#: ../src/settings.c:10634
+msgid "Re_al Path"
+msgstr "Πραγματική _διαδρομή"
+
+#: ../src/settings.c:10636
+msgid "Fo_cus"
+msgstr "Εστί_αση"
+
+#: ../src/settings.c:10640
+msgid "_Path Bar"
+msgstr "_Πεδίο εισαγωγής διαδρομής"
+
+#: ../src/settings.c:10642
+msgid "_File List"
+msgstr "_Λίστα αρχείων"
+
+#: ../src/settings.c:10644
+msgid "_Tree"
+msgstr "_Δένδρο"
+
+#: ../src/settings.c:10651
+msgctxt "Go|"
+msgid "_Tab"
+msgstr "Καρ_τέλα"
+
+#: ../src/settings.c:10657
+msgid "_Close"
+msgstr "_Κλείσιμο"
+
+#: ../src/settings.c:10674
+msgid "Styl_e"
+msgstr "Στ_υλ"
+
+#: ../src/settings.c:10677
+msgid "C_olumns"
+msgstr "_Στήλες"
+
+#: ../src/settings.c:10680
+msgid "_Reorder"
+msgstr "Α_λλαγή σειράς"
+
+#: ../src/settings.c:10682
+msgid "_Rubberband Select"
+msgstr "Επιλογή _Rubberband"
+
+#: ../src/settings.c:10695
+msgid "_Sort"
+msgstr "Τα_ξινόμηση"
+
+#. visible
+#. position
+#: ../src/settings.c:10701 ../src/settings.c:11111
+msgid "_Size"
+msgstr "Μέγε_θος"
+
+#: ../src/settings.c:10703 ../src/settings.c:11118
+msgid "_Type"
+msgstr "Τύ_πος"
+
+#: ../src/settings.c:10705 ../src/settings.c:11124
+msgid "_Permission"
+msgstr "_Δικαιώματα"
+
+#: ../src/settings.c:10707 ../src/settings.c:10970 ../src/settings.c:11130
+msgid "_Owner"
+msgstr "Ιδι_οκτήτης"
+
+#: ../src/settings.c:10709 ../src/settings.c:11136
+msgid "_Modified"
+msgstr "Ημερομηνία τ_ροποποίησης"
+
+#: ../src/settings.c:10713
+msgid "_Descending"
+msgstr "_Φθίνουσα"
+
+#: ../src/settings.c:10716
+msgid "Nat_ural"
+msgstr "Φυσι_κή"
+
+#: ../src/settings.c:10718
+msgid "_Case Sensitive"
+msgstr "Ευαισθησία κεφαλαίων /πε_ζών"
+
+#: ../src/settings.c:10720
+msgid "Folders Fi_rst"
+msgstr "Πρώτα οι φάκε_λοι"
+
+#: ../src/settings.c:10722
+msgid "F_iles First"
+msgstr "Πρώτα τα αρ_χεία"
+
+#: ../src/settings.c:10724
+msgid "Mi_xed"
+msgstr "_Μικτά"
+
+#: ../src/settings.c:10726
+msgid "_Hidden First"
+msgstr "Τα κρ_υφά στην αρχή"
+
+#: ../src/settings.c:10728
+msgid "Hidden _Last"
+msgstr "Τα κρυφά στο _τέλος"
+
+#: ../src/settings.c:10731
+msgid "Re_fresh"
+msgstr "_Ενημέρωση"
+
+#: ../src/settings.c:10734
+msgid "Auto See_k"
+msgstr ""
+
+#: ../src/settings.c:10739
+msgid "P_rotocol Handler..."
+msgstr ""
+
+#: ../src/settings.c:10741
+msgid "Set Protocol Handler"
+msgstr ""
+
+#: ../src/settings.c:10742
+msgid ""
+"Enter command to be used to mount or open protocols (such as nfs://, smb://, etc):\n"
+"\n"
+"If this setting is empty, SpaceFM will open protocols using 'udevil mount'.\n"
+"\n"
+"TIP:  To unmount networks, install udevil or set Unmount Command to a command which handles network protocols.\n"
+msgstr ""
+
+#: ../src/settings.c:10746
+msgid "Path Bar _Help"
+msgstr ""
+
+#: ../src/settings.c:10763 ../src/settings.c:10893
+msgid "_Delete"
+msgstr "_Διαγραφή"
+
+#: ../src/settings.c:10786
+msgid "Copy Pa_rent"
+msgstr "Αντιγραφή _γονικής διαδρομής"
+
+#: ../src/settings.c:10789
+msgid "Paste _Link"
+msgstr "Επικόλληση _συνδέσμου"
+
+#: ../src/settings.c:10792
+msgid "Paste _Target"
+msgstr "Επικόλληση _προορισμού"
+
+#: ../src/settings.c:10795
+msgid "Paste _As"
+msgstr "Επικόλλ_ηση ως"
+
+#: ../src/settings.c:10801 ../src/settings.c:10891
+msgid "_Copy To"
+msgstr "Αντιγρα_φή σε"
+
+#: ../src/settings.c:10805
+msgid "L_ocation"
+msgstr "Τ_οποθεσία"
+
+#: ../src/settings.c:10806 ../src/settings.c:10845
+msgid "L_ast Location"
+msgstr "Τ_ελευταία τοποθεσία"
+
+#: ../src/settings.c:10809
+msgctxt "Edit|CopyTo|"
+msgid "_Tab"
+msgstr "Καρ_τέλα"
+
+#: ../src/settings.c:10826
+msgctxt "Edit|CopyTo|"
+msgid "_Panel"
+msgstr "_Πάνελ"
+
+#: ../src/settings.c:10840
+msgid "_Move To"
+msgstr "Μετα_κίνηση σε"
+
+#: ../src/settings.c:10844
+msgid "_Location"
+msgstr "Τ_οποθεσία"
+
+#: ../src/settings.c:10847
+msgctxt "Edit|MoveTo|"
+msgid "_Tab"
+msgstr "Καρ_τέλα"
+
+#: ../src/settings.c:10864
+msgctxt "Edit|MoveTo|"
+msgid "_Panel"
+msgstr "_Πάνελ"
+
+#: ../src/settings.c:10877
+msgid "_Select All"
+msgstr "_Επιλογή όλων"
+
+#: ../src/settings.c:10880
+msgid "_Unselect All"
+msgstr "Αποεπιλογή ό_λων"
+
+#: ../src/settings.c:10882
+msgid "_Invert Selection"
+msgstr "_Αντιστροφή επιλογής"
+
+#: ../src/settings.c:10884
+msgid "S_elect By Pattern"
+msgstr "Επιλογή _βάσει μοτίβου"
+
+#: ../src/settings.c:10886
+msgid "R_oot"
+msgstr "_Ως Root"
+
+#: ../src/settings.c:10892
+msgid "Move _To"
+msgstr ""
+
+#. Properties
+#: ../src/settings.c:10897
+msgid "Propert_ies"
+msgstr "_Ιδιότητες"
+
+#: ../src/settings.c:10908
+msgid "_Quick"
+msgstr "Ταχυεπε_ξεργασία"
+
+#: ../src/settings.c:10930 ../src/settings.c:10960 ../src/settings.c:10986
+msgid "_Recursive"
+msgstr "Αναδ_ρομικά"
+
+#: ../src/settings.c:11008
+msgid "_Toolbar"
+msgstr "Εργαλειο_θήκη"
+
+#: ../src/settings.c:11019
+msgid "T_ree"
+msgstr "Δένδ_ρο"
+
+#: ../src/settings.c:11035
+msgid "_Detailed"
+msgstr "_Λεπτομερές"
+
+#: ../src/settings.c:11041
+msgid "_Icons"
+msgstr "_Εικονίδια"
+
+#: ../src/settings.c:11046
+msgid "_Compact"
+msgstr "_Συμπαγές"
+
+#: ../src/settings.c:11051
+msgid "_Hidden Files"
+msgstr "_Κρυφά αρχεία"
+
+#: ../src/settings.c:11059
+#, c-format
+msgid "File List Font (Panel %d)"
+msgstr "Γραμματοσειρά λίστας αρχείων (πάνελ %d)"
+
+#: ../src/settings.c:11060
+msgid "Example  1.1 M  file  -rwxr--r--  user:group  2011-01-01 01:11"
+msgstr "Παράδειγμα  1.1 M  file  -rwxr--r--  user:group  2011-01-01 01:11"
+
+#: ../src/settings.c:11065
+#, c-format
+msgid "Devices Font (Panel %d)"
+msgstr "Γραμματοσειρά συσκευών (πάνελ %d)"
+
+#: ../src/settings.c:11066
+msgid "sr0 [no media] :EXAMPLE"
+msgstr "sr0 [χωρίς μέσο] :ΠΑΡΑΔΕΙΓΜΑ"
+
+#: ../src/settings.c:11072
+#, c-format
+msgid "Bookmarks Font (Panel %d)"
+msgstr "Γραμματοσειρά καρτέλας (πάνελ %d)"
+
+#: ../src/settings.c:11073
+msgid "Example Bookmark Name"
+msgstr "Ενδεικτικό όνομα Σελιδοδείκτη"
+
+#: ../src/settings.c:11078
+#, c-format
+msgid "Path Bar Font (Panel %d)"
+msgstr ""
+
+#: ../src/settings.c:11079
+msgid "$ cat /home/user/example"
+msgstr ""
+
+#: ../src/settings.c:11085
+#, c-format
+msgid "Tab Font (Panel %d)"
+msgstr "Γραμματοσειρά καρτέλας (πάνελ %d)"
+
+#: ../src/settings.c:11095
+#, c-format
+msgid "Status Bar Font (Panel %d)"
+msgstr ""
+
+#: ../src/settings.c:11096
+msgid "12 G free / 200 G   52 items"
+msgstr "12 G ελεύθερα / 200 G   52 αντικείμενα"
+
+#. speed
+#: ../src/settings.c:11150 ../src/settings.c:11157
+msgid "_New Tab"
+msgstr ""
+
+#: ../src/settings.c:11153 ../src/settings.c:11162
+msgid "_Single Click"
+msgstr "_Μονό κλικ"
+
+#: ../src/ptk/ptk-file-browser.c:597
+msgid "Toolbar Config Menu Help"
+msgstr ""
+
+#: ../src/ptk/ptk-file-browser.c:597
+msgid ""
+"These toolbar config menus allow you to customize the toolbars.\n"
+"\n"
+"Enter the Left Toolbar, Right Toolbar, or Side Toolbar submenu and right-click on an item to show or hide it, change the icon, or add a custom tool item.\n"
+"\n"
+"For more information, click the Help button below."
+msgstr ""
+
+#: ../src/ptk/ptk-file-browser.c:2398
+#, c-format
+msgid ""
+"Directory doesn't exist\n"
+"\n"
+"%s"
+msgstr "Ο κατάλογος δεν υπάρχει\n\n%s"
+
+#: ../src/ptk/ptk-file-browser.c:2423
+#, c-format
+msgid ""
+"Unable to access %s\n"
+"\n"
+"%s"
+msgstr "Αδύνατη η πρόσβαση στο %s\n\n%s"
+
+#: ../src/ptk/ptk-file-browser.c:3075 ../src/desktop/desktop-window.c:2210
+msgid "Select By Pattern"
+msgstr "Επιλογή βάσει μοτίβου"
+
+#: ../src/ptk/ptk-file-browser.c:3075 ../src/desktop/desktop-window.c:2210
+#, c-format
+msgid ""
+"Enter pattern to select files and folders:\n"
+"\n"
+"If your pattern contains any uppercase characters, the matching will be case sensitive.\n"
+"\n"
+"Example:  *sp*e?m*\n"
+"\n"
+"TIP: You can also enter '%% PATTERN' in the path bar."
+msgstr ""
+
+#: ../src/ptk/ptk-file-browser.c:5856 ../src/ptk/ptk-file-misc.c:3811
+#: ../src/desktop/desktop-window.c:3211
+msgid "Choose Location"
+msgstr ""
+
+#: ../src/ptk/ptk-file-browser.c:5889 ../src/ptk/ptk-file-browser.c:5921
+#: ../src/desktop/desktop-window.c:3244 ../src/desktop/desktop-window.c:3276
+msgid "Invalid Destination"
+msgstr "Μη έγκυρος προορισμός"
+
+#: ../src/ptk/ptk-file-browser.c:5890 ../src/desktop/desktop-window.c:3245
+msgid "Destination same as source"
+msgstr "Ο προορισμός είναι ίδιος με την προέλευση"
+
+#: ../src/ptk/ptk-file-browser.c:5922 ../src/desktop/desktop-window.c:3277
+msgid "Invalid destination"
+msgstr "Μη έγκυρος προορισμός"
+
+#: ../src/ptk/ptk-file-browser.c:5969
+msgid "Hide File"
+msgstr "Απόκρυψη αρχείου"
+
+#: ../src/ptk/ptk-file-browser.c:5969
+msgid ""
+"The names of the selected files will be added to the '.hidden' file located in this folder, which will hide them from view in SpaceFM.  You may need to refresh the view or restart SpaceFM for the files to disappear.\n"
+"\n"
+"To unhide a file, open the .hidden file in your text editor, remove the name of the file, and refresh."
+msgstr ""
+
+#: ../src/ptk/ptk-file-browser.c:5982
+msgid "Error hiding files"
+msgstr "Σφάλμα απόκρυψης αρχείων"
+
+#: ../src/ptk/ptk-file-browser.c:5989
+msgid "No files are selected"
+msgstr "Δεν έχει επιλεγεί κανένα αρχείο"
+
+#: ../src/ptk/ptk-file-browser.c:6791 ../src/ptk/ptk-location-view.c:3726
+#: ../src/ptk/ptk-file-menu.c:510
+msgid "Bookmark Exists"
+msgstr "Ο σελιδοδείκτης υπάρχει"
+
+#: ../src/ptk/ptk-file-browser.c:6792 ../src/ptk/ptk-location-view.c:3727
+#: ../src/ptk/ptk-file-menu.c:511
+msgid "Bookmark already exists"
+msgstr "Ο σελιδοδείκτης υπάρχει ήδη"
+
+#: ../src/ptk/ptk-location-view.c:666 ../src/ptk/ptk-location-view.c:746
+msgid "Unable to mount device"
+msgstr "Αδύνατη προσάρτηση συσκευής"
+
+#: ../src/ptk/ptk-location-view.c:686
+msgid "Unable to unmount device"
+msgstr "Αδύνατη αποπροσάρτηση συσκευής"
+
+#: ../src/ptk/ptk-location-view.c:708 ../src/ptk/ptk-location-view.c:722
+msgid "Unable to eject device"
+msgstr "Αδύνατον η εξαγωγή του δίσκου"
+
+#: ../src/ptk/ptk-location-view.c:765
+msgid "udev Not Configured"
+msgstr "Το udev δεν έχει ρυθμιστεί"
+
+#: ../src/ptk/ptk-location-view.c:766
+msgid ""
+"Mounting a network share requires a udev (--disable-hal) build of SpaceFM."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:826 ../src/ptk/ptk-location-view.c:2676
+msgid "udevil Not Installed"
+msgstr "Το udev δεν είναι εγκατεστημένο"
+
+#: ../src/ptk/ptk-location-view.c:827
+msgid ""
+"Mounting a network share requires udevil to be installed, or you can set a "
+"custom protocol handler by right-clicking on the Path Bar."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:938
+#, c-format
+msgid "Netmount %s"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1002 ../src/ptk/ptk-location-view.c:1532
+#: ../src/ptk/ptk-location-view.c:1579 ../src/ptk/ptk-location-view.c:1632
+#, c-format
+msgid "Mount %s"
+msgstr "Προσάρτηση του %s"
+
+#: ../src/ptk/ptk-location-view.c:1029
+#, c-format
+msgid "%s is currently mounted.  You must unmount it before you can check it."
+msgstr "Το %s είναι προσαρτημένο. Πρέπει πρώτα να αποπροσαρτηθεί για να γίνει έλεγχός του."
+
+#: ../src/ptk/ptk-location-view.c:1030 ../src/ptk/ptk-location-view.c:1830
+#: ../src/ptk/ptk-location-view.c:1909 ../src/ptk/ptk-location-view.c:2251
+msgid "Device Is Mounted"
+msgstr "Η συσκευή είναι προσαρτημένη"
+
+#: ../src/ptk/ptk-location-view.c:1037
+#, c-format
+msgid ""
+"Enter filesystem check command:\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\n"
+"EDIT WITH CARE   This command is run as root"
+msgstr "Εισάγετε την εντολή ελέγχου του συστήματος αρχείων:\n\nΧρησιμοποιήστε:\n\t%%%%v\tdevice file ( %s )\n\nΣΥΝΕΧΙΣΤΕ ΜΕ ΠΡΟΣΟΧΗ\n   Η εντολή θα εκτελεστεί από τον root"
+
+#: ../src/ptk/ptk-location-view.c:1042
+msgid "Check As Root"
+msgstr "Έλεγχος ως Root"
+
+#: ../src/ptk/ptk-location-view.c:1045
+msgid "CHECK AS ROOT"
+msgstr "ΕΛΕΓΧΟΣ ΩΣ ROOT"
+
+#: ../src/ptk/ptk-location-view.c:1055
+#, c-format
+msgid "Check As Root %s"
+msgstr "Έλεγχος του %s ως Root"
+
+#: ../src/ptk/ptk-location-view.c:1088
+#, c-format
+msgid ""
+"Enter mount command:\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\t%%%%o\tvolume-specific mount options\n"
+"\t\t( %s )\n"
+"\n"
+"Note: fstab overrides some options\n"
+"\n"
+"EDIT WITH CARE   This command is run as root"
+msgstr "Εισάγετε την εντολή προσάρτησης:\n\nΧρησιμοποιήστε:\n\t%%%%v\tdevice file ( %s )\n\t%%%%o\tvolume-specific mount options\n\t\t( %s )\n\nΣημείωση: το fstab μπορεί να αλλάξει κάποιες επιλογές\n\nΣΥΝΕΧΙΣΤΕ ΜΕ ΠΡΟΣΟΧΗ\n   Η εντολή θα εκτελεστεί από τον root"
+
+#: ../src/ptk/ptk-location-view.c:1094
+msgid "Mount As Root"
+msgstr "Προσάρτηση ως Root"
+
+#: ../src/ptk/ptk-location-view.c:1097
+msgid "MOUNT AS ROOT"
+msgstr "ΠΡΟΣΑΡΤΗΣΗ ΩΣ ROOT"
+
+#: ../src/ptk/ptk-location-view.c:1113
+#, c-format
+msgid "Mount As Root %s"
+msgstr "Προσάρτηση του %s ως Root"
+
+#: ../src/ptk/ptk-location-view.c:1143
+#, c-format
+msgid ""
+"Enter unmount command:\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\n"
+"EDIT WITH CARE   This command is run as root"
+msgstr "Εισάγετε την εντολή αποπροσάρτησης:\n\nΧρησιμοποιήστε:\n\t%%%%v\tdevice file ( %s )\n\nΣΥΝΕΧΙΣΤΕ ΜΕ ΠΡΟΣΟΧΗ\n   Η εντολή θα εκτελεστεί από τον root"
+
+#: ../src/ptk/ptk-location-view.c:1148
+msgid "Unmount As Root"
+msgstr "Αποπροσάρτηση ως Root"
+
+#: ../src/ptk/ptk-location-view.c:1151
+msgid "UNMOUNT AS ROOT"
+msgstr "ΑΠΟΠΡΟΣΑΡΤΗΣΗ ΩΣ ROOT"
+
+#: ../src/ptk/ptk-location-view.c:1163
+#, c-format
+msgid "Unmount As Root %s"
+msgstr "Αποπροσάρτηση του %s ως Root"
+
+#: ../src/ptk/ptk-location-view.c:1219
+#, c-format
+msgid ""
+"\n"
+"\n"
+"WARNING: %s is mounted.  You may want or need to unmount it before changing the label."
+msgstr "\n\nΠΡΟΕΙΔΟΠΟΙΗΣΗ: το %s είναι προσαρτημένο.  Ίσως πρέπει να αποπροσαρτηθεί πριν γίνει αλλαγή της ετικέτας."
+
+#: ../src/ptk/ptk-location-view.c:1223
+#, c-format
+msgid "Enter volume label for %s:%s"
+msgstr "Εισάγετε την ετικέτα τόμου για το %s:%s"
+
+#: ../src/ptk/ptk-location-view.c:1225
+msgid "Change Volume Label"
+msgstr "Αλλαγή ετικέτας τόμου"
+
+#: ../src/ptk/ptk-location-view.c:1250
+#, c-format
+msgid ""
+"Enter remove label command for fstype '%s':\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\t%%%%l\tnew label ( \"%s\" )\n"
+"\n"
+"EDIT WITH CARE   This command is run as root%s"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1256
+#, c-format
+msgid ""
+"Enter change label command for fstype '%s':\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\t%%%%l\tnew label ( \"%s\" )\n"
+"\n"
+"EDIT WITH CARE   This command is run as root%s"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1259
+msgid "Change Label As Root"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1262
+msgid "LABEL AS ROOT"
+msgstr "ΑΛΛΑΓΗ ΕIΤΚΕΤΑΣ ΩΣ ROOT"
+
+#: ../src/ptk/ptk-location-view.c:1277
+#, c-format
+msgid "Label As Root %s"
+msgstr "Αλλαγή ετικέτας του %s ως Root"
+
+#: ../src/ptk/ptk-location-view.c:1340
+#, c-format
+msgid "Unmount %s"
+msgstr "Αποπροσάρτηση του %s"
+
+#: ../src/ptk/ptk-location-view.c:1448 ../src/ptk/ptk-location-view.c:1461
+#, c-format
+msgid "Remove %s"
+msgstr "Αφαίρεση του %s"
+
+#. task
+#: ../src/ptk/ptk-location-view.c:1681
+#, c-format
+msgid "Remount %s"
+msgstr "Επαναπροσάρτηση του %s"
+
+#: ../src/ptk/ptk-location-view.c:1767
+#, c-format
+msgid "Reload %s"
+msgstr "Ανανέωση του %s"
+
+#: ../src/ptk/ptk-location-view.c:1795
+msgid "Sync"
+msgstr "Συγχρονισμός"
+
+#: ../src/ptk/ptk-location-view.c:1829
+#, c-format
+msgid ""
+"%s is currently mounted.  You must unmount it before you can format it."
+msgstr "Το %s είναι προσαρτημένο. Θα πρέπει να αποπροσαρτηθεί ώστε να μπορέσει να γίνει η διαμόρφωσή του."
+
+#: ../src/ptk/ptk-location-view.c:1841 ../src/ptk/ptk-location-view.c:2001
+#, c-format
+msgid " ( AN ENTIRE DEVICE ) "
+msgstr "( ΟΛΟΚΛΗΡΗ ΣΥΣΚΕΥΗ )"
+
+#: ../src/ptk/ptk-location-view.c:1847
+#, c-format
+msgid ""
+"You are about to erase %s %s- ALL DATA WILL BE LOST.  Be patient - this can take awhile and dd gives no feedback.\n"
+"\n"
+"Enter command to overwrite entire volume with /dev/%s:\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\n"
+"EDIT WITH CARE   This command is run as root"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1850
+#, c-format
+msgid ""
+"You are about to format %s %s- ALL DATA WILL BE LOST.\n"
+"\n"
+"Enter %s format command:\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\n"
+"EDIT WITH CARE   This command is run as root"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1851
+msgid "Format"
+msgstr "Διαμόρφωση"
+
+#: ../src/ptk/ptk-location-view.c:1854 ../src/ptk/ptk-location-view.c:1951
+#: ../src/ptk/ptk-location-view.c:2008
+msgid "DATA LOSS WARNING"
+msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ ΑΠΩΛΕΙΑΣ ΔΕΔΟΜΕΝΩΝ"
+
+#: ../src/ptk/ptk-location-view.c:1863
+#, c-format
+msgid "Format %s"
+msgstr "Διαμόρφωση του %s"
+
+#: ../src/ptk/ptk-location-view.c:1908
+#, c-format
+msgid ""
+"%s is currently mounted.  You must unmount it before you can restore it."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1916
+msgid "Choose Backup For Restore"
+msgstr "Επιλογή αντιγράφου ασφαλείας για επαναφορά"
+
+#: ../src/ptk/ptk-location-view.c:1950
+#, c-format
+msgid ""
+"You are about to overwrite the MBR boot code of %s using %s.\n"
+"\n"
+"This change may prevent your computer from booting properly.  All important data on the entire device should be backed up first.\n"
+"\n"
+"Proceed?  (If you press Yes, you still have one more opportunity to abort before the disk is modified.)"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:1951
+msgid "Restore MBR"
+msgstr "Επαναφορά MBR"
+
+#: ../src/ptk/ptk-location-view.c:1963 ../src/ptk/ptk-location-view.c:2173
+msgid "Unknown Type"
+msgstr "Άγνωστος τύπος"
+
+#: ../src/ptk/ptk-location-view.c:1963 ../src/ptk/ptk-location-view.c:2173
+msgid ""
+"The selected file is not a recognized backup file.\n"
+"\n"
+"FSArchiver filenames contain 'fsarchiver' or end in '.fsa'.  Partimage filenames contain 'partimage' or end in '.000'.  MBR filenames end in '.mbr', '.mbr.bin', or '-MBR-back' and are 512 bytes in size.  If you are SURE this file is a valid backup, you can rename it to avoid this error."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2004
+#, c-format
+msgid ""
+"You are about to restore %s %susing %s - ALL DATA WILL BE LOST.\n"
+"\n"
+"Enter %s restore command:\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\t%%%%s\tbackup file ( %s )\n"
+"\n"
+"EDIT WITH CARE   This command is run as root"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2005
+msgid "Restore"
+msgstr "Επαναφορά"
+
+#: ../src/ptk/ptk-location-view.c:2046
+#, c-format
+msgid "%s Restore %s"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2100
+msgid "Directory Missing"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2101
+msgid "The /etc/udevil directory was not found.  Is udevil installed?"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2114
+msgid "Choose Backup For Info"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2167
+msgid "MBR File"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2167
+msgid ""
+"Based on its name, the selected file appears to be an MBR backup file.  No "
+"other information is available for this type of backup."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2183
+msgid "Restore Info"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2242
+#, c-format
+msgid ""
+"\n"
+"\n"
+"WARNING: %s is mounted.  By default, FSArchiver will only backup volumes mounted read-only.  To backup a read-write volume, you need to add --allow-rw-mounted to the command.  See 'man fsarchiver' for details."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2250
+#, c-format
+msgid ""
+"%s is currently mounted.  You must unmount it before you can create a backup"
+" using Partimage."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2267
+#, c-format
+msgid "Save %s Backup"
+msgstr "Αποθήκευση αντιγράφου ασφαλείας του %s"
+
+#: ../src/ptk/ptk-location-view.c:2284
+msgid "Overwrite?"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2284
+msgid "The selected backup already exists.  Overwrite?"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2313
+#, c-format
+msgid ""
+"Enter %s backup command:\n"
+"\n"
+"Use:\n"
+"\t%%%%v\tdevice file ( %s )\n"
+"\t%%%%s\tbackup file ( %s )%s\n"
+"\n"
+"EDIT WITH CARE   This command is run as root"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2316
+msgid "Backup"
+msgstr "Αντίγραφο ασφαλείας"
+
+#: ../src/ptk/ptk-location-view.c:2344
+#, c-format
+msgid "%s Backup %s"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2573
+#, c-format
+msgid "Properties %s"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2611 ../src/ptk/ptk-location-view.c:2638
+#, c-format
+msgid ""
+"%sCurrently Selected Device: %s\n"
+"Volume Label: %s\n"
+"Device ID: %s"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2677
+msgid "Mounting a disc image file requires udevil to be installed."
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:2711
+msgid "Mount Disc Image Failed"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:3055 ../src/ptk/ptk-location-view.c:3365
+msgid "_Eject"
+msgstr "_Εξαγωγή"
+
+#: ../src/ptk/ptk-location-view.c:3755
+msgid "Rename Bookmark"
+msgstr "Μετονομασία σελιδοδείκτη"
+
+#: ../src/ptk/ptk-location-view.c:3757
+msgid "Enter new bookmark name:"
+msgstr "Εισάγετε το όνομα του νέου σελιδοδείκτη:"
+
+#: ../src/ptk/ptk-location-view.c:3778
+#, c-format
+msgid "Enter new folder for bookmark '%s':"
+msgstr ""
+
+#: ../src/ptk/ptk-location-view.c:3779
+msgid "Edit Bookmark Location"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:480
+msgid "Kill As Other"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:538
+msgid "Q_ueue"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:544
+msgid "Res_ume"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:625
+msgid "Stop As Other"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:625
+msgid "Cont As Other"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:795
+msgid "Move: "
+msgstr "Μετακίνηση:"
+
+#: ../src/ptk/ptk-file-task.c:796
+msgid "Copy: "
+msgstr "Αντιγραφή:"
+
+#: ../src/ptk/ptk-file-task.c:797
+msgid "Trash: "
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:798
+msgid "Delete: "
+msgstr "Διαγραφή:"
+
+#: ../src/ptk/ptk-file-task.c:799
+msgid "Link: "
+msgstr "Σύνδεσμος:"
+
+#: ../src/ptk/ptk-file-task.c:800
+msgid "Change: "
+msgstr "Αλλαγή:"
+
+#: ../src/ptk/ptk-file-task.c:801
+msgid "Run: "
+msgstr "Εκτέλεση:"
+
+#: ../src/ptk/ptk-file-task.c:805
+msgid "Moving..."
+msgstr "Μεταφορά..."
+
+#: ../src/ptk/ptk-file-task.c:806
+msgid "Copying..."
+msgstr "Αντιγραφή..."
+
+#: ../src/ptk/ptk-file-task.c:807
+msgid "Trashing..."
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:808
+msgid "Deleting..."
+msgstr "Διαγραφή..."
+
+#: ../src/ptk/ptk-file-task.c:809
+msgid "Linking..."
+msgstr "Σύνδεση..."
+
+#: ../src/ptk/ptk-file-task.c:810
+msgid "Changing..."
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:811 ../src/ptk/ptk-file-task.c:981
+#: ../src/ptk/ptk-file-task.c:1521
+#, c-format
+msgid "Running..."
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:897
+msgid "From:"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:914
+msgid "To:"
+msgstr "Προς:"
+
+#: ../src/ptk/ptk-file-task.c:932
+msgid "Progress:  "
+msgstr "Πρόοδος:"
+
+#: ../src/ptk/ptk-file-task.c:970
+msgid "Status:  "
+msgstr "Κατάσταση:"
+
+#: ../src/ptk/ptk-file-task.c:977 ../src/ptk/ptk-file-task.c:1482
+#, c-format
+msgid "Paused"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:979 ../src/ptk/ptk-file-task.c:1498
+#, c-format
+msgid "Queued"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1035
+msgid "Ask"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1036
+msgid "Overwrite All"
+msgstr "Αντικατάσταση όλων"
+
+#: ../src/ptk/ptk-file-task.c:1037
+msgid "Skip All"
+msgstr "Παράβλεψη όλων"
+
+#: ../src/ptk/ptk-file-task.c:1038
+msgid "Auto Rename"
+msgstr "Αυτόματη μετονομασία"
+
+#: ../src/ptk/ptk-file-task.c:1042
+msgid "Stop If Error First"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1043
+msgid "Stop On Any Error"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1044
+msgid "Continue"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1215 ../src/ptk/ptk-file-task.c:1453
+#, c-format
+msgid "Stopped"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1219
+msgid "Errors"
+msgstr "Σφάλματα"
+
+#: ../src/ptk/ptk-file-task.c:1221 ../src/ptk/ptk-file-task.c:1465
+#: ../src/ptk/ptk-file-task.c:1475
+#, c-format
+msgid "Done"
+msgstr "ΟΚ"
+
+#: ../src/ptk/ptk-file-task.c:1376
+#, c-format
+msgid "%s  (%s)  %s remaining"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1408
+msgid "[ SNIP - additional errors above have been trimmed from this log ]\n"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1443
+#, c-format
+msgid "Error  ( Stop If First )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1445
+#, c-format
+msgid "Error  ( Stop On Any )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1447
+#, c-format
+msgid "Stopped with %d error"
+msgid_plural "Stopped with %d errors"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/ptk/ptk-file-task.c:1460
+#, c-format
+msgid "Finished with %d error"
+msgid_plural "Finished with %d errors"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/ptk/ptk-file-task.c:1470
+#, c-format
+msgid "Finished with error  ( exit status %d )"
+msgstr "Ολοκληρώθηκε με σφάλμα  ( κατάσταση εξόδου %d )"
+
+#: ../src/ptk/ptk-file-task.c:1473
+#, c-format
+msgid "Finished with error"
+msgstr "Ολοκληρώθηκε με σφάλμα"
+
+#: ../src/ptk/ptk-file-task.c:1486
+#, c-format
+msgid "Paused  ( pid %d )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1489
+#, c-format
+msgid "Paused  ( exit status %d )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1502
+#, c-format
+msgid "Queued  ( pid %d )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1505
+#, c-format
+msgid "Queued  ( exit status %d )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1516
+#, c-format
+msgid "Running with %d error"
+msgid_plural "Running with %d errors"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/ptk/ptk-file-task.c:1526
+#, c-format
+msgid "Running...  ( pid %d )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1529
+#, c-format
+msgid "Running...  ( exit status %d )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:1694 ../src/ptk/ptk-file-task.c:2460
+#, c-format
+msgid "stalled"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2119
+msgid "Moving from folder:"
+msgstr "Μετακίνηση από τον φάκελο:"
+
+#: ../src/ptk/ptk-file-task.c:2121
+msgid "Linking from folder:"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2123
+msgid "Copying from folder:"
+msgstr "Αντιγραφή από τον φάκελο:"
+
+#. Ask the user whether to overwrite dir content or not
+#: ../src/ptk/ptk-file-task.c:2139
+msgid "Folder Exists"
+msgstr "Ο φάκελος υπάρχει ήδη"
+
+#: ../src/ptk/ptk-file-task.c:2140
+msgid "<b>Folder already exists.</b>  Please rename or select an action."
+msgstr "<b>Ο φάκελος υπάρχει ήδη.</b>  Παρακαλώ μετονομάστε τον ή επιλέξτε μία ενέργεια."
+
+#: ../src/ptk/ptk-file-task.c:2157 ../src/ptk/ptk-file-task.c:2161
+msgid "\t<b>( link )</b>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2165
+msgid "\t<b>! overwrite file with link !</b>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2170
+msgid "<b>( same size )</b>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2176 ../src/ptk/ptk-file-task.c:2199
+#, c-format
+msgid "%s\t( %lu bytes )"
+msgstr "%s\t( %lu bytes )"
+
+#: ../src/ptk/ptk-file-task.c:2178
+msgid "larger"
+msgstr "μεγαλύτερο"
+
+#: ../src/ptk/ptk-file-task.c:2180
+msgid "smaller"
+msgstr "μικρότερο"
+
+#: ../src/ptk/ptk-file-task.c:2184
+msgid "<b>( same time )</b>\t"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2194
+msgid "newer"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2196
+msgid "older"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2217
+msgid "Filename Exists"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2218 ../src/ptk/ptk-file-task.c:2233
+msgid "<b>Filename already exists.</b>  Please rename or select an action."
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2230
+msgid "Rename Required"
+msgstr "Απαιτείται μετονομασία"
+
+#: ../src/ptk/ptk-file-task.c:2232
+msgid "In folder:"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2312
+msgid "_Overwrite"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2313
+msgid "Overwrite _All"
+msgstr "Αντικατάσταση όλων"
+
+#: ../src/ptk/ptk-file-task.c:2318
+msgid "_Pause"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2320
+msgid "_Skip"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2321
+msgid "S_kip All"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2374
+msgid "To folder:"
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2401
+msgid "<b>Folder Name:</b>"
+msgstr ""
+
+#. extra buttons
+#: ../src/ptk/ptk-file-task.c:2429
+msgid " _Rename "
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2433
+msgid " A_uto Rename "
+msgstr ""
+
+#: ../src/ptk/ptk-file-task.c:2437
+msgid " Auto Re_name All "
+msgstr ""
+
+#: ../src/ptk/ptk-file-archiver.c:157
+msgid "Save Archive"
+msgstr "Αποθήκευση συμπιεσμένου αρχείου"
+
+#: ../src/ptk/ptk-file-archiver.c:166
+msgid "Archive Format:"
+msgstr "Είδος αρχείου:"
+
+#: ../src/ptk/ptk-file-archiver.c:191
+msgid "Options:"
+msgstr "Επιλογές:"
+
+#. task
+#: ../src/ptk/ptk-file-archiver.c:375
+#, c-format
+msgid "Archive"
+msgstr ""
+
+#: ../src/ptk/ptk-file-archiver.c:477
+msgid "Extract To"
+msgstr "Αποσυμπίεση σε Φάκελο"
+
+#: ../src/ptk/ptk-file-archiver.c:485
+msgid "Cre_ate subfolder(s)"
+msgstr "_Δημιουργία υποφακέλου"
+
+#: ../src/ptk/ptk-file-archiver.c:489
+msgid "Make contents user-_writable"
+msgstr "Τα περιεχόμενα να γίνουν ε_γγράψιμα για τον χρήστη"
+
+#: ../src/ptk/ptk-file-archiver.c:589 ../src/ptk/ptk-file-archiver.c:628
+#: ../src/ptk/ptk-file-menu.c:2225 ../src/vfs/vfs-file-task.c:137
+msgid "copy"
+msgstr ""
+
+#. task
+#: ../src/ptk/ptk-file-archiver.c:689
+#, c-format
+msgid "Extract %s"
+msgstr ""
+
+#: ../src/ptk/ptk-console-output.c:74
+msgid ""
+"\n"
+"Complete!"
+msgstr "\nΟλοκληρώθηκε!"
+
+#: ../src/ptk/ptk-console-output.c:178
+msgid "Command:"
+msgstr "Εντολή:"
+
+#: ../src/ptk/ptk-dir-tree.c:174
+msgid "File System"
+msgstr "Σύστημα αρχείων"
+
+#: ../src/ptk/ptk-dir-tree.c:396
+msgid "( no subfolder )"
+msgstr "( κανένας υποφάκελος )"
+
+#: ../src/ptk/ptk-file-menu.c:1843
+msgid "Remove Text Type Association"
+msgstr ""
+
+#: ../src/ptk/ptk-file-menu.c:1843
+msgid ""
+"NOTE:  When compiling the list of applications to appear in the Open submenu"
+" for a text file, SpaceFM will include applications associated with the MIME"
+" type (eg text/html) AND applications associated with text/plain.  If you "
+"select Remove on an application, it will be removed as an associated "
+"application for the MIME type (eg text/html), but will NOT be removed as an "
+"associated application for text/plain (unless the MIME type is text/plain)."
+"  Thus using Remove may not remove the application from the Open submenu for"
+" this type, unless you also remove it from text/plain."
+msgstr ""
+
+#. Set Default
+#: ../src/ptk/ptk-file-menu.c:2194
+msgid "_Set As Default"
+msgstr ""
+
+#. Add
+#: ../src/ptk/ptk-file-menu.c:2204
+msgid "_Add..."
+msgstr "_Προσθήκη..."
+
+#: ../src/ptk/ptk-file-menu.c:2267 ../src/ptk/ptk-file-misc.c:1785
+msgid "new"
+msgstr "νέο"
+
+#: ../src/ptk/ptk-file-misc.c:151
+#, c-format
+msgid "Delete %d selected item ?"
+msgid_plural "Delete %d selected items ?"
+msgstr[0] "Διαγραφή %d επιλεγμένου αντικειμένου;"
+msgstr[1] "Διαγραφή %d επιλεγμένων αντικειμένων;"
+
+#. MOD
+#: ../src/ptk/ptk-file-misc.c:160
+msgid "Confirm Delete"
+msgstr "Επιβεβαίωση διαγραφής"
+
+#: ../src/ptk/ptk-file-misc.c:614
+msgid "<b>P_ath:</b>   <i>original</i>"
+msgstr "<b>_Διαδρομή:</b>   <i>αρχική</i>"
+
+#: ../src/ptk/ptk-file-misc.c:616
+msgid "<b>_Name:</b>   <i>original</i>"
+msgstr "<b>Όνο_μα:</b>   <i>αρχικό</i>"
+
+#: ../src/ptk/ptk-file-misc.c:618
+msgid "<b>_Filename:</b>   <i>original</i>"
+msgstr "<b>Ό_νομα αρχείου:</b>   <i>αρχικό</i>"
+
+#: ../src/ptk/ptk-file-misc.c:620
+msgid "<b>_Parent:</b>   <i>original</i>"
+msgstr "<b>_Γονική διαδρομή:</b>   <i>αρχική</i>"
+
+#: ../src/ptk/ptk-file-misc.c:626
+msgid "<b>P_ath:</b>   <i>exists as folder</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:628
+msgid "<b>_Name:</b>   <i>exists as folder</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:630
+msgid "<b>_Filename:</b>   <i>exists as folder</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:631 ../src/ptk/ptk-file-misc.c:644
+#: ../src/ptk/ptk-file-misc.c:655 ../src/ptk/ptk-file-misc.c:692
+#: ../src/ptk/ptk-file-misc.c:2442
+msgid "<b>_Parent:</b>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:639
+msgid "<b>P_ath:</b>   <i>exists as file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:641
+msgid "<b>_Name:</b>   <i>exists as file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:643
+msgid "<b>_Filename:</b>   <i>exists as file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:650
+msgid "<b>P_ath:</b>   <i>* overwrite existing file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:652
+msgid "<b>_Name:</b>   <i>* overwrite existing file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:654
+msgid "<b>_Filename:</b>   <i>* overwrite existing file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:662
+msgid "<b>P_ath:</b>   <i>parent exists as file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:664 ../src/ptk/ptk-file-misc.c:676
+#: ../src/ptk/ptk-file-misc.c:688 ../src/ptk/ptk-file-misc.c:2371
+msgid "<b>_Name:</b>"
+msgstr "<b>Όν_ομα:</b>"
+
+#: ../src/ptk/ptk-file-misc.c:666 ../src/ptk/ptk-file-misc.c:678
+#: ../src/ptk/ptk-file-misc.c:690 ../src/ptk/ptk-file-misc.c:2418
+msgid "<b>_Filename:</b>"
+msgstr "<b>Ό_νομα αρχείου:</b>"
+
+#: ../src/ptk/ptk-file-misc.c:668
+msgid "<b>_Parent:</b>   <i>parent exists as file</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:674
+msgid "<b>P_ath:</b>   <i>* create parent</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:680
+msgid "<b>_Parent:</b>   <i>* create parent</i>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:686 ../src/ptk/ptk-file-misc.c:2466
+msgid "<b>P_ath:</b>"
+msgstr "<b>_Διαδρομή:</b>"
+
+#: ../src/ptk/ptk-file-misc.c:701 ../src/ptk/ptk-file-misc.c:1237
+msgid "_Move"
+msgstr "_Μετακίνηση"
+
+#: ../src/ptk/ptk-file-misc.c:852
+msgid "Select Link Target"
+msgstr "Επιλογή προορισμού για Σύνδεσμο"
+
+#: ../src/ptk/ptk-file-misc.c:868
+msgid "Select Template File"
+msgstr "Επιλογή αρχείου Προτύπου"
+
+#: ../src/ptk/ptk-file-misc.c:887
+msgid "Select Template Folder"
+msgstr "Επιλογή φακέλου Προτύπου"
+
+#. action create folder does not work properly so not used:
+#. it creates a folder by default with no way to stop it
+#. it gives 'folder already exists' error popup
+#: ../src/ptk/ptk-file-misc.c:1029
+msgid "Browse"
+msgstr "Περιήγηση"
+
+#: ../src/ptk/ptk-file-misc.c:1062
+msgid "Fil_ename"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:1064
+msgid "Pa_rent"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:1069
+msgid "Insert as"
+msgstr "Εισαγωγή ως"
+
+#: ../src/ptk/ptk-file-misc.c:1214
+msgid "C_reate"
+msgstr "Δημιου_ργία"
+
+#: ../src/ptk/ptk-file-misc.c:1215
+msgctxt "Title|"
+msgid "Create New"
+msgstr "Δημιουργία νέου"
+
+#: ../src/ptk/ptk-file-misc.c:1217
+msgctxt "Title|CreateNew|"
+msgid "File"
+msgstr "Αρχείου"
+
+#: ../src/ptk/ptk-file-misc.c:1219
+msgctxt "Title|CreateNew|"
+msgid "Folder"
+msgstr "Φακέλου"
+
+#: ../src/ptk/ptk-file-misc.c:1221
+msgctxt "Title|CreateNew|"
+msgid "Link"
+msgstr "Συνδέσμου"
+
+#: ../src/ptk/ptk-file-misc.c:1238 ../src/ptk/ptk-file-misc.c:2106
+msgid "Move"
+msgstr "Μετακίνηση"
+
+#: ../src/ptk/ptk-file-misc.c:1242 ../src/ptk/ptk-file-misc.c:1252
+msgid "C_opy"
+msgstr "Αν_τιγραφή"
+
+#: ../src/ptk/ptk-file-misc.c:1243 ../src/ptk/ptk-file-misc.c:1253
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: ../src/ptk/ptk-file-misc.c:1248 ../src/ptk/ptk-file-misc.c:1259
+msgid "Create Link To"
+msgstr "Δημιουργία συνδέσμου προς"
+
+#: ../src/ptk/ptk-file-misc.c:1254
+msgid "Link Target"
+msgstr "Προορισμός συνδέσμου"
+
+#: ../src/ptk/ptk-file-misc.c:1260
+msgid "Target"
+msgstr "Προορισμός"
+
+#: ../src/ptk/ptk-file-misc.c:1265 ../src/ptk/ptk-file-misc.c:2797
+msgid " As Root"
+msgstr "Ως Root"
+
+#: ../src/ptk/ptk-file-misc.c:2075
+msgid "Link"
+msgstr "Σύνδεσμος"
+
+#: ../src/ptk/ptk-file-misc.c:2079
+msgid "File"
+msgstr "Αρχείο"
+
+#. Buttons
+#: ../src/ptk/ptk-file-misc.c:2114
+msgid "Opt_ions"
+msgstr "Επ_ιλογές"
+
+#: ../src/ptk/ptk-file-misc.c:2130
+msgid "Re_vert"
+msgstr "Επανα_φορά"
+
+#: ../src/ptk/ptk-file-misc.c:2150
+msgid "& _Open"
+msgstr "& Άνοιγ_μα"
+
+#: ../src/ptk/ptk-file-misc.c:2184
+#, c-format
+msgid "Link-> %s"
+msgstr "Σύνδεσμος-> %s"
+
+#: ../src/ptk/ptk-file-misc.c:2187
+#, c-format
+msgid "!Link-> %s (missing)"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2236
+msgid "<b>_Target:</b>"
+msgstr "<b>_Προορισμός:</b>"
+
+#: ../src/ptk/ptk-file-misc.c:2282
+msgid "<b>_Template:</b>"
+msgstr "<b>_Πρότυπο:</b>"
+
+#: ../src/ptk/ptk-file-misc.c:2298 ../src/ptk/ptk-file-misc.c:2901
+msgid "Empty File"
+msgstr "Κενό αρχείο"
+
+#: ../src/ptk/ptk-file-misc.c:2328 ../src/ptk/ptk-file-misc.c:2979
+msgid "Empty Folder"
+msgstr "Κενός φάκελος"
+
+#: ../src/ptk/ptk-file-misc.c:2396
+msgid "<b>E_xtension:</b>"
+msgstr "<b>Επέ_κταση:</b>"
+
+#. Options
+#: ../src/ptk/ptk-file-misc.c:2491
+msgid "Mov_e"
+msgstr "Μετα_κίνηση"
+
+#: ../src/ptk/ptk-file-misc.c:2493
+msgid "Cop_y"
+msgstr "Αν_τιγραφή"
+
+#: ../src/ptk/ptk-file-misc.c:2495
+msgid "Lin_k"
+msgstr "Σύν_δεση"
+
+#: ../src/ptk/ptk-file-misc.c:2499
+msgid "Link Tar_get"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2500
+msgid "A_s Root"
+msgstr "Ω_ς Root"
+
+#: ../src/ptk/ptk-file-misc.c:2502
+msgctxt "New|Radio"
+msgid "Fil_e"
+msgstr "Αρ_χείο"
+
+#: ../src/ptk/ptk-file-misc.c:2504
+msgctxt "New|Radio"
+msgid "Fol_der"
+msgstr "Φά_κελος"
+
+#: ../src/ptk/ptk-file-misc.c:2506
+msgctxt "New|Radio"
+msgid "_Link"
+msgstr "_Σύνδεσμος"
+
+#: ../src/ptk/ptk-file-misc.c:2609
+msgid "New"
+msgstr "Νέο"
+
+#: ../src/ptk/ptk-file-misc.c:2752
+msgid "Path contains linefeeds"
+msgstr "Η διαδρομή περιέχει αλλαγές γραμμής"
+
+#: ../src/ptk/ptk-file-misc.c:2807
+msgid "Create Parent Folder"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2809
+msgid "The parent folder does not exist.  Create it?"
+msgstr "Ο γονικός φάκελος δεν υπάρχει. Να δημιουργηθεί;"
+
+#: ../src/ptk/ptk-file-misc.c:2822
+#, c-format
+msgid ""
+"Error creating parent folder\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2825
+msgid "Mkdir Error"
+msgstr "Σφάλμα του Mkdir"
+
+#: ../src/ptk/ptk-file-misc.c:2838
+msgid "Overwrite Existing File"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2840
+msgid "OVERWRITE WARNING"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2840
+msgid "The file path exists.  Overwrite existing file?"
+msgstr ""
+
+#. new link task
+#. link task
+#: ../src/ptk/ptk-file-misc.c:2849 ../src/ptk/ptk-file-misc.c:3091
+#, c-format
+msgid "Create Link%s"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2911 ../src/ptk/ptk-file-misc.c:2989
+msgid "Template Missing"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2912 ../src/ptk/ptk-file-misc.c:2990
+msgid "The specified template does not exist"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:2937
+#, c-format
+msgid "Create New File%s"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:3010
+#, c-format
+msgid "Create New Folder%s"
+msgstr ""
+
+#. copy task
+#: ../src/ptk/ptk-file-misc.c:3041
+#, c-format
+msgid "Copy%s"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:3054
+msgid "Copy Target Error"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:3055 ../src/ptk/ptk-file-misc.c:3103
+msgid "Error determining link's target"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:3102
+msgid "Link Target Error"
+msgstr ""
+
+#. move task
+#: ../src/ptk/ptk-file-misc.c:3135
+#, c-format
+msgid "Move%s"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:3167
+#, c-format
+msgid ""
+"Error renaming file\n"
+"\n"
+"%s"
+msgstr "Σφάλμα μετονομασίας του αρχείου\n\n%s"
+
+#: ../src/ptk/ptk-file-misc.c:3170 ../src/desktop/desktop-window.c:2071
+msgid "Rename Error"
+msgstr "Σφάλμα μετονομασίας"
+
+#: ../src/ptk/ptk-file-misc.c:3341 ../src/ptk/ptk-file-misc.c:3343
+msgid "New Folder"
+msgstr "Νέος φάκελος"
+
+#: ../src/ptk/ptk-file-misc.c:3342
+msgid "New folder name:"
+msgstr "Νέο όνομα φακέλου:"
+
+#: ../src/ptk/ptk-file-misc.c:3348 ../src/ptk/ptk-file-misc.c:3350
+msgid "New File"
+msgstr "Νέο αρχείο"
+
+#: ../src/ptk/ptk-file-misc.c:3349
+msgid "New filename:"
+msgstr "Νέο όνομα αρχείου:"
+
+#: ../src/ptk/ptk-file-misc.c:3372
+msgid ""
+"Name already exists.\n"
+"\n"
+"Please input a new one:"
+msgstr "Το όνομα υπάρχει ήδη.\n\nΠαρακαλώ επιλέξτε ένα νέο:"
+
+#: ../src/ptk/ptk-file-misc.c:3405
+msgid "The new file cannot be created"
+msgstr "Το νέο αρχείο δεν μπορεί να δημιουργηθεί"
+
+#: ../src/ptk/ptk-file-misc.c:3619
+#, c-format
+msgid ""
+"This symlink's target is missing or you do not have permission to access it:\n"
+"%s\n"
+"\n"
+"Target: %s"
+msgstr ""
+
+#: ../src/ptk/ptk-file-misc.c:3622
+msgid "Broken Link"
+msgstr "Σπασμένος δεσμός"
+
+#: ../src/ptk/ptk-file-misc.c:3787
+#, c-format
+msgid "Delete %d selected item as root ?"
+msgid_plural "Delete %d selected items as root ?"
+msgstr[0] "Διαγραφή %d επιλεγμένου αντικειμένου ως root;"
+msgstr[1] "Διαγραφή %d επιλεγμένων αντικειμένων ως root;"
+
+#: ../src/ptk/ptk-file-misc.c:3791
+msgid "Confirm Delete As Root"
+msgstr "Επιβεβαίωση διαγραφής ως Root"
+
+#: ../src/ptk/ptk-file-misc.c:3792
+msgid "DELETE AS ROOT"
+msgstr "ΔΙΑΓΡΑΦΗ ΩΣ ROOT"
+
+#: ../src/ptk/ptk-file-misc.c:3800
+msgid "Delete As Root"
+msgstr "Διαγραφή ως Root"
+
+#: ../src/ptk/ptk-file-misc.c:3819
+msgid "Move As Root"
+msgstr "Μετακίνηση ως Root"
+
+#: ../src/ptk/ptk-file-misc.c:3825
+msgid "Copy As Root"
+msgstr "Αντιγραφή ως Root"
+
+#: ../src/ptk/ptk-file-properties.c:168 ../src/ptk/ptk-file-properties.c:172
+#, c-format
+msgid "%s ( %lu bytes )"
+msgstr "%s ( %lu bytes )"
+
+#: ../src/ptk/ptk-file-properties.c:179
+#, c-format
+msgid "%d folder"
+msgid_plural "%d folders"
+msgstr[0] "%d φάκελος"
+msgstr[1] "%d φάκελοι"
+
+#: ../src/ptk/ptk-file-properties.c:183
+#, c-format
+msgid "%d file, %s"
+msgid_plural "%d files, %s"
+msgstr[0] "%d αρχείο, %s"
+msgstr[1] "%d αρχεία, %s"
+
+#: ../src/ptk/ptk-file-properties.c:190
+#, c-format
+msgid "%d files"
+msgid_plural "%d files"
+msgstr[0] "%d αρχείο"
+msgstr[1] "%d αρχεία"
+
+#: ../src/ptk/ptk-file-properties.c:339
+msgid "( multiple files )"
+msgstr "( πολλαπλά αρχεία )"
+
+#: ../src/ptk/ptk-file-properties.c:453
+msgid "( multiple types )"
+msgstr "( πολλαπλοί τύποι )"
+
+#: ../src/ptk/ptk-file-properties.c:521
+msgid "Choose..."
+msgstr "Επιλέξετε..."
+
+#: ../src/ptk/ptk-file-properties.c:570
+msgid "<b>Folder _Name:</b>"
+msgstr "<b>Ό_νομα φακέλου:</b>"
+
+#: ../src/ptk/ptk-file-properties.c:583 ../src/ptk/ptk-file-properties.c:590
+#, c-format
+msgid "%s  ( %lu bytes )"
+msgstr "%s  ( %lu bytes )"
+
+#: ../src/ptk/ptk-file-properties.c:594
+msgid "1 file"
+msgstr "1 αρχείο"
+
+#: ../src/ptk/ptk-file-properties.c:631
+msgid "<b>Link _Name:</b>"
+msgstr ""
+
+#: ../src/ptk/ptk-file-properties.c:646
+msgid "( broken link )"
+msgstr ""
+
+#: ../src/ptk/ptk-file-properties.c:650
+msgid "( read link error )"
+msgstr ""
+
+#. The total file size displayed in "File Properties" is not
+#. completely calculated yet. So "Calculating..." is displayed.
+#: ../src/ptk/ptk-file-properties.c:661
+msgid "Calculating..."
+msgstr "Υπολογισμός..."
+
+#: ../src/ptk/ptk-file-properties.c:850
+msgid "Change File Date"
+msgstr "Αλλαγή της ημερομηνίας του αρχείου"
+
+#: ../src/ptk/ptk-file-properties.c:891
+msgid "Invalid User"
+msgstr "Μη έγκυρος χρήστης"
+
+#: ../src/ptk/ptk-file-properties.c:902
+msgid "Invalid Group"
+msgstr "Μη έγκυρη Ομάδα"
+
+#: ../src/ptk/ptk-path-entry.c:616
+#, c-format
+msgid ""
+"In addition to a folder or file path, commands can be entered in the Path Bar.  Prefixes:\n"
+"\t$\trun as task\n"
+"\t&\trun and forget\n"
+"\t+\trun in terminal\n"
+"\t!\trun as root\n"
+"Use:\n"
+"\t%%F\tselected files  or  %%f first selected file\n"
+"\t%%N\tselected filenames  or  %%n first selected filename\n"
+"\t%%d\tcurrent directory\n"
+"\t%%v\tselected device (eg /dev/sda1)\n"
+"\t%%m\tdevice mount point (eg /media/dvd);  %%l device label\n"
+"\t%%b\tselected bookmark\n"
+"\t%%t\tselected task directory;  %%p task pid\n"
+"\t%%a\tmenu item value\n"
+"\t$fm_panel, $fm_tab, $fm_command, etc\n"
+"\n"
+"Example:  $ echo \"Current Directory: %%d\"\n"
+"Example:  +! umount %%v"
+msgstr ""
+
+#: ../src/edit-bookmarks.c:74
+msgid "New Item"
+msgstr "Νέο αντικείμενο"
+
+#: ../src/edit-bookmarks.c:148
+msgid "Edit Bookmarks"
+msgstr "Επεξεργασία σελιδοδεικτών"
+
+#: ../src/edit-bookmarks.c:205
+msgid "Path"
+msgstr "Διαδρομή"
+
+#: ../src/edit-bookmarks.c:228
+msgid "Use drag & drop to sort the items"
+msgstr "Χρησιμοποιήστε το σύρε & άφησε για να ταξινομήσετε τα αντικείμενα"
+
+#: ../src/ptk/ptk-app-chooser.c:199
+msgid "Please choose an application:"
+msgstr "Παρακαλώ επιλέξτε μία εφαρμογή:"
+
+#: ../src/vfs/vfs-app-desktop.c:574
+#, c-format
+msgid "Command not found"
+msgstr "Η εντολή δεν βρέθηκε"
+
+#: ../src/vfs/vfs-file-info.c:465 ../src/vfs/vfs-file-info.c:470
+#: ../src/vfs/vfs-file-info.c:564 ../src/vfs/vfs-file-info.c:569
+msgid "T"
+msgstr "T"
+
+#: ../src/vfs/vfs-file-info.c:483 ../src/vfs/vfs-file-info.c:488
+#: ../src/vfs/vfs-file-info.c:582 ../src/vfs/vfs-file-info.c:587
+msgid "G"
+msgstr "G"
+
+#: ../src/vfs/vfs-file-info.c:502 ../src/vfs/vfs-file-info.c:507
+#: ../src/vfs/vfs-file-info.c:601 ../src/vfs/vfs-file-info.c:606
+msgid "M"
+msgstr "M"
+
+#: ../src/vfs/vfs-file-info.c:520 ../src/vfs/vfs-file-info.c:525
+#: ../src/vfs/vfs-file-info.c:619 ../src/vfs/vfs-file-info.c:624
+msgid "K"
+msgstr "K"
+
+#. unit = size > 1 ? "Bytes" : "Byte";
+#: ../src/vfs/vfs-file-info.c:530 ../src/vfs/vfs-file-info.c:630
+msgid "B"
+msgstr "B"
+
+#: ../src/vfs/vfs-file-task.c:294
+#, c-format
+msgid "Destination directory \"%1$s\" is contained in source \"%2$s\""
+msgstr "Ο κατάλογος προορισμού \"%1$s\" περιέχεται στην πηγή \"%2$s\""
+
+#: ../src/vfs/vfs-file-task.c:381 ../src/vfs/vfs-file-task.c:526
+#: ../src/vfs/vfs-file-task.c:634 ../src/vfs/vfs-file-task.c:687
+#: ../src/vfs/vfs-file-task.c:835 ../src/vfs/vfs-file-task.c:866
+#: ../src/vfs/vfs-file-task.c:951 ../src/vfs/vfs-file-task.c:1093
+#: ../src/vfs/vfs-file-task.c:2094
+msgid "Accessing"
+msgstr "Πρόσβαση"
+
+#: ../src/vfs/vfs-file-task.c:456 ../src/vfs/vfs-file-task.c:492
+#: ../src/vfs/vfs-file-task.c:510 ../src/vfs/vfs-file-task.c:555
+#: ../src/vfs/vfs-file-task.c:595 ../src/vfs/vfs-file-task.c:619
+#: ../src/vfs/vfs-file-task.c:899 ../src/vfs/vfs-file-task.c:908
+#: ../src/vfs/vfs-file-task.c:976
+msgid "Removing"
+msgstr "Αφαίρεση"
+
+#: ../src/vfs/vfs-file-task.c:465
+msgid "Creating Dir"
+msgstr "Δημιουργία καταλόγου"
+
+#: ../src/vfs/vfs-file-task.c:520 ../src/vfs/vfs-file-task.c:984
+msgid "Creating Link"
+msgstr "Δημιουργία συνδέσμου"
+
+#: ../src/vfs/vfs-file-task.c:584
+msgid "Writing"
+msgstr "Δημιουργία συνδέσμου"
+
+#: ../src/vfs/vfs-file-task.c:627
+msgid "Creating"
+msgstr "Δημιουργία"
+
+#: ../src/vfs/vfs-file-task.c:751
+msgid "Renaming"
+msgstr "Μετονομασία"
+
+#: ../src/vfs/vfs-file-task.c:1385
+msgid ""
+"Please install /usr/bin/sha256sum so I can improve your security while "
+"running root commands\n"
+msgstr ""
+
+#: ../src/vfs/vfs-file-task.c:1477
+msgid ""
+"Please configure a valid Terminal SU command in View|Preferences|Advanced"
+msgstr ""
+
+#: ../src/vfs/vfs-file-task.c:1482
+msgid "Terminal SU Not Available"
+msgstr ""
+
+#: ../src/vfs/vfs-file-task.c:1488
+msgid ""
+"Please configure a valid Graphical SU command in View|Preferences|Advanced"
+msgstr ""
+
+#: ../src/vfs/vfs-file-task.c:1493
+msgid "Graphical SU Not Available"
+msgstr ""
+
+#: ../src/vfs/vfs-file-task.c:1507
+msgid "Cannot create temporary directory"
+msgstr "Η δημιουργία του προσωρινού καταλόγου απέτυχε"
+
+#: ../src/vfs/vfs-file-task.c:1539
+msgid "Please set a valid terminal program in View|Preferences|Advanced"
+msgstr ""
+
+#: ../src/vfs/vfs-file-task.c:1824
+msgid "spacefm-auth not found in path - this reduces your security"
+msgstr ""
+
+#: ../src/vfs/vfs-file-task.c:1925
+#, c-format
+msgid ""
+"Error executing '%s'\n"
+"See stdout (run spacefm in a terminal) for debug info"
+msgstr "Σφάλμα κατά την εκτέλεση του '%s'\nΔείτε το stdout (εκτελέστε το spacefm σε τερματικό) για πληροφορίες αποσφαλμάτωσης"
+
+#: ../src/vfs/vfs-file-task.c:1994
+msgid "Error writing temporary file"
+msgstr "Σφάλμα εγγραφής του προσωρινού αρχείου"
+
+#: ../src/vfs/vfs-file-task.c:2178
+msgid "Timed out calculating total size\n"
+msgstr "Λήξη χρονικού ορίου κατά τον υπολογισμό του συνολικού μεγέθους\n"
+
+#: ../src/vfs/vfs-file-task.c:2510
+#, c-format
+msgid ""
+"\n"
+"%s %s\n"
+"Error: %s\n"
+msgstr "\n%s %s\nΣφάλμα: %s\n"
+
+#: ../src/vfs/vfs-volume-hal.c:479 ../src/vfs/vfs-volume-hal.c:702
+#, c-format
+msgid "%s Volume"
+msgstr "Τόμος %s"
+
+#: ../src/vfs/vfs-volume-hal.c:494
+msgid "CD-ROM"
+msgstr "CD-ROM"
+
+#: ../src/vfs/vfs-volume-hal.c:496
+msgid "CD-R"
+msgstr "CD-R"
+
+#: ../src/vfs/vfs-volume-hal.c:498
+msgid "CD-RW"
+msgstr "CD-RW"
+
+#: ../src/vfs/vfs-volume-hal.c:502
+msgid "DVD-ROM"
+msgstr "DVD-ROM"
+
+#: ../src/vfs/vfs-volume-hal.c:504
+msgid "DVD+R"
+msgstr "DVD+R"
+
+#: ../src/vfs/vfs-volume-hal.c:506
+msgid "DVD+RW"
+msgstr "DVD+RW"
+
+#: ../src/vfs/vfs-volume-hal.c:508
+msgid "DVD-R"
+msgstr "DVD-R"
+
+#: ../src/vfs/vfs-volume-hal.c:510
+msgid "DVD-RW"
+msgstr "DVD-RW"
+
+#: ../src/vfs/vfs-volume-hal.c:512
+msgid "DVD-RAM"
+msgstr "DVD-RAM"
+
+#: ../src/vfs/vfs-volume-hal.c:521
+#, c-format
+msgid "%s/%s Drive"
+msgstr "Οδηγός %s/%s"
+
+#: ../src/vfs/vfs-volume-hal.c:523
+#, c-format
+msgid "%s Drive"
+msgstr "Οδηγός %s"
+
+#: ../src/vfs/vfs-volume-hal.c:528
+msgid "Floppy Drive"
+msgstr "Οδηγός δισκέτας"
+
+#: ../src/vfs/vfs-volume-hal.c:531
+msgid "Compact Flash Drive"
+msgstr "Οδηγός Compact flash"
+
+#: ../src/vfs/vfs-volume-hal.c:533
+msgid "Memory Stick Drive"
+msgstr "Οδηγός Memory stick"
+
+#: ../src/vfs/vfs-volume-hal.c:535
+msgid "Smart Media Drive"
+msgstr "Οδηγός Smart media"
+
+#: ../src/vfs/vfs-volume-hal.c:537
+msgid "SD/MMC Drive"
+msgstr "Οδηγός SD/MMC"
+
+#: ../src/vfs/vfs-volume-hal.c:539
+msgid "Zip Drive"
+msgstr "Οδηγός Zip"
+
+#: ../src/vfs/vfs-volume-hal.c:542
+msgid "Jaz Drive"
+msgstr "Οδηγός Jaz"
+
+#: ../src/vfs/vfs-volume-hal.c:545
+msgid "Pen Drive"
+msgstr "Οδηγός Pen"
+
+#: ../src/vfs/vfs-volume-hal.c:551
+#, c-format
+msgid "%s %s Music Player"
+msgstr "Αναπαραγωγέας μουσικής %s %s"
+
+#: ../src/vfs/vfs-volume-hal.c:559
+#, c-format
+msgid "%s %s Digital Camera"
+msgstr "Ψηφιακή Camera %s %s"
+
+#: ../src/vfs/vfs-volume-hal.c:590
+msgid "Drive"
+msgstr "Οδηγός"
+
+#: ../src/vfs/vfs-volume-hal.c:595
+#, c-format
+msgid "External %s"
+msgstr "Εξωτερικός %s"
+
+#: ../src/vfs/vfs-volume-hal.c:629
+msgid "CD-ROM Disc"
+msgstr "Δίσκος CD-ROM"
+
+#: ../src/vfs/vfs-volume-hal.c:634
+msgid "Blank CD-R Disc"
+msgstr "Κενός Δίσκος CD-R"
+
+#: ../src/vfs/vfs-volume-hal.c:636
+msgid "CD-R Disc"
+msgstr "Δίσκος CD-R"
+
+#: ../src/vfs/vfs-volume-hal.c:641
+msgid "Blank CD-RW Disc"
+msgstr "Κενός Δίσκος CD-RW"
+
+#: ../src/vfs/vfs-volume-hal.c:643
+msgid "CD-RW Disc"
+msgstr "Δίσκος CD-RW"
+
+#: ../src/vfs/vfs-volume-hal.c:647
+msgid "DVD-ROM Disc"
+msgstr "Δίσκος DVD-ROM"
+
+#: ../src/vfs/vfs-volume-hal.c:652
+msgid "Blank DVD-RAM Disc"
+msgstr "Κενός δίσκος DVD-RAM "
+
+#: ../src/vfs/vfs-volume-hal.c:654
+msgid "DVD-RAM Disc"
+msgstr "Δίσκος DVD-RAM "
+
+#: ../src/vfs/vfs-volume-hal.c:659
+msgid "Blank DVD-R Disc"
+msgstr "Κενός Δίσκος DVD-R "
+
+#: ../src/vfs/vfs-volume-hal.c:661
+msgid "DVD-R Disc"
+msgstr "Δίσκος DVD-R"
+
+#: ../src/vfs/vfs-volume-hal.c:666
+msgid "Blank DVD-RW Disc"
+msgstr "Κενός Δίσκος Blank DVD-RW Disc"
+
+#: ../src/vfs/vfs-volume-hal.c:668
+msgid "DVD-RW Disc"
+msgstr "Δίσκος DVD-RW "
+
+#: ../src/vfs/vfs-volume-hal.c:674
+msgid "Blank DVD+R Disc"
+msgstr "Κενός DVD+R Δίσκος"
+
+#: ../src/vfs/vfs-volume-hal.c:676
+msgid "DVD+R Disc"
+msgstr "Δίσκος DVD+R "
+
+#: ../src/vfs/vfs-volume-hal.c:681
+msgid "Blank DVD+RW Disc"
+msgstr "Κενός Δίσκος DVD+RW "
+
+#: ../src/vfs/vfs-volume-hal.c:683
+msgid "DVD+RW Disc"
+msgstr "Δίσκος DVD+RW "
+
+#: ../src/vfs/vfs-volume-hal.c:690
+msgid "Audio Disc"
+msgstr "Μουσικός Δίσκος"
+
+#: ../src/vfs/vfs-volume-hal.c:700
+#, c-format
+msgid "%s Removable Volume"
+msgstr "Αφαιρούμενος τόμος %s"
+
+#: ../src/vfs/vfs-volume-hal.c:708
+msgid "Volume"
+msgstr "Τόμος"
+
+#: ../src/vfs/vfs-volume-hal.c:1104
+#, c-format
+msgid "Failed to connect to the HAL daemon: %s"
+msgstr "Αποτυχία σύνδεσης στο HAL daemon : %s"
+
+#. definitely not a device that we're able to mount, eject or unmount
+#: ../src/vfs/vfs-volume-hal.c:1945 ../src/vfs/vfs-volume-hal.c:2001
+#, c-format
+msgid "Given device \"%s\" is not a volume or drive"
+msgstr " Η δοθήσα συσκευή \"%s\" δεν είναι τόμος ή δίσκος"
+
+#. tell the caller that no matching device was found
+#: ../src/vfs/vfs-volume-hal.c:2077
+#, c-format
+msgid "Device \"%s\" not found in file system device table"
+msgstr "Συσκευή \"%s\" δεν βρέθηκε στον πίνακα συσκευών του συστήματος"
+
+#: ../src/vfs/vfs-volume-hal.c:2260
+#, c-format
+msgid "You are not privileged to mount the volume \"%s\""
+msgstr "Δεν έχετε το δικαίωμα να προσαρτήσετε τον τόμο \"%s\""
+
+#: ../src/vfs/vfs-volume-hal.c:2261
+#, c-format
+msgid "You are not privileged to unmount the volume \"%s\""
+msgstr "Δεν έχετε το δικαίωμα να αποπροσαρτήσετε τον τόμο \"%s\""
+
+#: ../src/vfs/vfs-volume-hal.c:2262
+#, c-format
+msgid "You are not privileged to eject the volume \"%s\""
+msgstr "Δεν έχετε το δικαίωμα να εξαγάγετε τον τόμο \"%s\""
+
+#. TODO: slim down mount options to what is allowed, cf.
+#. volume.mount.valid_options
+#: ../src/vfs/vfs-volume-hal.c:2274
+#, c-format
+msgid "Invalid mount option when attempting to mount the volume \"%s\""
+msgstr "Λανθασμένη επιλογή προσάρτησης κατά την προσπάθεια προσάρτησης του τόμου \"%s\""
+
+#: ../src/vfs/vfs-volume-hal.c:2276
+#, c-format
+msgid ""
+"The volume \"%s\" uses the <i>%s</i> file system which is not supported by "
+"your system"
+msgstr "Ο τόμος \"%s\" χρησιμοποιεί το <i>%s</i> σύστημα αρχείου το οποίο δεν υποστηρίζεται από το σύστημα σας"
+
+#: ../src/vfs/vfs-volume-hal.c:2278
+#, c-format
+msgid "An application is preventing the volume \"%s\" from being unmounted"
+msgstr "Μία εφαρμογή εμποδίζει τον τόμο \"%s\" από το να αποπροσαρτηθεί"
+
+#: ../src/vfs/vfs-volume-hal.c:2280
+#, c-format
+msgid "The volume \"%s\" is not mounted"
+msgstr "Ο τόμος \"%s\" δεν είναι προσαρτημένος"
+
+#: ../src/vfs/vfs-volume-hal.c:2282
+#, c-format
+msgid "Error <i>%s</i>"
+msgstr "Σφάλμα<i>%s</i>"
+
+#. TRANSLATORS: HAL can only unmount volumes that were mounted via HAL.
+#: ../src/vfs/vfs-volume-hal.c:2285
+#, c-format
+msgid "The volume \"%s\" was probably mounted manually on the command line"
+msgstr "Ο τόμος \"%s\" πιθανότατα προσαρτήθηκε χειροκίνητα από τη γραμμή εντολών"
+
+#: ../src/vfs/vfs-volume-hal.c:2293
+#, c-format
+msgid ""
+"Blank discs cannot be mounted, use a CD recording application to record "
+"audio or data on the disc"
+msgstr "Οι κενοί δίσκοι δεν μπορούν ναι προσαρτηθούν, χρησιμοποιήστε μια εφαρμογή εγγραφής CD για να γράψετε αρχεία ήχου ή δεδομένα στον δίσκο"
+
+#: ../src/vfs/vfs-volume-hal.c:2304
+#, c-format
+msgid ""
+"Audio CDs cannot be mounted, use music players to play the audio tracks"
+msgstr "Τα CD ήχου δεν μπορούν να είναι προσαρτηθούν, χρησιμοποιήστε κάποια εφαρμογή μουσικής για να παίξει τα τραγούδια"
+
+#: ../src/vfs/vfs-volume-nohal.c:2316
+#, c-format
+msgid ":floppy"
+msgstr ":οδηγός δισκέτας"
+
+#: ../src/vfs/vfs-volume-nohal.c:2337
+#, c-format
+msgid ":optical"
+msgstr ":οπτικό"
+
+#: ../src/vfs/vfs-volume-nohal.c:2382
+#, c-format
+msgid "[blank]"
+msgstr "[κενό]"
+
+#: ../src/vfs/vfs-volume-nohal.c:2386
+#, c-format
+msgid "[audio]"
+msgstr "[ήχος]"
+
+#: ../src/vfs/vfs-volume-nohal.c:2400
+#, c-format
+msgid "[no media]"
+msgstr "[χωρίς μέσο]"
+
+#: ../src/vfs/vfs-volume-nohal.c:3201
+#, c-format
+msgid "( udev was unavailable at startup )"
+msgstr "( το udev δεν ήταν διαθέσιμο κατά την εκκίνηση )"
+
+#: ../src/vfs/vfs-volume-nohal.c:3206
+#, c-format
+msgid "( cannot stat device file )"
+msgstr ""
+
+#: ../src/vfs/vfs-volume-nohal.c:3211
+#, c-format
+msgid "( not a block device )"
+msgstr "( όχι συσκευή block )"
+
+#: ../src/vfs/vfs-volume-nohal.c:3219
+#, c-format
+msgid "( no udev device )"
+msgstr "( καμία συσκευή udev )"
+
+#: ../src/vfs/vfs-volume-nohal.c:3462
+#, c-format
+msgid ""
+"\n"
+"Autoexec: %s\n"
+msgstr "\nΑυτόματη εκτέλεση: %s\n"
+
+#: ../src/vfs/vfs-volume-nohal.c:3509
+#, c-format
+msgid ""
+"\n"
+"Auto Open Tab for %s in %s\n"
+msgstr ""
+
+#: ../src/vfs/vfs-volume-nohal.c:3555 ../src/vfs/vfs-volume-nohal.c:3802
+#, c-format
+msgid ""
+"\n"
+"Auto-Unmount: %s\n"
+msgstr "\nΑυτόματη αποπροσάρτηση: %s\n"
+
+#: ../src/vfs/vfs-volume-nohal.c:3560
+#, c-format
+msgid ""
+"\n"
+"Auto-Unmount: error: no unmount program available\n"
+msgstr "\nΑυτόματη αποπροσάρτηση: σφάλμα: κανένα διαθέσιμο πρόγραμμα αποπροσάρτησης\n"
+
+#: ../src/vfs/vfs-volume-nohal.c:3577
+#, c-format
+msgid ""
+"\n"
+"Automount: %s\n"
+msgstr "\nΑυτόματη προσάρτηση: %s\n"
+
+#: ../src/vfs/vfs-volume-nohal.c:3582
+#, c-format
+msgid ""
+"\n"
+"Automount: error: no mount program available\n"
+msgstr "\nΑυτόματη προσάρτηση: σφάλμα: κανένα διαθέσιμο πρόγραμμα προσάρτησης\n"
+
+#: ../src/vfs/vfs-volume-nohal.c:3787
+#, c-format
+msgid "Unmount-If-Mounted: %s\n"
+msgstr "Αποπροσάρτηση-αν-προσαρτημένο: %s\n"
+
+#: ../src/desktop/desktop-window.c:2047
+#, c-format
+msgid ""
+"Enter new desktop item name:\n"
+"\n"
+"Changing the name of this desktop item requires modifying the contents of desktop file %s"
+msgstr ""
+
+#: ../src/desktop/desktop-window.c:2049
+msgid "Change Desktop Item Name"
+msgstr ""
+
+#: ../src/desktop/desktop-window.c:2071
+msgid "An error occured renaming this desktop item."
+msgstr ""
+
+#: ../src/find-files.c:276
+msgid "Open Containing _Folder"
+msgstr "Άνοιγμα περιεχομένου _φακέλου"
+
+#: ../src/find-files.c:773
+msgid "Select a folder"
+msgstr "Επιλέξτε ένα φάκελο"
+
+#: ../src/find-files.c:822
+msgid "Browse..."
+msgstr "Αναζήτηση..."
+
+#: ../src/find-files.c:846
+msgid "Local Volumes"
+msgstr "Τοπικοί τόμοι"
+
+#: ../src/find-files.c:934
+msgid "Last Modified"
+msgstr "Τελευταία τροποποίηση"
+
+#: ../src/item-prop.c:22
+msgid ""
+"Enter program or bash command line(s):\n"
+"\n"
+"Use:\n"
+"\t%F\tselected files  or  %f first selected file\n"
+"\t%N\tselected filenames  or  %n first selected filename\n"
+"\t%d\tcurrent directory\n"
+"\t%v\tselected device (eg /dev/sda1)\n"
+"\t%m\tdevice mount point (eg /media/dvd);  %l device label\n"
+"\t%b\tselected bookmark\n"
+"\t%t\tselected task directory;  %p task pid\n"
+"\t%a\tmenu item value\n"
+"\t$fm_panel, $fm_tab, $fm_command, etc"
+msgstr ""
+
+#: ../src/item-prop.c:105
+msgid "MIME Type"
+msgstr "Τύπος MIME"
+
+#: ../src/item-prop.c:106
+msgid "Filename"
+msgstr "Όνομα αρχείου"
+
+#: ../src/item-prop.c:107
+msgid "Directory"
+msgstr "Κατάλογος"
+
+#: ../src/item-prop.c:108
+msgid "Dir Write Access"
+msgstr "Δυνατότητα εγγραφής στον κατάλογο"
+
+#: ../src/item-prop.c:109
+msgid "File Is Text"
+msgstr "Το αντικείμενο είναι κείμενο"
+
+#: ../src/item-prop.c:110
+msgid "File Is Dir"
+msgstr "Το αντικείμενο είναι κατάλογος"
+
+#: ../src/item-prop.c:111
+msgid "File Is Link"
+msgstr "Το αντικείμενο είναι σύνδεσμος"
+
+#: ../src/item-prop.c:112
+msgid "User Is Root"
+msgstr "Ο χρήστης είναι ο Root"
+
+#: ../src/item-prop.c:113
+msgid "Multiple Selected"
+msgstr "Πολλαπλά επιλεγμένα"
+
+#: ../src/item-prop.c:114
+msgid "Clipboard Has Files"
+msgstr "Το πρόχειρο έχει αρχεία"
+
+#: ../src/item-prop.c:115
+msgid "Clipboard Has Text"
+msgstr "Το πρόχειρο έχει κείμενο"
+
+#: ../src/item-prop.c:116
+msgid "Current Panel"
+msgstr "Τρέχον πάνελ"
+
+#: ../src/item-prop.c:117
+msgid "Panel Count"
+msgstr "Αριθμός πάνελ"
+
+#: ../src/item-prop.c:118
+msgid "Current Tab"
+msgstr "Τρέχουσα καρτέλα"
+
+#: ../src/item-prop.c:119
+msgid "Tab Count"
+msgstr "Αριθμός καρτελών"
+
+#: ../src/item-prop.c:120 ../src/item-prop.c:220
+msgid "Bookmark"
+msgstr "Σελιδοδείκτης"
+
+#: ../src/item-prop.c:121
+msgid "Device"
+msgstr "Συσκευή"
+
+#: ../src/item-prop.c:122
+msgid "Device Mount Point"
+msgstr "Σημείο προσάρτησης της συσκευής"
+
+#: ../src/item-prop.c:123
+msgid "Device Label"
+msgstr "Ετικέτα της συσκευής"
+
+#: ../src/item-prop.c:124
+msgid "Device FSType"
+msgstr "Τύπος συστήματος αρχείων"
+
+#: ../src/item-prop.c:125
+msgid "Device UDI"
+msgstr "UDI συσκευής"
+
+#: ../src/item-prop.c:126
+msgid "Device Properties"
+msgstr "Ιδιότητες συσκευής"
+
+#: ../src/item-prop.c:127
+msgid "Task Count"
+msgstr "Αριθμός Εργασιών"
+
+#: ../src/item-prop.c:128
+msgid "Task Directory"
+msgstr "Κατάλογος Εργασίας"
+
+#: ../src/item-prop.c:129
+msgid "Task Type"
+msgstr "Τύπος Εργασίας"
+
+#: ../src/item-prop.c:130
+msgid "Task Name"
+msgstr "Όνομα Εργασίας"
+
+#: ../src/item-prop.c:131
+msgid "Panel 1 Directory"
+msgstr "Ο κατάλογος του πάνελ 1"
+
+#: ../src/item-prop.c:132
+msgid "Panel 2 Directory"
+msgstr "Ο κατάλογος του πάνελ 2"
+
+#: ../src/item-prop.c:133
+msgid "Panel 3 Directory"
+msgstr "Ο κατάλογος του πάνελ 3"
+
+#: ../src/item-prop.c:134
+msgid "Panel 4 Directory"
+msgstr "Ο κατάλογος του πάνελ 4"
+
+#: ../src/item-prop.c:135
+msgid "Panel 1 Has Sel"
+msgstr "Το πάνελ 1 έχει επιλεγμένο αντικείμενο"
+
+#: ../src/item-prop.c:136
+msgid "Panel 2 Has Sel"
+msgstr "Το πάνελ 2 έχει επιλεγμένο αντικείμενο"
+
+#: ../src/item-prop.c:137
+msgid "Panel 3 Has Sel"
+msgstr "Το πάνελ 3 έχει επιλεγμένο αντικείμενο"
+
+#: ../src/item-prop.c:138
+msgid "Panel 4 Has Sel"
+msgstr "Το πάνελ 4 έχει επιλεγμένο αντικείμενο"
+
+#: ../src/item-prop.c:139
+msgid "Panel 1 Device"
+msgstr "Η συσκευή του πάνελ 1"
+
+#: ../src/item-prop.c:140
+msgid "Panel 2 Device"
+msgstr "Η συσκευή του πάνελ 2"
+
+#: ../src/item-prop.c:141
+msgid "Panel 3 Device"
+msgstr "Η συσκευή του πάνελ 3"
+
+#: ../src/item-prop.c:142
+msgid "Panel 4 Device"
+msgstr "Η συσκευή του πάνελ 4"
+
+#: ../src/item-prop.c:204
+msgid "equals"
+msgstr "είναι ίσο"
+
+#: ../src/item-prop.c:205
+msgid "doesn't equal"
+msgstr "δεν είναι ίσο"
+
+#: ../src/item-prop.c:206
+msgid "contains"
+msgstr "περιέχει"
+
+#: ../src/item-prop.c:207
+msgid "doesn't contain"
+msgstr "δεν περιέχει"
+
+#: ../src/item-prop.c:208
+msgid "begins with"
+msgstr "αρχίζει με"
+
+#: ../src/item-prop.c:209
+msgid "doesn't begin with"
+msgstr "δεν αρχίζει με"
+
+#: ../src/item-prop.c:210
+msgid "ends with"
+msgstr "τελειώνει με"
+
+#: ../src/item-prop.c:211
+msgid "doesn't end with"
+msgstr "δεν τελειώνει με"
+
+#: ../src/item-prop.c:212
+msgid "is less than"
+msgstr "είναι μικρότερο από"
+
+#: ../src/item-prop.c:213
+msgid "is greater than"
+msgstr "είναι μεγαλύτερο από"
+
+#: ../src/item-prop.c:214
+msgid "matches"
+msgstr "ταιριάζει"
+
+#: ../src/item-prop.c:215
+msgid "doesn't match"
+msgstr "δεν ταιριάζει"
+
+#: ../src/item-prop.c:221
+msgid "Application"
+msgstr "Εφαρμογή"
+
+#: ../src/item-prop.c:222
+msgid "Command"
+msgstr "Εντολή"
+
+#: ../src/item-prop.c:492
+msgid "Current: Show"
+msgstr "Τρέχουσα κατάσταση: Εμφάνιση"
+
+#: ../src/item-prop.c:497
+msgid "Current: Hide"
+msgstr "Τρέχουσα κατάσταση: Απόκρυψη"
+
+#: ../src/item-prop.c:499
+msgid "Current: Disable"
+msgstr "Τρέχουσα κατάσταση: Απενεργοποίηση"
+
+#: ../src/item-prop.c:834
+msgid "Save Modified Script?"
+msgstr "Αποθήκευση του τροποποιημένου Script;"
+
+#: ../src/item-prop.c:836
+msgid "Save your changes to the command script?"
+msgstr ""
+
+#: ../src/item-prop.c:841
+msgid "Overwrite Script?"
+msgstr ""
+
+#: ../src/item-prop.c:843
+msgid ""
+"The command script on disk has changed.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+
+#: ../src/item-prop.c:897 ../src/item-prop.c:2149
+msgid "Command Dir"
+msgstr ""
+
+#: ../src/item-prop.c:898 ../src/item-prop.c:2150 ../src/item-prop.c:2159
+msgid "(no files)"
+msgstr "(κανένα αρχείο)"
+
+#: ../src/item-prop.c:975
+msgid ""
+"The command line does not begin with a text file (script) to be opened, or "
+"the script was not found in your $PATH."
+msgstr ""
+
+#: ../src/item-prop.c:1093
+msgid "Targets:  (a semicolon-separated list of paths or URLs)"
+msgstr ""
+
+#: ../src/item-prop.c:1103
+msgid "Target:  (a .desktop or executable file)"
+msgstr ""
+
+#: ../src/item-prop.c:1254
+msgid "Choose Executable"
+msgstr ""
+
+#: ../src/item-prop.c:1529
+msgid "Toolbar Item Properties"
+msgstr "Ιδιότητες αντικειμένου Εργαλειοθήκης"
+
+#: ../src/item-prop.c:1530
+msgid "Menu Item Properties"
+msgstr "Ιδιότητες αντικειμένου Μενού"
+
+#: ../src/item-prop.c:1568
+msgid "_Toolbar Item"
+msgstr "Αντι_κείμενο εργαλειοθήκης"
+
+#: ../src/item-prop.c:1569
+msgid "_Menu Item"
+msgstr "Αντικείμενο _μενού"
+
+#: ../src/item-prop.c:1577
+msgid "Type:"
+msgstr "Τύπος:"
+
+#: ../src/item-prop.c:1588
+msgid "Name:"
+msgstr "Όνομα:"
+
+#: ../src/item-prop.c:1597
+msgid "Key:"
+msgstr "Πλήκτρο:"
+
+#: ../src/item-prop.c:1606
+msgid "Icon:"
+msgstr "Εικονίδιο:"
+
+#: ../src/item-prop.c:1637
+msgid "C_hoose"
+msgstr ""
+
+#: ../src/item-prop.c:1659
+msgid "S_how In Toolbar"
+msgstr "_Εμφάνιση στην εργαλειοθήκη"
+
+#: ../src/item-prop.c:1670
+msgid "Con_text"
+msgstr "Συμφρα_ζόμενα"
+
+#: ../src/item-prop.c:1717
+msgid "A_pply"
+msgstr "Εφαρμο_γή"
+
+#: ../src/item-prop.c:1749
+msgid "matches any rule:"
+msgstr "ταιριάζει με οποιονδήποτε κανόνα:"
+
+#: ../src/item-prop.c:1751
+msgid "matches all rules:"
+msgstr "ταιριάζει με όλους τους κανόνες:"
+
+#: ../src/item-prop.c:1753
+msgid "doesn't match any rule:"
+msgstr "δεν ταιριάζει με οποιονδήποτε κανόνα:"
+
+#: ../src/item-prop.c:1755
+msgid "doesn't match all rules:"
+msgstr "ταιριάζει με όλους τους κανόνες:"
+
+#: ../src/item-prop.c:1762
+msgid "Show"
+msgstr "Εμφάνιση"
+
+#: ../src/item-prop.c:1764
+msgid "Enable"
+msgstr "Ενεργοποίηση"
+
+#: ../src/item-prop.c:1766
+msgid "Hide"
+msgstr "Απόκρυψη"
+
+#: ../src/item-prop.c:1768
+msgid "Disable"
+msgstr "Απενεργοποίηση"
+
+#: ../src/item-prop.c:1798
+msgid "item if context"
+msgstr "του αντικειμένου αν"
+
+#: ../src/item-prop.c:1826
+msgid "Edit Rule"
+msgstr "Επεξεργασία κανόνα"
+
+#: ../src/item-prop.c:1843
+msgid "Value:"
+msgstr "Τιμή:"
+
+#: ../src/item-prop.c:1856
+msgid "If enabled, use as opener for:"
+msgstr ""
+
+#: ../src/item-prop.c:1861
+msgid "none"
+msgstr ""
+
+#: ../src/item-prop.c:1863
+msgid "files"
+msgstr "αρχεία"
+
+#: ../src/item-prop.c:1865
+msgid "devices"
+msgstr "συσκευές"
+
+#: ../src/item-prop.c:1873
+msgid "_Ignore Context / Show All  (global setting)"
+msgstr "Αγνόηση συμφραζομένων / Εμφάνιση όλων (γενική ρύθμιση)"
+
+#: ../src/item-prop.c:1968
+msgid "Comm_and"
+msgstr ""
+
+#: ../src/item-prop.c:1972
+msgid "Command _Line"
+msgstr ""
+
+#: ../src/item-prop.c:1974
+msgid "_Script"
+msgstr "_Script"
+
+#: ../src/item-prop.c:1979
+msgid "Open In _Editor"
+msgstr "Άνοιγμα στον _επεξεργαστή κειμένου"
+
+#: ../src/item-prop.c:1985
+msgid "_Root Editor"
+msgstr "Επεξε_ργαστής κειμένου του Root"
+
+#: ../src/item-prop.c:2025
+msgid "Optio_ns"
+msgstr ""
+
+#: ../src/item-prop.c:2027
+msgid "Run Options"
+msgstr "Επιλογές εκτέλεσης"
+
+#: ../src/item-prop.c:2036
+msgid "Run As Task"
+msgstr "Εκτέλεση ως Εργασία"
+
+#: ../src/item-prop.c:2040
+msgid "Popup Task"
+msgstr ""
+
+#: ../src/item-prop.c:2041
+msgid "Popup Error"
+msgstr ""
+
+#: ../src/item-prop.c:2042
+msgid "Popup Output"
+msgstr ""
+
+#: ../src/item-prop.c:2043
+msgid "Scroll Output"
+msgstr ""
+
+#: ../src/item-prop.c:2056
+msgid "Run In Terminal"
+msgstr "Εκτέλεση σε τερματικό"
+
+#: ../src/item-prop.c:2057
+msgid "Keep Terminal Open"
+msgstr "Διατήρηση του τερματικού ανοικτού"
+
+#: ../src/item-prop.c:2066
+msgid "Run As User:"
+msgstr "Εκτέλεση ως χρήστης:"
+
+#: ../src/item-prop.c:2073
+msgid "( leave blank for current user )"
+msgstr "( αφήστε κενό για τρέχοντα χρήστη )"
+
+#: ../src/item-prop.c:2080
+msgid "Style"
+msgstr "Στυλ"
+
+#: ../src/item-prop.c:2091
+msgid "Normal"
+msgstr "Κανονικό"
+
+#: ../src/item-prop.c:2094
+msgid "Checkbox"
+msgstr ""
+
+#: ../src/item-prop.c:2097
+msgid "Confirmation"
+msgstr "Επιβεβαίωση"
+
+#: ../src/item-prop.c:2100
+msgid "Input"
+msgstr ""
+
+#: ../src/item-prop.c:2114
+msgid "Confirmation/Input Message:"
+msgstr ""
+
+#: ../src/item-prop.c:2136
+msgid "Open In Browser:"
+msgstr "Άνοιγμα στον περιηγητή:"
+
+#: ../src/item-prop.c:2158
+msgid "Data Dir"
+msgstr "Κατάλογος δεδομένων"
+
+#: ../src/item-prop.c:2167
+msgid "Plugin Dir"
+msgstr "Κατάλογος πρόσθετου"
+
+#: ../src/item-prop.c:2186
+msgid "Submenu"
+msgstr "Υπομενού"
+
+#: ../src/item-prop.c:2188
+msgid "Separator"
+msgstr "Διαχωριστικό"
+
+#. built-in
+#: ../src/item-prop.c:2192
+msgid "Built-In Command"
+msgstr "Ενσωματωμένη εντολή"
