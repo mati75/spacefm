@@ -1,4 +1,4 @@
-spacefm (0.9.3-1) UNRELEASED; urgency=medium
+spacefm (0.9.3-1) unstable; urgency=medium
 
   * New upstream release.
   * debian/rules:
@@ -6,9 +6,10 @@ spacefm (0.9.3-1) UNRELEASED; urgency=medium
   * debian/control:
     + remove lsb-release from build depends.
   * Install spacefm-mansrc-en.html in spacefm-common.
-  * Update debian/copyright. 
+  * Update debian/copyright.
+  * Remove debian/patches/fix_memory_leak.patch - included upstream.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 10 Jan 2014 17:44:03 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 19 Jan 2014 14:42:52 +0100
 
 spacefm (0.9.2-1) unstable; urgency=medium
 
