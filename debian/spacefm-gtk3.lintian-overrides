@@ -1,0 +1,2 @@
+spacefm-gtk3: spelling-error-in-binary usr/bin/spacefm tEH the
+spacefm-gtk3: package-relation-with-self breaks: spacefm-gtk3 (<< 0.9)
