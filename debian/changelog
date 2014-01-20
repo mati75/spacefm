@@ -7,7 +7,7 @@ spacefm (0.9.3-1) unstable; urgency=medium
     + remove lsb-release from build depends.
   * Update debian/copyright.
   * Remove debian/patches/fix_memory_leak.patch - included upstream.
-  * Add debian/patches/fix_hardening_FTBFS.patch to fix FTBFS related when 
+  * Add debian/patches/fix_hardening_FTBFS.patch to fix FTBFS related when
     "-Wformat-security" is enabled.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 19 Jan 2014 22:26:23 +0100
