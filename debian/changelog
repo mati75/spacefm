@@ -1,3 +1,12 @@
+spacefm (0.9.3-2) UNRELEASED; urgency=medium
+
+  * debian/rules:
+    + using dh-autoreconf during the build. (Closes: #727508)
+  * debian/control:
+    + replace autotools-dev by dh-autoreconf in Build-Depends.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 21 Jan 2014 14:01:27 +0100
+
 spacefm (0.9.3-1) unstable; urgency=medium
 
   * New upstream release.
