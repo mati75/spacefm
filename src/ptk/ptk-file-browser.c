@@ -4384,7 +4384,7 @@ static GtkWidget* create_folder_view( PtkFileBrowser* file_browser,
 
         exo_icon_view_set_single_click( (ExoIconView*)folder_view, file_browser->single_click );
         exo_icon_view_set_single_click_timeout( (ExoIconView*)folder_view,
-                                                        SINGLE_CLICK_TIMEOUT );
+                    app_settings.no_single_hover ? 0 : SINGLE_CLICK_TIMEOUT );
 
         gtk_cell_layout_clear ( GTK_CELL_LAYOUT ( folder_view ) );
 
@@ -4464,7 +4464,7 @@ static GtkWidget* create_folder_view( PtkFileBrowser* file_browser,
 
         exo_tree_view_set_single_click( (ExoTreeView*)folder_view, file_browser->single_click );
         exo_tree_view_set_single_click_timeout( (ExoTreeView*)folder_view, 
-                                                        SINGLE_CLICK_TIMEOUT );
+                    app_settings.no_single_hover ? 0 : SINGLE_CLICK_TIMEOUT );
 
         icon_size = small_icon_size;
 
@@ -5423,7 +5423,7 @@ void ptk_file_browser_paste( PtkFileBrowser* file_browser )
     ptk_clipboard_paste_files(
         GTK_WINDOW( gtk_widget_get_toplevel( GTK_WIDGET( file_browser ) ) ),
         dest_dir ? dest_dir : ptk_file_browser_get_cwd( file_browser ),
-        GTK_TREE_VIEW( file_browser->task_view ), NULL );
+        GTK_TREE_VIEW( file_browser->task_view ), NULL, NULL );
     if ( dest_dir )
         g_free( dest_dir );
     if ( sel_files )
@@ -5438,7 +5438,7 @@ void ptk_file_browser_paste_link( PtkFileBrowser* file_browser )  //MOD added
     ptk_clipboard_paste_links(
         GTK_WINDOW( gtk_widget_get_toplevel( GTK_WIDGET( file_browser ) ) ),
         ptk_file_browser_get_cwd( file_browser ),
-        GTK_TREE_VIEW( file_browser->task_view ), NULL );
+        GTK_TREE_VIEW( file_browser->task_view ), NULL, NULL );
 }
 
 void ptk_file_browser_paste_target( PtkFileBrowser* file_browser )  //MOD added
@@ -5446,7 +5446,7 @@ void ptk_file_browser_paste_target( PtkFileBrowser* file_browser )  //MOD added
     ptk_clipboard_paste_targets(
         GTK_WINDOW( gtk_widget_get_toplevel( GTK_WIDGET( file_browser ) ) ),
         ptk_file_browser_get_cwd( file_browser ),
-        GTK_TREE_VIEW( file_browser->task_view ), NULL );
+        GTK_TREE_VIEW( file_browser->task_view ), NULL, NULL );
 }
 
 gboolean ptk_file_browser_can_cut_or_copy( PtkFileBrowser* file_browser )
