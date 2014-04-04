@@ -52,6 +52,7 @@ const int big_icon_size_default = 48;
 const int small_icon_size_default = 22;
 const int tool_icon_size_default = 0;
 const gboolean single_click_default = FALSE;
+const gboolean no_single_hover_default = FALSE;
 const gboolean show_location_bar_default = TRUE;
 
 /* FIXME: temporarily disable trash since it's not finished */
@@ -72,6 +73,7 @@ const int desktop_sort_by_default = DW_SORT_CUSTOM;
 const int desktop_sort_type_default = GTK_SORT_ASCENDING;
 const gboolean show_wm_menu_default = FALSE;
 const gboolean desk_single_click_default = FALSE;
+const gboolean desk_no_single_hover_default = FALSE;
 const gboolean desk_open_mime_default = FALSE;
 const int margin_top_default = 12;
 const int margin_left_default = 6;
@@ -182,6 +184,8 @@ static void parse_general_settings( char* line )
 #endif
     else if ( 0 == strcmp( name, "single_click" ) )
         app_settings.single_click = atoi(value);
+    else if ( 0 == strcmp( name, "no_single_hover" ) )
+        app_settings.no_single_hover = atoi(value);
     //else if ( 0 == strcmp( name, "view_mode" ) )
     //    app_settings.view_mode = atoi( value );
     else if ( 0 == strcmp( name, "sort_order" ) )
@@ -305,6 +309,8 @@ static void parse_desktop_settings( char* line )
         app_settings.show_wm_menu = atoi( value );
     else if ( 0 == strcmp( name, "desk_single_click" ) )
         app_settings.desk_single_click = atoi( value );
+    else if ( 0 == strcmp( name, "desk_no_single_hover" ) )
+        app_settings.desk_no_single_hover = atoi( value );
     else if ( 0 == strcmp( name, "desk_open_mime" ) )
         app_settings.desk_open_mime = atoi( value );
     else if ( 0 == strcmp( name, "margin_top" ) )
@@ -438,6 +444,7 @@ void load_settings( char* config_dir )
     app_settings.desktop_sort_type = desktop_sort_type_default;
     app_settings.show_wm_menu = show_wm_menu_default;
     app_settings.desk_single_click = desk_single_click_default;
+    app_settings.desk_no_single_hover = desk_no_single_hover_default;
     app_settings.desk_open_mime = desk_open_mime_default;
     app_settings.margin_top = margin_top_default;
     app_settings.margin_left = margin_left_default;
@@ -515,7 +522,9 @@ void load_settings( char* config_dir )
         g_free( command );
         chmod( settings_config_dir, S_IRWXU );
     }
-    
+    if ( !g_file_test( settings_config_dir, G_FILE_TEST_EXISTS ) )
+        g_mkdir_with_parents( settings_config_dir, 0700 );
+
     // load session
     int x = 0;
     do
@@ -994,6 +1003,18 @@ void load_settings( char* config_dir )
         swap_menu_label( "move_template", "_Template", _("Te_mplate") );
         swap_menu_label( "move_dlg_help", "T_ips", _("_Help") );
     }
+    if ( ver < 24 ) // < 0.9.4
+    {
+        // don't use panel_sliders-key - introduced in 0.9.2 as task man height
+        set = xset_is( "panel_sliders" );
+        if ( set && set->key != 0 )
+        {
+            str = g_strdup_printf( "%d", set->key );
+            set->key = 0;
+            xset_set( "task_show_manager", "x", str );
+            g_free( str );
+        }
+    }
 }
 
 
@@ -1010,7 +1031,7 @@ char* save_settings( gpointer main_window_ptr )
     FMMainWindow* main_window;
 //printf("save_settings\n");
 
-    xset_set( "config_version", "s", "23" );  // 0.9.0
+    xset_set( "config_version", "s", "24" );  // 0.9.4
 
     // save tabs
     gboolean save_tabs = xset_get_b( "main_save_tabs" );    
@@ -1125,6 +1146,8 @@ char* save_settings( gpointer main_window_ptr )
 #endif
         if ( app_settings.single_click != single_click_default )
             fprintf( file, "single_click=%d\n", app_settings.single_click );
+        if ( app_settings.no_single_hover != no_single_hover_default )
+            fprintf( file, "no_single_hover=%d\n", app_settings.no_single_hover );
         //if ( app_settings.view_mode != view_mode_default )
         //    fprintf( file, "view_mode=%d\n", app_settings.view_mode );
         if ( app_settings.sort_order != sort_order_default )
@@ -1174,6 +1197,9 @@ char* save_settings( gpointer main_window_ptr )
             fprintf( file, "show_wm_menu=%d\n", app_settings.show_wm_menu );
         if ( app_settings.desk_single_click != desk_single_click_default )
             fprintf( file, "desk_single_click=%d\n", app_settings.desk_single_click );
+        if ( app_settings.desk_no_single_hover != desk_no_single_hover_default )
+            fprintf( file, "desk_no_single_hover=%d\n",
+                                            app_settings.desk_no_single_hover );
         if ( app_settings.desk_open_mime != desk_open_mime_default )
             fprintf( file, "desk_open_mime=%d\n", app_settings.desk_open_mime );
         
@@ -4134,7 +4160,7 @@ XSet* xset_import_plugin( const char* plug_dir )
                             && !strcmp( plug_dir, ((XSet*)l->data)->plug_dir ) )
         {
             set = (XSet*)l->data;
-            set->key = set->keymod = set->tool = 0;
+            set->key = set->keymod = set->tool = set->opener = 0;
             xset_set_plugin_mirror( set );
             if ( set->plugin_top = top )
             {
@@ -4722,7 +4748,8 @@ void xset_custom_activate( GtkWidget* item, XSet* set )
     }
     else
     {
-        parent = GTK_WIDGET( set->desktop );
+        // do not pass desktop parent - some WMs won't bring desktop dlg to top
+        parent = NULL;  //GTK_WIDGET( set->desktop );
         cwd = vfs_get_desktop_dir();
     }
     
@@ -5173,7 +5200,8 @@ void xset_edit( GtkWidget* parent, const char* path, gboolean force_root, gboole
         editor = xset_get_s( "editor" );
         if ( !editor || editor[0] == '\0' )
         {
-            ptk_show_error( GTK_WINDOW( dlgparent ), _("Editor Not Set"),
+            ptk_show_error( dlgparent ? GTK_WINDOW( dlgparent ) : NULL,
+                            _("Editor Not Set"),
                             _("Please set your editor in View|Preferences|Advanced") );
             return;
         }
@@ -5184,7 +5212,8 @@ void xset_edit( GtkWidget* parent, const char* path, gboolean force_root, gboole
         editor = xset_get_s( "root_editor" );
         if ( !editor || editor[0] == '\0' )
         {
-            ptk_show_error( GTK_WINDOW( dlgparent ), _("Root Editor Not Set"),
+            ptk_show_error( dlgparent ? GTK_WINDOW( dlgparent ) : NULL,
+                            _("Root Editor Not Set"),
                             _("Please set root's editor in View|Preferences|Advanced") );
             return;
         }
@@ -5378,7 +5407,8 @@ void xset_show_help( GtkWidget* parent, XSet* set, const char* anchor )
     if ( parent )
         dlgparent = parent;
     else if ( set )
-        dlgparent = set->browser ? GTK_WIDGET( set->browser ) : GTK_WIDGET( set->desktop );
+        // do not pass desktop parent - some WMs won't bring desktop dlg to top
+        dlgparent = set->browser ? GTK_WIDGET( set->browser ) : NULL;
 
     if ( !set || ( set && set->lock ) )
     {
@@ -5628,7 +5658,8 @@ void xset_set_key( GtkWidget* parent, XSet* set )
     g_free( name );
     if ( parent )
         dlgparent = gtk_widget_get_toplevel( parent );
-    GtkWidget* dlg = gtk_message_dialog_new_with_markup( GTK_WINDOW( dlgparent ),
+    GtkWidget* dlg = gtk_message_dialog_new_with_markup( dlgparent ?
+                                                GTK_WINDOW( dlgparent ) : NULL,
                                   GTK_DIALOG_MODAL,
                                   GTK_MESSAGE_QUESTION,
                                   GTK_BUTTONS_NONE,
@@ -5737,7 +5768,8 @@ void xset_design_job( GtkWidget* item, XSet* set )
     if ( set->browser )
         parent = gtk_widget_get_toplevel( GTK_WIDGET( set->browser ) );
     else if ( set->desktop )
-        parent = gtk_widget_get_toplevel( GTK_WIDGET( set->desktop ) );
+        // do not pass desktop parent - some WMs won't bring desktop dlg to top
+        parent = NULL;  //gtk_widget_get_toplevel( GTK_WIDGET( set->desktop ) );
     
     int job = GPOINTER_TO_INT( g_object_get_data( G_OBJECT(item), "job" ) );
 
@@ -7614,7 +7646,8 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
         set->desktop = NULL;
     }
     
-    parent = set->browser ? GTK_WIDGET( set->browser ) : GTK_WIDGET( set->desktop );
+    // do not pass desktop parent - some WMs won't bring desktop dlg to top
+    parent = set->browser ? GTK_WIDGET( set->browser ) : NULL;
 
     if ( set->plugin )
     {
@@ -8039,7 +8072,8 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
 
     if ( parent )
          dlgparent = gtk_widget_get_toplevel( parent );
-    GtkWidget* dlg = gtk_message_dialog_new( GTK_WINDOW( dlgparent ),
+    GtkWidget* dlg = gtk_message_dialog_new( dlgparent ?
+                                                GTK_WINDOW( dlgparent ) : NULL,
                                   GTK_DIALOG_MODAL,
                                   GTK_MESSAGE_QUESTION,
                                   GTK_BUTTONS_NONE,
@@ -8379,9 +8413,10 @@ char* xset_file_dialog( GtkWidget* parent, GtkFileChooserAction action,
  *      GTK_FILE_CHOOSER_ACTION_SAVE
  *      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
  *      GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER  */
-    GtkWidget* dlgparent = gtk_widget_get_toplevel( parent );
+    GtkWidget* dlgparent = parent ? gtk_widget_get_toplevel( parent ) : NULL;
     GtkWidget* dlg = gtk_file_chooser_dialog_new( title,
-                                   GTK_WINDOW( dlgparent ), action,
+                                   dlgparent ? GTK_WINDOW( dlgparent ) : NULL,
+                                   action,
                                    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                    GTK_STOCK_OK, GTK_RESPONSE_OK, NULL );
     //gtk_file_chooser_set_action( GTK_FILE_CHOOSER(dlg), GTK_FILE_CHOOSER_ACTION_SAVE );
@@ -8458,7 +8493,7 @@ char* xset_color_dialog( GtkWidget* parent, char* title, char* defcolor )
 {
     GdkColor color;
     char* scolor = NULL;
-    GtkWidget* dlgparent = gtk_widget_get_toplevel( parent );
+    GtkWidget* dlgparent = parent ? gtk_widget_get_toplevel( parent ) : NULL;
     GtkWidget* dlg = gtk_color_selection_dialog_new( title );
     GtkWidget* color_sel;
     GtkWidget* help_button;
@@ -9410,12 +9445,12 @@ void xset_defaults()
 
         set = xset_set( "dev_back_fsarc", "lbl", "_FSArchiver" );
         xset_set_set( set, "desc", "FSArchiver" );
-        xset_set_set( set, "title", "/usr/sbin/fsarchiver -vo -z 7 savefs %s %v" );
+        xset_set_set( set, "title", "fsarchiver -vo -z 7 savefs %s %v" );
         set->line = g_strdup( "#devices-root-fsarc" );
 
         set = xset_set( "dev_back_part", "lbl", "_Partimage" );
         xset_set_set( set, "desc", "Partimage" );
-        xset_set_set( set, "title", "/usr/sbin/partimage -dbo -V 4050 save %v %s" );
+        xset_set_set( set, "title", "partimage -dbo -V 4050 save %v %s" );
         set->line = g_strdup( "#devices-root-parti" );
 
         set = xset_set( "dev_back_mbr", "lbl", "_MBR" );
@@ -9431,8 +9466,8 @@ void xset_defaults()
     set->line = g_strdup( "#devices-root-resfile" );
 
         set = xset_set( "dev_rest_file", "lbl", _("_From File") );
-        xset_set_set( set, "desc", "/usr/sbin/fsarchiver -v restfs %s id=0,dest=%v" );
-        xset_set_set( set, "title", "/usr/sbin/partimage -b restore %v %s" );
+        xset_set_set( set, "desc", "fsarchiver -v restfs %s id=0,dest=%v" );
+        xset_set_set( set, "title", "partimage -b restore %v %s" );
         set->line = g_strdup( "#devices-root-resfile" );
 
         set = xset_set( "dev_rest_info", "lbl", _("File _Info") );
@@ -10294,7 +10329,8 @@ void xset_defaults()
     set->menu_style = XSET_MENU_RADIO;
     set->b = XSET_B_FALSE;
     set->line = g_strdup( "#tasks-menu-show" );
-
+    //set->x  used for task man height >=0.9.4
+    
     set = xset_set( "task_hide_manager", "lbl", _("Auto-_Hide Manager") );
     set->menu_style = XSET_MENU_RADIO;
     set->b = XSET_B_TRUE;
@@ -11016,6 +11052,7 @@ void xset_defaults()
         
         set = xset_set_panel( p, "show_devmon", "lbl", _("_Devices") );
         set->menu_style = XSET_MENU_CHECK;
+        set->b = XSET_B_UNSET;
         if ( p != 1 )
             xset_set_set( set, "shared_key", "panel1_show_devmon" );
 
@@ -11027,11 +11064,13 @@ void xset_defaults()
 
         set = xset_set_panel( p, "show_book", "lbl", _("_Bookmarks") );
         set->menu_style = XSET_MENU_CHECK;
+        set->b = XSET_B_UNSET;
         if ( p != 1 )
             xset_set_set( set, "shared_key", "panel1_show_book" );
 
         set = xset_set_panel( p, "show_sidebar", "lbl", _("_Side Toolbar") );
         set->menu_style = XSET_MENU_CHECK;
+        set->b = XSET_B_UNSET;
         if ( p != 1 )
             xset_set_set( set, "shared_key", "panel1_show_sidebar" );
 
