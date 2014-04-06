@@ -1,12 +1,13 @@
-spacefm (0.9.4-1) UNRELEASED; urgency=medium
+spacefm (0.9.4-1) unstable; urgency=medium
 
   * New upstream release.
   * debian/rules:
-    + using dh-autoreconf during the build. (Closes: #727508)
+    + use dh-autoreconf during the build. (Closes: #727508)
   * debian/control:
     + replace autotools-dev by dh-autoreconf in Build-Depends.
+  * Remove debian/patches/fix_hardening_FTBFS.patch -- included upstream.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 21 Jan 2014 14:01:27 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 04 Apr 2014 19:32:47 +0200
 
 spacefm (0.9.3-1) unstable; urgency=medium
 
