@@ -1,3 +1,12 @@
+spacefm (0.9.4+git20140406-1) experimental; urgency=medium
+
+  * Upload to experimental.
+  * Merged latest snapshot from upstream git "hand" branch.
+  * debian/control:
+    + Drop deprecated udisks1 from Recommends. (Closes: #750510)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 05 Jun 2014 22:54:02 +0200
+
 spacefm (0.9.4-2) unstable; urgency=high
 
   * Add debian/patches/0001-fix-issue-468.patch to fix crash when
