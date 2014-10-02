@@ -1,3 +1,13 @@
+spacefm (0.9.4-2) unstable; urgency=high
+
+  * Add debian/patches/0001-fix-issue-468.patch to fix crash when
+    spacefm is running on glib2.0 >= 2.41.2. (Closes: #763575)
+  * debian/control:
+    + Bump Standards-Version to 3.9.6. (no changes needed)
+    + Drop deprecated udisks1 from Recommends. (Closes: #750510)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 01 Oct 2014 20:42:31 +0200
+
 spacefm (0.9.4-1) unstable; urgency=medium
 
   * New upstream release.
