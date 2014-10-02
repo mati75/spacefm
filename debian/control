@@ -15,7 +15,7 @@ Package: spacefm
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}), 
  dbus, desktop-file-utils, shared-mime-info
-Recommends: udisks | udisks2
+Recommends: udisks2
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs
 Replaces: spacefm-gtk3, spacefm (<< 0.9)
 Conflicts: spacefm-hal, spacefm-gtk3
@@ -57,7 +57,7 @@ Package: spacefm-gtk3
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
  dbus, desktop-file-utils, shared-mime-info
-Recommends: udisks | udisks2
+Recommends: udisks2
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs
 Replaces: spacefm, spacefm-gtk3
 Conflicts: spacefm-hal, spacefm
