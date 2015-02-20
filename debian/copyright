@@ -3,30 +3,30 @@ Upstream-Name: spacefm
 Source: https://github.com/IgnorantGuru/spacefm/tree/master/packages/
 
 Files: *
-Copyright: 2013-2014 IgnorantGuru <ignorantguru@gmx.com>
-           2013 BwackNinja <BwackNinja@gmail.com>
+Copyright: 2013-2014, IgnorantGuru <ignorantguru@gmx.com>
+           2013-2014, BwackNinja <BwackNinja@gmail.com>
 License: GPL-3+
 
-Files: data/*.png; data/faenza/*.png
-Copyright: 2013 Goran Simovic
+Files: data/*.png data/faenza/*.png
+Copyright: 2013, Goran Simovic
 License: Zlib
 
 Files: src/exo/*
-Copyright: 2008 Jannis Pohlmann <jannis@xfce.org>
-           2004-2006 os-cillation e.K.
-           2002,2004 Anders Carlsson <andersca@gnu.org
+Copyright: 2008, Jannis Pohlmann <jannis@xfce.org>
+           2004-2006, os-cillation e.K.
+           2002,2004, Anders Carlsson <andersca@gnu.org
 License: LGPL-3+
 
 Files: po/Makefile.in.in
-Copyright: 1995-1997 Ulrich Drepper <drepper@gnu.ai.mit.edu>
-           2004-2008 Rodney Dawes <dobey.pwns@gmail.com>
+Copyright: 1995-1997, Ulrich Drepper <drepper@gnu.ai.mit.edu>
+           2004-2008, Rodney Dawes <dobey.pwns@gmail.com>
 License: permissive
  This file may be copied and used freely without restrictions. It may
  be used in projects which are not available under a GNU General Public License,
  but which still want to provide support for the GNU gettext functionality.
 
-Files: Makefile.in; data/Makefile.in; src/Makefile.in
-Copyright: 1994-2013 Free Software Foundation, Inc.
+Files: Makefile.in data/Makefile.in src/Makefile.in
+Copyright: 1994-2013, Free Software Foundation, Inc.
 License: permissive
  This Makefile.in is free software; the Free Software Foundation
  gives unlimited permission to copy and/or distribute it,
@@ -38,24 +38,24 @@ License: permissive
  PARTICULAR PURPOSE.
 
 Files: src/libmd5-rfc/*
-Copyright: 1999-2002 Aladdin Enterprises
+Copyright: 1999-2002, Aladdin Enterprises
 License: Zlib
 
-Files: src/compat/*; src/desktop/desktop-window.h; src/mime-type/*; src/ptk/
-Copyright: 2006-2007 Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
+Files: src/compat/* src/desktop/desktop-window.h src/mime-type/* src/ptk/*
+Copyright: 2006-2007, Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
 License: GPL-2+
 
 Files: src/ptk/ptk-text-renderer.c
-Copyright: 2000 Red Hat, Inc., Jonathan Blandford <jrb@redhat.com>
+Copyright: 2000, Red Hat, Inc., Jonathan Blandford <jrb@redhat.com>
 License: GPL-2+
 
 Files: src/desktop/working-area.*
-Copyright: 2003-2004 Gary Kramlich
-	   2005 Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
+Copyright: 2003-2004, Gary Kramlich
+	   2005, Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
 License: GPL-2+
 
 Files: debian/*
-Copyright: 2013-2014 Mateusz Łukasik <mati75@linuxmint.pl>
+Copyright: 2013-2015 Mateusz Łukasik <mati75@linuxmint.pl>
 License: GPL-3+
 
 License: GPL-2+
