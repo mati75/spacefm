@@ -1,2 +1,1 @@
-spacefm: spelling-error-in-binary usr/bin/spacefm tEH the
 spacefm: package-relation-with-self breaks: spacefm (<< 0.9)

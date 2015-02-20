@@ -6,6 +6,8 @@ spacefm (0.9.4+git20141001-1) UNRELEASED; urgency=medium
     + Update homepage.
   * Remove 0001-fix-issue-468.patch -- included upstream.
   * Update debian/copyright.
+  * debian/spacefm*.lintian-overrides:
+    + remove unused override.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 02 Oct 2014 09:12:57 +0200
 
