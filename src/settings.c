@@ -34,7 +34,6 @@
 #include "vfs-app-desktop.h"
 #include "item-prop.h"
 #include "ptk-app-chooser.h"
-#include "ptk-handler.h"
 #include "vfs-utils.h" /* for vfs_load_icon */
 #include "ptk-location-view.h"
 
@@ -125,7 +124,6 @@ gboolean xset_design_cb( GtkWidget* item, GdkEventButton * event, XSet* set );
 gboolean on_autosave_timer( gpointer main_window );
 const char* icon_stock_to_id( const char* name );
 void xset_custom_activate( GtkWidget* item, XSet* set );
-void xset_custom_remove( XSet* set );
 
 const char* user_manual_url = "http://ignorantguru.github.io/spacefm/spacefm-manual-en.html";
 const char* homepage = "http://ignorantguru.github.io/spacefm/"; //also in aboutdlg.ui
@@ -416,78 +414,6 @@ void swap_menu_label( const char* set_name, const char* old_name,
     }
 }
 
-void move_attached_to_builtin( const char* removed_name, const char* move_to_name )
-{
-    /* For upgrades only: A built-in menu item (removed_name) has been removed,
-     * so move custom menu items attached to the removed item to another item.
-     * Leave removed item data intact in case of downgrade. */
-    
-    XSet* set_to = xset_is( move_to_name );
-    if ( !set_to )
-    {
-        g_warning( "remove_builtin_item passed invalid move_to_name '%s'",
-                                                            move_to_name );
-        return;
-    }
-    
-    GList* l;
-    XSet* set_move;
-    XSet* set_to_next;
-    XSet* set_move_next;
-    for ( l = xsets; l; l = l->next )
-    {
-        if ( !g_strcmp0( removed_name, ((XSet*)l->data)->prev ) )
-        {
-            // found a set attached to removed_name
-            set_move = l->data;
-            if ( set_move->lock )  // failsafe
-                return;
-            
-            while ( set_move )
-            {
-                xset_custom_remove( set_move );
-                
-                g_free( set_move->prev );
-                set_move->prev = g_strdup( set_to->name );
-                
-                if ( set_move->next )
-                {
-                    set_move_next = xset_get( set_move->next );
-                    if ( set_move_next->lock )  // failsafe
-                        set_move_next = NULL;
-                }
-                else
-                    set_move_next = NULL;
-                g_free( set_move->next );
-                set_move->next = g_strdup( set_to->next );
-                
-                if ( set_to->next )
-                {
-                    set_to_next = xset_get( set_to->next );
-                    if ( set_to_next->prev )
-                        g_free( set_to_next->prev );
-                    set_to_next->prev = g_strdup( set_move->name );
-                }
-                g_free( set_to->next );
-                set_to->next = g_strdup( set_move->name );
-                
-                if ( set_to->tool )
-                {
-                    set_move->tool = XSET_B_TRUE;
-                    if ( !set_move->icon )
-                        set_move->icon = g_strdup( "gtk-execute" );
-                }
-                else
-                    set_move->tool = XSET_B_UNSET;
-                
-                set_to = set_move;
-                set_move = set_move_next;
-            }
-            return;
-        }
-    }
-}
-
 void load_settings( char* config_dir )
 {
     FILE * file;
@@ -769,12 +695,6 @@ void load_settings( char* config_dir )
             }
         }
     }
-    
-    // add default handlers
-    ptk_handler_add_defaults( HANDLER_MODE_ARC, FALSE, FALSE );
-    ptk_handler_add_defaults( HANDLER_MODE_FS, FALSE, FALSE );
-    ptk_handler_add_defaults( HANDLER_MODE_NET, FALSE, FALSE );
-    ptk_handler_add_defaults( HANDLER_MODE_FILE, FALSE, FALSE );
     
     // get root-protected settings
     read_root_settings();
@@ -1095,130 +1015,8 @@ void load_settings( char* config_dir )
             g_free( str );
         }
     }
-    if ( ver < 26 ) // < hand
-    {
-        XSet* handset;
-        /* Archive handlers are now user configurable using a new
-         * xset - copying over dialog size from the old xset.
-         * Leave "arc_conf" unchanged for backwards compat. */
-        if (xset_get_int( "arc_conf2", "x" ) == 0)
-        {
-            int width = xset_get_int( "arc_conf", "x" );
-            str = g_strdup_printf( "%d", width );
-            xset_set( "arc_conf2", "x", str );
-            g_free( str );
-            int height = xset_get_int( "arc_conf", "y" );
-            str = g_strdup_printf( "%d", height );
-            xset_set( "arc_conf2", "y", str );
-            g_free( str );
-        }
-        // Import old archive creation options
-        const char* old_arc[] =
-                    { "tar_bz2", "tar_gz", "tar_xz", "zip", "7z", "tar", "rar" };
-        const char* new_cmd[]=
-        {
-            "tar @ -cvjf %o %N",
-            "tar @ -cvzf %o %N",
-            "tar @ -cvJf %o %N",
-            "zip @ -r %o %N",
-            "\"$(which 7za || echo 7zr)\" @ a %o %N",
-            "tar @ -cvf %o %N",
-            "rar a -r @ %o %N"
-        };
-        for ( i = 0; i < G_N_ELEMENTS( old_arc ); i++ )
-        {
-            // find old option
-            str = g_strdup_printf( "arc_%s", old_arc[i] );
-            set = xset_is( str );
-            g_free( str );
-            if ( set && set->s && set->s[0] )
-            {
-                // user had old options
-                str = g_strdup_printf( "hand_arc_+%s", old_arc[i] );
-                handset = xset_is( str );
-                g_free( str );
-                if ( handset )
-                {
-                    g_free( handset->y );
-                    handset->y = replace_string( new_cmd[i], "@", set->s, FALSE );
-                    handset->disable = FALSE;  // save in session
-                }
-            }
-        }
-        // Import old protocol handler into new handler
-        set = xset_is( "path_hand" );
-        if ( set && set->s && set->s[0] )
-        {
-            handset = add_new_handler( HANDLER_MODE_NET );
-            handset->menu_label = g_strdup( "Custom" );
-            handset->s = g_strdup( "*" );
-            handset->x = g_strdup( "" );
-            handset->y = g_strdup_printf( "%s %%url%%", set->s );
-            
-            set = xset_is( "dev_unmount_cmd" );
-            if ( set && set->s && set->s[0] )
-                handset->z = replace_string( set->s, "%v", "\"%a\"", FALSE );
-            else
-                handset->z = g_strdup( "udevil umount \"%a\"" );
-            
-            handset->context = g_strdup( "mount | grep \"%a\"" );
-            handset->b = XSET_B_TRUE;
-            handset->lock = FALSE;     // save menu_label
-            handset->disable = FALSE;  // save in session
-            // add handset to handler list
-            set = xset_get( "dev_net_cnf" );
-            str = g_strconcat( handset->name, " ", set->s ? set->s : "", NULL );
-            g_free( set->s );
-            set->s = str;
-        }
-        // Move custom mount/unmount commands to handler
-        handset = xset_get( "hand_fs_+def" );
-        set = xset_is( "dev_unmount_cmd" );
-        if ( set && set->s && set->s[0] )
-        {
-            str = g_strconcat( set->s, "\\n\\n", handset->z, NULL );
-            g_free( handset->z );
-            handset->z = str;
-            handset->disable = FALSE;  // save in session
-        }
-        set = xset_is( "dev_mount_cmd" );
-        if ( set && set->s && set->s[0] )
-        {
-            str = g_strconcat( set->s, "\\n\\n", handset->y, NULL );
-            g_free( handset->y );
-            handset->y = str;
-            handset->disable = FALSE;  // save in session
-        }
-        // Change Save Session to Open URL - remove custom label/icon
-        set = xset_set( "main_save_session", "lbl", _("Open _URL") );
-        xset_set_set( set, "icn", "gtk-network" );
-        // indicate that menu label is default and should not be saved
-        set->in_terminal = XSET_B_UNSET;
-        // indicate that icon is default and should not be saved
-        set->keep_terminal = XSET_B_UNSET;
-        // reset user key shortcut
-        set->key = set->keymod = 0;
-        
-        // Apply old Auto-Mount ISO setting to new handler
-        set = xset_is( "iso_auto" );
-        if ( set && set->b != XSET_B_TRUE )
-        {
-            // disable ISO Mount file handler as default opener
-            set = xset_get( "hand_f_+iso" );
-            set->b = XSET_B_UNSET; // disable as default opener
-            set->disable = FALSE;  // save in session
-        }
-        
-        // Move any custom items attached to removed menu items
-        move_attached_to_builtin( "iso_auto", "open_other" );
-        move_attached_to_builtin( "iso_mount", "open_other" );
-        move_attached_to_builtin( "dev_unmount_cmd", "dev_mount_options" );
-        move_attached_to_builtin( "dev_mount_cmd", "dev_mount_options" );
- 
-        // Save settings
-        xset_autosave( FALSE, FALSE );
-    }
 }
+
 
 char* save_settings( gpointer main_window_ptr )
 {
@@ -1233,10 +1031,10 @@ char* save_settings( gpointer main_window_ptr )
     FMMainWindow* main_window;
 //printf("save_settings\n");
 
-    xset_set( "config_version", "s", "26" );  // hand
+    xset_set( "config_version", "s", "24" );  // 0.9.4
 
     // save tabs
-    gboolean save_tabs = xset_get_b( "main_save_tabs" );
+    gboolean save_tabs = xset_get_b( "main_save_tabs" );    
     if ( main_window_ptr )
         main_window = (FMMainWindow*)main_window_ptr;
     else
@@ -2033,8 +1831,6 @@ void xset_free_all()
             g_free( set->prev );
         if ( set->line )
             g_free( set->line );
-        if ( set->context )
-            g_free( set->context );
         if ( set->plugin )
         {
             if ( set->plug_dir )
@@ -2088,8 +1884,6 @@ void xset_free( XSet* set )
         g_free( set->prev );
     if ( set->line )
         g_free( set->line );
-    if ( set->context )
-        g_free( set->context );
     if ( set->plugin )
     {
         if ( set->plug_dir )
@@ -2379,8 +2173,7 @@ static void xset_write_set( FILE* file, XSet* set )
         if ( set->lock )
         {
             // built-in
-            if ( set->in_terminal == XSET_B_TRUE && set->menu_label &&
-                                                    set->menu_label[0] )
+            if ( set->in_terminal == XSET_B_TRUE && set->menu_label[0] )
                 // only save lbl if menu_label was customized
                 fprintf( file, "%s-lbl=%s\n", set->name, set->menu_label );
         }
@@ -2450,15 +2243,7 @@ void xset_write( FILE* file )
         return;
 
     for ( l = g_list_last( xsets ); l; l = l->prev )
-    {
-        // hack to not save default handlers - this allows default handlers
-        // to be updated more easily
-        if ( (gboolean)((XSet*)l->data)->disable &&
-                (char)((XSet*)l->data)->name[0] == 'h' &&
-                g_str_has_prefix( (char*)((XSet*)l->data)->name, "hand" ) )
-            continue;
         xset_write_set( file, (XSet*)l->data );
-    }
 }
 
 void xset_parse( char* line )
@@ -2477,7 +2262,7 @@ void xset_parse( char* line )
     char* var = sep + 1;
     *sep = '\0';
 
-    if ( !strncmp( name, "cstm_", 5 ) || !strncmp( name, "hand_", 5 ) )
+    if ( !strncmp( name, "cstm_", 5 ) )
     {
         // custom
         if ( !strcmp( set_last->name, name ) )
@@ -3628,9 +3413,7 @@ char* xset_custom_get_script( XSet* set, gboolean create )
     char* old_path;
     char* cscript;
 
-    if ( ( strncmp( set->name, "cstm_", 5 ) && strncmp( set->name, "cust", 4 )
-                                            && strncmp( set->name, "hand", 4 ) )
-                                            || ( create && set->plugin ) )
+    if ( strncmp( set->name, "cstm_", 5 ) || ( create && set->plugin ) )
         return NULL;
 
     if ( create )
@@ -4883,8 +4666,7 @@ static void open_spec( PtkFileBrowser* file_browser, const char* url,
     {
         // network
         if ( file_browser )
-            ptk_location_view_mount_network( file_browser, use_url, new_tab,
-                                                                    FALSE );
+            mount_network( file_browser, use_url, new_tab );
         else
             open_in_prog( use_url );
     }
@@ -4966,7 +4748,8 @@ void xset_custom_activate( GtkWidget* item, XSet* set )
     }
     else
     {
-        parent = GTK_WIDGET( set->desktop );
+        // do not pass desktop parent - some WMs won't bring desktop dlg to top
+        parent = NULL;  //GTK_WIDGET( set->desktop );
         cwd = vfs_get_desktop_dir();
     }
     
@@ -5624,8 +5407,8 @@ void xset_show_help( GtkWidget* parent, XSet* set, const char* anchor )
     if ( parent )
         dlgparent = parent;
     else if ( set )
-        dlgparent = set->browser ? GTK_WIDGET( set->browser ) :
-                                   GTK_WIDGET( set->desktop );
+        // do not pass desktop parent - some WMs won't bring desktop dlg to top
+        dlgparent = set->browser ? GTK_WIDGET( set->browser ) : NULL;
 
     if ( !set || ( set && set->lock ) )
     {
@@ -5982,9 +5765,12 @@ void xset_design_job( GtkWidget* item, XSet* set )
     GtkClipboard* clip;
     GtkWidget* parent = NULL;
     
-    parent = gtk_widget_get_toplevel( set->browser ?
-                                                GTK_WIDGET( set->browser ) :
-                                                GTK_WIDGET( set->desktop ) );
+    if ( set->browser )
+        parent = gtk_widget_get_toplevel( GTK_WIDGET( set->browser ) );
+    else if ( set->desktop )
+        // do not pass desktop parent - some WMs won't bring desktop dlg to top
+        parent = NULL;  //gtk_widget_get_toplevel( GTK_WIDGET( set->desktop ) );
+    
     int job = GPOINTER_TO_INT( g_object_get_data( G_OBJECT(item), "job" ) );
 
 //printf("activate job %d %s\n", job, set->name);    
@@ -7860,8 +7646,8 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
         set->desktop = NULL;
     }
     
-    parent = set->browser ? GTK_WIDGET( set->browser ) :
-                            GTK_WIDGET( set->desktop );
+    // do not pass desktop parent - some WMs won't bring desktop dlg to top
+    parent = set->browser ? GTK_WIDGET( set->browser ) : NULL;
 
     if ( set->plugin )
     {
@@ -7999,7 +7785,7 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
                                 NULL, FALSE, NULL ) )
         {
             if ( rset->lock )
-                rset->keep_terminal = XSET_B_TRUE;  // trigger save of changed icon
+                rset->keep_terminal = TRUE;  // trigger save of changed icon
             if ( cb_func )
                 (*cb_func) ( item, cb_data );
         }
@@ -9017,19 +8803,11 @@ void xset_set_window_icon( GtkWindow* win )
     GtkIconTheme* theme = gtk_icon_theme_get_default();
     if ( !theme )
         return;
-    GError *error = NULL;
-    GdkPixbuf* icon = gtk_icon_theme_load_icon( theme, name, 48, 0, &error );
+    GdkPixbuf* icon = gtk_icon_theme_load_icon( theme, name, 48, 0, NULL );
     if ( icon )
     {
         gtk_window_set_icon( GTK_WINDOW( win ), icon );
         g_object_unref( icon );
-    }
-    else if ( error )
-    {   
-        // An error occured on loading the icon
-        fprintf( stderr, "spacefm: Unable to load the window icon "
-        "'%s' in - xset_set_window_icon - %s\n", name, error->message);
-        g_error_free( error );
     }
 }
 
@@ -9728,7 +9506,7 @@ void xset_defaults()
         set->line = g_strdup( "#devices-settings-net" );
         set->b = XSET_B_TRUE;
 
-        set = xset_set( "dev_show_file", "lbl", _("Mounted _Other") );
+        set = xset_set( "dev_show_file", "lbl", _("Mounted _Files") );
         set->menu_style = XSET_MENU_CHECK;
         set->line = g_strdup( "#devices-settings-files" );
         set->b = XSET_B_TRUE;
@@ -9745,7 +9523,7 @@ void xset_defaults()
         set = xset_set( "dev_dispname", "lbl", _("_Display Name") );
         set->menu_style = XSET_MENU_STRING;
         xset_set_set( set, "title", _("Set Display Name Format") );
-        xset_set_set( set, "desc", _("Enter device display name format:\n\nUse:\n\t%%v\tdevice filename (eg sdd1)\n\t%%s\ttotal size (eg 800G)\n\t%%t\tfstype (eg ext4)\n\t%%l\tvolume label (eg Label or [no media])\n\t%%m\tmount point if mounted, or ---\n\t%%i\tdevice ID\n\t%%n\tmajor:minor device numbers (eg 15:3)\n") );
+        xset_set_set( set, "desc", _("Enter device display name format:\n\nUse:\n\t%%v\tdevice filename (eg sdd1)\n\t%%s\ttotal size (eg 800G)\n\t%%t\tfstype (eg ext4)\n\t%%l\tvolume label (eg Label or [no media])\n\t%%m\tmount point if mounted, or ---\n\t%%i\tdevice ID\n") );
         xset_set_set( set, "s", "%v %s %l %m" );
         xset_set_set( set, "z", "%v %s %l %m" );
         xset_set_set( set, "icn", "gtk-edit" );
@@ -9846,38 +9624,19 @@ void xset_defaults()
     xset_set_set( set, "s", "noexec, nosuid, noatime" );
     set->line = g_strdup( "#devices-menu-remount" );
 
-    set = xset_set( "dev_change", "lbl", _("_Change Detection") );
-    xset_set_set( set, "desc", _("Enter your comma- or space-separated list of filesystems which should NOT be monitored for changes.  This setting only affects non-block devices (such as nfs or fuse), and is usually used to prevent SpaceFM becoming unresponsive with network filesystems.  Loading of thumbnails will also be disabled.") );
-    set->menu_style = XSET_MENU_STRING;
-    xset_set_set( set, "title", _("Change Detection Blacklist") );
-    xset_set_set( set, "icn", "gtk-edit" );
-    set->line = g_strdup( "#devices-settings-chdet" );
-    set->s = g_strdup( "cifs curlftpfs ftpfs fuse.sshfs nfs smbfs" );
-    set->z = g_strdup( set->s );
-    
-    /* Removed 0.9.4
     set = xset_set( "dev_mount_cmd", "lbl", _("Mount _Command") );
-    set->menu_style = XSET_MENU_STRING;
     xset_set_set( set, "desc", _("Enter the command to mount a device:\n\nUse:\n\t%%v\tdevice file ( eg /dev/sda5 )\n\t%%o\tvolume-specific mount options\n\nudevil:\t/usr/bin/udevil mount -o %%o %%v\npmount:\t/usr/bin/pmount %%v\nUdisks2:\t/usr/bin/udisksctl mount -b %%v -o %%o\nUdisks1:\t/usr/bin/udisks --mount %%v --mount-options %%o\n\nLeave blank for auto-detection.") );
+    set->menu_style = XSET_MENU_STRING;
     xset_set_set( set, "title", _("Mount Command") );
     xset_set_set( set, "icn", "gtk-edit" );
     set->line = g_strdup( "#devices-settings-mcmd" );
-    
+
     set = xset_set( "dev_unmount_cmd", "lbl", _("_Unmount Command") );
-    set->menu_style = XSET_MENU_STRING;
     xset_set_set( set, "desc", _("Enter the command to unmount a device:\n\nUse:\n\t%%v\tdevice file ( eg /dev/sda5 )\n\nudevil:\t/usr/bin/udevil umount %%v\npmount:\t/usr/bin/pumount %%v\nUdisks1:\t/usr/bin/udisks --unmount %%v\nUdisks2:\t/usr/bin/udisksctl unmount -b %%v\n\nLeave blank for auto-detection.") );
+    set->menu_style = XSET_MENU_STRING;
     xset_set_set( set, "title", _("Unmount Command") );
     xset_set_set( set, "icn", "gtk-edit" );
     set->line = g_strdup( "#devices-settings-ucmd" );
-    */
-
-    set = xset_set( "dev_fs_cnf", "label", _("_Device Handlers") );
-    xset_set_set( set, "icon", "gtk-preferences" );
-    set->line = g_strdup( "#handlers-dev" );
-    
-    set = xset_set( "dev_net_cnf", "label", _("_Protocol Handlers") );
-    xset_set_set( set, "icon", "gtk-preferences" );
-    set->line = g_strdup( "#handlers-pro" );
 
     // dev icons
     set = xset_get( "sep_i1" );
@@ -9953,7 +9712,7 @@ void xset_defaults()
         xset_set_set( set, "icn", "gtk-network" );
         set->line = g_strdup( "#devices-settings-icon" );
 
-        set = xset_set( "dev_icon_file", "lbl", _("Mounted Other") );
+        set = xset_set( "dev_icon_file", "lbl", _("Mounted File") );
         set->menu_style = XSET_MENU_ICON;
         xset_set_set( set, "icn", "gtk-file" );
         set->line = g_strdup( "#devices-settings-icon" );
@@ -10112,13 +9871,8 @@ void xset_defaults()
     set = xset_set( "main_root_terminal", "lbl", _("_Root Terminal") );
     xset_set_set( set, "icn", "gtk-dialog-warning" );
     
-    // was previously used for 'Save Session' < 0.9.4 as XSET_MENU_NORMAL
-    set = xset_set( "main_save_session", "lbl", _("Open _URL") );
-    set->menu_style = XSET_MENU_STRING;
-    xset_set_set( set, "icn", "gtk-network" );
-    xset_set_set( set, "title", _("Open URL") );
-    xset_set_set( set, "desc", _("Enter URL in the format:\n\tPROTO://USERNAME:PASSWORD@HOST:PORT/SHARE\n\nExamples:\n\tftp://mirrors.kernel.org\n\tsmb://user:pass@10.0.0.1:50/docs\n\tssh://user@sys.domain\n\nIncluding a password is unsafe.  To bookmark a URL, right-click on the mounted network in Devices and select Bookmark.\n") );
-    set->line = NULL;
+    set = xset_set( "main_save_session", "lbl", _("_Save Session") );
+    xset_set_set( set, "icn", "gtk-save" );
 
     set = xset_set( "main_save_tabs", "lbl", _("Save Ta_bs") );
     set->menu_style = XSET_MENU_CHECK;
@@ -10782,11 +10536,7 @@ void xset_defaults()
     set = xset_set( "open_other", "lbl", _("_Choose...") );
     xset_set_set( set, "icn", "gtk-open" );
 
-    set = xset_set( "open_hand", "lbl", _("_Handlers...") );
-    xset_set_set( set, "icn", "gtk-preferences" );
-    set->line = g_strdup( "#handlers-fil" );
-
-    set = xset_set( "open_all", "lbl", _("Open With _Default") );//virtual
+    set = xset_set( "open_all", "lbl", _("_Default") );//virtual
 
     set = xset_set( "open_in_tab", "lbl", _("In _Tab") );
     set->menu_style = XSET_MENU_SUBMENU;
@@ -10829,13 +10579,9 @@ void xset_defaults()
     set = xset_get( "sep_arc1" );
     set->menu_style = XSET_MENU_SEP;
 
-    set = xset_get( "sep_arc2" );
-    set->menu_style = XSET_MENU_SEP;
-
-    set = xset_set( "arc_default", "lbl", _("_Archive Defaults") );
-
+    set = xset_set( "arc_default", "lbl", _("_Archive Default") );
     set->menu_style = XSET_MENU_SUBMENU;
-    xset_set_set( set, "desc", "arc_conf2 sep_arc2 arc_def_open arc_def_ex arc_def_exto arc_def_list sep_arc1 arc_def_parent arc_def_write" );
+    xset_set_set( set, "desc", "arc_def_open arc_def_ex arc_def_exto arc_def_list sep_arc1 arc_def_parent arc_def_write" );
 
         set = xset_set( "arc_def_open", "lbl", _("_Open With App") );
         set->menu_style = XSET_MENU_RADIO;
@@ -10857,16 +10603,11 @@ void xset_defaults()
         set = xset_set( "arc_def_write", "lbl", _("_Write Access") );
         set->menu_style = XSET_MENU_CHECK;
 
-        set = xset_set( "arc_conf2", "label", _("Archive _Handlers") );
-        xset_set_set( set, "icon", "gtk-preferences" );
-
-    /* used in < 0.9.4
-    set = xset_set( "iso_mount", "label", _("_Mount ISO") );
-    xset_set_set( set, "icon", "gtk-cdrom" );
+    set = xset_set( "iso_mount", "lbl", _("_Mount ISO") );
+    xset_set_set( set, "icn", "gtk-cdrom" );
 
     set = xset_set( "iso_auto", "lbl", _("_Auto-Mount ISO") );
     set->menu_style = XSET_MENU_CHECK;
-    */
 
     set = xset_get( "sep_o1" );
     set->menu_style = XSET_MENU_SEP;
@@ -11034,11 +10775,12 @@ void xset_defaults()
     set->b = XSET_B_TRUE;
     set->line = g_strdup( "#gui-pathbar-seek" );
 
-    set = xset_set( "path_hand", "lbl", _("_Protocol Handlers") );
-    xset_set_set( set, "icn", "gtk-preferences" );
-    set->line = g_strdup( "#handlers-pro" );
-    xset_set_set( set, "shared_key", "dev_net_cnf" );
-    // set->s was custom protocol handler in sfm<=0.9.3 - retained
+    set = xset_set( "path_hand", "lbl", _("P_rotocol Handler...") );
+    set->menu_style = XSET_MENU_STRING;
+    xset_set_set( set, "title", _("Set Protocol Handler") );
+    xset_set_set( set, "desc", _("Enter command to be used to mount or open protocols (such as nfs://, smb://, etc):\n\nIf this setting is empty, SpaceFM will open protocols using 'udevil mount'.\n\nTIP:  To unmount networks, install udevil or set Unmount Command to a command which handles network protocols.\n") );
+    xset_set_set( set, "icn", "gtk-execute" );
+    set->line = g_strdup( "#gui-pathbar-protohand" );
 
     set = xset_set( "path_help", "lbl", _("Path Bar _Help") );
     xset_set_set( set, "icn", "gtk-help" );
