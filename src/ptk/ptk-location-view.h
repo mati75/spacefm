@@ -1,11 +1,13 @@
 /*
- * SpaceFM ptk-location-view.h
- * 
- * Copyright (C) 2014 IgnorantGuru <ignorantguru@gmx.com>
- * Copyright (C) 2006 Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>
- * 
- * License: See COPYING file
- * 
+*  C Interface: PtkLocationView
+*
+* Description:
+*
+*
+* Author: Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>, (C) 2006
+*
+* Copyright: See COPYING file that comes with this distribution
+*
 */
 
 #ifndef  _PTK_LOCATION_VIEW_H_
@@ -50,16 +52,10 @@ void on_bookmark_edit( GtkMenuItem* item, PtkFileBrowser* file_browser );
 void on_bookmark_open( GtkMenuItem* item, PtkFileBrowser* file_browser );
 void on_bookmark_open_tab( GtkMenuItem* item, PtkFileBrowser* file_browser );
 
-void ptk_location_view_mount_network( PtkFileBrowser* file_browser,
-                                      const char* url,
-                                      gboolean new_tab,
-                                      gboolean force_new_mount );
+void mount_network( PtkFileBrowser* file_browser, const char* url, gboolean new_tab );
 void mount_iso( PtkFileBrowser* file_browser, const char* path );
 void ptk_location_view_dev_menu( GtkWidget* parent, PtkFileBrowser* file_browser, 
                                                             GtkWidget* menu );
-char* ptk_location_view_create_mount_point( int mode, VFSVolume* vol,
-                                    netmount_t* netmount, const char* path );
-gboolean ptk_location_view_open_block( const char* block, gboolean new_tab );
 
 G_END_DECLS
 

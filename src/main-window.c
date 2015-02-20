@@ -282,8 +282,7 @@ void on_bookmark_item_activate ( GtkMenuItem* menu, gpointer user_data )
     if ( g_str_has_prefix( path, "//" ) || strstr( path, ":/" ) )
     {
         if ( file_browser )
-            ptk_location_view_mount_network( file_browser, path,
-                                xset_get_b( "book_newtab" ), FALSE );
+            mount_network( file_browser, path, xset_get_b( "book_newtab" ) );
     }
     else
     {
@@ -771,24 +770,14 @@ GtkWidget* create_devices_menu( FMMainWindow* main_window )
 
     set = xset_get( "dev_menu_settings" );
     xset_add_menuitem( NULL, file_browser, dev_menu, accel_group, set );
-
 #endif
-    // show all
-    gtk_widget_show_all( dev_menu );
 
+    gtk_widget_show_all( dev_menu );
     return dev_menu;
 }
 
-void on_open_url( GtkWidget* widget, FMMainWindow* main_window )
+void on_save_session( GtkWidget* widget, FMMainWindow* main_window )
 {
-    PtkFileBrowser* file_browser = 
-                    PTK_FILE_BROWSER( fm_main_window_get_current_file_browser(
-                                                                main_window ) );
-    char* url = xset_get_s( "main_save_session" );
-    if ( file_browser && url && url[0] )
-        ptk_location_view_mount_network( file_browser, url, TRUE, TRUE );
-#if 0
-    /* was on_save_session */
     xset_autosave_cancel();
     char* err_msg = save_settings( main_window );
     if ( err_msg )
@@ -799,8 +788,7 @@ void on_open_url( GtkWidget* widget, FMMainWindow* main_window )
                                                     NULL, 0, msg, NULL, 
                                                     "#programfiles-home-session" );
         g_free( msg );
-    }
-#endif
+    }    
 }
 
 void on_find_file_activate ( GtkMenuItem *menuitem, gpointer user_data )
@@ -1154,7 +1142,6 @@ void update_window_icon( GtkWindow* window, GtkIconTheme* theme )
 {
     GdkPixbuf* icon;
     char* name;
-    GError *error = NULL;
 
     XSet* set = xset_get( "main_icon" );
     if ( set->icon )
@@ -1164,18 +1151,11 @@ void update_window_icon( GtkWindow* window, GtkIconTheme* theme )
     else
         name = "spacefm";
     
-    icon = gtk_icon_theme_load_icon( theme, name, 48, 0, &error );
+    icon = gtk_icon_theme_load_icon( theme, name, 48, 0, NULL );
     if ( icon )
     {
         gtk_window_set_icon( window, icon );
         g_object_unref( icon );
-    }
-    else if ( error != NULL )
-    {
-        // An error occured on loading the icon
-        fprintf( stderr, "spacefm: Unable to load the window icon "
-        "'%s' in - update_window_icon - %s\n", name, error->message);
-        g_error_free( error );
     }
 }
 
@@ -1787,9 +1767,9 @@ void rebuild_menus( FMMainWindow* main_window )
     xset_set_cb( "main_search", on_find_file_activate, main_window );
     xset_set_cb( "main_terminal", on_open_terminal_activate, main_window );
     xset_set_cb( "main_root_terminal", on_open_root_terminal_activate, main_window );
-    xset_set_cb( "main_save_session", on_open_url, main_window );
+    xset_set_cb( "main_save_session", on_save_session, main_window );
     xset_set_cb( "main_exit", on_quit_activate, main_window );
-    menu_elements = g_strdup_printf( "main_save_session main_search sep_f1 main_terminal main_root_terminal main_new_window main_root_window sep_f2 main_save_tabs sep_f3 main_exit" );
+    menu_elements = g_strdup_printf( "main_search main_terminal main_root_terminal sep_f1 main_new_window main_root_window sep_f2 main_save_session main_save_tabs sep_f3 main_exit" );
     xset_add_menu( NULL, file_browser, newmenu, accel_group, menu_elements );
     g_free( menu_elements );
     gtk_widget_show_all( GTK_WIDGET(newmenu) );
@@ -3026,12 +3006,6 @@ GtkWidget* fm_main_window_new()
 
 GtkWidget* fm_main_window_get_current_file_browser ( FMMainWindow* main_window )
 {
-    if ( !main_window )
-    {
-        main_window = fm_main_window_get_last_active();
-        if ( !main_window )
-            return NULL;
-    }
     if ( main_window->notebook )
     {
         gint idx = gtk_notebook_get_current_page( GTK_NOTEBOOK( main_window->notebook ) );
@@ -3512,7 +3486,7 @@ void main_window_open_network( FMMainWindow* main_window, const char* path,
     if ( !file_browser )
         return;
     char* str = g_strdup( path );
-    ptk_location_view_mount_network( file_browser, str, new_tab, FALSE );
+    mount_network( file_browser, str, new_tab );
     g_free( str );
 }
 
@@ -3968,7 +3942,7 @@ g_warning( _("Device manager key shortcuts are disabled in HAL mode") );
                 else if ( !strcmp( xname, "root_terminal" ) )
                     on_open_root_terminal_activate( NULL, main_window );
                 else if ( !strcmp( xname, "save_session" ) )
-                    on_open_url( NULL, main_window );
+                    on_save_session( NULL, main_window );
                 else if ( !strcmp( xname, "exit" ) )
                     on_quit_activate( NULL, main_window );
                 else if ( !strcmp( xname, "full" ) )
