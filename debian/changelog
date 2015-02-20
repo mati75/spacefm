@@ -4,6 +4,7 @@ spacefm (0.9.4+git20141001-1) UNRELEASED; urgency=medium
     https://igurublog.wordpress.com/2015/02/17/updated-info-on-spacefm/
   * debian/control:
     + Update homepage.
+  * Remove 0001-fix-issue-468.patch -- included upstream.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 02 Oct 2014 09:12:57 +0200
 
