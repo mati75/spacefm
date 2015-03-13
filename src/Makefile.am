@@ -77,6 +77,7 @@ PTK_SOURCES = \
     ptk/ptk-input-dialog.c ptk/ptk-input-dialog.h \
     ptk/ptk-file-task.c ptk/ptk-file-task.h \
     ptk/ptk-file-archiver.c ptk/ptk-file-archiver.h \
+    ptk/ptk-handler.c ptk/ptk-handler.h \
     ptk/ptk-clipboard.c ptk/ptk-clipboard.h \
     ptk/ptk-file-menu.c ptk/ptk-file-menu.h \
     ptk/ptk-file-misc.c ptk/ptk-file-misc.h \
@@ -118,6 +119,7 @@ spacefm_CFLAGS = \
     @SN_CFLAGS@ \
     @HAL_CFLAGS@ \
     @LIBUDEV_CFLAGS@ \
+    @FFMPEG_CFLAGS@ \
     @G_CAST_CHECKS@ \
     -Werror-implicit-function-declaration
 
@@ -127,7 +129,8 @@ spacefm_LDADD = \
     @FAM_LIBS@ \
     @HAL_LIBS@ \
     @SN_LIBS@ \
-    @LIBUDEV_LIBS@
+    @LIBUDEV_LIBS@ \
+    @FFMPEG_LIBS@
 
 noinst_PROGRAMS=xml-purge
 xml_purge_SOURCES=xml-purge.c
