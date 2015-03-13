@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 9), dh-autoreconf, libgtk2.0-dev (>= 2.24),
  libglib2.0-dev, libstartup-notification0-dev, libdbus-1-dev, 
  libgdk-pixbuf2.0-dev, libudev-dev, hicolor-icon-theme, libgtk-3-dev
 Standards-Version: 3.9.6
-Homepage: https://github.com/BwackNinja/spacefm
+Homepage: http://ignorantguru.github.io/spacefm/
 Vcs-Git: git://github.com/mati75/spacefm.git
 Vcs-Browser: https://github.com/mati75/spacefm.git
 

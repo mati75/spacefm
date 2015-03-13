@@ -1,7 +1,6 @@
-spacefm (0.9.4+git20141001-1) UNRELEASED; urgency=medium
+spacefm (0.9.9+git20150313.ad8c8f8ce6-1) UNRELEASED; urgency=medium
 
-  * Contrib spacefm fork by BwackNinja, upstream author abandoned sources:
-    https://igurublog.wordpress.com/2015/02/17/updated-info-on-spacefm/
+  * Merged latest snapshot from upstream git "hand" branch.
   * debian/control:
     + Update homepage.
   * Remove 0001-fix-issue-468.patch -- included upstream.
