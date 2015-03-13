@@ -423,11 +423,27 @@ static void on_response( GtkDialog* dlg, int response, FMPrefDlg* user_data )
              show_wallpaper != app_settings.show_wallpaper ||
              ( g_strcmp0( wallpaper, app_settings.wallpaper ) ) )
         {
+            gboolean was_transparent = app_settings.show_wallpaper == 1 &&
+                            app_settings.wallpaper_mode == WPM_TRANSPARENT;
+            gboolean is_transparent = show_wallpaper == 1 &&
+                            wallpaper_mode == WPM_TRANSPARENT;
             app_settings.wallpaper_mode = wallpaper_mode;
             app_settings.show_wallpaper = show_wallpaper;
             g_free( app_settings.wallpaper );
             app_settings.wallpaper = wallpaper;
-            fm_desktop_update_wallpaper();
+            fm_desktop_update_wallpaper( !was_transparent != !is_transparent );
+            if ( is_transparent && !was_transparent &&
+                                                !xset_get_b( "desk_pref" ) )
+            {
+                xset_msg_dialog( GTK_WIDGET( dlg ), 0, _("Transparency Requirements"),
+                        NULL, 0, _("General Note: For desktop transparency to "
+                        "work, you need to be running a compositing window "
+                        "manager or separate compositor like compton or xcompmgr. "
+                        "You can then use use nitrogen or xwinwrap to set wallpaper "
+                        "on the background.\n\n"
+                        "This message will not repeat."), NULL, NULL );
+                xset_set_b( "desk_pref", TRUE );
+            }
         }
 
         //font
@@ -860,11 +876,21 @@ void on_show_thumbnail_toggled( GtkWidget* widget, FMPrefDlg* data )
                     GTK_TOGGLE_BUTTON( data->show_thumbnail ) ) );
 }
 
+void on_wallpaper_mode_changed( GtkComboBox *combobox, FMPrefDlg* data )
+{
+    gint active = gtk_combo_box_get_active(
+                                        (GtkComboBox*)data->wallpaper_mode );
+    gtk_widget_set_sensitive( data->wallpaper, active != WPM_TRANSPARENT );
+}
+
 void on_wallpaper_toggled( GtkToggleButton* show_wallpaper, FMPrefDlg* data )
 {
-    gboolean active = gtk_toggle_button_get_active( show_wallpaper );
-    gtk_widget_set_sensitive( GTK_WIDGET( data->wallpaper ), active );
-    gtk_widget_set_sensitive( GTK_WIDGET( data->wallpaper_mode ), active );
+    gboolean enabled = gtk_toggle_button_get_active( show_wallpaper );
+    gint active = gtk_combo_box_get_active(
+                                        (GtkComboBox*)data->wallpaper_mode );
+    gtk_widget_set_sensitive( GTK_WIDGET( data->wallpaper ), enabled &&
+                                          active != WPM_TRANSPARENT );
+    gtk_widget_set_sensitive( GTK_WIDGET( data->wallpaper_mode ), enabled );
 }
 
 gboolean fm_edit_preference( GtkWindow* parent, int page )
@@ -1118,6 +1144,8 @@ gboolean fm_edit_preference( GtkWindow* parent, int page )
             gtk_file_chooser_set_filename( GTK_FILE_CHOOSER( data->wallpaper ),
                                            app_settings.wallpaper );
         }
+        g_signal_connect( data->wallpaper_mode, "changed",
+                                G_CALLBACK( on_wallpaper_mode_changed ), data );
         gtk_combo_box_set_active( (GtkComboBox*)data->wallpaper_mode,
                                                 app_settings.wallpaper_mode );
         
@@ -1296,6 +1324,19 @@ gboolean fm_edit_preference( GtkWindow* parent, int page )
         g_object_unref( builder );
     }
 
+    // Set current Preferences page
+    const int desktop_page_num = 2;
+#ifndef DESKTOP_INTEGRATION
+    // hide the Desktop tab if no desktop integration at build time
+    gtk_widget_hide( gtk_notebook_get_nth_page(
+                                           (GtkNotebook*)data->notebook,
+                                            desktop_page_num ) );
+    if ( page >= desktop_page_num )
+        page++;
+#endif
+    // notebook page number 3 is permanently hidden Volume Management
+    if ( page > desktop_page_num )
+        page++;
     gtk_notebook_set_current_page( (GtkNotebook*)data->notebook, page );
 
     gtk_window_present( (GtkWindow*)data->dlg );
