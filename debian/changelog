@@ -1,4 +1,4 @@
-spacefm (0.9.9+git20150313.ad8c8f8ce6-1) UNRELEASED; urgency=medium
+spacefm (0.9.9+git20150313.ad8c8f8ce6-1) experimental; urgency=medium
 
   * Merged latest snapshot from upstream git "hand" branch.
   * debian/control:
@@ -10,8 +10,10 @@ spacefm (0.9.9+git20150313.ad8c8f8ce6-1) UNRELEASED; urgency=medium
     + remove unused override.
   * Add debian/source/lintian-overrides for
     debian-watch-may-check-gpg-signature.
+  * debian/rules: Drop obsolete override_dh_builddeb.
+  * Remove debian/source/options -- no longer needed.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 02 Oct 2014 09:12:57 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 13 Mar 2015 19:28:34 +0100
 
 spacefm (0.9.4+git20140406-1) experimental; urgency=medium
 

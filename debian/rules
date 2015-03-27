@@ -26,9 +26,6 @@ override_dh_auto_install: $(FLAVORS:%=doinstall-%)
 doinstall-%:
 	dh_auto_install --builddirectory=debian/build-$* --destdir=debian/tmp/$*
 
-override_dh_builddeb:
-	dh_builddeb -- -Zxz -z9
-
 override_dh_install:
 	find debian/tmp -name \*.la -delete
 	sh debian/clean_gtk3.sh
