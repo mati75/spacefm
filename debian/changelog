@@ -1,6 +1,6 @@
-spacefm (0.9.9+git20150313.ad8c8f8ce6-1) experimental; urgency=medium
+spacefm (1.0.0-1) UNRELEASED; urgency=medium
 
-  * Merged latest snapshot from upstream git "hand" branch.
+  * New upstream release.
   * debian/control:
     + Update homepage.
     + Add libffmpegthumbnailer-dev to build depends.
