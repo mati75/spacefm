@@ -1,2 +1,3 @@
 version=3
-http://githubredir.debian.net/github/IgnorantGuru/spacefm/(.*).tar.gz
+opts=filenamemangle=s/.+\/v?(\d\S*)\.tar\.gz/spacefm-$1\.tar\.gz/ \
+  https://github.com/IgnorantGuru/spacefm/tags .*/v?(\d\S*)\.tar\.gz
