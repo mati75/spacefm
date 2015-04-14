@@ -5,14 +5,15 @@
 # Translators:
 # fri, 2013-2014
 # Jiří Vírava <appukonrad@gmail.com>, 2013
+# fri, 2015
 # Radek <radek@fastlinux.eu>, 2008
 msgid ""
 msgstr ""
 "Project-Id-Version: spacefm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-07 17:17+0000\n"
-"PO-Revision-Date: 2015-03-08 10:33+0000\n"
-"Last-Translator: IgnorantGuru <ignorantguru@gmx.com>\n"
+"POT-Creation-Date: 2015-04-08 20:47+0000\n"
+"PO-Revision-Date: 2015-04-12 10:16+0000\n"
+"Last-Translator: fri\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/spacefm/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -53,12 +54,12 @@ msgid "by IgnorantGuru"
 msgstr "Od  IgnorantGuru"
 
 #: ../data/ui/about-dlg.ui.h:2
-msgid "Copyright (C) 2014    GPL3+"
-msgstr "Autorské právo (C) 2014    GPL3+"
+msgid "Copyright (C) 2015    GPL3+"
+msgstr "Autorské právo (C) 2015 GPL3+"
 
 #: ../data/ui/about-dlg.ui.h:3
 msgid ""
-"SpaceFM - Copyright (C) 2014   GPL3+\n"
+"SpaceFM - Copyright (C) 2015   GPL3+\n"
 "\n"
 "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.\n"
 "\n"
@@ -67,7 +68,7 @@ msgid ""
 "The 'exo' libraries and source code used by this software are licensed under the GNU General Public License and the GNU Lesser General Public License version 3 (LGPL3).\n"
 "\n"
 "You should have received a copy of the GNU General Public License and the GNU Lesser General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
-msgstr "SpaceFM - Autorské právo (C) 2014   GPL3+\n\nTento program je svobodným softwarem; můžete jej rozdávat a/nebo upravovat za podmínek GNU General Public License (GPL), jak jsou zveřejněny Free Software Foundation; buď ve verzi 3 licence, nebo (podle své volby) v kterékoli pozdější verzi.\n\nPOUŽÍVEJTE NA VLASTNÍ NEBEZPEČÍ. Tento program je šířen v naději, že bude užitečný, ale BEZ JAKÉKOLI ZÁRUKY; také bez předpokládané záruky PRODEJNOSTI nebo POUŽITELNOSTI PRO NĚJAKÝ URČITÝ ÚČEL: Více podrobností naleznete v GNU Library General Public License.\n\nKnihovny 'exo' a zdrojový kód používaný tímto software jsou licencovýny pod GNU General Public License a GNU Lesser General Public License verze 3 (LGPL3).\n\nKopii GNU Library General Public License byste měl obdržet společně s tímto balíkem; a pokud ne, napište Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA."
+msgstr ""
 
 #: ../data/ui/about-dlg.ui.h:12
 msgid ""
@@ -137,7 +138,7 @@ msgstr "_Všechny programy"
 msgid "_Command:"
 msgstr "_Příkaz:"
 
-#: ../data/ui/appchooserdlg.ui.h:7 ../src/settings.c:10380
+#: ../data/ui/appchooserdlg.ui.h:7 ../src/settings.c:10396
 #: ../src/ptk/ptk-file-misc.c:2131 ../src/item-prop.c:1647
 msgid "_Browse"
 msgstr "_Procházet"
@@ -194,7 +195,7 @@ msgstr "<b>Změněno:</b>"
 msgid "<b>_Accessed:</b>"
 msgstr "<b>Poslední _přistup:</b>"
 
-#: ../data/ui/file_properties.ui.h:12 ../src/settings.c:11201
+#: ../data/ui/file_properties.ui.h:12 ../src/settings.c:11218
 msgid "_Info"
 msgstr "_Informace"
 
@@ -246,7 +247,7 @@ msgstr "Sticky"
 msgid "Recursive (apply changes to folders and their contents)"
 msgstr "Použít změny na složky a jejich podsložky"
 
-#: ../data/ui/file_properties.ui.h:25 ../src/settings.c:11204
+#: ../data/ui/file_properties.ui.h:25 ../src/settings.c:11221
 msgid "_Permissions"
 msgstr "_Oprávnění"
 
@@ -255,7 +256,7 @@ msgid "Bytes"
 msgstr "Bytů"
 
 #: ../data/ui/find-files.ui.h:2 ../data/ui/find-files2.ui.h:2
-#: ../data/ui/prefdlg.ui.h:22 ../data/ui/prefdlg2.ui.h:22
+#: ../data/ui/prefdlg.ui.h:23 ../data/ui/prefdlg2.ui.h:23
 msgid "KB"
 msgstr "KB"
 
@@ -296,7 +297,7 @@ msgid "Find Files"
 msgstr "Najít soubory"
 
 #: ../data/ui/find-files.ui.h:12 ../data/ui/find-files2.ui.h:12
-#: ../src/ptk/ptk-file-task.c:2406
+#: ../src/ptk/ptk-file-task.c:2413
 msgid "<b>Filename:</b>"
 msgstr "<b>Název souboru:</b>"
 
@@ -421,214 +422,218 @@ msgid "Zoom"
 msgstr "Zvětšení"
 
 #: ../data/ui/prefdlg.ui.h:8 ../data/ui/prefdlg2.ui.h:8
+msgid "Transparent"
+msgstr "Průhledný"
+
+#: ../data/ui/prefdlg.ui.h:9 ../data/ui/prefdlg2.ui.h:9
 msgid "Automatic"
 msgstr "Automaticky"
 
-#: ../data/ui/prefdlg.ui.h:9 ../data/ui/prefdlg2.ui.h:9
+#: ../data/ui/prefdlg.ui.h:10 ../data/ui/prefdlg2.ui.h:10
 msgid "Copy (Ctrl+Drag)"
 msgstr "Kopírovat (Ctrl+tažení doleva)"
 
-#: ../data/ui/prefdlg.ui.h:10 ../data/ui/prefdlg2.ui.h:10
+#: ../data/ui/prefdlg.ui.h:11 ../data/ui/prefdlg2.ui.h:11
 msgid "Move (Shift+Drag)"
 msgstr "Přesunout (Shift+tažení)"
 
-#: ../data/ui/prefdlg.ui.h:11 ../data/ui/prefdlg2.ui.h:11
+#: ../data/ui/prefdlg.ui.h:12 ../data/ui/prefdlg2.ui.h:12
 msgid "Link (Ctrl+Shift+Drag)"
 msgstr "Spojit (Ctrl+Shift+tažení)"
 
-#: ../data/ui/prefdlg.ui.h:12 ../data/ui/prefdlg2.ui.h:12
+#: ../data/ui/prefdlg.ui.h:13 ../data/ui/prefdlg2.ui.h:13
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: ../data/ui/prefdlg.ui.h:13 ../data/ui/prefdlg2.ui.h:13
+#: ../data/ui/prefdlg.ui.h:14 ../data/ui/prefdlg2.ui.h:14
 msgid "Small Icons:"
 msgstr "Malé ikony"
 
-#: ../data/ui/prefdlg.ui.h:14 ../data/ui/prefdlg2.ui.h:14
+#: ../data/ui/prefdlg.ui.h:15 ../data/ui/prefdlg2.ui.h:15
 msgid "Large Icons:"
 msgstr "Velké ikony"
 
-#: ../data/ui/prefdlg.ui.h:15 ../data/ui/prefdlg2.ui.h:15
+#: ../data/ui/prefdlg.ui.h:16 ../data/ui/prefdlg2.ui.h:16
 msgid "Toolbar Icons:"
 msgstr "Ikony v nástrojovém pruhu:"
 
-#: ../data/ui/prefdlg.ui.h:16 ../data/ui/prefdlg2.ui.h:16
+#: ../data/ui/prefdlg.ui.h:17 ../data/ui/prefdlg2.ui.h:17
 msgid "<b>Icons</b>"
 msgstr "<b>Ikony</b>"
 
-#: ../data/ui/prefdlg.ui.h:17 ../data/ui/prefdlg2.ui.h:17
+#: ../data/ui/prefdlg.ui.h:18 ../data/ui/prefdlg2.ui.h:18
 msgid "Single click opens files"
 msgstr "Otevírat soubory jedním klepnutím"
 
-#: ../data/ui/prefdlg.ui.h:18 ../data/ui/prefdlg2.ui.h:18
+#: ../data/ui/prefdlg.ui.h:19 ../data/ui/prefdlg2.ui.h:19
 msgid "Hover selects"
 msgstr "Přejetím se vybere"
 
-#: ../data/ui/prefdlg.ui.h:19 ../data/ui/prefdlg2.ui.h:19
+#: ../data/ui/prefdlg.ui.h:20 ../data/ui/prefdlg2.ui.h:20
 msgid "Bookmarks:"
 msgstr "Záložky:"
 
-#: ../data/ui/prefdlg.ui.h:20 ../data/ui/prefdlg2.ui.h:20
+#: ../data/ui/prefdlg.ui.h:21 ../data/ui/prefdlg2.ui.h:21
 msgid "Show Thumbnails"
 msgstr "Ukázat náhledy"
 
-#: ../data/ui/prefdlg.ui.h:21 ../data/ui/prefdlg2.ui.h:21
+#: ../data/ui/prefdlg.ui.h:22 ../data/ui/prefdlg2.ui.h:22
 msgid "Max Pic Size To Thumbnail:"
 msgstr "Největší velikost obrázku náhledu:"
 
-#: ../data/ui/prefdlg.ui.h:23 ../data/ui/prefdlg2.ui.h:23
+#: ../data/ui/prefdlg.ui.h:24 ../data/ui/prefdlg2.ui.h:24
 msgid "<b>File List</b>"
 msgstr "<b>Seznam souborů</b>"
 
-#: ../data/ui/prefdlg.ui.h:24 ../data/ui/prefdlg2.ui.h:24
+#: ../data/ui/prefdlg.ui.h:25 ../data/ui/prefdlg2.ui.h:25
 msgid "_General"
 msgstr "_Hlavní"
 
-#: ../data/ui/prefdlg.ui.h:25 ../data/ui/prefdlg2.ui.h:25
+#: ../data/ui/prefdlg.ui.h:26 ../data/ui/prefdlg2.ui.h:26
 msgid "Always show the tab bar"
 msgstr "Vždy ukazovat pruh s kartami"
 
-#: ../data/ui/prefdlg.ui.h:26 ../data/ui/prefdlg2.ui.h:26
+#: ../data/ui/prefdlg.ui.h:27 ../data/ui/prefdlg2.ui.h:27
 msgid "Hide 'Close Tab' buttons"
 msgstr "Skrýt tlačítka Zavřít kartu"
 
-#: ../data/ui/prefdlg.ui.h:27 ../data/ui/prefdlg2.ui.h:27
+#: ../data/ui/prefdlg.ui.h:28 ../data/ui/prefdlg2.ui.h:28
 msgid "Confirm delete/remove"
 msgstr "Potvrdit smazání/odstranění"
 
-#: ../data/ui/prefdlg.ui.h:28 ../data/ui/prefdlg2.ui.h:28
+#: ../data/ui/prefdlg.ui.h:29 ../data/ui/prefdlg2.ui.h:29
 msgid "Click runs executables"
 msgstr "Klepnutí spustí spustitelné soubory"
 
-#: ../data/ui/prefdlg.ui.h:29 ../data/ui/prefdlg2.ui.h:29
+#: ../data/ui/prefdlg.ui.h:30 ../data/ui/prefdlg2.ui.h:30
 msgid "SI File Sizes (1K = 1000) (requires restart)"
 msgstr "SI velikosti souborů (1K = 1000) (vyžaduje opětovné spuštění)"
 
-#: ../data/ui/prefdlg.ui.h:30 ../data/ui/prefdlg2.ui.h:30
+#: ../data/ui/prefdlg.ui.h:31 ../data/ui/prefdlg2.ui.h:31
 msgid "Show root user indicator color"
 msgstr "Ukázat barvu ukazatele uživatele s právy superuživatele"
 
-#: ../data/ui/prefdlg.ui.h:31 ../data/ui/prefdlg2.ui.h:31
+#: ../data/ui/prefdlg.ui.h:32 ../data/ui/prefdlg2.ui.h:32
 msgid "Default Drag Action:"
 msgstr "Výchozí činnost tažení:"
 
-#: ../data/ui/prefdlg.ui.h:32 ../data/ui/prefdlg2.ui.h:32
+#: ../data/ui/prefdlg.ui.h:33 ../data/ui/prefdlg2.ui.h:33
 msgid "I_nterface"
 msgstr "_Rozhraní"
 
-#: ../data/ui/prefdlg.ui.h:33 ../data/ui/prefdlg2.ui.h:33
+#: ../data/ui/prefdlg.ui.h:34 ../data/ui/prefdlg2.ui.h:34
 msgid "Wallpaper:"
 msgstr "Pozadí:"
 
-#: ../data/ui/prefdlg.ui.h:34 ../data/ui/prefdlg2.ui.h:34
+#: ../data/ui/prefdlg.ui.h:35 ../data/ui/prefdlg2.ui.h:35
 msgid "Please select an image file"
 msgstr "Prosím vyberte obrázek"
 
-#: ../data/ui/prefdlg.ui.h:35 ../data/ui/prefdlg2.ui.h:35
+#: ../data/ui/prefdlg.ui.h:36 ../data/ui/prefdlg2.ui.h:36
 msgid "Mode:"
 msgstr "Mód:"
 
-#: ../data/ui/prefdlg.ui.h:36 ../data/ui/prefdlg2.ui.h:36
+#: ../data/ui/prefdlg.ui.h:37 ../data/ui/prefdlg2.ui.h:37
 msgid "Background:"
 msgstr "Pozadí:"
 
-#: ../data/ui/prefdlg.ui.h:37 ../data/ui/prefdlg2.ui.h:37
+#: ../data/ui/prefdlg.ui.h:38 ../data/ui/prefdlg2.ui.h:38
 msgid "Text:"
 msgstr "Text:"
 
-#: ../data/ui/prefdlg.ui.h:38 ../data/ui/prefdlg2.ui.h:38
+#: ../data/ui/prefdlg.ui.h:39 ../data/ui/prefdlg2.ui.h:39
 msgid "Shadow:"
 msgstr "Stín:"
 
-#: ../data/ui/prefdlg.ui.h:39 ../data/ui/prefdlg2.ui.h:39
+#: ../data/ui/prefdlg.ui.h:40 ../data/ui/prefdlg2.ui.h:40
 msgid "Font:"
 msgstr "Písmo:"
 
-#: ../data/ui/prefdlg.ui.h:40 ../data/ui/prefdlg2.ui.h:40
+#: ../data/ui/prefdlg.ui.h:41 ../data/ui/prefdlg2.ui.h:41
 msgid "Top:"
 msgstr "Nahoře:"
 
-#: ../data/ui/prefdlg.ui.h:41 ../data/ui/prefdlg2.ui.h:41
+#: ../data/ui/prefdlg.ui.h:42 ../data/ui/prefdlg2.ui.h:42
 msgid "Left:"
 msgstr "Vlevo:"
 
-#: ../data/ui/prefdlg.ui.h:42 ../data/ui/prefdlg2.ui.h:42
+#: ../data/ui/prefdlg.ui.h:43 ../data/ui/prefdlg2.ui.h:43
 msgid "Right:"
 msgstr "Vpravo:"
 
-#: ../data/ui/prefdlg.ui.h:43 ../data/ui/prefdlg2.ui.h:43
+#: ../data/ui/prefdlg.ui.h:44 ../data/ui/prefdlg2.ui.h:44
 msgid "Bottom:"
 msgstr "Dole:"
 
-#: ../data/ui/prefdlg.ui.h:44 ../data/ui/prefdlg2.ui.h:44
+#: ../data/ui/prefdlg.ui.h:45 ../data/ui/prefdlg2.ui.h:45
 msgid "Pad:"
 msgstr "Výplň:"
 
-#: ../data/ui/prefdlg.ui.h:45 ../data/ui/prefdlg2.ui.h:45
+#: ../data/ui/prefdlg.ui.h:46 ../data/ui/prefdlg2.ui.h:46
 msgid "<b>Margins</b>"
 msgstr "<b>Okraje</b>"
 
-#: ../data/ui/prefdlg.ui.h:46 ../data/ui/prefdlg2.ui.h:46
+#: ../data/ui/prefdlg.ui.h:47 ../data/ui/prefdlg2.ui.h:47
 msgid "Right click shows WM menu"
 msgstr "Klepnutí pravým tlačítkem myši ukáže nabídku"
 
-#: ../data/ui/prefdlg.ui.h:47 ../data/ui/prefdlg2.ui.h:47
+#: ../data/ui/prefdlg.ui.h:48 ../data/ui/prefdlg2.ui.h:48
 msgid "Open folders using associated MIME application"
 msgstr "Otevřít složky pomocí přiřazeného programu MIME"
 
-#: ../data/ui/prefdlg.ui.h:48 ../data/ui/prefdlg2.ui.h:48
+#: ../data/ui/prefdlg.ui.h:49 ../data/ui/prefdlg2.ui.h:49
 msgid "_Desktop"
 msgstr "_Pracovní plocha"
 
-#: ../data/ui/prefdlg.ui.h:49 ../data/ui/prefdlg2.ui.h:49
+#: ../data/ui/prefdlg.ui.h:50 ../data/ui/prefdlg2.ui.h:50
 msgid "_Volume Management"
 msgstr "_Správa svazků"
 
-#: ../data/ui/prefdlg.ui.h:50 ../data/ui/prefdlg2.ui.h:50
+#: ../data/ui/prefdlg.ui.h:51 ../data/ui/prefdlg2.ui.h:51
 msgid "Terminal:"
 msgstr "Terminál:"
 
-#: ../data/ui/prefdlg.ui.h:51 ../data/ui/prefdlg2.ui.h:51
+#: ../data/ui/prefdlg.ui.h:52 ../data/ui/prefdlg2.ui.h:52
 msgid "Terminal SU:"
 msgstr "Superuživatel - terminál:"
 
-#: ../data/ui/prefdlg.ui.h:52 ../data/ui/prefdlg2.ui.h:52
+#: ../data/ui/prefdlg.ui.h:53 ../data/ui/prefdlg2.ui.h:53
 msgid "Graphical SU:"
 msgstr "Superuživatel - grafické uživatelské rozhraní:"
 
-#: ../data/ui/prefdlg.ui.h:53 ../data/ui/prefdlg2.ui.h:53
+#: ../data/ui/prefdlg.ui.h:54 ../data/ui/prefdlg2.ui.h:54
 msgid "Filename Encoding:"
 msgstr "Kódování souborového názvu:"
 
-#: ../data/ui/prefdlg.ui.h:54 ../data/ui/prefdlg2.ui.h:54
+#: ../data/ui/prefdlg.ui.h:55 ../data/ui/prefdlg2.ui.h:55
 msgid "Editor:"
 msgstr "Editor:"
 
-#: ../data/ui/prefdlg.ui.h:55 ../data/ui/prefdlg2.ui.h:55
+#: ../data/ui/prefdlg.ui.h:56 ../data/ui/prefdlg2.ui.h:56
 msgid "Run editor in terminal"
 msgstr "Spustit editor v terminálu"
 
-#: ../data/ui/prefdlg.ui.h:56 ../data/ui/prefdlg2.ui.h:56
+#: ../data/ui/prefdlg.ui.h:57 ../data/ui/prefdlg2.ui.h:57
 msgid "Root's Editor:"
 msgstr "Editor superuživatele:"
 
-#: ../data/ui/prefdlg.ui.h:57 ../data/ui/prefdlg2.ui.h:57
+#: ../data/ui/prefdlg.ui.h:58 ../data/ui/prefdlg2.ui.h:58
 msgid "Run root's editor in terminal"
 msgstr "Spustit editor superuživatele v terminálu:"
 
-#: ../data/ui/prefdlg.ui.h:58 ../data/ui/prefdlg2.ui.h:58
+#: ../data/ui/prefdlg.ui.h:59 ../data/ui/prefdlg2.ui.h:59
 msgid "Date Format:"
 msgstr "Formát data:"
 
-#: ../data/ui/prefdlg.ui.h:59 ../data/ui/prefdlg2.ui.h:59
+#: ../data/ui/prefdlg.ui.h:60 ../data/ui/prefdlg2.ui.h:60
 msgid "(requires reload)"
 msgstr "(vyžaduje opětovné nahrání)"
 
-#: ../data/ui/prefdlg.ui.h:60 ../data/ui/prefdlg2.ui.h:60
+#: ../data/ui/prefdlg.ui.h:61 ../data/ui/prefdlg2.ui.h:61
 msgid "Date Display"
 msgstr "Zobrazení data"
 
-#: ../data/ui/prefdlg.ui.h:61 ../data/ui/prefdlg2.ui.h:61
+#: ../data/ui/prefdlg.ui.h:62 ../data/ui/prefdlg2.ui.h:62
 msgid "_Advanced"
 msgstr "_Pokročilé"
 
@@ -705,7 +710,7 @@ msgstr "Chyba při vytváření souboru %s: %s"
 msgid "pipe '%s' data is not valid UTF-8"
 msgstr "Řetěz příkazů '%s' neodpovídá normě UTF-8"
 
-#: ../src/cust-dialog.c:1790 ../src/ptk/ptk-file-task.c:1408
+#: ../src/cust-dialog.c:1790 ../src/ptk/ptk-file-task.c:1407
 msgid "[ SNIP - additional output above has been trimmed from this log ]\n"
 msgstr "[ SNIP - hořejší dodatečný výstup byl z tohoto převzat ve zlepšeném tvaru ]\n"
 
@@ -1072,528 +1077,532 @@ msgstr "Povolit prvek NAME, pokud byl předtím zakázán"
 msgid "Save files and write source output to FILE"
 msgstr "Uložit soubory a zapsat výstup zdroje do SOUBORU"
 
-#: ../src/main.c:130
+#: ../src/main.c:128
 msgid "Open folders in new tab of last window (default)"
 msgstr "Otevřít složky v nové kartě posledního okna (výchozí)"
 
-#: ../src/main.c:131
+#: ../src/main.c:129
 msgid "Open folder in current tab of last used window"
 msgstr "Otevřít složku v nynější kartě naposledy použitého okna"
 
-#: ../src/main.c:132
+#: ../src/main.c:130
 msgid "Don't load saved tabs"
 msgstr "Nenahrávat uložené karty"
 
-#: ../src/main.c:133
+#: ../src/main.c:131
 msgid "Open folders in new window"
 msgstr "Otevřít složky v novém okně"
 
-#: ../src/main.c:134
+#: ../src/main.c:132
 msgid "Open folders in panel 'P' (1-4)"
 msgstr "Otevřít složky v panelu 'P' (1-4)"
 
-#: ../src/main.c:135
+#: ../src/main.c:133
 msgid "Launch desktop manager daemon"
 msgstr "Spustit démona správce pracovní plochy"
 
-#: ../src/main.c:136
-msgid "Launch desktop manager daemon (transparent)"
-msgstr ""
-
-#: ../src/main.c:137
+#: ../src/main.c:134
 msgid "Show desktop settings"
 msgstr "Ukázat nastavení pracovní plochy"
 
-#: ../src/main.c:138
+#: ../src/main.c:135
 msgid "Show Preferences ('N' is the Pref tab number)"
 msgstr "Ukázat nastavení ('N' je počet karet pro nastavení)"
 
-#: ../src/main.c:139
+#: ../src/main.c:136
 msgid "Run as a daemon"
 msgstr "Spustit jako démona"
 
-#: ../src/main.c:140
+#: ../src/main.c:137
 msgid "Use DIR as configuration directory"
 msgstr "Použít adresář (DIR) jako adresáři s nastavením"
 
-#: ../src/main.c:141
+#: ../src/main.c:138
 msgid "Show File Search"
 msgstr "Ukázat hledání souboru"
 
-#: ../src/main.c:148
+#: ../src/main.c:145
 msgid "Set desktop wallpaper to FILE"
 msgstr "Nastavit pozadí plochy na SOUBOR"
 
-#: ../src/main.c:150
+#: ../src/main.c:147
 msgid "Show a custom dialog (See -g help)"
 msgstr "Ukázat uživatelsky stanovený dialog (Podívejte se na -g pro nápovědu)"
 
-#: ../src/main.c:151
+#: ../src/main.c:148
 msgid "Send a socket command (See -s help)"
 msgstr "Poslat příkaz socket (Podívejte se na -s pro nápovědu)"
 
-#: ../src/main.c:152 ../src/main.c:153
+#: ../src/main.c:149 ../src/main.c:150
 msgid "No function - for compatibility only"
 msgstr "Žádná funkce - přítomno jen z důvodu kompatibility"
 
-#: ../src/main.c:154
+#: ../src/main.c:151
 msgid "Show version information"
 msgstr "Ukázat informace o verzi"
 
-#: ../src/main.c:164
+#: ../src/main.c:161
 msgid "[DIR | FILE | URL]..."
 msgstr "[DIR | SOUBOR | URL]..."
 
-#: ../src/main.c:472
+#: ../src/main.c:464
 msgid "Option --config-dir ignored - an instance is already running"
 msgstr "Volba --config-dir se přehlíží - Část programu již běží"
 
-#: ../src/main.c:484
+#: ../src/main.c:476
 msgid "Option --config-dir contains invalid chars - cannot start"
 msgstr "Volba --config-dir obsahuje neplatné znaky - Nelze spustit"
 
-#: ../src/main.c:608
+#: ../src/main.c:600
 #, c-format
 msgid "spacefm: --socket-cmd requires an argument\n"
 msgstr "spacefm: --socket-cmd vyžaduje argument\n"
 
-#: ../src/main.c:615
+#: ../src/main.c:607
 #, c-format
 msgid "spacefm: could not create socket\n"
 msgstr "spacefm: Nepodařilo se vytvořit socket\n"
 
-#: ../src/main.c:630
+#: ../src/main.c:622
 #, c-format
 msgid ""
 "spacefm: could not connect to socket (not running? or DISPLAY not set?)\n"
 msgstr "spacefm : Nepodařilo se spojit se se socketem (neběží? nebo DISPLAY není nastaveno?)\n"
 
-#: ../src/main.c:673
+#: ../src/main.c:665
 #, c-format
 msgid "spacefm: invalid response from socket\n"
 msgstr "spacefm: Neplatná odpověď od socketu 's'\n"
 
 #. TRANSLATOR:  These three lines should be limited to 80 chars each
-#: ../src/main.c:683
+#: ../src/main.c:675
 msgid ""
 "SpaceFM socket commands permit external processes (such as command scripts)\n"
 "to read and set GUI property values and execute methods inside running SpaceFM\n"
 "windows.  To handle events see View|Events in the main menu bar."
 msgstr "Příkazy SpaceFM pro patici (socket) dovolují vnější procesy (jako příkazové skripty) das\nLesen a nastavení hodnot vlastností GUI a provádění metod v\notevřených oknech SpaceFM. Na to jak zacházet s událostmi se podívejte přes hlavní nabídku: Pohled|Události"
 
-#: ../src/main.c:685
+#: ../src/main.c:677
 msgid "Usage:"
 msgstr "Použití:"
 
-#: ../src/main.c:687
+#: ../src/main.c:679
 msgid "Example:"
 msgstr "Příklad:"
 
-#: ../src/main.c:690
+#: ../src/main.c:682
 msgid ""
 "METHODS\n"
 "-------"
 msgstr "METODY\n-------"
 
-#: ../src/main.c:692
+#: ../src/main.c:684
 msgid "Sets a property"
 msgstr "Nastaví vlastnost"
 
-#: ../src/main.c:695
+#: ../src/main.c:687
 msgid "Gets a property"
 msgstr "Načte vlastnost"
 
-#: ../src/main.c:698
+#: ../src/main.c:690
 msgid "Sets a task property"
 msgstr "Nastaví vlastnost úkolu"
 
-#: ../src/main.c:701
+#: ../src/main.c:693
 msgid "Gets a task property"
 msgstr "Načte vlastnost úkolu"
 
-#: ../src/main.c:704
+#: ../src/main.c:696
 msgid "Starts a new task"
 msgstr "Začne nový úkol"
 
-#: ../src/main.c:707
+#: ../src/main.c:699
 msgid "Activates a menu item by emitting its shortcut key"
 msgstr "Zapne položku nabídky odevzdáním její klávesové zkratky"
 
-#: ../src/main.c:710
+#: ../src/main.c:702
 msgid "Shows custom submenu named MENUNAME as a popup menu"
 msgstr "Ukáže uživatelsky stanovenou podnabídku NÁZEVNABÍDKY jako rozbalovací nabídku"
 
-#: ../src/main.c:713
+#: ../src/main.c:705
 msgid "Add asynchronous handler COMMAND to EVENT"
 msgstr "Přidat asynchronní část programu PŘÍKAZ k UDÁLOSTI"
 
-#: ../src/main.c:716
+#: ../src/main.c:708
 msgid "Add synchronous handler COMMAND to EVENT, replacing default handler"
 msgstr "Přidat synchronní část programu PŘÍKAZ k UDÁLOSTI. Nahradí přednastavený příkaz"
 
-#: ../src/main.c:719
+#: ../src/main.c:711
 msgid "Remove handler COMMAND from EVENT"
 msgstr "Odstranit část programu PŘÍKAZ z UDÁLOSTI"
 
-#: ../src/main.c:722
+#: ../src/main.c:714
 msgid "Shows this help reference.  (Also see manual link below.)"
 msgstr "Ukáže tento odkaz na nápovědu. (Podívejte se i na odkaz na příručku níže.)"
 
-#: ../src/main.c:724
+#: ../src/main.c:716
 msgid ""
 "OPTIONS\n"
 "-------"
 msgstr "VOLBY\n-------"
 
-#: ../src/main.c:725
+#: ../src/main.c:717
 msgid ""
 "Add options after METHOD to specify a specific window, panel, and/or tab."
 msgstr "Přidat volby po provedení METODY k stanovení určitého okna, panelu a/nebo karty."
 
-#: ../src/main.c:726
+#: ../src/main.c:718
 msgid ""
 "Otherwise the current tab of the current panel in the last window is used."
 msgstr "Jinak se použije nynější karta nynějšího panelu posledního okna"
 
-#: ../src/main.c:729
+#: ../src/main.c:721
 msgid "Specify window.  eg:"
 msgstr "Stanovit okno. Např.:"
 
-#: ../src/main.c:731
+#: ../src/main.c:723
 msgid "Specify panel 1-4.  eg:"
 msgstr "Stanovit panel 1-4. Např.:"
 
-#: ../src/main.c:733
+#: ../src/main.c:725
 msgid "Specify tab 1-...  eg:"
 msgstr "Stanovit kartu 1-. Např.:"
 
-#: ../src/main.c:735
+#: ../src/main.c:727
 msgid ""
 "PROPERTIES\n"
 "----------"
 msgstr "VLASTNOSTI\n----------"
 
-#: ../src/main.c:736
+#: ../src/main.c:728
 msgid "Set properties with METHOD 'set', or get the value with 'get'."
 msgstr "Nastavit vlastnosti METODOU 'set', nebo dostat hodnotu pomocí 'get'."
 
-#: ../src/main.c:738
+#: ../src/main.c:730
 msgid "eg '800x600'"
 msgstr "Např. '800x600'"
 
-#: ../src/main.c:739
+#: ../src/main.c:731
 msgid "eg '100x50'"
 msgstr "Např. '100x50'"
 
-#: ../src/main.c:742
+#: ../src/main.c:734
 msgid "eg '1024x768'  (read-only)"
 msgstr "Např. '1024x768' (jen pro čtení)"
 
-#: ../src/main.c:743 ../src/main.c:744 ../src/main.c:745 ../src/main.c:746
-#: ../src/main.c:762 ../src/main.c:763 ../src/main.c:764
+#: ../src/main.c:735 ../src/main.c:736 ../src/main.c:737 ../src/main.c:738
+#: ../src/main.c:754 ../src/main.c:755 ../src/main.c:756
 msgid "eg '100'"
 msgstr "Např. '100'"
 
-#: ../src/main.c:751
+#: ../src/main.c:743
 msgid "Open DIR or default in a new tab"
 msgstr "Otevřít DIR nebo přednastavenou složku v nové kartě"
 
-#: ../src/main.c:772
+#: ../src/main.c:765
 msgid "eg 'Current Status: Example'"
 msgstr "Např. 'Nynější stav: Příklad'"
 
-#: ../src/main.c:774
+#: ../src/main.c:767
 msgid "DIR            eg '/etc'"
 msgstr "DIR            Např. '/etc'"
 
-#: ../src/main.c:775
+#: ../src/main.c:768
 msgid "[FILENAME...]"
 msgstr "[NÁZEV SOUBORU...]"
 
-#: ../src/main.c:776
+#: ../src/main.c:769
 msgid "[PATTERN]      eg '*.jpg'"
 msgstr "[VZOR]      např '*.jpg'"
 
-#: ../src/main.c:777 ../src/main.c:778
+#: ../src/main.c:770 ../src/main.c:771
 msgid "eg 'Some\\nlines\\nof text'"
 msgstr "Např. 'nějaké\\nřádky\\ntextu'"
 
-#: ../src/main.c:779 ../src/main.c:780
+#: ../src/main.c:772 ../src/main.c:773
 msgid "eg '~/copy-file-contents-to-clipboard.txt'"
 msgstr "Např. '~/Kopírovat-obsah-souboru-do-schránky.txt'"
 
-#: ../src/main.c:781
+#: ../src/main.c:774
 msgid "FILE...  Files copied to clipboard"
 msgstr "SOUBOR...  Soubory zkopírovány do schránky"
 
-#: ../src/main.c:782
+#: ../src/main.c:775
 msgid "FILE...  Files cut to clipboard"
 msgstr "SOUBOR...  Soubory přesunuty do schránky"
 
-#: ../src/main.c:784
+#: ../src/main.c:777
 msgid ""
 "TASK PROPERTIES\n"
 "---------------"
 msgstr "VLASTNOSTI ÚKOLU\n---------------"
 
-#: ../src/main.c:785
+#: ../src/main.c:778
 msgid "contents of Status task column  (read-only)"
 msgstr "Obsah sloupce s úkoly Stav (pouze pro čtení)"
 
-#: ../src/main.c:786
+#: ../src/main.c:779
 msgid "eg 'gtk-open'"
 msgstr "Např. 'gtk-open'"
 
-#: ../src/main.c:787
+#: ../src/main.c:780
 msgid "text to show in Count task column"
 msgstr "Text k ukázání ve sloupci s úkoly Počet"
 
-#: ../src/main.c:788
+#: ../src/main.c:781
 msgid "text to show in Folder task column"
 msgstr "Text k ukázání ve sloupci s úkoly Složka"
 
-#: ../src/main.c:789
+#: ../src/main.c:782
 msgid "text to show in Item task column"
 msgstr "Text k ukázání ve sloupci s úkoly Položka"
 
-#: ../src/main.c:790
+#: ../src/main.c:783
 msgid "text to show in To task column"
 msgstr "Text k ukázání ve sloupci s úkoly Do"
 
-#: ../src/main.c:791
+#: ../src/main.c:784
 msgid "progress percent (1..100) or '' to pulse"
 msgstr "Postup v procentech (1..100) nebo \" pro tepající"
 
-#: ../src/main.c:792
+#: ../src/main.c:785
 msgid "text to show in Total task column"
 msgstr "Text k ukázání ve sloupci s úkoly Celkem"
 
-#: ../src/main.c:793
+#: ../src/main.c:786
 msgid "text to show in Current task column"
 msgstr "Text k ukázání ve sloupci s úkoly Nynější"
 
-#: ../src/main.c:794
+#: ../src/main.c:787
 msgid "text to show in CRemain task column"
 msgstr "Text k ukázání ve sloupci s úkoly Nyní zbývá"
 
-#: ../src/main.c:795
+#: ../src/main.c:788
 msgid "text to show in Average task column"
 msgstr "Text k ukázání ve sloupci s úkoly Průměr"
 
-#: ../src/main.c:796
+#: ../src/main.c:789
 msgid "text to show in Remain task column"
 msgstr "Text k ukázání ve sloupci s úkoly Zbývá"
 
-#: ../src/main.c:797
+#: ../src/main.c:790
 msgid "contents of Elapsed task column (read-only)"
 msgstr "Obsah sloupce s úkoly Uplynulo (pouze pro čtení)"
 
-#: ../src/main.c:798
+#: ../src/main.c:791
 msgid "contents of Started task column (read-only)"
 msgstr "Obsah sloupce s úkoly Spuštěno (pouze pro čtení)"
 
-#: ../src/main.c:800
+#: ../src/main.c:793
 msgid "COMMAND  command to show a custom task dialog\n"
 msgstr "PŘÍKAZ  příkaz k ukázání uživatelsky stanoveného dialogu\n"
 
-#: ../src/main.c:802
+#: ../src/main.c:795
 msgid ""
 "TASK TYPES\n"
 "----------"
 msgstr "TYPY ÚKOLŮ\n----------"
 
-#: ../src/main.c:804
+#: ../src/main.c:797
 msgid "Run COMMAND in DIR"
 msgstr "Spustit PŘÍKAZ v ADRESÁŘI"
 
-#: ../src/main.c:806
+#: ../src/main.c:799
 msgid "Copy|Move|Link FILE(s) or DIR(s) to TARGET dir"
 msgstr "Kopírovat|Přesunout|Odkázat SOUBOR(Y) oder ADRESÁŘ(E) do CÍLOVÉHO adresáře/složky"
 
-#: ../src/main.c:807
+#: ../src/main.c:800
 msgid "Recursively delete FILE(s) or DIR(s)"
 msgstr "Smazat SOUBOR(Y) oder ADRESÁŘ(E) včetně podložek"
 
-#: ../src/main.c:808
+#: ../src/main.c:801
 msgid "Open FILE in user's or root's text editor"
 msgstr "Otevřít SOUBOR v textovém editoru superuživatele"
 
-#: ../src/main.c:809
+#: ../src/main.c:802
 msgid "Open URL in user's web browser"
 msgstr "Otevřít adresu (URL) v prohlížeči uživatele"
 
-#: ../src/main.c:811
+#: ../src/main.c:803
+msgid "Mount DEVICE or URL"
+msgstr "Připojit ZAŘÍZENÍ nebo ADRESU (URL)"
+
+#: ../src/main.c:804
+msgid "Unmount DEVICE or mount point DIR"
+msgstr "Odpojit ZAŘÍZENÍ nebo ADRESÁŘ přípojného bodu"
+
+#: ../src/main.c:806
 msgid ""
 "EVENTS\n"
 "------"
 msgstr "UDÁLOSTI\n------"
 
-#: ../src/main.c:812
+#: ../src/main.c:807
 #, c-format
 msgid "Instance start        %e"
 msgstr "Spustit instanci        %e"
 
-#: ../src/main.c:813
+#: ../src/main.c:808
 #, c-format
 msgid "Instance exit         %e"
 msgstr "Ukončit instanci          %e"
 
-#: ../src/main.c:814
+#: ../src/main.c:809
 msgid "Window new            %e %w %p %t"
 msgstr "Nové okno            %e %w %p %t"
 
-#: ../src/main.c:815
+#: ../src/main.c:810
 msgid "Window focus          %e %w %p %t"
 msgstr "Zaměřit okno          %e %w %p %t"
 
-#: ../src/main.c:816
+#: ../src/main.c:811
 msgid "Window move/resize    %e %w %p %t"
 msgstr "Přesunout okno/Změnit velikost okna    %e %w %p %t"
 
-#: ../src/main.c:817
+#: ../src/main.c:812
 msgid "Mouse click           %e %w %p %t %b %m %f"
 msgstr "Klepnutí myši           %e %w %p %t %b %m %f"
 
-#: ../src/main.c:818
+#: ../src/main.c:813
 msgid "Window keypress       %e %w %p %t %k %m"
 msgstr "Stisknout klávesu okna       %e %w %p %t %k %m"
 
-#: ../src/main.c:819
+#: ../src/main.c:814
 msgid "Window close          %e %w %p %t"
 msgstr "Zavřít okno          %e %w %p %t"
 
-#: ../src/main.c:820
+#: ../src/main.c:815
 msgid "Panel focus           %e %w %p %t"
 msgstr "Zaměřit panel           %e %w %p %t"
 
-#: ../src/main.c:821
+#: ../src/main.c:816
 msgid "Panel show/hide       %e %w %p %t %f %v"
 msgstr "Ukázat/Skrýt panel       %e %w %p %t %f %v"
 
-#: ../src/main.c:822
+#: ../src/main.c:817
 msgid "Selection changed     %e %w %p %t"
 msgstr "Výběr změněn     %e %w %p %t"
 
-#: ../src/main.c:823
+#: ../src/main.c:818
 msgid "Tab new               %e %w %p %t"
 msgstr "Nová karta               %e %w %p %t"
 
-#: ../src/main.c:824
+#: ../src/main.c:819
 msgid "Tab focus             %e %w %p %t"
 msgstr "Zaměřit kartu             %e %w %p %t"
 
-#: ../src/main.c:825
+#: ../src/main.c:820
 msgid "Tab close             %e %w %p %t"
 msgstr "Zavřít kartu             %e %w %p %t"
 
-#: ../src/main.c:826
+#: ../src/main.c:821
 msgid "Device change         %e %f %v"
 msgstr "Změnit zařízení         %e %f %v"
 
-#: ../src/main.c:828
+#: ../src/main.c:823
 msgid "Event COMMAND Substitution Variables:"
 msgstr "Nahrazovací proměnná pro událost PŘÍKAZ:"
 
-#: ../src/main.c:829
+#: ../src/main.c:824
 msgid "event type (evt_start|evt_exit|...)"
 msgstr "Typ události (spuštění|ukončení|...)"
 
-#: ../src/main.c:830
+#: ../src/main.c:825
 msgid "window ID"
 msgstr "ID okna"
 
-#: ../src/main.c:831
+#: ../src/main.c:826
 msgid "panel number (1-4)"
 msgstr "Číslo panelu (1-4)"
 
-#: ../src/main.c:832
+#: ../src/main.c:827
 msgid "tab number (1-...)"
 msgstr "Číslo karty (1-...)"
 
-#: ../src/main.c:833
+#: ../src/main.c:828
 msgid "mouse button (0=double 1=left 2=middle 3=right ...)"
 msgstr "Tlačítko myši (0=pravé+levé 1=levé 2=prostřední 3=pravé ...)"
 
-#: ../src/main.c:834
+#: ../src/main.c:829
 msgid "key code  (eg 0x63)"
 msgstr "Kód klávesy (např. 0x63)"
 
-#: ../src/main.c:835
+#: ../src/main.c:830
 msgid "modifier key (eg 0x4  used with clicks and keypresses)"
 msgstr "Klávesa modifikátoru (např. 0x4 dohromady s klepnutím nebo stisknutím klávesy)"
 
-#: ../src/main.c:836
+#: ../src/main.c:831
 msgid "focus element (panelN|filelist|devices|bookmarks|dirtree|pathbar)"
 msgstr "Prvek v zaměření (PanelN|Seznam souborů|Zařízení|Záložky|Adresářový strom|Pole s cestou)"
 
-#: ../src/main.c:837
+#: ../src/main.c:832
 msgid "focus element is visible (0 or 1, or device state change)"
 msgstr "Prvek v zaměření je viditelný (0 nebo 1, nebo změnit stav zařízení)"
 
-#: ../src/main.c:839
+#: ../src/main.c:834
 msgid "Examples"
 msgstr "Příklady"
 
-#: ../src/main.c:855
+#: ../src/main.c:850
 msgid "These files have been copied to the clipboard"
 msgstr "Tyto soubory byly zkopírovány do schránky"
 
-#: ../src/main.c:866
+#: ../src/main.c:861
 msgid "For full documentation and examples see the SpaceFM User's Manual:"
 msgstr "Úplná dokumentace a příklady jsou v uživatelské příručce k SpaceFM:"
 
-#: ../src/main.c:1167 ../src/main.c:1430
+#: ../src/main.c:1153 ../src/main.c:1416
 msgid "This build of SpaceFM has desktop integration disabled"
 msgstr "U této verze SpaceFM je integrace plochy vypnuta"
 
-#: ../src/main.c:1208
+#: ../src/main.c:1194
 #, c-format
 msgid ""
 "spacefm: Error: Unable to save session\n"
 "       %s\n"
 msgstr "spacefm: Chyba: Nelze uložit sezení\n       %s\n"
 
-#: ../src/main.c:1279
+#: ../src/main.c:1265
 msgid "File doesn't exist"
 msgstr "Soubor neexistuje"
 
-#: ../src/main.c:1281 ../src/main.c:1359 ../src/main.c:1361 ../src/main.c:1469
-#: ../src/main.c:1497 ../src/main.c:1499 ../src/main.c:1635
-#: ../src/settings.c:5085 ../src/settings.c:8404
-#: ../src/ptk/ptk-file-browser.c:2415 ../src/ptk/ptk-file-browser.c:2432
-#: ../src/ptk/ptk-file-browser.c:5980 ../src/ptk/ptk-file-browser.c:5987
+#: ../src/main.c:1267 ../src/main.c:1345 ../src/main.c:1347 ../src/main.c:1455
+#: ../src/main.c:1483 ../src/main.c:1485 ../src/main.c:1621
+#: ../src/settings.c:5101 ../src/settings.c:8420
+#: ../src/ptk/ptk-file-browser.c:2431 ../src/ptk/ptk-file-browser.c:2448
+#: ../src/ptk/ptk-file-browser.c:6030 ../src/ptk/ptk-file-browser.c:6037
 #: ../src/ptk/ptk-console-output.c:232 ../src/ptk/ptk-file-misc.c:2761
-#: ../src/ptk/ptk-file-misc.c:3422 ../src/ptk/ptk-file-misc.c:3690
-#: ../src/ptk/ptk-file-misc.c:3797 ../src/ptk/ptk-file-misc.c:3998
-#: ../src/ptk/ptk-file-properties.c:892 ../src/ptk/ptk-file-properties.c:903
+#: ../src/ptk/ptk-file-misc.c:3422 ../src/ptk/ptk-file-misc.c:3691
+#: ../src/ptk/ptk-file-misc.c:3798 ../src/ptk/ptk-file-misc.c:3999
+#: ../src/ptk/ptk-file-properties.c:895 ../src/ptk/ptk-file-properties.c:906
 #: ../src/vfs/vfs-file-task.c:1512 ../src/item-prop.c:974
 #, c-format
 msgid "Error"
 msgstr "Chyba"
 
-#: ../src/main.c:1359 ../src/main.c:1497
+#: ../src/main.c:1345 ../src/main.c:1483
 msgid ""
 "Error: Unable to initialize inotify file change monitor.\n"
 "\n"
 "Do you have an inotify-capable kernel?"
 msgstr "Chyba: Nelze inicializovat sledování změn souborů inotify.\n\nMáte jádro s podporou pro inotify (kernel)?"
 
-#: ../src/main.c:1361 ../src/main.c:1499
+#: ../src/main.c:1347 ../src/main.c:1485
 msgid ""
 "Error: Unable to establish connection with FAM.\n"
 "\n"
 "Do you have \"FAM\" or \"Gamin\" installed and running?"
 msgstr "Chyba: Nemohu navázat spojení s FAM.\n\nMáte nainstalován a spuštěn \"FAM\" nebo \"Gamin\" ?"
 
-#: ../src/main.c:1415
+#: ../src/main.c:1401
 msgid "--dialog must be first option"
 msgstr "--dialog musí být první volba"
 
-#: ../src/main.c:1422
+#: ../src/main.c:1408
 msgid "--socket-cmd must be first option"
 msgstr "--socket-cmd musí být první volba"
 
-#: ../src/main.c:1467
+#: ../src/main.c:1453
 #, c-format
 msgid ""
 "SpaceFM requires bash to be installed.  Other shells are NOT equivalent as SpaceFM uses features only found in genuine bash (v4+).\n"
@@ -1601,11 +1610,11 @@ msgid ""
 "The program %s was not found.  Install bash or use configure option --with-bash-path to specify a custom location at build time."
 msgstr ""
 
-#: ../src/main.c:1630
+#: ../src/main.c:1616
 msgid "Don't know how to open the file"
 msgstr "Neví se, jak soubor otevřít"
 
-#: ../src/main.c:1632
+#: ../src/main.c:1618
 #, c-format
 msgid ""
 "Unable to open file:\n"
@@ -1613,42 +1622,42 @@ msgid ""
 "%s"
 msgstr "Nelze otevřít soubor:\n\"%s\"\n%s"
 
-#: ../src/main-window.c:405 ../src/settings.c:10431
+#: ../src/main-window.c:406 ../src/settings.c:10447
 msgid "_Show"
 msgstr "_Ukázat"
 
-#: ../src/main-window.c:406 ../src/item-prop.c:1711
+#: ../src/main-window.c:407 ../src/item-prop.c:1711
 msgid "_Add"
 msgstr "_Přidat"
 
-#: ../src/main-window.c:460 ../src/settings.c:6310
+#: ../src/main-window.c:461 ../src/settings.c:6326
 msgid "Choose Plugin File"
 msgstr "Vybrat soubor s přídavným modulem"
 
 #. get url
-#: ../src/main-window.c:471 ../src/settings.c:6322
+#: ../src/main-window.c:472 ../src/settings.c:6338
 msgid "Enter Plugin URL"
 msgstr "Zadat adresu (URL) přídavného modulu"
 
-#: ../src/main-window.c:471 ../src/settings.c:6322
+#: ../src/main-window.c:472 ../src/settings.c:6338
 msgid ""
 "Enter SpaceFM Plugin URL:\n"
 "\n"
 "(wget will be used to download the plugin file)"
 msgstr "Zadat adresu (URL) přídavného modulu SpaceFM:\n\n(soubor s přídavným modulem bude stažen pomocí wget)"
 
-#: ../src/main-window.c:491
+#: ../src/main-window.c:492
 #, c-format
 msgid ""
 "This plugin's filename is invalid.  Please rename it using alpha-numeric "
 "ASCII characters and try again."
 msgstr "Neplatný název přídavného modulu. Přejmenujte jej, prosím (jen alfanumerické znaky ASCII!) a zkuste to ještě jednou."
 
-#: ../src/main-window.c:493
+#: ../src/main-window.c:494
 msgid "Invalid Plugin Filename"
 msgstr "Neplatný název souboru přídavného modulu"
 
-#: ../src/main-window.c:516
+#: ../src/main-window.c:517
 #, c-format
 msgid ""
 "There is already a plugin installed as '%s'.  Overwrite ?\n"
@@ -1656,19 +1665,19 @@ msgid ""
 "Tip: You can also rename this plugin file to install it under a different name."
 msgstr "Přídavný modul '%s' již je nainstalován. Přepsat?\n\nRada: Je možné tento přídavný modul přepsat a uložit pod jiným názvem, pod kterým se pak nainstaluje. "
 
-#: ../src/main-window.c:518
+#: ../src/main-window.c:519
 msgid "Overwrite Plugin ?"
 msgstr "Přepsat přídavný modul?"
 
-#: ../src/main-window.c:539 ../src/settings.c:6330
+#: ../src/main-window.c:540 ../src/settings.c:6346
 msgid "Error Creating Temp Directory"
 msgstr "Chyba při vytváření dočasného adresáře"
 
-#: ../src/main-window.c:540 ../src/settings.c:6331
+#: ../src/main-window.c:541 ../src/settings.c:6347
 msgid "Unable to create temporary directory"
 msgstr "Nelze vytvořit dočasný adresář"
 
-#: ../src/main-window.c:796
+#: ../src/main-window.c:797
 #, c-format
 msgid ""
 "Error: Unable to save session file\n"
@@ -1676,32 +1685,32 @@ msgid ""
 "( %s )"
 msgstr "Chyba: Nelze uložit soubor se sezením.\n\n( %s )"
 
-#: ../src/main-window.c:798
+#: ../src/main-window.c:799
 msgid "Save Session Error"
 msgstr "Chyba při ukládání sezení"
 
 #. root task
-#: ../src/main-window.c:830
+#: ../src/main-window.c:831
 msgid "Open Root Window"
 msgstr "Otevřít okno superuživatele"
 
-#: ../src/main-window.c:860 ../src/vfs/vfs-file-task.c:1544
+#: ../src/main-window.c:861 ../src/vfs/vfs-file-task.c:1544
 msgid "Terminal Not Available"
 msgstr "Terminál nedostupný"
 
-#: ../src/main-window.c:861
+#: ../src/main-window.c:862
 msgid "Please set your terminal program in View|Preferences|Advanced"
 msgstr "Nastavte, prosím, svůj program pro terminál v Pohled|Nastavení|Pokročilé"
 
-#: ../src/main-window.c:872
+#: ../src/main-window.c:873
 msgid "Open Terminal"
 msgstr "Otevřít terminál"
 
-#: ../src/main-window.c:1200
+#: ../src/main-window.c:1201
 msgid "Design Mode Help"
 msgstr "Nápověda k návrhovému režimu"
 
-#: ../src/main-window.c:1200
+#: ../src/main-window.c:1201
 msgid ""
 "Design Mode allows you to change the name, shortcut key and icon of menu items, show help for an item, and add your own custom commands to most menus.\n"
 "\n"
@@ -1712,8 +1721,8 @@ msgid ""
 "To modify a toolbar, click the leftmost tool icon to open the toolbar config menu and select Help."
 msgstr "Návrhový režim vám umožňuje změnit název, klávesovou zkratku a ikony položek nabídky, ukázat nápovědu k položce, a přidat vaše vlastní příkazy pro většinu nabídek.\n\nK otevření návrhové nabídky jednou klepněte na položku nabídky.\n\nPro použití návrhovému režimu na podnabídku nejprve musíte zavřít podnabídku (klepnutím na ni). Nabídka záložek návrhový režim nepodporuje.\n\nPro změnu nástrojového pruhu klepněte na ikonu nástroje zcela vlevo k otevření nabídky pro nastavení nástrojového pruhu a vyberte Nápověda."
 
-#: ../src/main-window.c:1890 ../src/settings.c:4979 ../src/settings.c:5281
-#: ../src/settings.c:6155 ../src/settings.c:6272
+#: ../src/main-window.c:1890 ../src/settings.c:4995 ../src/settings.c:5297
+#: ../src/settings.c:6171 ../src/settings.c:6288
 #, c-format
 msgid "New _Command"
 msgstr "Nový _příkaz"
@@ -1723,21 +1732,21 @@ msgstr "Nový _příkaz"
 msgid "Show Panel %d"
 msgstr "Ukázat panel %d"
 
-#: ../src/main-window.c:2027 ../src/settings.c:7528 ../src/settings.c:10353
-#: ../src/settings.c:10369 ../src/settings.c:10881
+#: ../src/main-window.c:2027 ../src/settings.c:7544 ../src/settings.c:10369
+#: ../src/settings.c:10385 ../src/settings.c:10898
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../src/main-window.c:2030 ../src/settings.c:10970
+#: ../src/main-window.c:2030 ../src/settings.c:10987
 msgid "_View"
 msgstr "_Pohled"
 
-#: ../src/main-window.c:2033 ../src/settings.c:11313
+#: ../src/main-window.c:2033 ../src/settings.c:11330
 msgid "_Devices"
 msgstr "_Zařízení"
 
-#: ../src/main-window.c:2037 ../src/settings.c:10724 ../src/settings.c:10946
-#: ../src/settings.c:11325
+#: ../src/main-window.c:2037 ../src/settings.c:10741 ../src/settings.c:10963
+#: ../src/settings.c:11342
 msgid "_Bookmarks"
 msgstr "Zál_ožky"
 
@@ -1750,8 +1759,8 @@ msgid "_Tools"
 msgstr "_Nástroje"
 
 #. Help
-#: ../src/main-window.c:2050 ../src/settings.c:1084 ../src/settings.c:7539
-#: ../src/settings.c:8064 ../src/settings.c:8346 ../src/settings.c:10050
+#: ../src/main-window.c:2050 ../src/settings.c:1084 ../src/settings.c:7555
+#: ../src/settings.c:8080 ../src/settings.c:8362 ../src/settings.c:10066
 msgid "_Help"
 msgstr "Nápo_věda"
 
@@ -1929,259 +1938,276 @@ msgstr "Mění se"
 msgid "running"
 msgstr "Spouští se"
 
-#: ../src/main-window.c:5872
+#: ../src/main-window.c:5876
 #, c-format
 msgid "%d error %s"
 msgstr "%d chyba %s"
 
-#: ../src/main-window.c:5873
+#: ../src/main-window.c:5877
 #, c-format
 msgid "%d errors %s"
 msgstr "%d chyby %s"
 
-#: ../src/main-window.c:5889 ../src/ptk/ptk-file-task.c:1692
+#: ../src/main-window.c:5893 ../src/ptk/ptk-file-task.c:1694
 #, c-format
 msgid "paused"
 msgstr "Pozastaveno"
 
-#: ../src/main-window.c:5891 ../src/ptk/ptk-file-task.c:1694
+#: ../src/main-window.c:5895 ../src/ptk/ptk-file-task.c:1696
 #, c-format
 msgid "queued"
 msgstr "Zařazeno"
 
-#: ../src/main-window.c:6160 ../src/ptk/ptk-file-browser.c:297
+#: ../src/main-window.c:6164 ../src/ptk/ptk-file-browser.c:297
 #: ../src/edit-bookmarks.c:196 ../src/find-files.c:906
 msgid "Name"
 msgstr "Název"
 
-#: ../src/main-window.c:6160 ../src/ptk/ptk-file-browser.c:297
+#: ../src/main-window.c:6164 ../src/ptk/ptk-file-browser.c:297
 #: ../src/find-files.c:927
 msgid "Size"
 msgstr "Velikost"
 
-#: ../src/main-window.c:6160 ../src/ptk/ptk-file-browser.c:297
+#: ../src/main-window.c:6164 ../src/ptk/ptk-file-browser.c:297
 #: ../src/find-files.c:931
 msgid "Type"
 msgstr "Typ"
 
-#: ../src/main-window.c:6161 ../src/ptk/ptk-file-browser.c:298
+#: ../src/main-window.c:6165 ../src/ptk/ptk-file-browser.c:298
 msgid "Permission"
 msgstr "Práva"
 
-#: ../src/main-window.c:6161 ../src/ptk/ptk-file-browser.c:298
+#: ../src/main-window.c:6165 ../src/ptk/ptk-file-browser.c:298
 msgid "Owner"
 msgstr "Vlastník"
 
-#: ../src/main-window.c:6161 ../src/ptk/ptk-file-browser.c:298
+#: ../src/main-window.c:6165 ../src/ptk/ptk-file-browser.c:298
 msgid "Modified"
 msgstr "Upraveno"
 
-#: ../src/main-window.c:6173
+#: ../src/main-window.c:6177
 msgid "spacefm: invalid socket command\n"
 msgstr "spacefm: Neplatný příkaz konektoru\n"
 
-#: ../src/main-window.c:6202
+#: ../src/main-window.c:6206
 #, c-format
 msgid "spacefm: invalid option '%s'\n"
 msgstr "spacefm: Neplatný přepínač '%s'\n"
 
-#: ../src/main-window.c:6205
+#: ../src/main-window.c:6209
 #, c-format
 msgid "spacefm: option %s requires an argument\n"
 msgstr "spacefm: Přepínač %s vyžaduje argument\n"
 
-#: ../src/main-window.c:6215
+#: ../src/main-window.c:6219
 msgid "spacefm: invalid window\n"
 msgstr "spacefm: Neplatné okno\n"
 
-#: ../src/main-window.c:6235
+#: ../src/main-window.c:6239
 #, c-format
 msgid "spacefm: invalid window %s\n"
 msgstr "spacefm: Neplatné okno %s\n"
 
-#: ../src/main-window.c:6245
+#: ../src/main-window.c:6249
 #, c-format
 msgid "spacefm: invalid panel %d\n"
 msgstr "spacefm: Neplatný panel %d\n"
 
-#: ../src/main-window.c:6252
+#: ../src/main-window.c:6256
 #, c-format
 msgid "spacefm: panel %d is not visible\n"
 msgstr "spacefm: Panel %d není viditelný\n"
 
-#: ../src/main-window.c:6265
+#: ../src/main-window.c:6269
 #, c-format
 msgid "spacefm: invalid tab %d\n"
 msgstr "spacefm: Neplatná karta %d\n"
 
-#: ../src/main-window.c:6277
+#: ../src/main-window.c:6281
 msgid "spacefm: command set requires an argument\n"
 msgstr "spacefm: Sada příkazů vyžaduje argument\n"
 
-#: ../src/main-window.c:6303 ../src/main-window.c:6610
+#: ../src/main-window.c:6307 ../src/main-window.c:6614
 #, c-format
 msgid "spacefm: invalid %s value\n"
 msgstr "spacefm: Neplatná hodnota %s\n"
 
-#: ../src/main-window.c:6336 ../src/main-window.c:6488
+#: ../src/main-window.c:6340 ../src/main-window.c:6492
 msgid "spacefm: invalid slider value\n"
 msgstr "spacefm: Neplatná hodnota posuvníku\n"
 
-#: ../src/main-window.c:6365
+#: ../src/main-window.c:6369
 msgid "spacefm: invalid panel number\n"
 msgstr "spacefm: Neplatné číslo panelu\n"
 
-#: ../src/main-window.c:6406
+#: ../src/main-window.c:6410
 msgid "spacefm: invalid tab number\n"
 msgstr "spacefm: Neplatné číslo karty\n"
 
-#: ../src/main-window.c:6459 ../src/main-window.c:6779
-#: ../src/main-window.c:6906 ../src/main-window.c:7174
+#: ../src/main-window.c:6463 ../src/main-window.c:6793
+#: ../src/main-window.c:6920 ../src/main-window.c:7193
 #, c-format
 msgid "spacefm: invalid property %s\n"
 msgstr "spacefm: Neplatná vlastnost %s\n"
 
-#: ../src/main-window.c:6508
+#: ../src/main-window.c:6512
 msgid "spacefm: invalid column width\n"
 msgstr "spacefm: Neplatná šířka sloupce\n"
 
-#: ../src/main-window.c:6544 ../src/main-window.c:6571
-#: ../src/main-window.c:6972
+#: ../src/main-window.c:6548 ../src/main-window.c:6575
+#: ../src/main-window.c:6986
 #, c-format
 msgid "spacefm: invalid column name '%s'\n"
 msgstr "spacefm: Neplatný název sloupce '%s'\n"
 
-#: ../src/main-window.c:6666
+#: ../src/main-window.c:6680
 msgid "spacefm: text is not valid UTF-8\n"
 msgstr "spacefm: Text neodpovídá normě UTF-8\n"
 
-#: ../src/main-window.c:6683
+#: ../src/main-window.c:6697
 #, c-format
 msgid "spacefm: %s requires a file path\n"
 msgstr "spacefm: %s vyžaduje cestu k souboru\n"
 
-#: ../src/main-window.c:6689
+#: ../src/main-window.c:6703
 #, c-format
 msgid "spacefm: error reading file '%s'\n"
 msgstr "spacefm: Chyba při čtení souboru '%s'\n"
 
-#: ../src/main-window.c:6695
+#: ../src/main-window.c:6709
 #, c-format
 msgid "spacefm: file '%s' does not contain valid UTF-8 text\n"
 msgstr "spacefm: Obsah souboru '%s' neobsahuje platný text UTF-8\n"
 
-#: ../src/main-window.c:6736
+#: ../src/main-window.c:6750
 #, c-format
 msgid "spacefm: %s requires a directory path\n"
 msgstr "spacefm: %s vyžaduje cestu k adresáři\n"
 
-#: ../src/main-window.c:6742
+#: ../src/main-window.c:6756
 #, c-format
 msgid "spacefm: directory '%s' does not exist\n"
 msgstr "spacefm: Adresář '%s' neexistuje\n"
 
-#: ../src/main-window.c:6788 ../src/main-window.c:7659
-#: ../src/main-window.c:7685
+#: ../src/main-window.c:6802 ../src/main-window.c:7806
+#: ../src/main-window.c:7832
 #, c-format
 msgid "spacefm: command %s requires an argument\n"
 msgstr "spacefm: Příkaz %s vyžaduje argument\n"
 
-#: ../src/main-window.c:7182 ../src/main-window.c:7312
-#: ../src/main-window.c:7416 ../src/main-window.c:7473
-#: ../src/main-window.c:7524 ../src/main-window.c:7725
+#: ../src/main-window.c:7201 ../src/main-window.c:7331
+#: ../src/main-window.c:7435 ../src/main-window.c:7492
+#: ../src/main-window.c:7543 ../src/main-window.c:7872
 #, c-format
 msgid "spacefm: %s requires two arguments\n"
 msgstr "spacefm: %s vyžaduje dva argumenty\n"
 
-#: ../src/main-window.c:7210 ../src/main-window.c:7340
+#: ../src/main-window.c:7229 ../src/main-window.c:7359
 #, c-format
 msgid "spacefm: invalid task '%s'\n"
 msgstr "spacefm: Neplatný úkol '%s'\n"
 
-#: ../src/main-window.c:7215
+#: ../src/main-window.c:7234
 #, c-format
 msgid "spacefm: internal task %s is read-only\n"
 msgstr "spacefm: Vnitřní úkol %s je pouze ke čtení\n"
 
-#: ../src/main-window.c:7267
+#: ../src/main-window.c:7286
 #, c-format
 msgid "spacefm: task property '%s' is read-only\n"
 msgstr "spacefm: Vlastnost úkolu '%s' je pouze ke čtení\n"
 
-#: ../src/main-window.c:7284
+#: ../src/main-window.c:7303
 #, c-format
 msgid "spacefm: invalid queue_state '%s'\n"
 msgstr "spacefm: Neplatný stav řetězce '%s'\n"
 
-#: ../src/main-window.c:7302 ../src/main-window.c:7403
+#: ../src/main-window.c:7321 ../src/main-window.c:7422
 #, c-format
 msgid "spacefm: invalid task property '%s'\n"
 msgstr "spacefm: Neplatná vlastnost úkolu '%s'\n"
 
-#: ../src/main-window.c:7459 ../src/main-window.c:7561
-#: ../src/main-window.c:7582
+#: ../src/main-window.c:7478 ../src/main-window.c:7708
+#: ../src/main-window.c:7729
 #, c-format
 msgid "spacefm: no such directory '%s'\n"
 msgstr "spacefm: Není žádný takový adresář '%s'\n"
 
-#: ../src/main-window.c:7466 ../src/main-window.c:7517
-#: ../src/main-window.c:7568
+#: ../src/main-window.c:7485 ../src/main-window.c:7536
+#: ../src/main-window.c:7571 ../src/main-window.c:7715
 #, c-format
 msgid "spacefm: invalid %s task option '%s'\n"
 msgstr "spacefm: Neplatná volba %s u úkolu '%s'\n"
 
-#: ../src/main-window.c:7533
+#: ../src/main-window.c:7552
 #, c-format
 msgid "spacefm: no such file '%s'\n"
 msgstr "spacefm: Není žádný takový soubor '%s'\n"
 
-#: ../src/main-window.c:7601
+#: ../src/main-window.c:7565
+#, c-format
+msgid "spacefm: task type %s requires udev build\n"
+msgstr "spacefm: Typ úkolu %s vyžaduje sestavení udev\n\n"
+
+#: ../src/main-window.c:7577
+#, c-format
+msgid "spacefm: task type %s requires TARGET argument\n"
+msgstr "spacefm: Typ úkolu %s vyžaduje argument CÍL\n"
+
+#. not a valid url
+#: ../src/main-window.c:7602 ../src/main-window.c:7625
+#: ../src/main-window.c:7669
+#, c-format
+msgid "spacefm: invalid TARGET '%s'\n"
+msgstr "spacefm: Neplatný CÍL '%s'\n"
+
+#: ../src/main-window.c:7748
 #, c-format
 msgid "spacefm: relative path '%s' requires %s option --dir DIR\n"
 msgstr "spacefm: relativní cesta '%s' vyžaduje %s volbu --dir DIR\n"
 
-#: ../src/main-window.c:7625
+#: ../src/main-window.c:7772
 #, c-format
 msgid "spacefm: task type %s requires FILE argument(s)\n"
 msgstr "spacefm: Typ úkolu %s vyžaduje argument(y) SOUBOR\n"
 
-#: ../src/main-window.c:7650
+#: ../src/main-window.c:7797
 #, c-format
 msgid "spacefm: invalid task type '%s'\n"
 msgstr "spacefm: Neplatný typ úkolu '%s'\n"
 
-#: ../src/main-window.c:7674
+#: ../src/main-window.c:7821
 #, c-format
 msgid "spacefm: invalid keycode '%s'\n"
 msgstr "spacefm: Neplatný kód klávesy '%s'\n"
 
-#: ../src/main-window.c:7692
+#: ../src/main-window.c:7839
 #, c-format
 msgid "spacefm: custom submenu '%s' not found\n"
 msgstr "spacefm: Vlastní podnabídka '%s' nenalezena\n"
 
-#: ../src/main-window.c:7704
+#: ../src/main-window.c:7851
 #, c-format
 msgid "spacefm: menu '%s' context hidden or disabled\n"
 msgstr "spacefm: Souvislost při nabídce '%s' skryta nebo zakázána\n"
 
-#: ../src/main-window.c:7731
+#: ../src/main-window.c:7878
 #, c-format
 msgid "spacefm: invalid event type '%s'\n"
 msgstr "spacefm: Neplatný typ události '%s'\n"
 
-#: ../src/main-window.c:7757
+#: ../src/main-window.c:7904
 #, c-format
 msgid "spacefm: event handler not found\n"
 msgstr "spacefm: Správa události nenalezena\n"
 
-#: ../src/main-window.c:7768
+#: ../src/main-window.c:7915
 #, c-format
 msgid "spacefm: invalid socket method '%s'\n"
 msgstr "spacefm: Neplatná metoda socketu '%s'\n"
 
-#: ../src/pref-dialog.c:161 ../src/pref-dialog.c:173 ../src/settings.c:9310
-#: ../src/settings.c:9380 ../src/settings.c:9448
+#: ../src/pref-dialog.c:161 ../src/pref-dialog.c:173 ../src/settings.c:9326
+#: ../src/settings.c:9396 ../src/settings.c:9464
 msgid "Default"
 msgstr "Výchozí"
 
@@ -2193,12 +2219,23 @@ msgstr "Vybrat písmo plochy"
 msgid "Example Item 0123456789"
 msgstr "Příklad 0123456789"
 
+#: ../src/pref-dialog.c:438
+msgid "Transparency Requirements"
+msgstr "Požadavky na průhlednost"
+
+#: ../src/pref-dialog.c:439
+msgid ""
+"General Note: For desktop transparency to work, you need to be running a compositing window manager or separate compositor like compton or xcompmgr. You can then use use nitrogen or xwinwrap to set wallpaper on the background.\n"
+"\n"
+"This message will not repeat."
+msgstr ""
+
 #. task
-#: ../src/pref-dialog.c:807 ../src/pref-dialog.c:808
+#: ../src/pref-dialog.c:827 ../src/pref-dialog.c:828
 msgid "Save Root Settings"
 msgstr "Uložit nastavení superuživatele"
 
-#: ../src/pref-dialog.c:807
+#: ../src/pref-dialog.c:827
 msgid ""
 "You will now be asked for your root password to save the root settings for "
 "this user to a file in /etc/spacefm/  Supplying the password in the next "
@@ -2255,53 +2292,53 @@ msgstr "Uživatelsky stanovený tmp_dir obsahuje neplatné znaky - vrací se zp�
 msgid "custom tmp_dir does not exist - reverting to /tmp"
 msgstr "Uživatelsky stanovený tmp_dir neexistuje - vrací se zpět na /tmp"
 
-#: ../src/settings.c:950 ../src/settings.c:9742
+#: ../src/settings.c:950 ../src/settings.c:9758
 msgid "Ignore _Hide Policy"
 msgstr "Přehlížet příkazy ke skrývá_ní"
 
-#: ../src/settings.c:957 ../src/settings.c:9825
+#: ../src/settings.c:957 ../src/settings.c:9841
 msgid "Ignore _No Policy"
 msgstr "Přehlížet příkazy k _vyloučení"
 
-#: ../src/settings.c:967 ../src/settings.c:10399
+#: ../src/settings.c:967 ../src/settings.c:10415
 msgid "_FAQ"
 msgstr "Č_asto kladené otázky"
 
-#: ../src/settings.c:977 ../src/settings.c:982 ../src/settings.c:10542
-#: ../src/settings.c:10562
+#: ../src/settings.c:977 ../src/settings.c:982 ../src/settings.c:10558
+#: ../src/settings.c:10578
 msgid "_Stop"
 msgstr "Za_stavit"
 
-#: ../src/settings.c:989 ../src/settings.c:10575
+#: ../src/settings.c:989 ../src/settings.c:10591
 msgid "Show _Manager"
 msgstr "Ukázat _správce"
 
 #. set->x  used for task man height >=0.9.4
-#: ../src/settings.c:996 ../src/settings.c:10581
+#: ../src/settings.c:996 ../src/settings.c:10597
 msgid "Auto-_Hide Manager"
 msgstr "Skrýt správce automaticky"
 
-#: ../src/settings.c:1003 ../src/settings.c:10646
+#: ../src/settings.c:1003 ../src/settings.c:10662
 msgid "Err_ors"
 msgstr "_Chyby"
 
-#: ../src/settings.c:1010 ../src/settings.c:10521
+#: ../src/settings.c:1010 ../src/settings.c:10537
 msgid "Current Re_main"
 msgstr "Nyní z_bývá"
 
-#: ../src/settings.c:1017 ../src/settings.c:10533
+#: ../src/settings.c:1017 ../src/settings.c:10549
 msgid "A_verage Remain"
 msgstr "Průměrně zbý_vá"
 
-#: ../src/settings.c:1024 ../src/settings.c:10471
+#: ../src/settings.c:1024 ../src/settings.c:10487
 msgid "_Folder"
 msgstr "_Složka"
 
-#: ../src/settings.c:1054 ../src/settings.c:10623
+#: ../src/settings.c:1054 ../src/settings.c:10639
 msgid "_Detailed Stats"
 msgstr "_Podrobné statistiky"
 
-#: ../src/settings.c:1065 ../src/settings.c:9481
+#: ../src/settings.c:1065 ../src/settings.c:9497
 msgid "Remo_ve / Eject"
 msgstr "Odstrani_t/Vysunout"
 
@@ -2309,39 +2346,39 @@ msgstr "Odstrani_t/Vysunout"
 #. changes of this nature due to defaults no longer being saved
 #. in session file
 #. New > Import >
-#: ../src/settings.c:1076 ../src/settings.c:7516 ../src/settings.c:10363
+#: ../src/settings.c:1076 ../src/settings.c:7532 ../src/settings.c:10379
 msgid "_Import"
 msgstr "_Zavést"
 
-#: ../src/settings.c:1077 ../src/settings.c:10455
+#: ../src/settings.c:1077 ../src/settings.c:10471
 msgid "_Task Manager"
 msgstr "Správce ú_kolů"
 
 #. for rename dialog
-#: ../src/settings.c:1080 ../src/settings.c:9999
+#: ../src/settings.c:1080 ../src/settings.c:10015
 msgid "F_ilename"
 msgstr "Název _souboru"
 
-#: ../src/settings.c:1081 ../src/settings.c:10010
+#: ../src/settings.c:1081 ../src/settings.c:10026
 msgid "Typ_e"
 msgstr "Ty_p"
 
-#: ../src/settings.c:1082 ../src/settings.c:10014
+#: ../src/settings.c:1082 ../src/settings.c:10030
 msgid "Ta_rget"
 msgstr "_Cíl"
 
-#: ../src/settings.c:1083 ../src/settings.c:10018
+#: ../src/settings.c:1083 ../src/settings.c:10034
 msgid "Te_mplate"
 msgstr "Pře_dloha"
 
 #. Change Save Session to Open URL - remove custom label/icon
 #. was previously used for 'Save Session' < 0.9.4 as XSET_MENU_NORMAL
-#: ../src/settings.c:1193 ../src/settings.c:10117
+#: ../src/settings.c:1209 ../src/settings.c:10133
 msgid "Open _URL"
-msgstr ""
+msgstr "Otevřít adresu (_URL)"
 
 #. General
-#: ../src/settings.c:1318
+#: ../src/settings.c:1334
 msgid ""
 "# SpaceFM Session File\n"
 "\n"
@@ -2351,30 +2388,30 @@ msgid ""
 "\n"
 msgstr "# Soubor se sezením SpaceFM\n\n# TENTO SOUBOR NENÍ NAVRŽEN PRO ÚPRAVY - bude přečten a PŘEPSÁN\n\n# pokud smažete všechny soubory session*, SpaceFM bude nastaven znovu na výchozí tovární nastavení.\n\n"
 
-#: ../src/settings.c:1495
+#: ../src/settings.c:1511
 #, c-format
 msgid "Error saving file"
 msgstr "Chyba při ukládání souboru"
 
-#: ../src/settings.c:1579
+#: ../src/settings.c:1595
 #, c-format
 msgid "SpaceFM Error: Unable to autosave session file ( %s )\n"
 msgstr "Chyba SpaceFM: Nelze automaticky uložit soubor se sezením ( %s )\n"
 
-#: ../src/settings.c:3025
+#: ../src/settings.c:3041
 msgid ""
 "Error reading root settings from /etc/spacefm/  Commands run as root may "
 "present a security risk"
 msgstr "Chyba při čtení nastavení superuživatele z/etc/spacefm/. Provedení příkazů může představovat bezpečnostní riziko"
 
-#: ../src/settings.c:3027
+#: ../src/settings.c:3043
 msgid ""
 "No root settings found in /etc/spacefm/  Setting a root editor in "
 "Preferences should remove this warning on startup.   Otherwise commands run "
 "as root may present a security risk."
 msgstr "V /etc/spacefm/ nebyla nalezena žádná nastavení pro superuživatele (root). Toto varování při spuštění se odstraní nastavením editoru pro superuživatele v nastavení. Provádění příkazů pod superuživatelem může představovat bezpečnostní riziko"
 
-#: ../src/settings.c:3937
+#: ../src/settings.c:3953
 #, c-format
 msgid ""
 "An error occured copying command files\n"
@@ -2382,11 +2419,11 @@ msgid ""
 "%s"
 msgstr "Při kopírování souborů s příkazy se vyskytla chyba\n\n%s"
 
-#: ../src/settings.c:3939 ../src/settings.c:3974
+#: ../src/settings.c:3955 ../src/settings.c:3990
 msgid "Copy Command Error"
 msgstr "Chyba při kopírování"
 
-#: ../src/settings.c:3972
+#: ../src/settings.c:3988
 #, c-format
 msgid ""
 "An error occured copying command data files\n"
@@ -2394,12 +2431,12 @@ msgid ""
 "%s"
 msgstr "Při kopírování souborů s daty příkazů se vyskytla chyba\n\n%s"
 
-#: ../src/settings.c:4345
+#: ../src/settings.c:4361
 #, c-format
 msgid "Error reading plugin file %s"
 msgstr "Chyba při čtení souboru s přídavným modulem %s"
 
-#: ../src/settings.c:4423
+#: ../src/settings.c:4439
 #, c-format
 msgid ""
 "The imported plugin folder does not contain a valid plugin.\n"
@@ -2407,7 +2444,7 @@ msgid ""
 "(%s/)"
 msgstr "Složka se zavedeným přídavným modulem neobsahuje platný přídavný modul.\n\n(%s/)"
 
-#: ../src/settings.c:4463
+#: ../src/settings.c:4479
 #, c-format
 msgid ""
 "The '%s' plugin has been copied to the design clipboard.  Use View|Design Mode to paste it into a menu.\n"
@@ -2415,7 +2452,7 @@ msgid ""
 "Because it has not been installed, this plugin will not appear in the Plugins menu."
 msgstr "Přídavný modul %s' byl zkopírován do návrhové schránky.  K jeho vložení do nabídky použijte Pohled|Návrhový režim.\n\nProtože nebyl nainstalován, neobjeví se tento přídavný modul v nabídce s přídavnými moduly"
 
-#: ../src/settings.c:4465
+#: ../src/settings.c:4481
 #, c-format
 msgid ""
 "The '%s' plugin has been copied to the design clipboard.  Use View|Design Mode to paste it into a menu.\n"
@@ -2425,7 +2462,7 @@ msgid ""
 "If this plugin contains su commands or will be run as root, installing it to and running it only from the Plugins menu is recommended to improve your system security."
 msgstr "Přídavný modul %s' byl zkopírován do návrhové schránky.  K jeho vložení do nabídky použijte Pohled|Návrhový režim.\n\nProtože nebyl nainstalován, neobjeví se tento přídavný modul v nabídce s přídavnými moduly. Jeho obsah není chráněn superuživatelskými oprávněními (až bude vložen, bude chráněn obyčejnými uživatelskými oprávněními).\n\nPokud tento přídavný modul obsahuje příkazy su, nebo pokud bude spuštěn pod superuživatelem, doporučuje se z bezpečnostních důvodů jeho instalace a spuštění pouze z nabídky s přídavný moduly."
 
-#: ../src/settings.c:4496
+#: ../src/settings.c:4512
 #, c-format
 msgid ""
 "Uninstall the '%s' plugin?\n"
@@ -2433,102 +2470,102 @@ msgid ""
 "( %s )"
 msgstr "Odinstalovat přídavný modul '%s'?\n\n( %s )"
 
-#: ../src/settings.c:4499 ../src/settings.c:4507
+#: ../src/settings.c:4515 ../src/settings.c:4523
 msgid "Uninstall Plugin"
 msgstr "Odinstalovat přídavný modul"
 
 #. task
-#: ../src/settings.c:4544
+#: ../src/settings.c:4560
 msgid "Install Plugin"
 msgstr "Nainstalovat přídavný modul"
 
-#: ../src/settings.c:4744
+#: ../src/settings.c:4760
 msgid "Save As Plugin File"
 msgstr "Uložit jako soubor s přídavným modulem"
 
 #. tar and delete tmp files
 #. task
-#: ../src/settings.c:4812
+#: ../src/settings.c:4828
 msgid "Export Plugin"
 msgstr "Vyvést přídavný modul"
 
-#: ../src/settings.c:4846
+#: ../src/settings.c:4862
 msgid "Export Error"
 msgstr "Chyba při vyvedení"
 
-#: ../src/settings.c:4847
+#: ../src/settings.c:4863
 msgid "Unable to create temporary files"
 msgstr "Nelze vytvořit dočasné soubory"
 
-#: ../src/settings.c:4981
+#: ../src/settings.c:4997
 msgid "Change Menu Name"
 msgstr "Změnit název nabídky"
 
-#: ../src/settings.c:5422
+#: ../src/settings.c:5438
 msgid "Editor Not Set"
 msgstr "Editor není nastaven"
 
-#: ../src/settings.c:5423
+#: ../src/settings.c:5439
 msgid "Please set your editor in View|Preferences|Advanced"
 msgstr "Nastavte, prosím, svůj editor v Pohled|Nastavení|Pokročilé"
 
-#: ../src/settings.c:5434
+#: ../src/settings.c:5450
 msgid "Root Editor Not Set"
 msgstr "Editor pro superuživatele není nastaven"
 
-#: ../src/settings.c:5435
+#: ../src/settings.c:5451
 msgid "Please set root's editor in View|Preferences|Advanced"
 msgstr "Nastavte, prosím, editor pro superuživatele v Pohled|Nastavení|Pokročilé"
 
 #. task
-#: ../src/settings.c:5456
+#: ../src/settings.c:5472
 #, c-format
 msgid "Edit %s"
 msgstr "Upravit %s"
 
-#: ../src/settings.c:5637
+#: ../src/settings.c:5653
 msgid "User's Manual Not Found"
 msgstr "Příručka uživatele nenalezena"
 
-#: ../src/settings.c:5639
+#: ../src/settings.c:5655
 msgid ""
 "Read the user's manual online?\n"
 "\n"
 "The local copy of the SpaceFM user's manual was not found.  Click Yes to read it online, or click No and then set the correct location in Help|Options|Manual Location."
 msgstr "Číst uživatelskou příručku na internetu?'\n\nV místním systému se nepodařilo najít žádnou příručku. Klepněte na Ano pro její čtení na internetu, nebo klepněte na Ne, a pak nastavte správné umístění příručky v Nápověda|Volby|Příručka."
 
-#: ../src/settings.c:5670
+#: ../src/settings.c:5686
 msgid "Help Not Available"
 msgstr "Nápověda není dostupná"
 
-#: ../src/settings.c:5670
+#: ../src/settings.c:5686
 msgid "This plugin does not include a README file."
 msgstr "Tento přídavný modul nezahrnuje žádný soubor README."
 
-#: ../src/settings.c:5672
+#: ../src/settings.c:5688
 msgid "Creation Failed"
 msgstr "Vytvoření se nezdařilo"
 
-#: ../src/settings.c:5672
+#: ../src/settings.c:5688
 msgid "An error occured creating a README file for this command."
 msgstr "Při vytváření souboru README pro tento příkaz se vyskytla chyba."
 
-#: ../src/settings.c:5694
+#: ../src/settings.c:5710
 msgid "Manual Opened ?"
 msgstr "Je příručka otevřena?"
 
-#: ../src/settings.c:5694
+#: ../src/settings.c:5710
 msgid ""
 "The SpaceFM user's manual should have opened in your browser.  If it didn't open, or if you would like to use a different browser, set your browser in Help|Options|Browser.\n"
 "\n"
 "This message will not repeat."
 msgstr "Uživatelská příručka k SpaceFM by se měla otevřít ve vašem prohlížeči. Pokud se neotevřela, nebo v případě, že byste rád použil jiný prohlížeč, nastavte svůj prohlížeč v Nápověda|Volby|Prohlížeč.\n\nTato zpráva se nebude opakovat."
 
-#: ../src/settings.c:5713
+#: ../src/settings.c:5729
 msgid "( none )"
 msgstr "(žádná)"
 
-#: ../src/settings.c:5836
+#: ../src/settings.c:5852
 #, c-format
 msgid ""
 "\t%s\n"
@@ -2539,60 +2576,60 @@ msgid ""
 "Press a different key or click Set to replace the current key assignment."
 msgstr "\t%s\n\tKód klávesy: %#4x  Modifikátor: %#x\n\n%s je již přiřazen k '%s'.\n\nStiskněte jinou klávesu nebo klepněte na Nastavit pro nahrazení nynějšího přiřazení klávesy."
 
-#: ../src/settings.c:5847
+#: ../src/settings.c:5863
 #, c-format
 msgid ""
 "\t%s\n"
 "\tKeycode: %#4x  Modifier: %#x"
 msgstr "\t%s\n\tKód klávesy: %#4x  Modifikátor: %#x"
 
-#: ../src/settings.c:5875
+#: ../src/settings.c:5891
 #, c-format
 msgid ""
 "Press your key combination for menu item '%s' then click Set.  To remove the"
 " current key assignment, click Unset."
 msgstr "Stiskněte novoé spojení kláves pro položku nabídky '%s', potom klepněte na Nastavit. Pro odstranění nynějšího přiřazení klávesy klepněte na Zrušit nastavení."
 
-#: ../src/settings.c:5888
+#: ../src/settings.c:5904
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: ../src/settings.c:5894
+#: ../src/settings.c:5910
 msgid "Unset"
 msgstr "Zrušit nastavení"
 
-#: ../src/settings.c:5907
+#: ../src/settings.c:5923
 msgid "Set"
 msgstr "Nastavit"
 
-#: ../src/settings.c:5921
+#: ../src/settings.c:5937
 msgid "Set Key"
 msgstr "Nastavit klávesu"
 
-#: ../src/settings.c:5999
+#: ../src/settings.c:6015
 msgid "Change Icon"
 msgstr "Změnit ikonu"
 
-#: ../src/settings.c:6099
+#: ../src/settings.c:6115
 msgid "Edit Command Line"
 msgstr "Upravit příkazový řádek"
 
-#: ../src/settings.c:6125
+#: ../src/settings.c:6141
 msgid "Choose Custom Executable"
 msgstr "Vybrat vlastní spustitelný soubor"
 
-#: ../src/settings.c:6136
+#: ../src/settings.c:6152
 msgid "Run As User"
 msgstr "Spustit jako uživatel"
 
-#: ../src/settings.c:6136
+#: ../src/settings.c:6152
 msgid ""
 "Run this command as username:\n"
 "\n"
 "( Leave blank for current user )"
 msgstr "Spustit tento příkaz jako uživatel:\n\n( Ponechte prázdné pro nynějšího uživatele )"
 
-#: ../src/settings.c:6144
+#: ../src/settings.c:6160
 #, c-format
 msgid ""
 "You are adding a custom command to the Default menu item.  This item will automatically have a pre-context - it will only appear when the MIME type of the first selected file matches the current type '%s'.\n"
@@ -2600,19 +2637,19 @@ msgid ""
 "Add commands or menus here which you only want to appear for this one MIME type."
 msgstr "Přidáváte uživatelsky stanovený příkaz do výchozí položky nabídky. Tato položka nabídky bude mít potom automatické omezení souvislostí -- objeví se, jen když se bude shodovat typ MIME prvního vybraného souboru s nynějším typem '%s'.\n\nPřidávejte zde jen ty příkazy nebo nabídky, které se mají u tohoto typu MIME objevovat."
 
-#: ../src/settings.c:6145
+#: ../src/settings.c:6161
 msgid "New Context Command"
 msgstr "Nový související příkaz"
 
-#: ../src/settings.c:6156
+#: ../src/settings.c:6172
 msgid "Set Menu Name"
 msgstr "Nastavit název nabídky"
 
-#: ../src/settings.c:6192 ../src/item-prop.c:1209
+#: ../src/settings.c:6208 ../src/item-prop.c:1209
 msgid "Choose Folder"
 msgstr "Vybrat složku"
 
-#: ../src/settings.c:6238
+#: ../src/settings.c:6254
 #, c-format
 msgid ""
 "You are adding a custom submenu to the Default menu item.  This item will automatically have a pre-context - it will only appear when the MIME type of the first selected file matches the current type '%s'.\n"
@@ -2620,30 +2657,30 @@ msgid ""
 "Add commands or menus here which you only want to appear for this one MIME type."
 msgstr "Přidáváte uživatelsky stanovený podnabídku do výchozí položky nabídky. Tato položka nabídky bude mít potom automatické omezení souvislostí -- objeví se, jen když se bude shodovat typ MIME prvního vybraného souboru s nynějším typem '%s'.\n\nPřidávejte zde jen ty příkazy nebo nabídky, které se mají u tohoto typu MIME objevovat."
 
-#: ../src/settings.c:6238
+#: ../src/settings.c:6254
 msgid "(none)"
 msgstr "(žádné)"
 
-#: ../src/settings.c:6247
+#: ../src/settings.c:6263
 msgid "Set Submenu Name"
 msgstr "Zadat název podnabídky"
 
-#: ../src/settings.c:6247
+#: ../src/settings.c:6263
 msgid ""
 "Enter submenu name:\n"
 "\n"
 "Precede a character with an underscore (_) to underline that character as a shortcut key if desired."
 msgstr "Zadejte název podnabídky:\n\nJedno písmeno můžete uvést podtržítkem (_) pro zdůraznění tohoto znaku jako klávesové zkratky."
 
-#: ../src/settings.c:6247
+#: ../src/settings.c:6263
 msgid "New _Submenu"
 msgstr "Nová _podnabídka"
 
-#: ../src/settings.c:6421
+#: ../src/settings.c:6437
 msgid "( no name )"
 msgstr "(žádný název)"
 
-#: ../src/settings.c:6424
+#: ../src/settings.c:6440
 #, c-format
 msgid ""
 "Permanently remove the '%s' SUBMENU AND ALL ITEMS WITHIN IT?\n"
@@ -2651,7 +2688,7 @@ msgid ""
 "This action will delete all settings and files associated with these items."
 msgstr "Trvale odstranit PODNABÍDKU '%s' A VŠECHNY TAMĚJŠÍ PŘÍKAZY?\n\nTento krok smaže všechna nastavení a soubory spojené s těmito položkami."
 
-#: ../src/settings.c:6429
+#: ../src/settings.c:6445
 #, c-format
 msgid ""
 "Permanently remove the '%s' item?\n"
@@ -2659,19 +2696,19 @@ msgid ""
 "This action will delete all settings and files associated with this item."
 msgstr "Trvale odstranit položku '%s'?\n\nTento krok smaže všechna nastavení a soubory spojené s těmito položkami."
 
-#: ../src/settings.c:6443
+#: ../src/settings.c:6459
 msgid "Confirm Remove"
 msgstr "Potvrdit odstranění"
 
-#: ../src/settings.c:6467 ../src/item-prop.c:700 ../src/item-prop.c:712
+#: ../src/settings.c:6483 ../src/item-prop.c:700 ../src/item-prop.c:712
 msgid "Are you sure?"
 msgstr "Jste si jistý?"
 
-#: ../src/settings.c:6468 ../src/settings.c:6472 ../src/settings.c:6476
+#: ../src/settings.c:6484 ../src/settings.c:6488 ../src/settings.c:6492
 msgid "Dialog Message"
 msgstr "Dialogová zpráva"
 
-#: ../src/settings.c:6468 ../src/settings.c:6472 ../src/settings.c:6476
+#: ../src/settings.c:6484 ../src/settings.c:6488 ../src/settings.c:6492
 msgid ""
 "Enter the message to be displayed in this dialog:\n"
 "\n"
@@ -2682,23 +2719,23 @@ msgstr "Zadejte zprávu, která se má zobrazit v tomto dialogu:\n\nPoužít:\n\
 
 #. Show Tool
 #. dev settings
-#: ../src/settings.c:7112 ../src/settings.c:9708
+#: ../src/settings.c:7128 ../src/settings.c:9724
 msgid "S_how"
 msgstr "U_kázat"
 
 #. Cut
 #. EDIT
-#: ../src/settings.c:7444 ../src/settings.c:11049
+#: ../src/settings.c:7460 ../src/settings.c:11066
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
 #. Copy
-#: ../src/settings.c:7451 ../src/settings.c:10026 ../src/settings.c:11052
+#: ../src/settings.c:7467 ../src/settings.c:10042 ../src/settings.c:11069
 msgid "_Copy"
 msgstr "_Kopírovat"
 
 #. Paste
-#: ../src/settings.c:7458 ../src/settings.c:11055
+#: ../src/settings.c:7474 ../src/settings.c:11072
 msgid "_Paste"
 msgstr "V_ložit"
 
@@ -2707,109 +2744,109 @@ msgstr "V_ložit"
 #. GDK_k, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 #. Remove
 #. list buttons
-#: ../src/settings.c:7468 ../src/ptk/ptk-file-menu.c:2221
+#: ../src/settings.c:7484 ../src/ptk/ptk-file-menu.c:2231
 #: ../src/item-prop.c:1704
 msgid "_Remove"
 msgstr "O_dstranit"
 
 #. Export
-#: ../src/settings.c:7475
+#: ../src/settings.c:7491
 msgid "E_xport"
 msgstr "_Vyvést"
 
 #. // New submenu
-#: ../src/settings.c:7481 ../src/settings.c:9969 ../src/settings.c:10295
-#: ../src/settings.c:10876
+#: ../src/settings.c:7497 ../src/settings.c:9985 ../src/settings.c:10311
+#: ../src/settings.c:10893
 msgid "_New"
 msgstr "_Nový"
 
 #. New > Bookmark
-#: ../src/settings.c:7494 ../src/settings.c:9513
+#: ../src/settings.c:7510 ../src/settings.c:9529
 msgid "_Bookmark"
 msgstr "_Záložka"
 
 #. New > Application
-#: ../src/settings.c:7498
+#: ../src/settings.c:7514
 msgid "_Application"
 msgstr "_Program"
 
 #. New > Command
-#: ../src/settings.c:7502
+#: ../src/settings.c:7518
 msgid "_Command"
 msgstr "_Příkaz"
 
 #. New > Submenu
-#: ../src/settings.c:7508
+#: ../src/settings.c:7524
 msgid "Sub_menu"
 msgstr "Pod_nabídka"
 
 #. New > Separator
-#: ../src/settings.c:7512
+#: ../src/settings.c:7528
 msgid "S_eparator"
 msgstr "O_ddělovač"
 
-#: ../src/settings.c:7531 ../src/settings.c:10356 ../src/settings.c:10372
+#: ../src/settings.c:7547 ../src/settings.c:10372 ../src/settings.c:10388
 msgid "_URL"
 msgstr "Adresa (_URL)"
 
 #. Key
-#: ../src/settings.c:7546
+#: ../src/settings.c:7562
 msgid "_Key Shortcut"
 msgstr "_Klávesová zkratka"
 
 #. edit as user
-#: ../src/settings.c:7562
+#: ../src/settings.c:7578
 msgid "_Edit Script"
 msgstr "_Upravit skript"
 
 #. edit as root
-#: ../src/settings.c:7570
+#: ../src/settings.c:7586
 msgid "E_dit As Root"
 msgstr "U_pravit jako superuživatel"
 
 #. edit command line
-#: ../src/settings.c:7582
+#: ../src/settings.c:7598
 msgid "_Edit Command"
 msgstr "Up_ravit příkaz"
 
 #. Properties
-#: ../src/settings.c:7589 ../src/settings.c:9699
+#: ../src/settings.c:7605 ../src/settings.c:9715
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
-#: ../src/settings.c:7996
+#: ../src/settings.c:8012
 msgid "Set Icon"
 msgstr "Nastavit ikonu"
 
-#: ../src/settings.c:8355 ../src/settings.c:9975 ../src/settings.c:11074
+#: ../src/settings.c:8371 ../src/settings.c:9991
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/settings.c:8365 ../src/settings.c:8578 ../src/settings.c:10928
+#: ../src/settings.c:8381 ../src/settings.c:8594 ../src/settings.c:10945
 msgid "_Default"
 msgstr "_Výchozí"
 
-#: ../src/settings.c:8405
+#: ../src/settings.c:8421
 msgid "Your input is invalid because it contains linefeeds"
 msgstr "Vaše zadání je neplatné, protože obsahuje posuny na nové řádky"
 
-#: ../src/settings.c:8581
+#: ../src/settings.c:8597
 msgid "_OK"
 msgstr "_OK"
 
-#: ../src/settings.c:8718
+#: ../src/settings.c:8734
 msgid "_Unset"
 msgstr "_Zrušit nastavení"
 
-#: ../src/settings.c:9221
+#: ../src/settings.c:9237
 msgid "_Left Toolbar"
 msgstr "_Levý nástrojový pruh"
 
-#: ../src/settings.c:9225
+#: ../src/settings.c:9241
 msgid "_Right Toolbar"
 msgstr "_Pravý nástrojový pruh"
 
-#: ../src/settings.c:9229 ../src/settings.c:11331
+#: ../src/settings.c:9245 ../src/settings.c:11348
 msgid "_Side Toolbar"
 msgstr "P_ostranní nástrojový pruh"
 
@@ -2817,187 +2854,187 @@ msgstr "P_ostranní nástrojový pruh"
 #. xset_set( "panel_right", "lbl", _("_Right") );
 #. xset_set( "panel_top", "lbl", _("_Top") );
 #. xset_set( "panel_bottom", "lbl", _("_Bottom") );
-#: ../src/settings.c:9233 ../src/settings.c:9236 ../src/settings.c:10196
-#: ../src/settings.c:11174
+#: ../src/settings.c:9249 ../src/settings.c:9252 ../src/settings.c:10212
+#: ../src/settings.c:11191
 msgid "_Hide"
 msgstr "_Skrýt"
 
-#: ../src/settings.c:9239
+#: ../src/settings.c:9255
 msgid "Configure Toolbar"
 msgstr "Nastavit nástrojový pruh"
 
-#: ../src/settings.c:9243
+#: ../src/settings.c:9259
 msgid "H_elp"
 msgstr "_Nápověda"
 
 #. toolitems left
 #. toolitems right
 #. toolitems side
-#: ../src/settings.c:9247 ../src/settings.c:9317 ../src/settings.c:9386
+#: ../src/settings.c:9263 ../src/settings.c:9333 ../src/settings.c:9402
 msgid "Tree"
 msgstr "Strom"
 
-#: ../src/settings.c:9253 ../src/settings.c:9323 ../src/settings.c:9392
+#: ../src/settings.c:9269 ../src/settings.c:9339 ../src/settings.c:9408
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: ../src/settings.c:9259 ../src/settings.c:9329 ../src/settings.c:9398
+#: ../src/settings.c:9275 ../src/settings.c:9345 ../src/settings.c:9414
 msgid "Devices"
 msgstr "Zařízení"
 
-#: ../src/settings.c:9265 ../src/settings.c:9335 ../src/settings.c:9404
+#: ../src/settings.c:9281 ../src/settings.c:9351 ../src/settings.c:9420
 msgid "New Tab"
 msgstr "Nová karta"
 
-#: ../src/settings.c:9270 ../src/settings.c:9340 ../src/settings.c:9409
+#: ../src/settings.c:9286 ../src/settings.c:9356 ../src/settings.c:9425
 msgid "New Tab Here"
 msgstr "Nová karta zde"
 
-#: ../src/settings.c:9275 ../src/settings.c:9345 ../src/settings.c:9414
+#: ../src/settings.c:9291 ../src/settings.c:9361 ../src/settings.c:9430
 msgid "Back"
 msgstr "Zpět"
 
-#: ../src/settings.c:9280 ../src/settings.c:9350 ../src/settings.c:9419
+#: ../src/settings.c:9296 ../src/settings.c:9366 ../src/settings.c:9435
 msgid "Back Menu"
 msgstr "Nabídka zpět"
 
-#: ../src/settings.c:9285 ../src/settings.c:9355 ../src/settings.c:9424
+#: ../src/settings.c:9301 ../src/settings.c:9371 ../src/settings.c:9440
 msgid "Forward"
 msgstr "Vpřed"
 
-#: ../src/settings.c:9290 ../src/settings.c:9360 ../src/settings.c:9429
+#: ../src/settings.c:9306 ../src/settings.c:9376 ../src/settings.c:9445
 msgid "Forward Menu"
 msgstr "Nabídka vpřed"
 
-#: ../src/settings.c:9295 ../src/settings.c:9365 ../src/settings.c:9434
+#: ../src/settings.c:9311 ../src/settings.c:9381 ../src/settings.c:9450
 msgid "Up"
 msgstr "Nahoru"
 
-#: ../src/settings.c:9300 ../src/settings.c:9370 ../src/settings.c:9439
+#: ../src/settings.c:9316 ../src/settings.c:9386 ../src/settings.c:9455
 msgid "Refresh"
 msgstr "Obnovit"
 
-#: ../src/settings.c:9305 ../src/settings.c:9375 ../src/settings.c:9444
+#: ../src/settings.c:9321 ../src/settings.c:9391 ../src/settings.c:9460
 msgid "Home"
 msgstr "Domovská složka"
 
-#: ../src/settings.c:9453
+#: ../src/settings.c:9469
 msgid "Mount"
 msgstr "Připojit"
 
-#: ../src/settings.c:9457
+#: ../src/settings.c:9473
 msgid "Mount & Open"
 msgstr "Připojit a otevřít"
 
-#: ../src/settings.c:9461
+#: ../src/settings.c:9477
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../src/settings.c:9485 ../src/settings.c:9537
-#: ../src/ptk/ptk-location-view.c:3439 ../src/ptk/ptk-location-view.c:3773
+#: ../src/settings.c:9501 ../src/settings.c:9553
+#: ../src/ptk/ptk-location-view.c:3469 ../src/ptk/ptk-location-view.c:3803
 msgid "_Unmount"
 msgstr "O_dpojit"
 
-#: ../src/settings.c:9489
+#: ../src/settings.c:9505
 msgid "Re_load"
 msgstr "_Nahrát znovu"
 
-#: ../src/settings.c:9493
+#: ../src/settings.c:9509
 msgid "_Sync"
 msgstr "_Seřídit"
 
-#: ../src/settings.c:9497 ../src/settings.c:9981 ../src/settings.c:10770
+#: ../src/settings.c:9513 ../src/settings.c:9997 ../src/settings.c:10787
 #: ../src/find-files.c:278
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: ../src/settings.c:9501
+#: ../src/settings.c:9517
 msgctxt "Devices|Open|"
-msgid "_Tab"
-msgstr "_Karta"
+msgid "Open In _Tab"
+msgstr "Otevřít v _kartě"
 
-#: ../src/settings.c:9505 ../src/settings.c:9532
-#: ../src/ptk/ptk-location-view.c:3432 ../src/ptk/ptk-location-view.c:3767
+#: ../src/settings.c:9521 ../src/settings.c:9548
+#: ../src/ptk/ptk-location-view.c:3462 ../src/ptk/ptk-location-view.c:3797
 msgid "_Mount"
 msgstr "_Připojit"
 
-#: ../src/settings.c:9509
+#: ../src/settings.c:9525
 msgid "Re_/mount"
 msgstr "Znovu_připojit"
 
-#: ../src/settings.c:9526 ../src/settings.c:11239
+#: ../src/settings.c:9542 ../src/settings.c:11256
 msgid "_Root"
 msgstr "_Superuživatel"
 
-#: ../src/settings.c:9542
+#: ../src/settings.c:9558
 msgid "_Label"
 msgstr "Š_títek"
 
-#: ../src/settings.c:9592
+#: ../src/settings.c:9608
 msgid "_Check"
 msgstr "_Přezkoušet"
 
-#: ../src/settings.c:9596
+#: ../src/settings.c:9612
 msgid "_Edit fstab"
 msgstr "_Upravit fstab"
 
-#: ../src/settings.c:9600
+#: ../src/settings.c:9616
 msgid "Edit u_devil.conf"
 msgstr "Upravit u_devil.conf"
 
-#: ../src/settings.c:9604
+#: ../src/settings.c:9620
 msgid "_Format"
 msgstr "_Formátovat"
 
-#: ../src/settings.c:9664
+#: ../src/settings.c:9680
 msgid "_Backup"
 msgstr "_Zálohovat"
 
-#: ../src/settings.c:9686
+#: ../src/settings.c:9702
 msgid "_Restore"
 msgstr "_Obnovit"
 
-#: ../src/settings.c:9691
+#: ../src/settings.c:9707
 msgid "_From File"
 msgstr "_Ze souboru"
 
-#: ../src/settings.c:9696 ../src/settings.c:10081
+#: ../src/settings.c:9712 ../src/settings.c:10097
 msgid "File _Info"
 msgstr "_Informace o souboru"
 
-#: ../src/settings.c:9702
+#: ../src/settings.c:9718
 msgid "Setti_ngs"
 msgstr "Nasta_vení"
 
-#: ../src/settings.c:9713
+#: ../src/settings.c:9729
 msgid "_Internal Drives"
 msgstr "_Vnitřní diskové jednotky"
 
-#: ../src/settings.c:9718
+#: ../src/settings.c:9734
 msgid "_Empty Drives"
 msgstr "P_rázdné diskové jednotky"
 
-#: ../src/settings.c:9723
+#: ../src/settings.c:9739
 msgid "_Partition Tables"
 msgstr "Tabulky _oddílů"
 
-#: ../src/settings.c:9727
+#: ../src/settings.c:9743
 msgid "Mounted _Networks"
 msgstr "Připojené sí_tě"
 
-#: ../src/settings.c:9732
+#: ../src/settings.c:9748
 msgid "Mounted _Other"
-msgstr ""
+msgstr "Připojené _jiné"
 
-#: ../src/settings.c:9737
+#: ../src/settings.c:9753
 msgid "_Volumes..."
 msgstr "Sv_azky..."
 
-#: ../src/settings.c:9738
+#: ../src/settings.c:9754
 msgid "Show/Hide Volumes"
 msgstr "Ukázat/Skrýt svazky"
 
-#: ../src/settings.c:9739
+#: ../src/settings.c:9755
 msgid ""
 "To force showing or hiding of some volumes, overriding other settings, you can specify the devices, volume labels, or device IDs in the space-separated list below.\n"
 "\n"
@@ -3008,15 +3045,15 @@ msgid ""
 "\n"
 msgstr "Pro vynucení ukázání nebo skrytí jednotlivých svazků, přepsání jiných nastavení, můžete zadat zařízení, popisky svazků, nebo ID zařízení v mezerami odděleném seznamu níže\n\nPříklad:  +/dev/sdd1 -Label With Space +ata-OCZ-part4\nTímto bude /dev/sdd1 a zařízení OCZ ukázáno, a svazek s popiskem \"Label With Space\" skryt.\n\nMezi záznamy musí být mezera znaménko plus nebo minus přímo před každou položkou.  Tento seznam bere ohled na velikost písmen.\n\n"
 
-#: ../src/settings.c:9746
+#: ../src/settings.c:9762
 msgid "_Display Name"
 msgstr "_Zobrazit název"
 
-#: ../src/settings.c:9748
+#: ../src/settings.c:9764
 msgid "Set Display Name Format"
 msgstr "Nastavit formát zobrazení názvu"
 
-#: ../src/settings.c:9749
+#: ../src/settings.c:9765
 #, c-format
 msgid ""
 "Enter device display name format:\n"
@@ -3031,39 +3068,39 @@ msgid ""
 "\t%%n\tmajor:minor device numbers (eg 15:3)\n"
 msgstr ""
 
-#: ../src/settings.c:9755
+#: ../src/settings.c:9771
 msgid "_Auto Mount"
 msgstr "Připojit _automaticky"
 
-#: ../src/settings.c:9760
+#: ../src/settings.c:9776
 msgid "Mount _Optical"
 msgstr "Připojit _optickou diskovou jednotku"
 
-#: ../src/settings.c:9765
+#: ../src/settings.c:9781
 msgid "_Mount Removable"
 msgstr "_Připojit odpojitelný"
 
-#: ../src/settings.c:9770
+#: ../src/settings.c:9786
 msgid "Open _Tab"
 msgstr "Otevřít _kartu"
 
-#: ../src/settings.c:9775
+#: ../src/settings.c:9791
 msgid "_Unmount On Exit"
 msgstr "Odpojit při _ukončení"
 
-#: ../src/settings.c:9783
+#: ../src/settings.c:9799
 msgid "Auto _Run"
 msgstr "_Spustit automaticky"
 
-#: ../src/settings.c:9789
+#: ../src/settings.c:9805
 msgid "On _Mount"
 msgstr "Při _připojení"
 
-#: ../src/settings.c:9791
+#: ../src/settings.c:9807
 msgid "Auto Run On Mount"
 msgstr "Spustit automaticky při připojení"
 
-#: ../src/settings.c:9792
+#: ../src/settings.c:9808
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically after a removable drive or data disc is auto-mounted:\n"
@@ -3074,15 +3111,15 @@ msgid ""
 "\t%%m\tdevice mount point (eg /media/disk)"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je automaticky připojen odpojitelný disk nebo datový nosič:\n\nPoužití:\n\t%%v\tzařízení (např. /dev/sda1)\n\t%%l\tpopisek zařízení\n\t%%m\tpřípojný bod zařízení (např. /media/disk)"
 
-#: ../src/settings.c:9795
+#: ../src/settings.c:9811
 msgid "On _Audio CD"
 msgstr "Při _zvukovém CD"
 
-#: ../src/settings.c:9797
+#: ../src/settings.c:9813
 msgid "Auto Run On Audio CD"
 msgstr "Spustit automaticky při zvukovém CD"
 
-#: ../src/settings.c:9798
+#: ../src/settings.c:9814
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically when an audio CD is inserted in a qualified device:\n"
@@ -3093,15 +3130,15 @@ msgid ""
 "\t%%m\tdevice mount point (eg /media/disk)"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je do příslušného zařízení vloženo zvukové CD:\n\nPoužití:\n\t%%v\tzařízení (např. /dev/sda1)\n\t%%l\tpopisek zařízení\n\t%%m\tpřípojný bod zařízení (např. /media/disk)"
 
-#: ../src/settings.c:9801
+#: ../src/settings.c:9817
 msgid "On _Video DVD"
 msgstr "Při o_brazovém DVD"
 
-#: ../src/settings.c:9803
+#: ../src/settings.c:9819
 msgid "Auto Run On Video DVD"
 msgstr "Spustit automaticky při obrazovém DVD"
 
-#: ../src/settings.c:9804
+#: ../src/settings.c:9820
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically when a video DVD is auto-mounted:\n"
@@ -3112,15 +3149,15 @@ msgid ""
 "\t%%m\tdevice mount point (eg /media/disk)"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je automaticky připojeno obrazové DVD:\n\nPoužití:\n\t%%v\tzařízení (např. /dev/sda1)\n\t%%l\tpopisek zařízení\n\t%%m\tpřípojný bod zařízení (např. /media/disk)"
 
-#: ../src/settings.c:9807
+#: ../src/settings.c:9823
 msgid "On _Insert"
 msgstr "Při _vložení"
 
-#: ../src/settings.c:9809
+#: ../src/settings.c:9825
 msgid "Auto Run On Insert"
 msgstr "Spustit automaticky při vložení"
 
-#: ../src/settings.c:9810
+#: ../src/settings.c:9826
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically when any device is inserted:\n"
@@ -3131,15 +3168,15 @@ msgid ""
 "\t%%m\tdevice mount point (eg /media/disk)"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je vloženo libovolné zařízení:\n\nPoužití:\n\t%%v\tzařízení přidáno (např. /dev/sda1)\n\t%%l\tpopisek zařízení\n\t%%m\tpřípojný bod zařízení (např. /media/disk)"
 
-#: ../src/settings.c:9813
+#: ../src/settings.c:9829
 msgid "On _Unmount"
 msgstr "Při _odpojení"
 
-#: ../src/settings.c:9815
+#: ../src/settings.c:9831
 msgid "Auto Run On Unmount"
 msgstr "Spustit automaticky při odpojení"
 
-#: ../src/settings.c:9816
+#: ../src/settings.c:9832
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically when any device is unmounted by any means:\n"
@@ -3150,15 +3187,15 @@ msgid ""
 "\t%%m\tdevice mount point (eg /media/disk)"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je odpojeno libovolné zařízení:\n\nPoužití:\n\t%%v\tzařízení odstraněno (např. /dev/sda1)\n\t%%l\tpopisek zařízení\n\t%%m\tpřípojný bod zařízení (např. /media/disk)"
 
-#: ../src/settings.c:9819
+#: ../src/settings.c:9835
 msgid "On _Remove"
 msgstr "Při o_dstranění"
 
-#: ../src/settings.c:9821
+#: ../src/settings.c:9837
 msgid "Auto Run On Remove"
 msgstr "Spustit automaticky při odstranění"
 
-#: ../src/settings.c:9822
+#: ../src/settings.c:9838
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically when any device is removed (ejection of media does not qualify):\n"
@@ -3169,15 +3206,15 @@ msgid ""
 "\t%%m\tdevice mount point (eg /media/disk)"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je odpojeno libovolné zařízení (vysunutí datového nosiče nestačí):\n\nPoužití:\n\t%%v\tzařízení odstraněno (např. /dev/sda1)\n\t%%l\tpopisek zařízení\n\t%%m\tpřípojný bod zařízení (např. /media/disk)"
 
-#: ../src/settings.c:9829
+#: ../src/settings.c:9845
 msgid "Mount _Volumes..."
 msgstr "Připojit _svazky..."
 
-#: ../src/settings.c:9830
+#: ../src/settings.c:9846
 msgid "Auto-Mount Volumes"
 msgstr "Připojit svazky automaticky"
 
-#: ../src/settings.c:9831
+#: ../src/settings.c:9847
 msgid ""
 "To force or prevent automounting of some volumes, overriding other settings, you can specify the devices, volume labels, or device IDs in the space-separated list below.\n"
 "\n"
@@ -3188,11 +3225,11 @@ msgid ""
 "\n"
 msgstr "Pro vynucení nebo zabránění automatického připojení jednotlivých svazků, přepsání jiných nastavení, můžete zadat zařízení, popisky svazků, nebo ID zařízení v mezerami odděleném seznamu níže\n\nPříklad:  +/dev/sdd1 -Label With Space +ata-OCZ-part4\nTímto bude /dev/sdd1 a zařízení OCZ při zjištění automaticky připojeno, a svazek s popiskem \"Label With Space\" přehlížen.\n\nMezi záznamy musí být mezera znaménko plus nebo minus přímo před každou položkou.  Tento seznam bere ohled na velikost písmen.\n\n"
 
-#: ../src/settings.c:9834
+#: ../src/settings.c:9850
 msgid "_Mount Options"
 msgstr "Volby pro připojení"
 
-#: ../src/settings.c:9835
+#: ../src/settings.c:9851
 msgid ""
 "Enter your comma- or space-separated list of default mount options below (to be used for all mounts).\n"
 "\n"
@@ -3204,15 +3241,15 @@ msgid ""
 "Note: Some options, such as nosuid, may be added by the mount program even if you don't include them.  Options in fstab take precedence.  pmount ignores options set here."
 msgstr "Zadejte svůj čárkami nebo mezerami oddělený seznam výchozích voleb pro připojení níže (použije se potom při všech připojeních).\n\nDodatečně k běžným volbám lze přidat nebo odstranit volby pro určité souborové systémové typy pomocí zadávacího formuláře VOLBA+TYPSOUBOROVÉHOSYSTÉMU nebo VOLBA-TYPSOUBOROVÉHOSYSTÉMU.\n\nPříklad:  nosuid, sync+vfat, sync+ntfs, noatime, noatime-ext4\nTímto se přidá nosuid a noatime ke všem typům souborových systémů, sync pouze pro vfat a ntfs, a odstraní noatime pro ext4.\n\nPoznámka: Některé volby, jako je nosuid, mohou být, pokud je nezahrnete, přidány pomocí připojovacího příkazu.  Volby v fstab mají přednost.  pmount přehlíží zde nastavené volby."
 
-#: ../src/settings.c:9837
+#: ../src/settings.c:9853
 msgid "Default Mount Options"
 msgstr "Výchozí volby pro připojení"
 
-#: ../src/settings.c:9845
+#: ../src/settings.c:9861
 msgid "Re/mount With Options"
 msgstr "Opakovat připojení s volbami"
 
-#: ../src/settings.c:9846
+#: ../src/settings.c:9862
 msgid ""
 "Device will be (re)mounted using the options below.\n"
 "\n"
@@ -3224,11 +3261,11 @@ msgid ""
 "Note: Some options, such as nosuid, may be added by the mount program even if you don't include them.  Options in fstab take precedence.  pmount ignores options set here."
 msgstr "Zařízení bude (znovu) připojeno pomocí voleb níže.\n\nDodatečně k běžným volbám lze přidat nebo odstranit volby pro určité souborové systémové typy pomocí zadávacího formuláře VOLBA+TYPSOUBOROVÉHOSYSTÉMU nebo VOLBA-TYPSOUBOROVÉHOSYSTÉMU.\n\nPříklad:  nosuid, sync+vfat, sync+ntfs, noatime, noatime-ext4\nTímto se přidá nosuid a noatime ke všem typům souborových systémů, sync pouze pro vfat a ntfs, a odstraní noatime pro ext4.\n\nPoznámka: Některé volby, jako je nosuid, mohou být, pokud je nezahrnete, přidány pomocí připojovacího příkazu.  Volby v fstab mají přednost.  pmount přehlíží zde nastavené volby."
 
-#: ../src/settings.c:9850
+#: ../src/settings.c:9866
 msgid "_Change Detection"
-msgstr ""
+msgstr "Zjištění _změny"
 
-#: ../src/settings.c:9851
+#: ../src/settings.c:9867
 msgid ""
 "Enter your comma- or space-separated list of filesystems which should NOT be"
 " monitored for changes.  This setting only affects non-block devices (such "
@@ -3237,9 +3274,9 @@ msgid ""
 "disabled."
 msgstr ""
 
-#: ../src/settings.c:9853
+#: ../src/settings.c:9869
 msgid "Change Detection Blacklist"
-msgstr ""
+msgstr "Černá listina zjištění změny"
 
 #. Removed 0.9.4
 #. set = xset_set( "dev_mount_cmd", "lbl", _("Mount _Command") );
@@ -3263,198 +3300,198 @@ msgstr ""
 #. xset_set_set( set, "title", _("Unmount Command") );
 #. xset_set_set( set, "icn", "gtk-edit" );
 #. set->line = g_strdup( "#devices-settings-ucmd" );
-#: ../src/settings.c:9875
+#: ../src/settings.c:9891
 msgid "_Device Handlers"
-msgstr ""
+msgstr "Zacházení se _zařízeními"
 
-#: ../src/settings.c:9879 ../src/settings.c:11039
+#: ../src/settings.c:9895 ../src/settings.c:11056
 msgid "_Protocol Handlers"
-msgstr ""
+msgstr "Zacházení s _protokoly"
 
-#: ../src/settings.c:9896 ../src/settings.c:9991 ../src/settings.c:11390
-#: ../src/settings.c:11402
+#: ../src/settings.c:9912 ../src/settings.c:10007 ../src/settings.c:11412
+#: ../src/settings.c:11424
 msgid "_Icon"
 msgstr "_Symbol"
 
-#: ../src/settings.c:9901
+#: ../src/settings.c:9917
 msgid "Audio CD"
 msgstr "Audio CD"
 
-#: ../src/settings.c:9907
+#: ../src/settings.c:9923
 msgid "Optical Mounted"
 msgstr "Připojena disková jednotka CD/DVD"
 
-#: ../src/settings.c:9912
+#: ../src/settings.c:9928
 msgid "Optical Has Media"
 msgstr "V diskové jednotce CD/DVD je přítomen nosič dat"
 
-#: ../src/settings.c:9917
+#: ../src/settings.c:9933
 msgid "Optical No Media"
 msgstr "V diskové jednotce CD/DVD není přítomen žádný nosič dat"
 
-#: ../src/settings.c:9922
+#: ../src/settings.c:9938
 msgid "Floppy Mounted"
 msgstr "Připojena disketová jednotka"
 
-#: ../src/settings.c:9927
+#: ../src/settings.c:9943
 msgid "Floppy Unmounted"
 msgstr "Odpojena disketová jednotka"
 
-#: ../src/settings.c:9932
+#: ../src/settings.c:9948
 msgid "Removable Mounted"
 msgstr "Připojen vnější odpojitelný disk"
 
-#: ../src/settings.c:9937
+#: ../src/settings.c:9953
 msgid "Removable Unmounted"
 msgstr "Odpojen vnější odpojitelný disk"
 
-#: ../src/settings.c:9942
+#: ../src/settings.c:9958
 msgid "Internal Mounted"
 msgstr "Připojen vnitřní disk"
 
-#: ../src/settings.c:9947
+#: ../src/settings.c:9963
 msgid "Internal Unmounted"
 msgstr "Odpojen vnitřní disk"
 
-#: ../src/settings.c:9952
+#: ../src/settings.c:9968
 msgid "Mounted Network"
 msgstr "Připojen síťový disk"
 
-#: ../src/settings.c:9957
+#: ../src/settings.c:9973
 msgid "Mounted Other"
-msgstr ""
+msgstr "Připojené jiné"
 
-#: ../src/settings.c:9972 ../src/settings.c:11058
+#: ../src/settings.c:9988 ../src/settings.c:11075
 #: ../src/ptk/ptk-file-misc.c:710 ../src/ptk/ptk-file-misc.c:1246
 #: ../src/ptk/ptk-file-misc.c:2155
 msgid "_Rename"
 msgstr "_Přejmenovat"
 
-#: ../src/settings.c:9978
+#: ../src/settings.c:9994
 msgid "Re_move"
 msgstr "_Odstranit"
 
-#: ../src/settings.c:9984
+#: ../src/settings.c:10000
 msgctxt "Bookmarks|Open|"
 msgid "_Tab"
 msgstr "_Karta"
 
-#: ../src/settings.c:9987
+#: ../src/settings.c:10003
 msgid "_Settings"
 msgstr "_Nastavení"
 
 #. do not set a default icon for book_icon
 #. Rename/Move Dialog
-#: ../src/settings.c:9996 ../src/settings.c:10999 ../src/settings.c:11408
+#: ../src/settings.c:10012 ../src/settings.c:11016 ../src/settings.c:11430
 msgid "_Name"
 msgstr "_Název"
 
-#: ../src/settings.c:10003
+#: ../src/settings.c:10019
 msgid "_Parent"
 msgstr "Pů_vod"
 
-#: ../src/settings.c:10006 ../src/ptk/ptk-file-misc.c:1075
+#: ../src/settings.c:10022 ../src/ptk/ptk-file-misc.c:1075
 msgid "P_ath"
 msgstr "_Cesta"
 
-#: ../src/settings.c:10022
+#: ../src/settings.c:10038
 msgid "_Option"
 msgstr "_Volba"
 
-#: ../src/settings.c:10030 ../src/settings.c:10889
+#: ../src/settings.c:10046 ../src/settings.c:10906
 #: ../src/ptk/ptk-file-misc.c:1256 ../src/ptk/ptk-file-misc.c:1267
 msgid "_Link"
 msgstr "_Zástupce"
 
-#: ../src/settings.c:10034 ../src/ptk/ptk-file-misc.c:2506
+#: ../src/settings.c:10050 ../src/ptk/ptk-file-misc.c:2506
 msgid "Copy _Target"
 msgstr "Kopírovat _cíl"
 
-#: ../src/settings.c:10037
+#: ../src/settings.c:10053
 msgid "Lin_k Target"
 msgstr "Cíl _odkazu"
 
-#: ../src/settings.c:10040
+#: ../src/settings.c:10056
 msgid "_As Root"
 msgstr "_Jako superuživatel"
 
-#: ../src/settings.c:10044 ../src/settings.c:10586 ../src/settings.c:10638
-#: ../src/settings.c:10735 ../src/settings.c:10764 ../src/settings.c:11358
-#: ../src/settings.c:11364 ../src/settings.c:11371 ../src/settings.c:11377
-#: ../src/settings.c:11384 ../src/settings.c:11394
+#: ../src/settings.c:10060 ../src/settings.c:10602 ../src/settings.c:10654
+#: ../src/settings.c:10752 ../src/settings.c:10781 ../src/settings.c:11380
+#: ../src/settings.c:11386 ../src/settings.c:11393 ../src/settings.c:11399
+#: ../src/settings.c:11406 ../src/settings.c:11416
 msgid "_Font"
 msgstr "_Písmo"
 
-#: ../src/settings.c:10047
+#: ../src/settings.c:10063
 msgid "Move Dialog Font"
 msgstr "Posunout písmo pro dialog"
 
-#: ../src/settings.c:10048
+#: ../src/settings.c:10064
 msgid "/home/user/Example Filename.ext"
 msgstr "/home/user/Příklad názvu souboru.ext"
 
-#: ../src/settings.c:10053
+#: ../src/settings.c:10069
 msgid "_Confirm Create"
 msgstr "_Potvrdit vytvoření"
 
-#: ../src/settings.c:10061
+#: ../src/settings.c:10077
 msgid "Highlight _Bar"
 msgstr "Zvýraznit řá_dek"
 
-#: ../src/settings.c:10062
+#: ../src/settings.c:10078
 msgid "Status Bar Highlight Color"
 msgstr "Barva zvýraznění stavového řádku"
 
-#: ../src/settings.c:10066
+#: ../src/settings.c:10082
 msgid "Highlight _Text"
 msgstr "Zvýraznit _text"
 
-#: ../src/settings.c:10067
+#: ../src/settings.c:10083
 msgid "Status Bar Text Highlight Color"
 msgstr "Barva zvýraznění textu stavového řádku"
 
-#: ../src/settings.c:10071
+#: ../src/settings.c:10087
 msgid "_Middle Click"
 msgstr "Klepnutí p_rostředním tlačítkem myši"
 
-#: ../src/settings.c:10075 ../src/settings.c:11079
+#: ../src/settings.c:10091 ../src/settings.c:11096
 msgid "Copy _Name"
 msgstr "Kopírovat _název"
 
-#: ../src/settings.c:10078 ../src/settings.c:11082
+#: ../src/settings.c:10094 ../src/settings.c:11099
 msgid "Copy _Path"
 msgstr "Kopírovat _cestu"
 
-#: ../src/settings.c:10085
+#: ../src/settings.c:10101
 msgid "_Hide Panel"
 msgstr "_Skrýt panel"
 
-#: ../src/settings.c:10101
+#: ../src/settings.c:10117
 msgid "New _Window"
 msgstr "Nové _okno"
 
-#: ../src/settings.c:10104
+#: ../src/settings.c:10120
 msgid "R_oot Window"
 msgstr "Okno s_uperuživatele"
 
-#: ../src/settings.c:10107
+#: ../src/settings.c:10123
 msgid "_File Search"
 msgstr "Hledání _souboru"
 
-#: ../src/settings.c:10110
+#: ../src/settings.c:10126
 msgid "_Terminal"
 msgstr "_Terminál"
 
 #. discovery notification
-#: ../src/settings.c:10113
+#: ../src/settings.c:10129
 msgid "_Root Terminal"
 msgstr "Terminál sup_eruživatele"
 
-#: ../src/settings.c:10120
+#: ../src/settings.c:10136
 msgid "Open URL"
-msgstr ""
+msgstr "Otevřít adresu (URL)"
 
-#: ../src/settings.c:10121
+#: ../src/settings.c:10137
 msgid ""
 "Enter URL in the format:\n"
 "\tPROTOCOL://USERNAME:PASSWORD@HOST:PORT/SHARE\n"
@@ -3467,71 +3504,71 @@ msgid ""
 "Including a password is unsafe.  To bookmark a URL, right-click on the mounted network in Devices and select Bookmark.\n"
 msgstr ""
 
-#: ../src/settings.c:10124
+#: ../src/settings.c:10140
 msgid "Save Ta_bs"
 msgstr "Uložit k_arty"
 
-#: ../src/settings.c:10128
+#: ../src/settings.c:10144
 msgid "E_xit"
 msgstr "U_končit"
 
-#: ../src/settings.c:10159 ../src/settings.c:10197 ../src/settings.c:10816
-#: ../src/settings.c:11131 ../src/settings.c:11169
+#: ../src/settings.c:10175 ../src/settings.c:10213 ../src/settings.c:10833
+#: ../src/settings.c:11148 ../src/settings.c:11186
 msgid "Panel _1"
 msgstr "Panel _1"
 
-#: ../src/settings.c:10164 ../src/settings.c:10199 ../src/settings.c:10817
-#: ../src/settings.c:11132 ../src/settings.c:11170
+#: ../src/settings.c:10180 ../src/settings.c:10215 ../src/settings.c:10834
+#: ../src/settings.c:11149 ../src/settings.c:11187
 msgid "Panel _2"
 msgstr "Panel _2"
 
-#: ../src/settings.c:10168 ../src/settings.c:10200 ../src/settings.c:10818
-#: ../src/settings.c:11133 ../src/settings.c:11171
+#: ../src/settings.c:10184 ../src/settings.c:10216 ../src/settings.c:10835
+#: ../src/settings.c:11150 ../src/settings.c:11188
 msgid "Panel _3"
 msgstr "Panel _3"
 
-#: ../src/settings.c:10172 ../src/settings.c:10201 ../src/settings.c:10819
-#: ../src/settings.c:11134 ../src/settings.c:11172
+#: ../src/settings.c:10188 ../src/settings.c:10217 ../src/settings.c:10836
+#: ../src/settings.c:11151 ../src/settings.c:11189
 msgid "Panel _4"
 msgstr "Panel _4"
 
-#: ../src/settings.c:10176
+#: ../src/settings.c:10192
 msgid "Panel _Bar"
 msgstr "_Pruh s panely"
 
-#: ../src/settings.c:10181 ../src/settings.c:10915
-msgid "_Go"
-msgstr "_Přejít"
+#: ../src/settings.c:10197
+msgid "F_ocus"
+msgstr "_Zaměření"
 
-#: ../src/settings.c:10187 ../src/settings.c:10797 ../src/settings.c:10814
-#: ../src/settings.c:10955 ../src/settings.c:11112 ../src/settings.c:11129
-#: ../src/settings.c:11150 ../src/settings.c:11167
+#: ../src/settings.c:10203 ../src/settings.c:10814 ../src/settings.c:10831
+#: ../src/settings.c:10972 ../src/settings.c:11129 ../src/settings.c:11146
+#: ../src/settings.c:11167 ../src/settings.c:11184
 msgid "_Prev"
 msgstr "_Předchozí"
 
-#: ../src/settings.c:10189 ../src/settings.c:10798 ../src/settings.c:10815
-#: ../src/settings.c:10956 ../src/settings.c:11113 ../src/settings.c:11130
-#: ../src/settings.c:11151 ../src/settings.c:11168
+#: ../src/settings.c:10205 ../src/settings.c:10815 ../src/settings.c:10832
+#: ../src/settings.c:10973 ../src/settings.c:11130 ../src/settings.c:11147
+#: ../src/settings.c:11168 ../src/settings.c:11185
 msgid "_Next"
 msgstr "_Další"
 
-#: ../src/settings.c:10203
-msgid "_Events"
-msgstr "_Události"
+#: ../src/settings.c:10219
+msgid "_Event Manager"
+msgstr "Správce _událostí"
 
-#: ../src/settings.c:10209
+#: ../src/settings.c:10225
 msgid "_Instance"
 msgstr "_Instance"
 
-#: ../src/settings.c:10214
+#: ../src/settings.c:10230
 msgid "_Startup"
 msgstr "_Spuštění"
 
-#: ../src/settings.c:10216
+#: ../src/settings.c:10232
 msgid "Set Instance Startup Command"
 msgstr "Stanovit příkaz pro spuštění instance"
 
-#: ../src/settings.c:10217
+#: ../src/settings.c:10233
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically when a SpaceFM instance starts:\n"
@@ -3540,15 +3577,15 @@ msgid ""
 "\t%%e\tevent type  (evt_start)\n"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je spuštěna instance SpaceFM:\n\nPoužití:\n\t%%e\ttyp události  (evt_start)\n"
 
-#: ../src/settings.c:10220
+#: ../src/settings.c:10236
 msgid "_Exit"
 msgstr "U_končit"
 
-#: ../src/settings.c:10222
+#: ../src/settings.c:10238
 msgid "Set Instance Exit Command"
 msgstr "Stanovit příkaz pro ukončení instance"
 
-#: ../src/settings.c:10223
+#: ../src/settings.c:10239
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically when a SpaceFM instance exits:\n"
@@ -3557,20 +3594,20 @@ msgid ""
 "\t%%e\tevent type  (evt_exit)\n"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je ukončena instance SpaceFM:\n\nPoužití:\n\t%%e\ttyp události  (evt_exit)\n"
 
-#: ../src/settings.c:10226
+#: ../src/settings.c:10242
 msgid "_Window"
 msgstr "_Okno"
 
-#: ../src/settings.c:10231
+#: ../src/settings.c:10247
 msgctxt "View|Events|Window|"
 msgid "_New"
 msgstr "_Nový"
 
-#: ../src/settings.c:10233
+#: ../src/settings.c:10249
 msgid "Set New Window Command"
 msgstr "Stanovit příkaz pro nové okno"
 
-#: ../src/settings.c:10234
+#: ../src/settings.c:10250
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a new SpaceFM window is opened:\n"
@@ -3584,15 +3621,15 @@ msgid ""
 "Exported bash variables (eg $fm_pwd, etc) can be used in this command."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je otevřeno nové okno SpaceFM:\n\nPoužití:\n\t%%e\ttyp události  (evt_win_new)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10237 ../src/settings.c:10272 ../src/settings.c:10301
+#: ../src/settings.c:10253 ../src/settings.c:10288 ../src/settings.c:10317
 msgid "_Focus"
 msgstr "_Zaměření"
 
-#: ../src/settings.c:10239
+#: ../src/settings.c:10255
 msgid "Set Window Focus Command"
 msgstr "Stanovit příkaz pro zaměření okna"
 
-#: ../src/settings.c:10240
+#: ../src/settings.c:10256
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a SpaceFM window gets focus:\n"
@@ -3606,15 +3643,15 @@ msgid ""
 "Exported bash variables (eg $fm_pwd, etc) can be used in this command."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je zaměřeno okno SpaceFM:\n\nPoužití:\n\t%%e\ttyp události  (evt_win_focus)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10243
+#: ../src/settings.c:10259
 msgid "_Move/Resize"
 msgstr "_Přesunout/Změnit velikost"
 
-#: ../src/settings.c:10245
+#: ../src/settings.c:10261
 msgid "Set Window Move/Resize Command"
 msgstr "Stanovit příkaz pro přesunutí/změnu velikosti"
 
-#: ../src/settings.c:10246
+#: ../src/settings.c:10262
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a SpaceFM window is moved or resized:\n"
@@ -3630,15 +3667,15 @@ msgid ""
 "Note: This command may be run multiple times during resize."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je okno SpaceFM přesunuto, nebo je změněna jeho velikost:\n\nPoužití:\n\t%%e\ttyp události  (evt_win_move)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10249
+#: ../src/settings.c:10265
 msgid "_Click"
 msgstr "_Klepnout"
 
-#: ../src/settings.c:10251
+#: ../src/settings.c:10267
 msgid "Set Click Command"
 msgstr "Stanovit příkaz pro klepnutí"
 
-#: ../src/settings.c:10252
+#: ../src/settings.c:10268
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever the mouse is clicked:\n"
@@ -3658,15 +3695,15 @@ msgid ""
 "*if [ \"%%b\" != \"2\" ]; then exit 1; fi; spacefm -g --label \"\\nMiddle button was clicked in %%f\" --button ok &"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je klepnuto myší:\n\nPoužití:\n\t%%e\ttyp události  (evt_win_click)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\t%%b\ttlačítko  (stisknuto tlačítko myši)\n\t%%m\tmodifikátor  (klávesy modifikátorů)\n\t%%f\tzaměření  (prvek, jenž přijal klepnutí)\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít.\n\nUveďte před svůj příkaz hvězdičku (*) a podmínečně vrácení stavu ukončení 0 pro zabránění výchozímu zacházení.  Například:\n*if [ \"%%b\" != \"2\" ]; then exit 1; fi; spacefm -g --label \"\\nProstřední tlačítko myši stisknuto v %%f\" --button ok &"
 
-#: ../src/settings.c:10255
+#: ../src/settings.c:10271
 msgid "_Keypress"
 msgstr "Stisknout _klávesu"
 
-#: ../src/settings.c:10257
+#: ../src/settings.c:10273
 msgid "Set Window Keypress Command"
 msgstr "Stanovit příkaz pro stisknutí klávesy"
 
-#: ../src/settings.c:10258
+#: ../src/settings.c:10274
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a key is pressed:\n"
@@ -3685,15 +3722,15 @@ msgid ""
 "*if [ \"%%k\" != \"0xffc5\" ]; then exit 1; fi; spacefm -g --label \"\\nKey F8 was pressed.\" --button ok &"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je stisknuta klávesa:\n\nPoužití:\n\t%%e\ttyp události  (evt_win_key)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\t%%k\tkód klávesy  (stisknutá klávesa)\n\t%%m\tmodifikátor  (klávesy modifikátorů)\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít.\n\nUveďte před svůj příkaz hvězdičku (*) a podmínečně vrácení stavu ukončení 0 pro zabránění výchozímu zacházení.  Například:\n*if [ \"%%k\" != \"0xffc5\" ]; then exit 1; fi; spacefm -g --label \"\\nKlávesa F8 stisknuta\" --button ok &"
 
-#: ../src/settings.c:10261
+#: ../src/settings.c:10277
 msgid "Cl_ose"
 msgstr "Z_avřít"
 
-#: ../src/settings.c:10263
+#: ../src/settings.c:10279
 msgid "Set Window Close Command"
 msgstr "Stanovit příkaz pro zavření okna"
 
-#: ../src/settings.c:10264
+#: ../src/settings.c:10280
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a SpaceFM window is closed:\n"
@@ -3707,15 +3744,15 @@ msgid ""
 "Exported bash variables (eg $fm_pwd, etc) can be used in this command."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je okno SpaceFM zavřeno:\n\nPoužití:\n\t%%e\ttyp události  (evt_win_close)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10267
+#: ../src/settings.c:10283
 msgid "_Panel"
 msgstr "_Panel"
 
-#: ../src/settings.c:10274
+#: ../src/settings.c:10290
 msgid "Set Panel Focus Command"
 msgstr "Stanovit příkaz pro zaměření panelu"
 
-#: ../src/settings.c:10275
+#: ../src/settings.c:10291
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a panel gets focus:\n"
@@ -3729,16 +3766,16 @@ msgid ""
 "Exported bash variables (eg $fm_pwd, etc) can be used in this command."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je panel zaměřen:\n\nPoužití:\n\t%%e\ttyp události  (evt_pnl_focus)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10278
+#: ../src/settings.c:10294
 msgctxt "View|Events|Panel|"
 msgid "_Show"
 msgstr "_Ukázat"
 
-#: ../src/settings.c:10280
+#: ../src/settings.c:10296
 msgid "Set Panel Show Command"
 msgstr "Stanovit příkaz pro ukázání panelu"
 
-#: ../src/settings.c:10281
+#: ../src/settings.c:10297
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a panel or panel element is shown or hidden:\n"
@@ -3754,15 +3791,15 @@ msgid ""
 "Exported bash variables (eg $fm_pwd, etc) can be used in this command."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je panel nebo prvek panelu ukázán nebo skryt:\n\nPoužití:\n\t%%e\ttyp události  (evt_pnl_show)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\t%%f\tzaměření  (prvek ukázán nebo skryt)\n\t%%v\tvisible  (1 or 0)\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10284
+#: ../src/settings.c:10300
 msgid "S_elect"
 msgstr "_Vybrat"
 
-#: ../src/settings.c:10286
+#: ../src/settings.c:10302
 msgid "Set Panel Select Command"
 msgstr "Stanovit příkaz pro vybrání panelu"
 
-#: ../src/settings.c:10287
+#: ../src/settings.c:10303
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever the file selection changes:\n"
@@ -3778,16 +3815,16 @@ msgid ""
 "Prefix your command with an asterisk (*) and conditionally return exit status 0 to inhibit the default handler."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když se změní výběr panelu:\n\nPoužití:\n\t%%e\ttyp události  (evt_pnl_sel)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10290
+#: ../src/settings.c:10306
 msgctxt "View|Events|"
 msgid "_Tab"
 msgstr "_Karta"
 
-#: ../src/settings.c:10297
+#: ../src/settings.c:10313
 msgid "Set New Tab Command"
 msgstr "Stanovit příkaz pro novou kartu"
 
-#: ../src/settings.c:10298
+#: ../src/settings.c:10314
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a new tab is opened:\n"
@@ -3801,11 +3838,11 @@ msgid ""
 "Exported bash variables (eg $fm_pwd, etc) can be used in this command."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je otevřena nová karta:\n\nPoužití:\n\t%%e\ttyp události  (evt_tab_new)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10303
+#: ../src/settings.c:10319
 msgid "Set Tab Focus Command"
 msgstr "Stanovit příkaz pro zaměření karty"
 
-#: ../src/settings.c:10304
+#: ../src/settings.c:10320
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a tab gets focus:\n"
@@ -3819,16 +3856,16 @@ msgid ""
 "Exported bash variables (eg $fm_pwd, etc) can be used in this command."
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je karta zaměřena:\n\nPoužití:\n\t%%e\ttyp události  (evt_tab_focus)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tkarta\n\nVyvedené proměnné příkazového řádku (bash) (např. $fm_pwd, atd.) lze v tomto příkazu použít."
 
-#: ../src/settings.c:10307
+#: ../src/settings.c:10323
 msgctxt "View|Events|Tab|"
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: ../src/settings.c:10309
+#: ../src/settings.c:10325
 msgid "Set Tab Close Command"
 msgstr "Stanovit příkaz pro zavření karty"
 
-#: ../src/settings.c:10310
+#: ../src/settings.c:10326
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a tab is closed:\n"
@@ -3840,15 +3877,15 @@ msgid ""
 "\t%%t\tclosed tab"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když je karta zavřena:\n\nPoužití:\n\t%%e\ttyp události  (evt_tab_close)\n\t%%w\tID okna  (podívejte se na spacefm -s pro nápovědu)\n\t%%p\tpanel\n\t%%t\tzavřená karta"
 
-#: ../src/settings.c:10313
+#: ../src/settings.c:10329
 msgid "_Device"
 msgstr "Zaříz_ení"
 
-#: ../src/settings.c:10315
+#: ../src/settings.c:10331
 msgid "Set Device Command"
 msgstr "Stanovit příkaz pro zařízení"
 
-#: ../src/settings.c:10316
+#: ../src/settings.c:10332
 #, c-format
 msgid ""
 "Enter program or bash command line to be run automatically whenever a device state changes:\n"
@@ -3859,15 +3896,15 @@ msgid ""
 "\t%%v\tchange  (added|removed|changed)\n"
 msgstr "Zadejte program nebo příkaz pro (bash) příkazový řádek, aby byl spuštěn automaticky, když se změní stav zařízení:\n\nPoužití:\n\t%%e\ttyp události  (evt_device)\n\t%%f\tsoubor zařízení\n\t%%v\tzměna  (přidáno|odstraněno|změněno)\n"
 
-#: ../src/settings.c:10319
+#: ../src/settings.c:10335
 msgid "Wi_ndow Title"
 msgstr "Název _okna"
 
-#: ../src/settings.c:10321
+#: ../src/settings.c:10337
 msgid "Set Window Title Format"
 msgstr "Stanovit formát názvu okna"
 
-#: ../src/settings.c:10322
+#: ../src/settings.c:10338
 #, c-format
 msgid ""
 "Set window title format:\n"
@@ -3882,15 +3919,15 @@ msgid ""
 "\t*\tasterisk shown if tasks running in window"
 msgstr "Nastavit formát názvu okna:\n\nPoužití:\n\t%%n\tnázev nynější složky (např. bin)\n\t%%d\tcesta k nynější  složce (např. /usr/bin)\n\t%%p\tčíslo nynějšího panelu (1-4)\n\t%%t\tčíslo nynější karty\n\t%%P\tcelkový počet viditelných panelů\n\t%%T\tcelkový počet karet v nynějším panelu\n\t*\thvězdička ukázána, pokud v okně běží úkoly"
 
-#: ../src/settings.c:10326
+#: ../src/settings.c:10342
 msgid "_Window Icon"
 msgstr "Symbol okn_a"
 
-#: ../src/settings.c:10328
+#: ../src/settings.c:10344
 msgid "Set Window Icon"
 msgstr "Stanovit symbol okna"
 
-#: ../src/settings.c:10329
+#: ../src/settings.c:10345
 msgid ""
 "Enter an icon name, icon file path, or stock item name:\n"
 "\n"
@@ -3903,64 +3940,64 @@ msgid ""
 "For example: spacefm-48-pyramid-green"
 msgstr "Zadejte název ikony, cestu k souboru s ikonou, nebo inventární název položky:\n\nNe všechny ikony musí z různých důvodů pracovat.\n\nV takovém případě jsou poskytovány náhradní ikony SpaceFM:\n\tspacefm-[48|128]-[cube|pyramid]-[blue|green|red]\n\tspacefm-48-folder-[blue|red]\n\nNapříklad: spacefm-48-pyramid-green"
 
-#: ../src/settings.c:10331
+#: ../src/settings.c:10347
 msgid "_Fullscreen"
 msgstr "_Celá obrazovka"
 
-#: ../src/settings.c:10334
+#: ../src/settings.c:10350
 msgid "_Design Mode"
 msgstr "_Návrhový režim"
 
-#: ../src/settings.c:10337
+#: ../src/settings.c:10353
 msgid "_Preferences"
 msgstr "_Nastavení"
 
-#: ../src/settings.c:10340
+#: ../src/settings.c:10356
 msgid "_Tool"
 msgstr "_Nástroje"
 
 #. Plugins
-#: ../src/settings.c:10347
+#: ../src/settings.c:10363
 msgid "_Install"
 msgstr "_Nainstalovat"
 
-#: ../src/settings.c:10375
+#: ../src/settings.c:10391
 msgid "_Verbose"
 msgstr "Pod_robný"
 
-#: ../src/settings.c:10382
+#: ../src/settings.c:10398
 msgid "In_cluded"
 msgstr "Za_hrnuto"
 
-#: ../src/settings.c:10396
+#: ../src/settings.c:10412
 msgid "_User's Manual"
 msgstr "Uži_vatelská příručka"
 
-#: ../src/settings.c:10402
+#: ../src/settings.c:10418
 msgid "_Homepage"
 msgstr "_Domovská stránka"
 
-#: ../src/settings.c:10405
+#: ../src/settings.c:10421
 msgid "SpaceFM _News"
 msgstr "_Zprávy SpaceFM"
 
-#: ../src/settings.c:10408
+#: ../src/settings.c:10424
 msgid "_Get Plugins"
 msgstr "Získ_at přídavné moduly"
 
-#: ../src/settings.c:10411
+#: ../src/settings.c:10427
 msgid "_Options"
 msgstr "_Volby"
 
-#: ../src/settings.c:10416
+#: ../src/settings.c:10432
 msgid "_Browser"
 msgstr "P_rohlížeč"
 
-#: ../src/settings.c:10418
+#: ../src/settings.c:10434
 msgid "Choose HTML Browser"
 msgstr "Vybrat prohlížeč HTML"
 
-#: ../src/settings.c:10419
+#: ../src/settings.c:10435
 #, c-format
 msgid ""
 "Enter browser name or bash command line to be used to display HTML files and URLs:\n"
@@ -3971,682 +4008,695 @@ msgid ""
 "(Leave blank for automatic browser detection)"
 msgstr "Zadejte název prohlížeče neboo příkaz pro (bash) příkazový řádek, aby byl použit k zobrazení souborů HTML a adres (URL):\n\nPoužití:\n\t%%u\turl\n\n(Ponechte prázdné pro automatické zjištění prohlížeče)"
 
-#: ../src/settings.c:10422
+#: ../src/settings.c:10438
 msgid "_Manual Location"
 msgstr "Umístění _příručky"
 
-#: ../src/settings.c:10424
+#: ../src/settings.c:10440
 msgid "Choose User's Manual Location"
 msgstr "Vyberte umístění uživatelské příručky"
 
-#: ../src/settings.c:10425
+#: ../src/settings.c:10441
 msgid ""
 "Enter local file path or remote URL for the SpaceFM User's Manual:\n"
 "\n"
 "(Leave blank for default)\n"
 msgstr "Zadejte cestu k místnímu souboru nebo vzdálenou adresu (URL) pro uživatelskou příručku SpaceFM:\n\n(Ponechte prázdné pro výchozí)\n"
 
-#: ../src/settings.c:10428
+#: ../src/settings.c:10444
 msgid "_About"
 msgstr "O _programu"
 
-#: ../src/settings.c:10460
+#: ../src/settings.c:10476
 msgid "_Status"
 msgstr "_Stav"
 
 #. column position
 #. column width
-#: ../src/settings.c:10466
+#: ../src/settings.c:10482
 msgid "_Count"
 msgstr "Poč_et"
 
-#: ../src/settings.c:10477
+#: ../src/settings.c:10493
 msgid "_Item"
 msgstr "P_oložka"
 
-#: ../src/settings.c:10483
+#: ../src/settings.c:10499
 msgid "_To"
 msgstr "_Do"
 
-#: ../src/settings.c:10489
+#: ../src/settings.c:10505
 msgid "_Progress"
 msgstr "_Postup"
 
-#: ../src/settings.c:10496
+#: ../src/settings.c:10512
 msgid "T_otal"
 msgstr "_Celkem"
 
-#: ../src/settings.c:10503
+#: ../src/settings.c:10519
 msgid "Sta_rted"
 msgstr "Spuště_no"
 
-#: ../src/settings.c:10508
+#: ../src/settings.c:10524
 msgid "_Elapsed"
 msgstr "_Uplynulo"
 
-#: ../src/settings.c:10515
+#: ../src/settings.c:10531
 msgid "C_urrent Speed"
 msgstr "N_ynější rychlost"
 
-#: ../src/settings.c:10527
+#: ../src/settings.c:10543
 msgid "_Average Speed"
 msgstr "P_růměrná rychlost"
 
-#: ../src/settings.c:10539
+#: ../src/settings.c:10555
 msgid "Reor_der"
 msgstr "Přeuspořáda_t"
 
-#: ../src/settings.c:10545 ../src/settings.c:10565
-#: ../src/ptk/ptk-file-task.c:552 ../src/ptk/ptk-file-task.c:837
+#: ../src/settings.c:10561 ../src/settings.c:10581
+#: ../src/ptk/ptk-file-task.c:553 ../src/ptk/ptk-file-task.c:838
 msgid "Pa_use"
 msgstr "Pozastav_it"
 
-#: ../src/settings.c:10548 ../src/settings.c:10568
+#: ../src/settings.c:10564 ../src/settings.c:10584
 msgid "_Queue"
 msgstr "_Zařadit"
 
-#: ../src/settings.c:10551 ../src/settings.c:10571
+#: ../src/settings.c:10567 ../src/settings.c:10587
 msgid "_Resume"
 msgstr "_Pokračovat"
 
-#: ../src/settings.c:10554
+#: ../src/settings.c:10570
 msgid "Sho_w Output"
 msgstr "_Ukázat výstup"
 
-#: ../src/settings.c:10557
+#: ../src/settings.c:10573
 msgid "_All Tasks"
 msgstr "_Všechny úkoly"
 
-#: ../src/settings.c:10589
+#: ../src/settings.c:10605
 msgid "Task Manager Font"
 msgstr "Písmo správce úkolů"
 
-#: ../src/settings.c:10590
+#: ../src/settings.c:10606
 msgid "copying  File  1:15  65.2 M  30.2 M/s"
 msgstr "Kopíruje se soubor  1:15  65.2 M  30.2 M/s"
 
-#: ../src/settings.c:10593
+#: ../src/settings.c:10609
 msgid "_Columns"
 msgstr "_Sloupce"
 
-#: ../src/settings.c:10598
+#: ../src/settings.c:10614
 msgid "_Popups"
 msgstr "_Oznámení"
 
-#: ../src/settings.c:10603
+#: ../src/settings.c:10619
 msgid "Popup _All Tasks"
 msgstr "Nechat ukázat _všechny úkoly"
 
-#: ../src/settings.c:10608
+#: ../src/settings.c:10624
 msgid "Stay On _Top"
 msgstr "Zůstat na v_rchu"
 
-#: ../src/settings.c:10613
+#: ../src/settings.c:10629
 msgid "A_bove Others"
 msgstr "Zůstat _nad ostatními"
 
-#: ../src/settings.c:10618
+#: ../src/settings.c:10634
 msgid "All _Workspaces"
 msgstr "Všechny _pracovní plochy"
 
-#: ../src/settings.c:10628
+#: ../src/settings.c:10644
 msgid "_Overwrite Option"
 msgstr "Volba pro _přepsání"
 
-#: ../src/settings.c:10633
+#: ../src/settings.c:10649
 msgid "_Error Option"
 msgstr "Volba pro zacházení s ch_ybami"
 
-#: ../src/settings.c:10641
+#: ../src/settings.c:10657
 msgid "Task Popup Font (affects new tasks)"
 msgstr "Písmo oznámení úkolu (ovlivní nové úkoly)"
 
-#: ../src/settings.c:10642
+#: ../src/settings.c:10658
 msgid "Example Output 0123456789"
 msgstr "Příklad výstupu 0123456789"
 
-#: ../src/settings.c:10651
+#: ../src/settings.c:10667
 msgid "Stop If _First"
 msgstr "Zastavit, pokud je prv_ní"
 
-#: ../src/settings.c:10656
+#: ../src/settings.c:10672
 msgid "Stop On _Any"
 msgstr "Zastavit při _jakémkoli"
 
-#: ../src/settings.c:10661
+#: ../src/settings.c:10677
 msgid "_Continue"
 msgstr "_Pokračovat"
 
-#: ../src/settings.c:10666
+#: ../src/settings.c:10682
 msgid "Qu_eue"
 msgstr "Z_ařadit"
 
-#: ../src/settings.c:10671
+#: ../src/settings.c:10687
 msgid "_Queue New Tasks"
 msgstr "_Zařadit nové úkoly"
 
-#: ../src/settings.c:10676
+#: ../src/settings.c:10692
 msgid "_Smart Queue"
 msgstr "C_hytré zařazení"
 
-#: ../src/settings.c:10681
+#: ../src/settings.c:10697
 msgid "_Pause On Error"
 msgstr "_Pozastavit při chybě"
 
-#: ../src/settings.c:10691
+#: ../src/settings.c:10707
 msgid "Arrange _Icons"
 msgstr "Uspořádat _symboly"
 
-#: ../src/settings.c:10696
+#: ../src/settings.c:10712
 msgid "By _Name"
 msgstr "Podle _názvu"
 
-#: ../src/settings.c:10699
+#: ../src/settings.c:10715
 msgid "By _Type"
 msgstr "Podle _typu"
 
-#: ../src/settings.c:10702
+#: ../src/settings.c:10718
 msgid "By _Date"
 msgstr "Podle _data"
 
-#: ../src/settings.c:10705
+#: ../src/settings.c:10721
 msgid "By _Size"
 msgstr "Podle _velikosti"
 
-#: ../src/settings.c:10708
+#: ../src/settings.c:10724
 msgid "_Custom"
 msgstr "_Vlastní"
 
-#: ../src/settings.c:10711 ../src/settings.c:11011
+#: ../src/settings.c:10727 ../src/settings.c:11028
 msgid "_Ascending"
 msgstr "Vzest_upně"
 
-#: ../src/settings.c:10714
+#: ../src/settings.c:10730
 msgid "D_escending"
 msgstr "S_estupně"
 
-#: ../src/settings.c:10717
+#: ../src/settings.c:10733
 msgid "Desktop _Settings"
 msgstr "_Nastavení plochy"
 
-#: ../src/settings.c:10720 ../src/settings.c:10948
+#. set->b keeps desktop prefs compositing wm info has been shown
+#: ../src/settings.c:10737 ../src/settings.c:10965
 msgid "De_vices"
 msgstr "_Zařízení"
 
-#: ../src/settings.c:10728
+#: ../src/settings.c:10745
 msgid "_Desktop Folder"
 msgstr "Složka na _ploše"
 
-#: ../src/settings.c:10738
+#: ../src/settings.c:10755
 msgid "Editor Font"
 msgstr "Písmo editoru"
 
-#: ../src/settings.c:10739 ../src/settings.c:10768
+#: ../src/settings.c:10756 ../src/settings.c:10785
 msgid "Example Input 0123456789"
 msgstr "Příklad vstupu 0123456789"
 
-#: ../src/settings.c:10767
+#: ../src/settings.c:10784
 msgid "Input Font"
 msgstr "Písmo pro vstup"
 
-#: ../src/settings.c:10774
+#: ../src/settings.c:10791
 msgid "E_xecute"
 msgstr "S_pustit"
 
-#: ../src/settings.c:10777
+#: ../src/settings.c:10794
 msgid "Edi_t"
 msgstr "_Upravit"
 
-#: ../src/settings.c:10780
+#: ../src/settings.c:10797
 msgid "Edit As _Root"
 msgstr "Upravit jako _superuživatel"
 
-#: ../src/settings.c:10783
+#: ../src/settings.c:10800
 msgid "_Choose..."
 msgstr "_Vybrat..."
 
-#: ../src/settings.c:10786
+#: ../src/settings.c:10803
 msgid "_Handlers..."
-msgstr ""
+msgstr "_Zacházení..."
 
-#: ../src/settings.c:10790
+#: ../src/settings.c:10807
 msgid "Open With _Default"
-msgstr ""
+msgstr "Otevřít s _výchozím"
 
 #. virtual
-#: ../src/settings.c:10792
+#: ../src/settings.c:10809
 msgid "In _Tab"
 msgstr "V _kartě"
 
-#: ../src/settings.c:10796
+#: ../src/settings.c:10813
 msgid "N_ew"
 msgstr "N_ová"
 
-#: ../src/settings.c:10799 ../src/settings.c:10959 ../src/settings.c:11114
-#: ../src/settings.c:11152
+#: ../src/settings.c:10816 ../src/settings.c:10976 ../src/settings.c:11131
+#: ../src/settings.c:11169
 msgid "Tab _1"
 msgstr "Karta _1"
 
-#: ../src/settings.c:10800 ../src/settings.c:10960 ../src/settings.c:11115
-#: ../src/settings.c:11153
+#: ../src/settings.c:10817 ../src/settings.c:10977 ../src/settings.c:11132
+#: ../src/settings.c:11170
 msgid "Tab _2"
 msgstr "Karta _2"
 
-#: ../src/settings.c:10801 ../src/settings.c:10961 ../src/settings.c:11116
-#: ../src/settings.c:11154
+#: ../src/settings.c:10818 ../src/settings.c:10978 ../src/settings.c:11133
+#: ../src/settings.c:11171
 msgid "Tab _3"
 msgstr "Karta _3"
 
-#: ../src/settings.c:10802 ../src/settings.c:10962 ../src/settings.c:11117
-#: ../src/settings.c:11155
+#: ../src/settings.c:10819 ../src/settings.c:10979 ../src/settings.c:11134
+#: ../src/settings.c:11172
 msgid "Tab _4"
 msgstr "Karta _4"
 
-#: ../src/settings.c:10803 ../src/settings.c:10963 ../src/settings.c:11118
-#: ../src/settings.c:11156
+#: ../src/settings.c:10820 ../src/settings.c:10980 ../src/settings.c:11135
+#: ../src/settings.c:11173
 msgid "Tab _5"
 msgstr "Karta _5"
 
-#: ../src/settings.c:10804 ../src/settings.c:10964 ../src/settings.c:11119
-#: ../src/settings.c:11157
+#: ../src/settings.c:10821 ../src/settings.c:10981 ../src/settings.c:11136
+#: ../src/settings.c:11174
 msgid "Tab _6"
 msgstr "Karta _6"
 
-#: ../src/settings.c:10805 ../src/settings.c:10965 ../src/settings.c:11120
-#: ../src/settings.c:11158
+#: ../src/settings.c:10822 ../src/settings.c:10982 ../src/settings.c:11137
+#: ../src/settings.c:11175
 msgid "Tab _7"
 msgstr "Karta _7"
 
-#: ../src/settings.c:10806 ../src/settings.c:10966 ../src/settings.c:11121
-#: ../src/settings.c:11159
+#: ../src/settings.c:10823 ../src/settings.c:10983 ../src/settings.c:11138
+#: ../src/settings.c:11176
 msgid "Tab _8"
 msgstr "Karta _8"
 
-#: ../src/settings.c:10807 ../src/settings.c:10967 ../src/settings.c:11122
-#: ../src/settings.c:11160
+#: ../src/settings.c:10824 ../src/settings.c:10984 ../src/settings.c:11139
+#: ../src/settings.c:11177
 msgid "Tab _9"
 msgstr "Karta _9"
 
-#: ../src/settings.c:10808 ../src/settings.c:10968 ../src/settings.c:11123
-#: ../src/settings.c:11161
+#: ../src/settings.c:10825 ../src/settings.c:10985 ../src/settings.c:11140
+#: ../src/settings.c:11178
 msgid "Tab 1_0"
 msgstr "Karta _10"
 
-#: ../src/settings.c:10810
+#: ../src/settings.c:10827
 msgid "In _Panel"
 msgstr "V _panelu"
 
-#: ../src/settings.c:10821 ../src/settings.c:10844
+#: ../src/settings.c:10838 ../src/settings.c:10861
 msgid "_Extract"
 msgstr "_Rozbalit"
 
-#: ../src/settings.c:10824 ../src/settings.c:10848
+#: ../src/settings.c:10841 ../src/settings.c:10865
 msgid "Extract _To"
 msgstr "Rozbalit _do"
 
-#: ../src/settings.c:10827 ../src/settings.c:10851
+#: ../src/settings.c:10844 ../src/settings.c:10868
 msgid "_List Contents"
 msgstr "Ukázat _obsah"
 
-#: ../src/settings.c:10836
+#: ../src/settings.c:10853
 msgid "_Archive Defaults"
-msgstr ""
+msgstr "Výchozí _archivy"
 
-#: ../src/settings.c:10841
+#: ../src/settings.c:10858
 msgid "_Open With App"
 msgstr "_Otevřít s programem"
 
-#: ../src/settings.c:10854
+#: ../src/settings.c:10871
 msgid "_Create Subfolder"
 msgstr "Vy_tvořit podsložku"
 
-#: ../src/settings.c:10858
+#: ../src/settings.c:10875
 msgid "_Write Access"
 msgstr "Přístup k _zápisu"
 
-#: ../src/settings.c:10862
+#: ../src/settings.c:10879
 msgid "Archive _Handlers"
-msgstr ""
+msgstr "Za_cházení s archivy"
 
-#: ../src/settings.c:10885
+#: ../src/settings.c:10902
 msgid "Fol_der"
 msgstr "Slož_ka"
 
-#: ../src/settings.c:10893
+#: ../src/settings.c:10910
 msgctxt "New|"
 msgid "_Bookmark"
 msgstr "_Záložka"
 
-#: ../src/settings.c:10897
+#: ../src/settings.c:10914
 msgid "_Archive"
 msgstr "_Archiv"
 
-#: ../src/settings.c:10904
+#: ../src/settings.c:10921
 msgctxt "New|"
 msgid "_Tab"
 msgstr "_Karta"
 
-#: ../src/settings.c:10906
+#: ../src/settings.c:10923
 msgid "Tab _Here"
 msgstr "Karta _zde"
 
-#: ../src/settings.c:10909
+#: ../src/settings.c:10926
 msgid "_Desktop Application"
 msgstr "Program _plochy"
 
-#: ../src/settings.c:10920
+#: ../src/settings.c:10932
+msgid "_Go"
+msgstr "_Přejít"
+
+#: ../src/settings.c:10937
 msgid "_Back"
 msgstr "_Zpět"
 
-#: ../src/settings.c:10922
+#: ../src/settings.c:10939
 msgid "_Forward"
 msgstr "_Vpřed"
 
-#: ../src/settings.c:10924
+#: ../src/settings.c:10941
 msgid "_Up"
 msgstr "_Nahoru"
 
-#: ../src/settings.c:10926
+#: ../src/settings.c:10943
 msgid "_Home"
 msgstr "_Domovská složka"
 
-#: ../src/settings.c:10931
+#: ../src/settings.c:10948
 msgid "_Set Default"
 msgstr "_Nastavit jako výchozí"
 
-#: ../src/settings.c:10934
+#: ../src/settings.c:10951
 msgid "Re_al Path"
 msgstr "_Skutečná cesta"
 
-#: ../src/settings.c:10936
+#: ../src/settings.c:10953
 msgid "Fo_cus"
 msgstr "Z_aměření"
 
-#: ../src/settings.c:10940
+#: ../src/settings.c:10957
 msgid "_Path Bar"
 msgstr "Pruh s _cestou"
 
-#: ../src/settings.c:10942
+#: ../src/settings.c:10959
 msgid "_File List"
 msgstr "Seznam _souborů"
 
-#: ../src/settings.c:10944
+#: ../src/settings.c:10961
 msgid "_Tree"
 msgstr "S_trom"
 
-#: ../src/settings.c:10951
+#: ../src/settings.c:10968
 msgctxt "Go|"
 msgid "_Tab"
 msgstr "_Karta"
 
-#: ../src/settings.c:10957
+#: ../src/settings.c:10974
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: ../src/settings.c:10974
+#: ../src/settings.c:10991
 msgid "Styl_e"
 msgstr "Sty_l"
 
-#: ../src/settings.c:10977
+#: ../src/settings.c:10994
 msgid "C_olumns"
 msgstr "S_loupce"
 
-#: ../src/settings.c:10980
+#: ../src/settings.c:10997
 msgid "_Reorder"
 msgstr "_Přeuspořádat"
 
-#: ../src/settings.c:10982
+#: ../src/settings.c:10999
 msgid "_Rubberband Select"
 msgstr "_Gumičkový výběr"
 
-#: ../src/settings.c:10995
+#: ../src/settings.c:11012
 msgid "_Sort"
 msgstr "_Seřadit"
 
 #. visible
 #. position
-#: ../src/settings.c:11001 ../src/settings.c:11413
+#: ../src/settings.c:11018 ../src/settings.c:11435
 msgid "_Size"
 msgstr "_Velikost"
 
-#: ../src/settings.c:11003 ../src/settings.c:11420
+#: ../src/settings.c:11020 ../src/settings.c:11442
 msgid "_Type"
 msgstr "_Typ"
 
-#: ../src/settings.c:11005 ../src/settings.c:11426
+#: ../src/settings.c:11022 ../src/settings.c:11448
 msgid "_Permission"
 msgstr "_Oprávnění"
 
-#: ../src/settings.c:11007 ../src/settings.c:11269 ../src/settings.c:11432
+#: ../src/settings.c:11024 ../src/settings.c:11286 ../src/settings.c:11454
 msgid "_Owner"
 msgstr "_Vlastník"
 
-#: ../src/settings.c:11009 ../src/settings.c:11438
+#: ../src/settings.c:11026 ../src/settings.c:11460
 msgid "_Modified"
 msgstr "_Změněno"
 
-#: ../src/settings.c:11013
+#: ../src/settings.c:11030
 msgid "_Descending"
 msgstr "Ses_tupně"
 
-#: ../src/settings.c:11016
+#: ../src/settings.c:11033
 msgid "Nat_ural"
 msgstr "Př_irozeně"
 
-#: ../src/settings.c:11018
+#: ../src/settings.c:11035
 msgid "_Case Sensitive"
 msgstr "Rozlišovat _velikost písmen"
 
-#: ../src/settings.c:11020
+#: ../src/settings.c:11037
 msgid "Folders Fi_rst"
 msgstr "Nejprve sl_ožky"
 
-#: ../src/settings.c:11022
+#: ../src/settings.c:11039
 msgid "F_iles First"
 msgstr "Nejprve sou_bory"
 
-#: ../src/settings.c:11024
+#: ../src/settings.c:11041
 msgid "Mi_xed"
 msgstr "S_míšeně"
 
-#: ../src/settings.c:11026
+#: ../src/settings.c:11043
 msgid "_Hidden First"
 msgstr "Nejprve s_kryté"
 
-#: ../src/settings.c:11028
+#: ../src/settings.c:11045
 msgid "Hidden _Last"
 msgstr "Skryté naposledy"
 
-#: ../src/settings.c:11031
+#: ../src/settings.c:11048
 msgid "Re_fresh"
 msgstr "Ob_novit"
 
-#: ../src/settings.c:11034
+#: ../src/settings.c:11051
 msgid "Auto See_k"
 msgstr "_Hledat automaticky"
 
 #. set->s was custom protocol handler in sfm<=0.9.3 - retained
-#: ../src/settings.c:11045
+#: ../src/settings.c:11062
 msgid "Path Bar _Help"
 msgstr "_Nápověda k pruhu s cestou"
 
-#: ../src/settings.c:11062 ../src/settings.c:11192
+#: ../src/settings.c:11079 ../src/settings.c:11209
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: ../src/settings.c:11085
+#: ../src/settings.c:11091
+msgid "_Actions"
+msgstr "Či_nnosti"
+
+#: ../src/settings.c:11102
 msgid "Copy Pa_rent"
 msgstr "Kopírovat pů_vod"
 
-#: ../src/settings.c:11088
+#: ../src/settings.c:11105
 msgid "Paste _Link"
 msgstr "Vložit _odkaz"
 
-#: ../src/settings.c:11091
+#: ../src/settings.c:11108
 msgid "Paste _Target"
 msgstr "Vložit _cíl"
 
-#: ../src/settings.c:11094
+#: ../src/settings.c:11111
 msgid "Paste _As"
 msgstr "Vložit _jako"
 
-#: ../src/settings.c:11100 ../src/settings.c:11190
+#: ../src/settings.c:11117 ../src/settings.c:11207
 msgid "_Copy To"
 msgstr "_Kopírovat do"
 
-#: ../src/settings.c:11104
+#: ../src/settings.c:11121
 msgid "L_ocation"
 msgstr "_Umístění"
 
-#: ../src/settings.c:11105 ../src/settings.c:11144
+#: ../src/settings.c:11122 ../src/settings.c:11161
 msgid "L_ast Location"
 msgstr "Posle_dní umístění"
 
-#: ../src/settings.c:11108
+#: ../src/settings.c:11125
 msgctxt "Edit|CopyTo|"
 msgid "_Tab"
 msgstr "_Karta"
 
-#: ../src/settings.c:11125
+#: ../src/settings.c:11142
 msgctxt "Edit|CopyTo|"
 msgid "_Panel"
 msgstr "_Panel"
 
-#: ../src/settings.c:11139
+#: ../src/settings.c:11156
 msgid "_Move To"
 msgstr "_Přesunout do"
 
-#: ../src/settings.c:11143
+#: ../src/settings.c:11160
 msgid "_Location"
 msgstr "_Umístění"
 
-#: ../src/settings.c:11146
+#: ../src/settings.c:11163
 msgctxt "Edit|MoveTo|"
 msgid "_Tab"
 msgstr "_Karta"
 
-#: ../src/settings.c:11163
+#: ../src/settings.c:11180
 msgctxt "Edit|MoveTo|"
 msgid "_Panel"
 msgstr "_Panel"
 
-#: ../src/settings.c:11176
+#: ../src/settings.c:11193
 msgid "_Select All"
 msgstr "_Vybrat vše"
 
-#: ../src/settings.c:11179
+#: ../src/settings.c:11196
 msgid "_Unselect All"
 msgstr "_Zrušit výběr všeho"
 
-#: ../src/settings.c:11181
+#: ../src/settings.c:11198
 msgid "_Invert Selection"
 msgstr "_Obrátit výběr"
 
-#: ../src/settings.c:11183
+#: ../src/settings.c:11200
 msgid "S_elect By Pattern"
 msgstr "V_ybrat podle vzoru"
 
-#: ../src/settings.c:11185
+#: ../src/settings.c:11202
 msgid "R_oot"
 msgstr "S_uperuživatel"
 
-#: ../src/settings.c:11191
+#: ../src/settings.c:11208
 msgid "Move _To"
 msgstr "Přesunout _do"
 
 #. Properties
-#: ../src/settings.c:11196
+#: ../src/settings.c:11213
 msgid "Propert_ies"
 msgstr "_Vlastnosti"
 
-#: ../src/settings.c:11207
+#: ../src/settings.c:11224
 msgid "_Quick"
 msgstr "_Rychle"
 
-#: ../src/settings.c:11229 ../src/settings.c:11259 ../src/settings.c:11285
+#: ../src/settings.c:11246 ../src/settings.c:11276 ../src/settings.c:11302
 msgid "_Recursive"
 msgstr "_Rekurzivní"
 
-#: ../src/settings.c:11307
+#: ../src/settings.c:11324
 msgid "_Toolbar"
 msgstr "_Nástrojový pruh"
 
-#: ../src/settings.c:11319
+#: ../src/settings.c:11336
 msgid "T_ree"
 msgstr "S_trom"
 
-#: ../src/settings.c:11337
+#: ../src/settings.c:11354
 msgid "_Detailed"
 msgstr "_Podrobné"
 
-#: ../src/settings.c:11343
+#: ../src/settings.c:11360
 msgid "_Icons"
 msgstr "_Ikony"
 
-#: ../src/settings.c:11348
+#: ../src/settings.c:11365
 msgid "_Compact"
 msgstr "Ce_listvý"
 
-#: ../src/settings.c:11353
+#: ../src/settings.c:11370
+msgid "_Large Icons"
+msgstr "_Velké ikony"
+
+#: ../src/settings.c:11375
 msgid "_Hidden Files"
 msgstr "S_kryté soubory"
 
-#: ../src/settings.c:11361
+#: ../src/settings.c:11383
 #, c-format
 msgid "File List Font (Panel %d)"
 msgstr "Písmo pro seznam souborů (Panel %d)"
 
-#: ../src/settings.c:11362
+#: ../src/settings.c:11384
 msgid "Example  1.1 M  file  -rwxr--r--  user:group  2011-01-01 01:11"
 msgstr "Příklad  1.1 M  Soubor  -rwxr--r--  user:group  2011-01-01 01:11"
 
-#: ../src/settings.c:11367
+#: ../src/settings.c:11389
 #, c-format
 msgid "Devices Font (Panel %d)"
 msgstr "Písmo pro zařízení (Panel %d)"
 
-#: ../src/settings.c:11368
+#: ../src/settings.c:11390
 msgid "sr0 [no media] :EXAMPLE"
 msgstr "sr0 [no media] :PŘÍKLAD"
 
-#: ../src/settings.c:11374
+#: ../src/settings.c:11396
 #, c-format
 msgid "Bookmarks Font (Panel %d)"
 msgstr "Písmo pro záložky (Panel %d)"
 
-#: ../src/settings.c:11375
+#: ../src/settings.c:11397
 msgid "Example Bookmark Name"
 msgstr "Příklad pro název záložky"
 
-#: ../src/settings.c:11380
+#: ../src/settings.c:11402
 #, c-format
 msgid "Path Bar Font (Panel %d)"
 msgstr "Písmo pro pruh s cestou (Panel %d)"
 
-#: ../src/settings.c:11381
+#: ../src/settings.c:11403
 msgid "$ cat /home/user/example"
 msgstr "$ cat /home/user/Beispiel"
 
-#: ../src/settings.c:11387
+#: ../src/settings.c:11409
 #, c-format
 msgid "Tab Font (Panel %d)"
 msgstr "Písmo pro kartu (Panel %d)"
 
-#: ../src/settings.c:11397
+#: ../src/settings.c:11419
 #, c-format
 msgid "Status Bar Font (Panel %d)"
 msgstr "Písmo pro stavový řádek (Panel %d)"
 
-#: ../src/settings.c:11398
+#: ../src/settings.c:11420
 msgid "12 G free / 200 G   52 items"
 msgstr "12 G volné / 200 G   52 položek"
 
 #. speed
-#: ../src/settings.c:11452 ../src/settings.c:11459
+#: ../src/settings.c:11474 ../src/settings.c:11481
 msgid "_New Tab"
 msgstr "_Nová karta"
 
-#: ../src/settings.c:11455 ../src/settings.c:11464
+#: ../src/settings.c:11477 ../src/settings.c:11486
 msgid "_Single Click"
 msgstr "_Jedno klepnutí"
 
@@ -4663,7 +4713,7 @@ msgid ""
 "For more information, click the Help button below."
 msgstr "Tyto nabídky pro nastavení nástrojového pruhu umoňují vlastní úpravy nástrojových pruhů.\n\nVstupte do podnabídky pro levý nástrojový pruh, pravý nástrojový pruh, nebo postranní nástrojový pruh a klepněte pravým tlačítkem myši na položku pro její ukázání, nebo skrytí, změňte ikonu, nebo přidejte vlastní položku s nástrojem.\n\nPro více informací klepněte na tlačítko pro nápovědu níže."
 
-#: ../src/ptk/ptk-file-browser.c:2412
+#: ../src/ptk/ptk-file-browser.c:2428
 #, c-format
 msgid ""
 "Directory doesn't exist\n"
@@ -4671,7 +4721,7 @@ msgid ""
 "%s"
 msgstr "Adresář neexistuje\n\n%s"
 
-#: ../src/ptk/ptk-file-browser.c:2428
+#: ../src/ptk/ptk-file-browser.c:2444
 #, c-format
 msgid ""
 "Unable to access %s\n"
@@ -4679,11 +4729,11 @@ msgid ""
 "%s"
 msgstr "Nelze přistupovat k %s\n\n%s"
 
-#: ../src/ptk/ptk-file-browser.c:3143 ../src/desktop/desktop-window.c:2216
+#: ../src/ptk/ptk-file-browser.c:3180 ../src/desktop/desktop-window.c:2216
 msgid "Select By Pattern"
 msgstr "Vybrat podle vzoru"
 
-#: ../src/ptk/ptk-file-browser.c:3143 ../src/desktop/desktop-window.c:2216
+#: ../src/ptk/ptk-file-browser.c:3180 ../src/desktop/desktop-window.c:2216
 #, c-format
 msgid ""
 "Enter pattern to select files and folders:\n"
@@ -4695,130 +4745,130 @@ msgid ""
 "TIP: You can also enter '%% PATTERN' in the path bar."
 msgstr "Zadejte vzor pro výběr souborů a složek:\n\npokud váš vzor obsahuje velká písmena, bude se při porovnání rozlišovat velikost písmen.\n\nPříklad:  *sp*e?m*\n\nRADA: '%% VZOR' lze také zadat v pruhu s cestou."
 
-#: ../src/ptk/ptk-file-browser.c:5854 ../src/ptk/ptk-file-misc.c:4071
+#: ../src/ptk/ptk-file-browser.c:5904 ../src/ptk/ptk-file-misc.c:4072
 #: ../src/desktop/desktop-window.c:3250
 msgid "Choose Location"
 msgstr "Vybrat umístění"
 
-#: ../src/ptk/ptk-file-browser.c:5887 ../src/ptk/ptk-file-browser.c:5919
+#: ../src/ptk/ptk-file-browser.c:5937 ../src/ptk/ptk-file-browser.c:5969
 #: ../src/desktop/desktop-window.c:3283 ../src/desktop/desktop-window.c:3314
 msgid "Invalid Destination"
 msgstr "Neplatný cíl"
 
-#: ../src/ptk/ptk-file-browser.c:5888 ../src/desktop/desktop-window.c:3284
+#: ../src/ptk/ptk-file-browser.c:5938 ../src/desktop/desktop-window.c:3284
 msgid "Destination same as source"
 msgstr "Cíl stejný jako zdroj"
 
-#: ../src/ptk/ptk-file-browser.c:5920 ../src/desktop/desktop-window.c:3315
+#: ../src/ptk/ptk-file-browser.c:5970 ../src/desktop/desktop-window.c:3315
 msgid "Invalid destination"
 msgstr "Neplatný cíl"
 
-#: ../src/ptk/ptk-file-browser.c:5967
+#: ../src/ptk/ptk-file-browser.c:6017
 msgid "Hide File"
 msgstr "Skrýt soubor"
 
-#: ../src/ptk/ptk-file-browser.c:5967
+#: ../src/ptk/ptk-file-browser.c:6017
 msgid ""
 "The names of the selected files will be added to the '.hidden' file located in this folder, which will hide them from view in SpaceFM.  You may need to refresh the view or restart SpaceFM for the files to disappear.\n"
 "\n"
 "To unhide a file, open the .hidden file in your text editor, remove the name of the file, and refresh."
 msgstr "Názvy vybraných souborů budou přidány do souboru '.hidden' umístěného v této složce, což je skryje ze zobrazení v SpaceFM.  Případně bude nutné obnovit zobrazení nebo SpaceFM spustit znovu, aby soubory zmizely.\n\nPro opětovné ukázání souboru, otevřete soubor .hidden ve svém textovém editoru, odstraňte ze souboru název, a obnovte zobrazení."
 
-#: ../src/ptk/ptk-file-browser.c:5980
+#: ../src/ptk/ptk-file-browser.c:6030
 msgid "Error hiding files"
 msgstr "Chyba při skrývání souborů"
 
-#: ../src/ptk/ptk-file-browser.c:5987
+#: ../src/ptk/ptk-file-browser.c:6037
 msgid "No files are selected"
 msgstr "Nejsou vybrány žádné soubory"
 
-#: ../src/ptk/ptk-file-browser.c:6802 ../src/ptk/ptk-location-view.c:4149
-#: ../src/ptk/ptk-file-menu.c:434
+#: ../src/ptk/ptk-file-browser.c:6873 ../src/ptk/ptk-location-view.c:4179
+#: ../src/ptk/ptk-file-menu.c:445
 msgid "Bookmark Exists"
 msgstr "Záložka existuje"
 
-#: ../src/ptk/ptk-file-browser.c:6803 ../src/ptk/ptk-location-view.c:4150
-#: ../src/ptk/ptk-file-menu.c:435
+#: ../src/ptk/ptk-file-browser.c:6874 ../src/ptk/ptk-location-view.c:4180
+#: ../src/ptk/ptk-file-menu.c:446
 msgid "Bookmark already exists"
 msgstr "Záložka již existuje"
 
-#: ../src/ptk/ptk-location-view.c:842 ../src/ptk/ptk-location-view.c:922
+#: ../src/ptk/ptk-location-view.c:851 ../src/ptk/ptk-location-view.c:931
 msgid "Unable to mount device"
 msgstr "Nelze připojit zařízení"
 
-#: ../src/ptk/ptk-location-view.c:862
+#: ../src/ptk/ptk-location-view.c:871
 msgid "Unable to unmount device"
 msgstr "Nelze odpojit zařízení"
 
-#: ../src/ptk/ptk-location-view.c:884 ../src/ptk/ptk-location-view.c:898
+#: ../src/ptk/ptk-location-view.c:893 ../src/ptk/ptk-location-view.c:907
 msgid "Unable to eject device"
 msgstr "Nelze vysunout zařízení"
 
-#: ../src/ptk/ptk-location-view.c:944
+#: ../src/ptk/ptk-location-view.c:953
 msgid "udev Not Configured"
 msgstr "udev nenastaveno"
 
-#: ../src/ptk/ptk-location-view.c:945
+#: ../src/ptk/ptk-location-view.c:954
 msgid ""
 "Mounting a network share requires a udev (--disable-hal) build of SpaceFM."
 msgstr "Připojení v síti sdílených složek vyžaduje sestavení SpaceFM pro udev (--disable-hal)."
 
-#: ../src/ptk/ptk-location-view.c:1045
+#: ../src/ptk/ptk-location-view.c:1054
 msgid "Invalid URL"
-msgstr ""
+msgstr "Neplatná adresa (URL)"
 
-#: ../src/ptk/ptk-location-view.c:1046
+#: ../src/ptk/ptk-location-view.c:1055
 msgid "The entered URL is not valid."
-msgstr ""
+msgstr "Zadaná adresa (URL) je neplatná."
 
-#: ../src/ptk/ptk-location-view.c:1104 ../src/ptk/ptk-location-view.c:1219
+#: ../src/ptk/ptk-location-view.c:1113 ../src/ptk/ptk-location-view.c:1228
 msgid "Handler Not Found"
-msgstr ""
+msgstr "Manipulátor nenalezen"
 
-#: ../src/ptk/ptk-location-view.c:1105
+#: ../src/ptk/ptk-location-view.c:1114
 msgid ""
 "No network handler is configured for this URL, or no mount command is set.  "
-"Add a handler in Settings|Protocol Handlers."
-msgstr ""
+"Add a handler in Devices|Settings|Protocol Handlers."
+msgstr "Pro tuto adresu (URL) není nastaven žádný síťový manipulátor, nebo není nastaven žádný příkaz pro připojení. Přidejte manipulátor v Zařízení|Nastavení|Zacházení s protokoly."
 
-#: ../src/ptk/ptk-location-view.c:1162
+#: ../src/ptk/ptk-location-view.c:1171
 #, c-format
-msgid "Netmount %s"
-msgstr "Připojit %s přes síť"
+msgid "Open URL %s"
+msgstr "Otevřít adresu (URL) %s"
 
-#: ../src/ptk/ptk-location-view.c:1215
+#: ../src/ptk/ptk-location-view.c:1224
 msgid "mount"
-msgstr ""
+msgstr "Připojit"
 
-#: ../src/ptk/ptk-location-view.c:1217
+#: ../src/ptk/ptk-location-view.c:1226
 msgid "unmount"
-msgstr ""
+msgstr "Odpojit"
 
-#: ../src/ptk/ptk-location-view.c:1218
+#: ../src/ptk/ptk-location-view.c:1227
 #, c-format
 msgid ""
 "No handler is configured for this device type, or no %s command is set.  Add"
 " a handler in Settings|Device Handlers or Protocol Handlers."
-msgstr ""
+msgstr "Pro tento typ zařízení není nastaven žádný manipulátor, nebo není nastaven žádný příkaz %s. Přidejte manipulátor v Nastavení|Zacházení se zařízeními nebo Zacházení s protokoly."
 
 #. task
-#: ../src/ptk/ptk-location-view.c:1251 ../src/ptk/ptk-location-view.c:1816
-#: ../src/ptk/ptk-location-view.c:1891 ../src/ptk/ptk-location-view.c:1968
+#: ../src/ptk/ptk-location-view.c:1260 ../src/ptk/ptk-location-view.c:1825
+#: ../src/ptk/ptk-location-view.c:1900 ../src/ptk/ptk-location-view.c:1977
 #, c-format
 msgid "Mount %s"
 msgstr "Připojit %s"
 
-#: ../src/ptk/ptk-location-view.c:1291
+#: ../src/ptk/ptk-location-view.c:1300
 #, c-format
 msgid "%s is currently mounted.  You must unmount it before you can check it."
 msgstr "%s je nyní připojeno. Před přezkoušením musí být odpojeno."
 
-#: ../src/ptk/ptk-location-view.c:1292 ../src/ptk/ptk-location-view.c:2202
-#: ../src/ptk/ptk-location-view.c:2281 ../src/ptk/ptk-location-view.c:2623
+#: ../src/ptk/ptk-location-view.c:1301 ../src/ptk/ptk-location-view.c:2211
+#: ../src/ptk/ptk-location-view.c:2290 ../src/ptk/ptk-location-view.c:2632
 msgid "Device Is Mounted"
 msgstr "Zařízení je připojeno"
 
-#: ../src/ptk/ptk-location-view.c:1299
+#: ../src/ptk/ptk-location-view.c:1308
 #, c-format
 msgid ""
 "Enter filesystem check command:\n"
@@ -4829,20 +4879,20 @@ msgid ""
 "EDIT WITH CARE   This command is run as root"
 msgstr "Zadejte příkaz pro přezkoušení souborového systému:\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele"
 
-#: ../src/ptk/ptk-location-view.c:1304
+#: ../src/ptk/ptk-location-view.c:1313
 msgid "Check As Root"
 msgstr "Přezkoušet jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1307
+#: ../src/ptk/ptk-location-view.c:1316
 msgid "CHECK AS ROOT"
 msgstr "Přezkoušet jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1317
+#: ../src/ptk/ptk-location-view.c:1326
 #, c-format
 msgid "Check As Root %s"
 msgstr "Přezkoušet jako superuživatel %s"
 
-#: ../src/ptk/ptk-location-view.c:1350
+#: ../src/ptk/ptk-location-view.c:1359
 #, c-format
 msgid ""
 "Enter mount command:\n"
@@ -4857,20 +4907,20 @@ msgid ""
 "EDIT WITH CARE   This command is run as root"
 msgstr "Zadejte příkaz pro přezkoušení souborového systému:\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\t%%%%o\tzvláštní volby pro připojení svazku\n\t\t( %s )\n\nPoznámka: fstab přepíše některé volby\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele"
 
-#: ../src/ptk/ptk-location-view.c:1356
+#: ../src/ptk/ptk-location-view.c:1365
 msgid "Mount As Root"
 msgstr "Připojit jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1359
+#: ../src/ptk/ptk-location-view.c:1368
 msgid "MOUNT AS ROOT"
 msgstr "Připojit jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1375
+#: ../src/ptk/ptk-location-view.c:1384
 #, c-format
 msgid "Mount As Root %s"
 msgstr "Připojit jako superuživatel %s"
 
-#: ../src/ptk/ptk-location-view.c:1405
+#: ../src/ptk/ptk-location-view.c:1414
 #, c-format
 msgid ""
 "Enter unmount command:\n"
@@ -4881,20 +4931,20 @@ msgid ""
 "EDIT WITH CARE   This command is run as root"
 msgstr "Zadejte příkaz pro odpojení:\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele"
 
-#: ../src/ptk/ptk-location-view.c:1410
+#: ../src/ptk/ptk-location-view.c:1419
 msgid "Unmount As Root"
 msgstr "Odpojit jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1413
+#: ../src/ptk/ptk-location-view.c:1422
 msgid "UNMOUNT AS ROOT"
 msgstr "Odpojit jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1425
+#: ../src/ptk/ptk-location-view.c:1434
 #, c-format
 msgid "Unmount As Root %s"
 msgstr "Odpojit jako superuživatel %s"
 
-#: ../src/ptk/ptk-location-view.c:1481
+#: ../src/ptk/ptk-location-view.c:1490
 #, c-format
 msgid ""
 "\n"
@@ -4902,16 +4952,16 @@ msgid ""
 "WARNING: %s is mounted.  You may want or need to unmount it before changing the label."
 msgstr "\n\nVAROVÁNÍ: %s je připojen.  Před změnou popisku je lepší provést odpojení."
 
-#: ../src/ptk/ptk-location-view.c:1485
+#: ../src/ptk/ptk-location-view.c:1494
 #, c-format
 msgid "Enter volume label for %s:%s"
 msgstr "Zadejte název svazku pro %s:%s"
 
-#: ../src/ptk/ptk-location-view.c:1487
+#: ../src/ptk/ptk-location-view.c:1496
 msgid "Change Volume Label"
 msgstr "Změnit popisek svazku"
 
-#: ../src/ptk/ptk-location-view.c:1512
+#: ../src/ptk/ptk-location-view.c:1521
 #, c-format
 msgid ""
 "Enter remove label command for fstype '%s':\n"
@@ -4923,7 +4973,7 @@ msgid ""
 "EDIT WITH CARE   This command is run as root%s"
 msgstr "Zadejte příkaz pro odstranění popisku pro fstype '%s':\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\t%%%%l\tnový popisek ( \"%s\" )\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele %s"
 
-#: ../src/ptk/ptk-location-view.c:1518
+#: ../src/ptk/ptk-location-view.c:1527
 #, c-format
 msgid ""
 "Enter change label command for fstype '%s':\n"
@@ -4935,56 +4985,56 @@ msgid ""
 "EDIT WITH CARE   This command is run as root%s"
 msgstr "Zadejte příkaz pro změnu popisku pro fstype '%s':\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\t%%%%l\tnový popisek ( \"%s\" )\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele %s"
 
-#: ../src/ptk/ptk-location-view.c:1521
+#: ../src/ptk/ptk-location-view.c:1530
 msgid "Change Label As Root"
 msgstr "Změnit popisek jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1524
+#: ../src/ptk/ptk-location-view.c:1533
 msgid "LABEL AS ROOT"
 msgstr "Popisek jako superuživatel"
 
-#: ../src/ptk/ptk-location-view.c:1539
+#: ../src/ptk/ptk-location-view.c:1548
 #, c-format
 msgid "Label As Root %s"
 msgstr "Popisek jako superuživatel %s"
 
-#: ../src/ptk/ptk-location-view.c:1603
+#: ../src/ptk/ptk-location-view.c:1612
 #, c-format
 msgid "Unmount %s"
 msgstr "Odpojit %s"
 
-#: ../src/ptk/ptk-location-view.c:1737 ../src/ptk/ptk-location-view.c:1750
+#: ../src/ptk/ptk-location-view.c:1746 ../src/ptk/ptk-location-view.c:1759
 #, c-format
 msgid "Remove %s"
 msgstr "Odstranit %s"
 
 #. task
-#: ../src/ptk/ptk-location-view.c:2040
+#: ../src/ptk/ptk-location-view.c:2049
 #, c-format
 msgid "Remount %s"
 msgstr "Připojit znovu %s"
 
-#: ../src/ptk/ptk-location-view.c:2139
+#: ../src/ptk/ptk-location-view.c:2148
 #, c-format
 msgid "Reload %s"
 msgstr "Nahrát znovu %s"
 
-#: ../src/ptk/ptk-location-view.c:2167
+#: ../src/ptk/ptk-location-view.c:2176
 msgid "Sync"
 msgstr "Seřídit"
 
-#: ../src/ptk/ptk-location-view.c:2201
+#: ../src/ptk/ptk-location-view.c:2210
 #, c-format
 msgid ""
 "%s is currently mounted.  You must unmount it before you can format it."
 msgstr "%s je nyní připojeno. Před formátováním musí být odpojeno."
 
-#: ../src/ptk/ptk-location-view.c:2213 ../src/ptk/ptk-location-view.c:2373
+#: ../src/ptk/ptk-location-view.c:2222 ../src/ptk/ptk-location-view.c:2382
 #, c-format
 msgid " ( AN ENTIRE DEVICE ) "
 msgstr " (CELÝ DATOVÝ NOSIČ) "
 
-#: ../src/ptk/ptk-location-view.c:2219
+#: ../src/ptk/ptk-location-view.c:2228
 #, c-format
 msgid ""
 "You are about to erase %s %s- ALL DATA WILL BE LOST.  Be patient - this can take awhile and dd gives no feedback.\n"
@@ -4997,7 +5047,7 @@ msgid ""
 "EDIT WITH CARE   This command is run as root"
 msgstr "Chystáte se vymazat %s %s- VŠECHNA DATA BUDOU ZTRACENA.  Buďte opatrný - může to chvíli trvat a dd nedává žádnou zpětnou vazbu.\n\nZadejte příkaz pro přepsání celého svazku /dev/%s:\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele"
 
-#: ../src/ptk/ptk-location-view.c:2222
+#: ../src/ptk/ptk-location-view.c:2231
 #, c-format
 msgid ""
 "You are about to format %s %s- ALL DATA WILL BE LOST.\n"
@@ -5010,31 +5060,31 @@ msgid ""
 "EDIT WITH CARE   This command is run as root"
 msgstr "Chystáte se formátovat %s %s- VŠECHNA DATA BUDOU ZTRACENA.\n\nZadejte příkaz pro přepsání %s:\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele"
 
-#: ../src/ptk/ptk-location-view.c:2223
+#: ../src/ptk/ptk-location-view.c:2232
 msgid "Format"
 msgstr "Formátovat"
 
-#: ../src/ptk/ptk-location-view.c:2226 ../src/ptk/ptk-location-view.c:2323
-#: ../src/ptk/ptk-location-view.c:2380
+#: ../src/ptk/ptk-location-view.c:2235 ../src/ptk/ptk-location-view.c:2332
+#: ../src/ptk/ptk-location-view.c:2389
 msgid "DATA LOSS WARNING"
 msgstr "VAROVÁNÍ PŘED ZTRÁTOU DAT"
 
-#: ../src/ptk/ptk-location-view.c:2235
+#: ../src/ptk/ptk-location-view.c:2244
 #, c-format
 msgid "Format %s"
 msgstr "Formátovat %s"
 
-#: ../src/ptk/ptk-location-view.c:2280
+#: ../src/ptk/ptk-location-view.c:2289
 #, c-format
 msgid ""
 "%s is currently mounted.  You must unmount it before you can restore it."
 msgstr "%s je nyní připojeno. Před obnovením musí být odpojeno."
 
-#: ../src/ptk/ptk-location-view.c:2288
+#: ../src/ptk/ptk-location-view.c:2297
 msgid "Choose Backup For Restore"
 msgstr "Vybrat zálohu pro obnovení"
 
-#: ../src/ptk/ptk-location-view.c:2322
+#: ../src/ptk/ptk-location-view.c:2331
 #, c-format
 msgid ""
 "You are about to overwrite the MBR boot code of %s using %s.\n"
@@ -5044,22 +5094,22 @@ msgid ""
 "Proceed?  (If you press Yes, you still have one more opportunity to abort before the disk is modified.)"
 msgstr "Chystáte se přepsat zaváděcí kód (boot code) %s v MBR pomocí %s.\n\nTato změna může vašemu počítači zabránit v řádném zavedení. Všechna důležitá data na celém zařízení by se nejprve měla zazálohovat\n\nPokračovat? (Pokud stisknete Ano, stále ještě máte jednu další příležitost k přerušení, předtím než bude datový nosič (disk) změněn.)"
 
-#: ../src/ptk/ptk-location-view.c:2323
+#: ../src/ptk/ptk-location-view.c:2332
 msgid "Restore MBR"
 msgstr "Obnovit MBR"
 
-#: ../src/ptk/ptk-location-view.c:2335 ../src/ptk/ptk-location-view.c:2545
+#: ../src/ptk/ptk-location-view.c:2344 ../src/ptk/ptk-location-view.c:2554
 msgid "Unknown Type"
 msgstr "Neznámý typ"
 
-#: ../src/ptk/ptk-location-view.c:2335 ../src/ptk/ptk-location-view.c:2545
+#: ../src/ptk/ptk-location-view.c:2344 ../src/ptk/ptk-location-view.c:2554
 msgid ""
 "The selected file is not a recognized backup file.\n"
 "\n"
 "FSArchiver filenames contain 'fsarchiver' or end in '.fsa'.  Partimage filenames contain 'partimage' or end in '.000'.  MBR filenames end in '.mbr', '.mbr.bin', or '-MBR-back' and are 512 bytes in size.  If you are SURE this file is a valid backup, you can rename it to avoid this error."
 msgstr "Vybraný soubor není rozpoznán jako záložní soubor.\n\nSouborové názvy FSArchiver obsahují 'fsarchiver' nebo končí na '.fsa'.  Souborové názvy Partimage obsahují 'partimage' nebo končí na '.000'.  Souborové názvy MBR končí na '.mbr', '.mbr.bin', nebo '-MBR-back' a mají velikost 512 bytů.  pokud jste si JISTÝ, že tento soubor je platnou zálohou, můžete jej přejmenovat, abyste se vyhnul této chybě."
 
-#: ../src/ptk/ptk-location-view.c:2376
+#: ../src/ptk/ptk-location-view.c:2385
 #, c-format
 msgid ""
 "You are about to restore %s %susing %s - ALL DATA WILL BE LOST.\n"
@@ -5073,42 +5123,42 @@ msgid ""
 "EDIT WITH CARE   This command is run as root"
 msgstr "Chystáte se obnovit %s %s pomocí %s- VŠECHNA DATA BUDOU ZTRACENA.\n\nZadejte příkaz pro  obnovení %s:\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\t%%%%s\tsoubor se zálohou ( %s )\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele"
 
-#: ../src/ptk/ptk-location-view.c:2377
+#: ../src/ptk/ptk-location-view.c:2386
 msgid "Restore"
 msgstr "Obnovit"
 
-#: ../src/ptk/ptk-location-view.c:2418
+#: ../src/ptk/ptk-location-view.c:2427
 #, c-format
 msgid "%s Restore %s"
 msgstr "%s Obnovit %s"
 
-#: ../src/ptk/ptk-location-view.c:2472
+#: ../src/ptk/ptk-location-view.c:2481
 msgid "Directory Missing"
 msgstr "Adresář chybí"
 
-#: ../src/ptk/ptk-location-view.c:2473
+#: ../src/ptk/ptk-location-view.c:2482
 msgid "The /etc/udevil directory was not found.  Is udevil installed?"
 msgstr "Adresář /etc/udevil nebyl nalezen.  Je udevil nainstalován?"
 
-#: ../src/ptk/ptk-location-view.c:2486
+#: ../src/ptk/ptk-location-view.c:2495
 msgid "Choose Backup For Info"
 msgstr "Vybrat zálohu pro informace"
 
-#: ../src/ptk/ptk-location-view.c:2539
+#: ../src/ptk/ptk-location-view.c:2548
 msgid "MBR File"
 msgstr "Soubor MBR"
 
-#: ../src/ptk/ptk-location-view.c:2539
+#: ../src/ptk/ptk-location-view.c:2548
 msgid ""
 "Based on its name, the selected file appears to be an MBR backup file.  No "
 "other information is available for this type of backup."
 msgstr "Podle jeho názvu se zdá, že vybraný soubor je záložní soubor MBR. U tohoto typu zálohy nejsou dostupné žádné další zálohy."
 
-#: ../src/ptk/ptk-location-view.c:2555
+#: ../src/ptk/ptk-location-view.c:2564
 msgid "Restore Info"
 msgstr "Informace o obnovení"
 
-#: ../src/ptk/ptk-location-view.c:2614
+#: ../src/ptk/ptk-location-view.c:2623
 #, c-format
 msgid ""
 "\n"
@@ -5116,27 +5166,27 @@ msgid ""
 "WARNING: %s is mounted.  By default, FSArchiver will only backup volumes mounted read-only.  To backup a read-write volume, you need to add --allow-rw-mounted to the command.  See 'man fsarchiver' for details."
 msgstr "\n\nVAROVÁNÍ: %s je připojen.  FSArchiver podle  výchozího nastavení zazálohuje jen svazky připojené pouze pro čtení.  Pro zazálohování svazku nastaveného na čtení-zápis (read-write) potřebujete přidat --allow-rw-mounted do příkazu umožňujícího zálohu datového nosiče rw.  Podívejte se do 'man fsarchiver' na podrobnosti."
 
-#: ../src/ptk/ptk-location-view.c:2622
+#: ../src/ptk/ptk-location-view.c:2631
 #, c-format
 msgid ""
 "%s is currently mounted.  You must unmount it before you can create a backup"
 " using Partimage."
 msgstr "%s je nyní připojeno. Před vytvořením zálohy pomocí Partimage musí být odpojeno."
 
-#: ../src/ptk/ptk-location-view.c:2639
+#: ../src/ptk/ptk-location-view.c:2648
 #, c-format
 msgid "Save %s Backup"
 msgstr "Uložit jako %s zálohu"
 
-#: ../src/ptk/ptk-location-view.c:2656
+#: ../src/ptk/ptk-location-view.c:2665
 msgid "Overwrite?"
 msgstr "Přepsat?"
 
-#: ../src/ptk/ptk-location-view.c:2656
+#: ../src/ptk/ptk-location-view.c:2665
 msgid "The selected backup already exists.  Overwrite?"
 msgstr "Vybraná záloha již existuje. Přepsat?"
 
-#: ../src/ptk/ptk-location-view.c:2685
+#: ../src/ptk/ptk-location-view.c:2694
 #, c-format
 msgid ""
 "Enter %s backup command:\n"
@@ -5148,21 +5198,21 @@ msgid ""
 "EDIT WITH CARE   This command is run as root"
 msgstr "Zadejte příkaz pro zálohu %s:\n\nPoužití:\n\t%%%%v\tsoubor zařízení ( %s )\n\t%%%%s\tsoubor se zálohou ( %s )%s\n\nUPRAVUJTE OPATRNĚ   Tento příkaz je spuštěn s oprávněními superuživatele"
 
-#: ../src/ptk/ptk-location-view.c:2688
+#: ../src/ptk/ptk-location-view.c:2697
 msgid "Backup"
 msgstr "Záloha"
 
-#: ../src/ptk/ptk-location-view.c:2716
+#: ../src/ptk/ptk-location-view.c:2725
 #, c-format
 msgid "%s Backup %s"
 msgstr "%s Záloha dat %s"
 
-#: ../src/ptk/ptk-location-view.c:2802
+#: ../src/ptk/ptk-location-view.c:2832
 #, c-format
 msgid "Properties %s"
 msgstr "Vlastnosti %s"
 
-#: ../src/ptk/ptk-location-view.c:3045 ../src/ptk/ptk-location-view.c:3072
+#: ../src/ptk/ptk-location-view.c:3075 ../src/ptk/ptk-location-view.c:3102
 #, c-format
 msgid ""
 "%sCurrently Selected Device: %s\n"
@@ -5170,194 +5220,194 @@ msgid ""
 "Device ID: %s"
 msgstr "%sNyní vybrané zařízení: %s\npopisek svazku: %s\nID zařízení: %s"
 
-#: ../src/ptk/ptk-location-view.c:3448 ../src/ptk/ptk-location-view.c:3781
+#: ../src/ptk/ptk-location-view.c:3478 ../src/ptk/ptk-location-view.c:3811
 msgid "_Eject"
 msgstr "_Vysunout"
 
-#: ../src/ptk/ptk-location-view.c:4178
+#: ../src/ptk/ptk-location-view.c:4208
 msgid "Rename Bookmark"
 msgstr "Přejmenovat záložku"
 
-#: ../src/ptk/ptk-location-view.c:4180
+#: ../src/ptk/ptk-location-view.c:4210
 msgid "Enter new bookmark name:"
 msgstr "Zadejte nový název záložky:"
 
-#: ../src/ptk/ptk-location-view.c:4201
+#: ../src/ptk/ptk-location-view.c:4231
 #, c-format
 msgid "Enter new folder for bookmark '%s':"
 msgstr "Zadejte novou složku pro záložku '%s':"
 
-#: ../src/ptk/ptk-location-view.c:4202
+#: ../src/ptk/ptk-location-view.c:4232
 msgid "Edit Bookmark Location"
 msgstr "Upravit umístění záložky"
 
-#: ../src/ptk/ptk-file-task.c:482
+#: ../src/ptk/ptk-file-task.c:483
 msgid "Kill As Other"
 msgstr "Zabít jako jiné"
 
-#: ../src/ptk/ptk-file-task.c:540
+#: ../src/ptk/ptk-file-task.c:541
 msgid "Q_ueue"
 msgstr "_Zařadit"
 
-#: ../src/ptk/ptk-file-task.c:546
+#: ../src/ptk/ptk-file-task.c:547
 msgid "Res_ume"
 msgstr "_Pokračovat"
 
-#: ../src/ptk/ptk-file-task.c:627
+#: ../src/ptk/ptk-file-task.c:628
 msgid "Stop As Other"
 msgstr "Zastavit jako jiné"
 
-#: ../src/ptk/ptk-file-task.c:627
+#: ../src/ptk/ptk-file-task.c:628
 msgid "Cont As Other"
 msgstr "Počítat jako jiné"
 
-#: ../src/ptk/ptk-file-task.c:797
+#: ../src/ptk/ptk-file-task.c:798
 msgid "Move: "
 msgstr "Přesunout:"
 
-#: ../src/ptk/ptk-file-task.c:798
+#: ../src/ptk/ptk-file-task.c:799
 msgid "Copy: "
 msgstr "Kopírovat:"
 
-#: ../src/ptk/ptk-file-task.c:799
+#: ../src/ptk/ptk-file-task.c:800
 msgid "Trash: "
 msgstr "Koš:"
 
-#: ../src/ptk/ptk-file-task.c:800
+#: ../src/ptk/ptk-file-task.c:801
 msgid "Delete: "
 msgstr "Mazat:"
 
-#: ../src/ptk/ptk-file-task.c:801
+#: ../src/ptk/ptk-file-task.c:802
 msgid "Link: "
 msgstr "Odkaz:"
 
-#: ../src/ptk/ptk-file-task.c:802
+#: ../src/ptk/ptk-file-task.c:803
 msgid "Change: "
 msgstr "Změnit: "
 
-#: ../src/ptk/ptk-file-task.c:803
+#: ../src/ptk/ptk-file-task.c:804
 msgid "Run: "
 msgstr "Spustit: "
 
-#: ../src/ptk/ptk-file-task.c:807
+#: ../src/ptk/ptk-file-task.c:808
 msgid "Moving..."
 msgstr "Přesouvá se..."
 
-#: ../src/ptk/ptk-file-task.c:808
+#: ../src/ptk/ptk-file-task.c:809
 msgid "Copying..."
 msgstr "Kopíruje se..."
 
-#: ../src/ptk/ptk-file-task.c:809
+#: ../src/ptk/ptk-file-task.c:810
 msgid "Trashing..."
 msgstr "Odhazuje se..."
 
-#: ../src/ptk/ptk-file-task.c:810
+#: ../src/ptk/ptk-file-task.c:811
 msgid "Deleting..."
 msgstr "Maže se..."
 
-#: ../src/ptk/ptk-file-task.c:811
+#: ../src/ptk/ptk-file-task.c:812
 msgid "Linking..."
 msgstr "Spojuje se..."
 
-#: ../src/ptk/ptk-file-task.c:812
+#: ../src/ptk/ptk-file-task.c:813
 msgid "Changing..."
 msgstr "Mění se..."
 
-#: ../src/ptk/ptk-file-task.c:813 ../src/ptk/ptk-file-task.c:983
-#: ../src/ptk/ptk-file-task.c:1523
+#: ../src/ptk/ptk-file-task.c:814 ../src/ptk/ptk-file-task.c:984
+#: ../src/ptk/ptk-file-task.c:1525
 #, c-format
 msgid "Running..."
 msgstr "Běží..."
 
-#: ../src/ptk/ptk-file-task.c:899
+#: ../src/ptk/ptk-file-task.c:900
 msgid "From:"
 msgstr "Z:"
 
-#: ../src/ptk/ptk-file-task.c:916
+#: ../src/ptk/ptk-file-task.c:917
 msgid "To:"
 msgstr "Do:"
 
-#: ../src/ptk/ptk-file-task.c:934
+#: ../src/ptk/ptk-file-task.c:935
 msgid "Progress:  "
 msgstr "Postup: "
 
-#: ../src/ptk/ptk-file-task.c:972
+#: ../src/ptk/ptk-file-task.c:973
 msgid "Status:  "
 msgstr "Stav: "
 
-#: ../src/ptk/ptk-file-task.c:979 ../src/ptk/ptk-file-task.c:1484
+#: ../src/ptk/ptk-file-task.c:980 ../src/ptk/ptk-file-task.c:1486
 #, c-format
 msgid "Paused"
 msgstr "Pozastaveno"
 
-#: ../src/ptk/ptk-file-task.c:981 ../src/ptk/ptk-file-task.c:1500
+#: ../src/ptk/ptk-file-task.c:982 ../src/ptk/ptk-file-task.c:1502
 #, c-format
 msgid "Queued"
 msgstr "Zařazeno"
 
-#: ../src/ptk/ptk-file-task.c:1037
+#: ../src/ptk/ptk-file-task.c:1038
 msgid "Ask"
 msgstr "Ptát se"
 
-#: ../src/ptk/ptk-file-task.c:1038
+#: ../src/ptk/ptk-file-task.c:1039
 msgid "Overwrite All"
 msgstr "Přepsat vše"
 
-#: ../src/ptk/ptk-file-task.c:1039
+#: ../src/ptk/ptk-file-task.c:1040
 msgid "Skip All"
 msgstr "Přeskočit vše"
 
-#: ../src/ptk/ptk-file-task.c:1040
+#: ../src/ptk/ptk-file-task.c:1041
 msgid "Auto Rename"
 msgstr "Přejmenovat automaticky"
 
-#: ../src/ptk/ptk-file-task.c:1044
+#: ../src/ptk/ptk-file-task.c:1045
 msgid "Stop If Error First"
 msgstr "Zastavit při první chybě"
 
-#: ../src/ptk/ptk-file-task.c:1045
+#: ../src/ptk/ptk-file-task.c:1046
 msgid "Stop On Any Error"
 msgstr "Zastavit při jakékoli chybě"
 
-#: ../src/ptk/ptk-file-task.c:1046
+#: ../src/ptk/ptk-file-task.c:1047
 msgid "Continue"
 msgstr "Pokračovat"
 
-#: ../src/ptk/ptk-file-task.c:1217 ../src/ptk/ptk-file-task.c:1455
+#: ../src/ptk/ptk-file-task.c:1216 ../src/ptk/ptk-file-task.c:1457
 #, c-format
 msgid "Stopped"
 msgstr "Zastaveno"
 
-#: ../src/ptk/ptk-file-task.c:1221
+#: ../src/ptk/ptk-file-task.c:1220
 msgid "Errors"
 msgstr "Chyby"
 
-#: ../src/ptk/ptk-file-task.c:1223 ../src/ptk/ptk-file-task.c:1467
-#: ../src/ptk/ptk-file-task.c:1477
+#: ../src/ptk/ptk-file-task.c:1222 ../src/ptk/ptk-file-task.c:1469
+#: ../src/ptk/ptk-file-task.c:1479
 #, c-format
 msgid "Done"
 msgstr "Hotovo"
 
-#: ../src/ptk/ptk-file-task.c:1378
+#: ../src/ptk/ptk-file-task.c:1377
 #, c-format
 msgid "%s  (%s)  %s remaining"
 msgstr "%s  (%s)  %s zbývá"
 
-#: ../src/ptk/ptk-file-task.c:1410
+#: ../src/ptk/ptk-file-task.c:1409
 msgid "[ SNIP - additional errors above have been trimmed from this log ]\n"
 msgstr "[ SNIP - dodatečné chyby výše byly z tohoto zápisu odstraněny ]\n"
 
-#: ../src/ptk/ptk-file-task.c:1445
+#: ../src/ptk/ptk-file-task.c:1447
 #, c-format
 msgid "Error  ( Stop If First )"
 msgstr "Chyba (zastavit pokud první)"
 
-#: ../src/ptk/ptk-file-task.c:1447
+#: ../src/ptk/ptk-file-task.c:1449
 #, c-format
 msgid "Error  ( Stop On Any )"
 msgstr "Chyba (zastavit při jakékoli)"
 
-#: ../src/ptk/ptk-file-task.c:1449
+#: ../src/ptk/ptk-file-task.c:1451
 #, c-format
 msgid "Stopped with %d error"
 msgid_plural "Stopped with %d errors"
@@ -5365,7 +5415,7 @@ msgstr[0] "Zastaveno s %d chybou"
 msgstr[1] "Zastaveno s %d chybami"
 msgstr[2] "Zastaveno s %d chybami"
 
-#: ../src/ptk/ptk-file-task.c:1462
+#: ../src/ptk/ptk-file-task.c:1464
 #, c-format
 msgid "Finished with %d error"
 msgid_plural "Finished with %d errors"
@@ -5373,37 +5423,37 @@ msgstr[0] "Dokončeno s %d chybou"
 msgstr[1] "Dokončeno s %d chybami"
 msgstr[2] "Dokončeno s %d chybami"
 
-#: ../src/ptk/ptk-file-task.c:1472
+#: ../src/ptk/ptk-file-task.c:1474
 #, c-format
 msgid "Finished with error  ( exit status %d )"
 msgstr "Dokončeno s chybou (stav ukončení %d)"
 
-#: ../src/ptk/ptk-file-task.c:1475
+#: ../src/ptk/ptk-file-task.c:1477
 #, c-format
 msgid "Finished with error"
 msgstr "Dokončeno s chybou"
 
-#: ../src/ptk/ptk-file-task.c:1488
+#: ../src/ptk/ptk-file-task.c:1490
 #, c-format
 msgid "Paused  ( pid %d )"
 msgstr "Pozastaveno ( PID %d )"
 
-#: ../src/ptk/ptk-file-task.c:1491
+#: ../src/ptk/ptk-file-task.c:1493
 #, c-format
 msgid "Paused  ( exit status %d )"
 msgstr "Pozastaveno (stav ukončení %d)"
 
-#: ../src/ptk/ptk-file-task.c:1504
+#: ../src/ptk/ptk-file-task.c:1506
 #, c-format
 msgid "Queued  ( pid %d )"
 msgstr "Zařazeno ( PID %d )"
 
-#: ../src/ptk/ptk-file-task.c:1507
+#: ../src/ptk/ptk-file-task.c:1509
 #, c-format
 msgid "Queued  ( exit status %d )"
 msgstr "Pozastaveno (stav ukončení %d)"
 
-#: ../src/ptk/ptk-file-task.c:1518
+#: ../src/ptk/ptk-file-task.c:1520
 #, c-format
 msgid "Running with %d error"
 msgid_plural "Running with %d errors"
@@ -5411,173 +5461,173 @@ msgstr[0] "Běží s %d chybou"
 msgstr[1] "Běží s %d chybami"
 msgstr[2] "Běží s %d chybami"
 
-#: ../src/ptk/ptk-file-task.c:1528
+#: ../src/ptk/ptk-file-task.c:1530
 #, c-format
 msgid "Running...  ( pid %d )"
 msgstr "Běží... ( PID %d )"
 
-#: ../src/ptk/ptk-file-task.c:1531
+#: ../src/ptk/ptk-file-task.c:1533
 #, c-format
 msgid "Running...  ( exit status %d )"
 msgstr "Běží... (stav ukončení %d)"
 
-#: ../src/ptk/ptk-file-task.c:1696 ../src/ptk/ptk-file-task.c:2465
+#: ../src/ptk/ptk-file-task.c:1698 ../src/ptk/ptk-file-task.c:2472
 #, c-format
 msgid "stalled"
 msgstr "přerušeno"
 
-#: ../src/ptk/ptk-file-task.c:2124
+#: ../src/ptk/ptk-file-task.c:2131
 msgid "Moving from folder:"
 msgstr "Přesunout ze složky:"
 
-#: ../src/ptk/ptk-file-task.c:2126
+#: ../src/ptk/ptk-file-task.c:2133
 msgid "Linking from folder:"
 msgstr "Odkázat ze složky:"
 
-#: ../src/ptk/ptk-file-task.c:2128
+#: ../src/ptk/ptk-file-task.c:2135
 msgid "Copying from folder:"
 msgstr "Kopírovat ze složky:"
 
 #. Ask the user whether to overwrite dir content or not
-#: ../src/ptk/ptk-file-task.c:2144
+#: ../src/ptk/ptk-file-task.c:2151
 msgid "Folder Exists"
 msgstr "Složka existuje"
 
-#: ../src/ptk/ptk-file-task.c:2145
+#: ../src/ptk/ptk-file-task.c:2152
 msgid "<b>Folder already exists.</b>  Please rename or select an action."
 msgstr "<b>Složka již existuje.</b>  Přejmenujte ji, prosím, nebo zvolte činnost."
 
-#: ../src/ptk/ptk-file-task.c:2162 ../src/ptk/ptk-file-task.c:2166
+#: ../src/ptk/ptk-file-task.c:2169 ../src/ptk/ptk-file-task.c:2173
 msgid "\t<b>( link )</b>"
 msgstr "\t<b>( odkaz )</b>"
 
-#: ../src/ptk/ptk-file-task.c:2170
+#: ../src/ptk/ptk-file-task.c:2177
 msgid "\t<b>! overwrite file with link !</b>"
 msgstr "\t<b>! Přepsat soubor s odkazem !</b>"
 
-#: ../src/ptk/ptk-file-task.c:2175
+#: ../src/ptk/ptk-file-task.c:2182
 msgid "<b>( same size )</b>"
 msgstr "<b>( stejná velikost )</b>"
 
-#: ../src/ptk/ptk-file-task.c:2181 ../src/ptk/ptk-file-task.c:2204
+#: ../src/ptk/ptk-file-task.c:2188 ../src/ptk/ptk-file-task.c:2211
 #, c-format
 msgid "%s\t( %lu bytes )"
 msgstr "%s\t( %lu bytů )"
 
-#: ../src/ptk/ptk-file-task.c:2183
+#: ../src/ptk/ptk-file-task.c:2190
 msgid "larger"
 msgstr "Větší"
 
-#: ../src/ptk/ptk-file-task.c:2185
+#: ../src/ptk/ptk-file-task.c:2192
 msgid "smaller"
 msgstr "Menší"
 
-#: ../src/ptk/ptk-file-task.c:2189
+#: ../src/ptk/ptk-file-task.c:2196
 msgid "<b>( same time )</b>\t"
 msgstr "<b>( stejný čas )</b>\t"
 
-#: ../src/ptk/ptk-file-task.c:2199
+#: ../src/ptk/ptk-file-task.c:2206
 msgid "newer"
 msgstr "novější"
 
-#: ../src/ptk/ptk-file-task.c:2201
+#: ../src/ptk/ptk-file-task.c:2208
 msgid "older"
 msgstr "starší"
 
-#: ../src/ptk/ptk-file-task.c:2222
+#: ../src/ptk/ptk-file-task.c:2229
 msgid "Filename Exists"
 msgstr "Souborový název existuje"
 
-#: ../src/ptk/ptk-file-task.c:2223 ../src/ptk/ptk-file-task.c:2238
+#: ../src/ptk/ptk-file-task.c:2230 ../src/ptk/ptk-file-task.c:2245
 msgid "<b>Filename already exists.</b>  Please rename or select an action."
 msgstr "<b>Souborový název již existuje.</b>  Přejmenujte jej, prosím, nebo zvolte činnost."
 
-#: ../src/ptk/ptk-file-task.c:2235
+#: ../src/ptk/ptk-file-task.c:2242
 msgid "Rename Required"
 msgstr "Požadováno přejmenování"
 
-#: ../src/ptk/ptk-file-task.c:2237
+#: ../src/ptk/ptk-file-task.c:2244
 msgid "In folder:"
 msgstr "Ve složce:"
 
-#: ../src/ptk/ptk-file-task.c:2317
+#: ../src/ptk/ptk-file-task.c:2324
 msgid "_Overwrite"
 msgstr "_Přepsat"
 
-#: ../src/ptk/ptk-file-task.c:2318
+#: ../src/ptk/ptk-file-task.c:2325
 msgid "Overwrite _All"
 msgstr "Přepsat _vše"
 
-#: ../src/ptk/ptk-file-task.c:2323
+#: ../src/ptk/ptk-file-task.c:2330
 msgid "_Pause"
 msgstr "_Pozastavit"
 
-#: ../src/ptk/ptk-file-task.c:2325
+#: ../src/ptk/ptk-file-task.c:2332
 msgid "_Skip"
 msgstr "_Přeskočit"
 
-#: ../src/ptk/ptk-file-task.c:2326
+#: ../src/ptk/ptk-file-task.c:2333
 msgid "S_kip All"
 msgstr "_Přeskočit vše"
 
-#: ../src/ptk/ptk-file-task.c:2379
+#: ../src/ptk/ptk-file-task.c:2386
 msgid "To folder:"
 msgstr "Po složku:"
 
-#: ../src/ptk/ptk-file-task.c:2406
+#: ../src/ptk/ptk-file-task.c:2413
 msgid "<b>Folder Name:</b>"
 msgstr "<b>Název složky:</b>"
 
 #. extra buttons
-#: ../src/ptk/ptk-file-task.c:2434
+#: ../src/ptk/ptk-file-task.c:2441
 msgid " _Rename "
 msgstr "_Přejmenovat"
 
-#: ../src/ptk/ptk-file-task.c:2438
+#: ../src/ptk/ptk-file-task.c:2445
 msgid " A_uto Rename "
 msgstr "Přejmenovat _automaticky"
 
-#: ../src/ptk/ptk-file-task.c:2442
+#: ../src/ptk/ptk-file-task.c:2449
 msgid " Auto Re_name All "
 msgstr "_Přejmenovat vše automaticky"
 
-#: ../src/ptk/ptk-file-archiver.c:208 ../src/ptk/ptk-file-archiver.c:535
+#: ../src/ptk/ptk-file-archiver.c:208 ../src/ptk/ptk-file-archiver.c:533
 #: ../src/ptk/ptk-file-misc.c:3526
 msgid "Error Loading Handler"
-msgstr ""
+msgstr "Chyba při nahrávání manipulátoru"
 
-#: ../src/ptk/ptk-file-archiver.c:343 ../src/ptk/ptk-file-archiver.c:661
-#: ../src/ptk/ptk-file-archiver.c:690
+#: ../src/ptk/ptk-file-archiver.c:341 ../src/ptk/ptk-file-archiver.c:659
+#: ../src/ptk/ptk-file-archiver.c:688
 msgid "Create Archive"
-msgstr ""
+msgstr "Vytvořit archiv"
 
-#: ../src/ptk/ptk-file-archiver.c:352
+#: ../src/ptk/ptk-file-archiver.c:350 ../src/ptk/ptk-file-archiver.c:1058
 msgid "Conf_igure"
-msgstr ""
+msgstr "_Nastavit"
 
-#: ../src/ptk/ptk-file-archiver.c:388
+#: ../src/ptk/ptk-file-archiver.c:386
 msgid "Co_mpress Commands:"
-msgstr ""
+msgstr "Příkazy pro _kompresi:"
 
-#: ../src/ptk/ptk-file-archiver.c:417
+#: ../src/ptk/ptk-file-archiver.c:415
 msgid "Archive Handlers - Create Archive"
-msgstr ""
+msgstr "Zacházení s archivy - Vytvořit archiv"
 
-#: ../src/ptk/ptk-file-archiver.c:418
+#: ../src/ptk/ptk-file-archiver.c:416
 msgid ""
 "No archive handlers configured. You must add a handler before creating an "
 "archive."
-msgstr ""
+msgstr "Nenastaveny žádné manipulátory s archivy. Před vytvořením archivu musíte přidat manipulátor."
 
-#: ../src/ptk/ptk-file-archiver.c:502
+#: ../src/ptk/ptk-file-archiver.c:500
 msgid "_Archive Format:"
-msgstr ""
+msgstr "Formát _archivu:"
 
-#: ../src/ptk/ptk-file-archiver.c:662
+#: ../src/ptk/ptk-file-archiver.c:660
 msgid "The archive creation command is empty.  Please enter a command."
-msgstr ""
+msgstr "Příkaz pro vytvoření archivu je prázdný. Zadejte, prosím, příkaz."
 
-#: ../src/ptk/ptk-file-archiver.c:691
+#: ../src/ptk/ptk-file-archiver.c:689
 #, c-format
 msgid ""
 "The following variables should be in the archive creation command:\n"
@@ -5593,41 +5643,41 @@ msgid ""
 "%%%%O: Resulting archive per source file/directory (see %%%%n/%%%%N)\n"
 msgstr ""
 
-#: ../src/ptk/ptk-file-archiver.c:766
+#: ../src/ptk/ptk-file-archiver.c:764
 msgid "Error Saving Handler"
-msgstr ""
+msgstr "Chyba při ukládání manipulátoru"
 
 #. Creating task
-#: ../src/ptk/ptk-file-archiver.c:970
+#: ../src/ptk/ptk-file-archiver.c:967
 #, c-format
 msgid "Archive"
 msgstr "Zabalit"
 
 #. It hasn't - generating dialog to ask user. Only dealing with
 #. * user-writable contents if the user isn't root
-#: ../src/ptk/ptk-file-archiver.c:1052
+#: ../src/ptk/ptk-file-archiver.c:1049
 msgid "Extract To"
 msgstr "Rozbalit do"
 
-#: ../src/ptk/ptk-file-archiver.c:1060
+#: ../src/ptk/ptk-file-archiver.c:1089
 msgid "Cre_ate subfolder(s)"
 msgstr "Vy_tvořit podsložku(y):"
 
-#: ../src/ptk/ptk-file-archiver.c:1062
+#: ../src/ptk/ptk-file-archiver.c:1091
 msgid "Make contents user-_writable"
 msgstr "Udělat obsah _zapisovatelný pro uživatele"
 
-#: ../src/ptk/ptk-file-archiver.c:1185
+#: ../src/ptk/ptk-file-archiver.c:1237
 msgid "No archive handler/command found for file:"
-msgstr ""
+msgstr "Nenalezen žádný manipulátor archivu/příkaz pro soubor:"
 
-#: ../src/ptk/ptk-file-archiver.c:1325 ../src/ptk/ptk-file-archiver.c:1380
-#: ../src/ptk/ptk-file-menu.c:2246 ../src/vfs/vfs-file-task.c:137
+#: ../src/ptk/ptk-file-archiver.c:1377 ../src/ptk/ptk-file-archiver.c:1432
+#: ../src/ptk/ptk-file-menu.c:2256 ../src/vfs/vfs-file-task.c:137
 msgid "copy"
 msgstr "Kopírovat"
 
 #. Creating task
-#: ../src/ptk/ptk-file-archiver.c:1437
+#: ../src/ptk/ptk-file-archiver.c:1493
 #, c-format
 msgid "Extract %s"
 msgstr "Rozbalit %s"
@@ -5646,15 +5696,15 @@ msgstr "Příkaz:"
 msgid "File System"
 msgstr "Systém souborů"
 
-#: ../src/ptk/ptk-dir-tree.c:396
+#: ../src/ptk/ptk-dir-tree.c:405
 msgid "( no subfolder )"
 msgstr "(žádná podsložka)"
 
-#: ../src/ptk/ptk-file-menu.c:1846
+#: ../src/ptk/ptk-file-menu.c:1856
 msgid "Remove Text Type Association"
 msgstr "Odstranit přiřazení typu textu"
 
-#: ../src/ptk/ptk-file-menu.c:1846
+#: ../src/ptk/ptk-file-menu.c:1856
 msgid ""
 "NOTE:  When compiling the list of applications to appear in the Open submenu"
 " for a text file, SpaceFM will include applications associated with the MIME"
@@ -5667,16 +5717,16 @@ msgid ""
 msgstr ""
 
 #. Set Default
-#: ../src/ptk/ptk-file-menu.c:2215
+#: ../src/ptk/ptk-file-menu.c:2225
 msgid "_Set As Default"
 msgstr "_Nastavit jako výchozí"
 
 #. Add
-#: ../src/ptk/ptk-file-menu.c:2225
+#: ../src/ptk/ptk-file-menu.c:2235
 msgid "_Add..."
 msgstr "_Přidat..."
 
-#: ../src/ptk/ptk-file-menu.c:2288 ../src/ptk/ptk-file-misc.c:1794
+#: ../src/ptk/ptk-file-menu.c:2298 ../src/ptk/ptk-file-misc.c:1794
 msgid "new"
 msgstr "Nový"
 
@@ -6085,7 +6135,7 @@ msgstr "Název již existuje\n\nZadejte, prosím, nový:"
 msgid "The new file cannot be created"
 msgstr "Nový soubor nelze vytvořit"
 
-#: ../src/ptk/ptk-file-misc.c:3870
+#: ../src/ptk/ptk-file-misc.c:3871
 #, c-format
 msgid ""
 "This symlink's target is missing or you do not have permission to access it:\n"
@@ -6094,11 +6144,11 @@ msgid ""
 "Target: %s"
 msgstr "Cíl tohoto odkazu chybí nebo nemáte oprávnění pro přistupování k němu:\n%s\n\nCíl: %s"
 
-#: ../src/ptk/ptk-file-misc.c:3876
+#: ../src/ptk/ptk-file-misc.c:3877
 msgid "Broken Link"
 msgstr "Poškozený odkaz"
 
-#: ../src/ptk/ptk-file-misc.c:4047
+#: ../src/ptk/ptk-file-misc.c:4048
 #, c-format
 msgid "Delete %d selected item as root ?"
 msgid_plural "Delete %d selected items as root ?"
@@ -6106,23 +6156,23 @@ msgstr[0] "Smazat %d vybranou položku jako superuživatel?"
 msgstr[1] "Smazat %d vybrané položky jako superuživatel?"
 msgstr[2] "Smazat %d vybraných položek jako superuživatel?"
 
-#: ../src/ptk/ptk-file-misc.c:4051
+#: ../src/ptk/ptk-file-misc.c:4052
 msgid "Confirm Delete As Root"
 msgstr "Potvrdit smazání jako superuživatel"
 
-#: ../src/ptk/ptk-file-misc.c:4052
+#: ../src/ptk/ptk-file-misc.c:4053
 msgid "DELETE AS ROOT"
 msgstr "Smazat jako superuživatel"
 
-#: ../src/ptk/ptk-file-misc.c:4060
+#: ../src/ptk/ptk-file-misc.c:4061
 msgid "Delete As Root"
 msgstr "Smazat jako superuživatel"
 
-#: ../src/ptk/ptk-file-misc.c:4079
+#: ../src/ptk/ptk-file-misc.c:4080
 msgid "Move As Root"
 msgstr "Přesunout jako superuživatel"
 
-#: ../src/ptk/ptk-file-misc.c:4085
+#: ../src/ptk/ptk-file-misc.c:4086
 msgid "Copy As Root"
 msgstr "Kopírovat jako superuživatel"
 
@@ -6155,58 +6205,58 @@ msgstr[0] "%d soubor"
 msgstr[1] "%d soubory"
 msgstr[2] "%d souborů"
 
-#: ../src/ptk/ptk-file-properties.c:339
+#: ../src/ptk/ptk-file-properties.c:341
 msgid "( multiple files )"
 msgstr "(více souborů)"
 
-#: ../src/ptk/ptk-file-properties.c:453
+#: ../src/ptk/ptk-file-properties.c:456
 msgid "( multiple types )"
 msgstr "(více typů)"
 
-#: ../src/ptk/ptk-file-properties.c:521
+#: ../src/ptk/ptk-file-properties.c:524
 msgid "Choose..."
 msgstr "Vybrat..."
 
-#: ../src/ptk/ptk-file-properties.c:570
+#: ../src/ptk/ptk-file-properties.c:573
 msgid "<b>Folder _Name:</b>"
 msgstr "<b>_Název složky:</b>"
 
-#: ../src/ptk/ptk-file-properties.c:583 ../src/ptk/ptk-file-properties.c:590
+#: ../src/ptk/ptk-file-properties.c:586 ../src/ptk/ptk-file-properties.c:593
 #, c-format
 msgid "%s  ( %lu bytes )"
 msgstr "%s  ( %lu bytů )"
 
-#: ../src/ptk/ptk-file-properties.c:594
+#: ../src/ptk/ptk-file-properties.c:597
 msgid "1 file"
 msgstr "Jeden soubor"
 
-#: ../src/ptk/ptk-file-properties.c:631
+#: ../src/ptk/ptk-file-properties.c:634
 msgid "<b>Link _Name:</b>"
 msgstr "<b>_Název odkazu:</b>"
 
-#: ../src/ptk/ptk-file-properties.c:646
+#: ../src/ptk/ptk-file-properties.c:649
 msgid "( broken link )"
 msgstr "( poškozený odkaz )"
 
-#: ../src/ptk/ptk-file-properties.c:650
+#: ../src/ptk/ptk-file-properties.c:653
 msgid "( read link error )"
 msgstr "( chyba při čtení odkazu )"
 
 #. The total file size displayed in "File Properties" is not
 #. completely calculated yet. So "Calculating..." is displayed.
-#: ../src/ptk/ptk-file-properties.c:661
+#: ../src/ptk/ptk-file-properties.c:664
 msgid "Calculating..."
 msgstr "Počítá se..."
 
-#: ../src/ptk/ptk-file-properties.c:851
+#: ../src/ptk/ptk-file-properties.c:854
 msgid "Change File Date"
 msgstr "Změnit datum souboru"
 
-#: ../src/ptk/ptk-file-properties.c:892
+#: ../src/ptk/ptk-file-properties.c:895
 msgid "Invalid User"
 msgstr "Neplatný uživatel"
 
-#: ../src/ptk/ptk-file-properties.c:903
+#: ../src/ptk/ptk-file-properties.c:906
 msgid "Invalid Group"
 msgstr "Neplatná skupina"
 
@@ -6263,7 +6313,7 @@ msgstr ""
 
 #: ../src/ptk/ptk-app-chooser.c:500 ../src/ptk/ptk-app-chooser.c:516
 msgid "MIME Type Has Handler"
-msgstr ""
+msgstr "MIME typ má manipulátor"
 
 #: ../src/ptk/ptk-app-chooser.c:513
 #, c-format
@@ -6661,87 +6711,87 @@ msgid ""
 "Audio CDs cannot be mounted, use music players to play the audio tracks"
 msgstr "Audio CD nemohou být připojena, použijte hudební přehrávač pro přehrátí "
 
-#: ../src/vfs/vfs-volume-nohal.c:2363
+#: ../src/vfs/vfs-volume-nohal.c:2369
 #, c-format
 msgid ":floppy"
 msgstr ":disketa"
 
-#: ../src/vfs/vfs-volume-nohal.c:2384
+#: ../src/vfs/vfs-volume-nohal.c:2390
 #, c-format
 msgid ":optical"
 msgstr ":optické médium"
 
-#: ../src/vfs/vfs-volume-nohal.c:2429
+#: ../src/vfs/vfs-volume-nohal.c:2435
 #, c-format
 msgid "[blank]"
 msgstr "[nepopsaná]"
 
-#: ../src/vfs/vfs-volume-nohal.c:2433
+#: ../src/vfs/vfs-volume-nohal.c:2439
 #, c-format
 msgid "[audio]"
 msgstr "[zvuk]"
 
-#: ../src/vfs/vfs-volume-nohal.c:2447
+#: ../src/vfs/vfs-volume-nohal.c:2453
 #, c-format
 msgid "[no media]"
 msgstr "[žádné médium]"
 
-#: ../src/vfs/vfs-volume-nohal.c:3314
+#: ../src/vfs/vfs-volume-nohal.c:3407
 msgid "Selected Device Handler"
-msgstr ""
+msgstr "Vybraný způsob zacházení se zařízením"
 
-#: ../src/vfs/vfs-volume-nohal.c:3315
+#: ../src/vfs/vfs-volume-nohal.c:3408
 msgid "Selected Protocol Handler"
-msgstr ""
+msgstr "Vybraný způsob zacházení s protokolem"
 
-#: ../src/vfs/vfs-volume-nohal.c:3580
+#: ../src/vfs/vfs-volume-nohal.c:3679
 #, c-format
 msgid "( no udev device )"
 msgstr "( není zařízením udev )"
 
-#: ../src/vfs/vfs-volume-nohal.c:3868
+#: ../src/vfs/vfs-volume-nohal.c:3985
 #, c-format
 msgid ""
 "\n"
 "Autoexec: %s\n"
 msgstr "\nAutomatické spuštění: %s\n"
 
-#: ../src/vfs/vfs-volume-nohal.c:3908
+#: ../src/vfs/vfs-volume-nohal.c:4025
 #, c-format
 msgid ""
 "\n"
 "Auto Open Tab for %s in %s\n"
 msgstr "\nKartu otevřít automaticky pro %s v %s\n"
 
-#: ../src/vfs/vfs-volume-nohal.c:3954
+#: ../src/vfs/vfs-volume-nohal.c:4071
 #, c-format
 msgid ""
 "\n"
 "Auto-Unmount: %s\n"
 msgstr "\nAutomatické odpojení: %s\n"
 
-#: ../src/vfs/vfs-volume-nohal.c:3959
+#: ../src/vfs/vfs-volume-nohal.c:4076
 #, c-format
 msgid ""
 "\n"
 "Auto-Unmount: error: no unmount command available\n"
-msgstr ""
+msgstr "\nAutomatické odpojení: chyba: Není dostupný žádný program pro odpojování\n"
 
-#: ../src/vfs/vfs-volume-nohal.c:3978
+#: ../src/vfs/vfs-volume-nohal.c:4095
 #, c-format
 msgid ""
 "\n"
 "Automount: %s\n"
 msgstr "\nAutomatické připojení: %s\n"
 
-#: ../src/vfs/vfs-volume-nohal.c:3983
+#: ../src/vfs/vfs-volume-nohal.c:4100
 #, c-format
 msgid ""
 "\n"
 "Automount: error: no mount command available\n"
-msgstr ""
+msgstr "\nAutomatické připojení: chyba: Není dostupný žádný příkaz pro připojování\n"
 
-#: ../src/vfs/vfs-volume-nohal.c:4162
+#: ../src/vfs/vfs-volume-nohal.c:4279
 #, c-format
 msgid "Unmount-If-Mounted: %s\n"
 msgstr "Odpojit pokud připojeno: %s\n"
@@ -7169,7 +7219,7 @@ msgstr "Hodnota:"
 
 #: ../src/item-prop.c:1857
 msgid "If enabled, use as handler for:"
-msgstr ""
+msgstr "Pokud povolen, použít jako manipulátor pro:"
 
 #: ../src/item-prop.c:1862
 msgid "none"

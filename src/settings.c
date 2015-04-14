@@ -163,13 +163,13 @@ static void parse_general_settings( char* line )
     else if ( 0 == strcmp( name, "big_icon_size" ) )
     {
         app_settings.big_icon_size = atoi( value );
-        if( app_settings.big_icon_size <= 0 || app_settings.big_icon_size > 128 )
+        if( app_settings.big_icon_size <= 0 || app_settings.big_icon_size > 256 )
             app_settings.big_icon_size = big_icon_size_default;
     }
     else if ( 0 == strcmp( name, "small_icon_size" ) )
     {
         app_settings.small_icon_size = atoi( value );
-        if( app_settings.small_icon_size <= 0 || app_settings.small_icon_size > 128 )
+        if( app_settings.small_icon_size <= 0 || app_settings.small_icon_size > 256 )
             app_settings.small_icon_size = small_icon_size_default;
     }
     else if ( 0 == strcmp( name, "tool_icon_size" ) )
@@ -1249,7 +1249,7 @@ char* save_settings( gpointer main_window_ptr )
     FMMainWindow* main_window;
 //printf("save_settings\n");
 
-    xset_set( "config_version", "s", "26" );  // hand
+    xset_set( "config_version", "s", "27" );
 
     // save tabs
     gboolean save_tabs = xset_get_b( "main_save_tabs" );
@@ -6460,7 +6460,7 @@ void xset_design_job( GtkWidget* item, XSet* set )
             gtk_widget_show_all( dlg );
             response = gtk_dialog_run( GTK_DIALOG( dlg ) );
             gtk_widget_destroy( dlg );
-            if ( response == GTK_RESPONSE_CANCEL )
+            if ( response != GTK_RESPONSE_OK && response != GTK_RESPONSE_YES )
                 break;
         }
         g_free( msg );
@@ -7567,38 +7567,41 @@ static void xset_design_show_menu( GtkWidget* menu, XSet* set, guint button, gui
                             GDK_KEY_k, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
     // Edit (script)
-    if ( !set->lock && set->x && atoi( set->x ) == XSET_CMD_SCRIPT )
+    if ( !set->lock && set->menu_style < XSET_MENU_SUBMENU && set->x )
     {
-        char* script = xset_custom_get_script( set, FALSE );
-        if ( script )
+        if ( atoi( set->x ) == XSET_CMD_SCRIPT )
         {
-            if ( geteuid() != 0 && have_rw_access( script ) )
+            char* script = xset_custom_get_script( set, FALSE );
+            if ( script )
             {
-                // edit as user
-                newitem = xset_design_additem( design_menu, _("_Edit Script"),
-                                    GTK_STOCK_EDIT, XSET_JOB_EDIT, set );
-                gtk_widget_add_accelerator( newitem, "activate", accel_group,
-                                    GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);
-            }
-            else
-            {
-                // edit as root
-                newitem = xset_design_additem( design_menu, _("E_dit As Root"),
-                                    GTK_STOCK_DIALOG_WARNING, XSET_JOB_EDIT_ROOT, set );
-                if ( geteuid() == 0 )
+                if ( geteuid() != 0 && have_rw_access( script ) )
+                {
+                    // edit as user
+                    newitem = xset_design_additem( design_menu, _("_Edit Script"),
+                                        GTK_STOCK_EDIT, XSET_JOB_EDIT, set );
                     gtk_widget_add_accelerator( newitem, "activate", accel_group,
-                                    GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);                
+                                        GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);
+                }
+                else
+                {
+                    // edit as root
+                    newitem = xset_design_additem( design_menu, _("E_dit As Root"),
+                                        GTK_STOCK_DIALOG_WARNING, XSET_JOB_EDIT_ROOT, set );
+                    if ( geteuid() == 0 )
+                        gtk_widget_add_accelerator( newitem, "activate", accel_group,
+                                        GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);                
+                }
+                g_free( script );
             }
-            g_free( script );
         }
-    }
-    else if ( !set->lock && set->x && atoi( set->x ) == XSET_CMD_LINE )
-    {
-        // edit command line
-        newitem = xset_design_additem( design_menu, _("_Edit Command"),
-                            GTK_STOCK_EDIT, XSET_JOB_PROP_CMD, set );
-        gtk_widget_add_accelerator( newitem, "activate", accel_group,
-                            GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);
+        else if ( atoi( set->x ) == XSET_CMD_LINE )
+        {
+            // edit command line
+            newitem = xset_design_additem( design_menu, _("_Edit Command"),
+                                GTK_STOCK_EDIT, XSET_JOB_PROP_CMD, set );
+            gtk_widget_add_accelerator( newitem, "activate", accel_group,
+                                GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);
+        }
     }
     
     // Properties
@@ -9514,7 +9517,7 @@ void xset_defaults()
     xset_set_set( set, "icn", "gtk-open" );
     set->line = g_strdup( "#devices-menu-open" );
    
-    set = xset_set( "dev_menu_tab", "lbl", C_("Devices|Open|", "_Tab") );
+    set = xset_set( "dev_menu_tab", "lbl", C_("Devices|Open|", "Open In _Tab") );
     xset_set_set( set, "icn", "gtk-add" );
     set->line = g_strdup( "#devices-menu-tab" );
    
@@ -10194,7 +10197,7 @@ void xset_defaults()
     set->b = XSET_B_TRUE;
     set->line = g_strdup( "#gui-pan" );
 
-    set = xset_set( "main_focus_panel", "lbl", _("_Go") );
+    set = xset_set( "main_focus_panel", "lbl", _("F_ocus") );
     set->menu_style = XSET_MENU_SUBMENU;
     xset_set_set( set, "desc", "panel_prev panel_next panel_hide panel_1 panel_2 panel_3 panel_4" );
     xset_set_set( set, "icn", "gtk-go-forward" );
@@ -10216,7 +10219,7 @@ void xset_defaults()
         xset_set( "panel_3", "lbl", _("Panel _3") );
         xset_set( "panel_4", "lbl", _("Panel _4") );
 
-    set = xset_set( "main_auto", "lbl", _("_Events") );
+    set = xset_set( "main_auto", "lbl", _("_Event Manager") );
     set->menu_style = XSET_MENU_SUBMENU;
     xset_set_set( set, "desc", "auto_inst auto_win auto_pnl auto_tab evt_device" );
     xset_set_set( set, "icn", "gtk-execute" );
@@ -11088,7 +11091,7 @@ void xset_defaults()
     set = xset_get( "sep_e3" );
     set->menu_style = XSET_MENU_SEP;
 
-    set = xset_set( "edit_submenu", "lbl", _("_Edit") );
+    set = xset_set( "edit_submenu", "lbl", _("_Actions") );
     set->menu_style = XSET_MENU_SUBMENU;
     xset_set_set( set, "desc", "copy_name copy_parent copy_path sep_e1 paste_link paste_target paste_as sep_e2 copy_to move_to edit_root edit_hide sep_e3 select_all select_patt select_invert select_un" );
     xset_set_set( set, "icn", "gtk-edit" );
@@ -11366,6 +11369,11 @@ void xset_defaults()
         set->menu_style = XSET_MENU_RADIO;
         if ( p != 1 )
             xset_set_set( set, "shared_key", "panel1_list_compact" );
+
+        set = xset_set_panel( p, "list_large", "lbl", _("_Large Icons") );
+        set->menu_style = XSET_MENU_CHECK;
+        if ( p != 1 )
+            xset_set_set( set, "shared_key", "panel1_list_large" );
 
         set = xset_set_panel( p, "show_hidden", "lbl", _("_Hidden Files") );
         set->menu_style = XSET_MENU_CHECK;

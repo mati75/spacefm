@@ -148,6 +148,17 @@ static void on_popup_open_all( GtkMenuItem *menuitem, PtkFileMenu* data );
 void
 on_popup_canon ( GtkMenuItem *menuitem, PtkFileMenu* data );
 
+void on_popup_list_large( GtkMenuItem *menuitem, PtkFileBrowser* browser )
+{
+    int p = browser->mypanel;
+    FMMainWindow* main_window = (FMMainWindow*)browser->main_window;
+    char mode = main_window->panel_context[p-1];
+
+    xset_set_b_panel_mode( p, "list_large", mode,
+                                        xset_get_b_panel( p, "list_large" ) );
+    update_views_all_windows( NULL, browser );
+}
+
 void on_popup_list_detailed( GtkMenuItem *menuitem, PtkFileBrowser* browser )
 {
     int p = browser->mypanel;
@@ -735,6 +746,9 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
         }
         
         // add apps
+        gtk_icon_size_lookup_for_settings( gtk_settings_get_default(),
+                                           GTK_ICON_SIZE_MENU,
+                                           &icon_w, &icon_h );
         if ( is_text )
         {
             char **tmp, **txt_apps;
@@ -783,9 +797,6 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
                                             ( gpointer ) data );
                 g_object_set_data_full( G_OBJECT( app_menu_item ), "desktop_file",
                                         desktop_file, vfs_app_desktop_unref );
-                gtk_icon_size_lookup_for_settings( gtk_settings_get_default(),
-                                                   GTK_ICON_SIZE_MENU,
-                                                   &icon_w, &icon_h );
                 app_icon = vfs_app_desktop_get_icon( desktop_file,
                                     icon_w > icon_h ? icon_w : icon_h, TRUE );
                 if ( app_icon )
@@ -844,11 +855,16 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
         app_icon = mime_type ? vfs_mime_type_get_icon( mime_type, FALSE ) : NULL;
         if ( app_icon )
         {
-            app_img = gtk_image_new_from_pixbuf( app_icon );
+            GdkPixbuf* app_icon_scaled = gdk_pixbuf_scale_simple( app_icon,
+                         icon_w, icon_h, GDK_INTERP_BILINEAR );
+            app_img = gtk_image_new_from_pixbuf( app_icon_scaled );
             if ( app_img )
+            {
                 gtk_image_menu_item_set_image ( GTK_IMAGE_MENU_ITEM( item ),
                                                                     app_img );
+            }
             g_object_unref( app_icon );
+            g_object_unref( app_icon_scaled );
         } 
         if ( set->menu_label )
             g_free( set->menu_label );
@@ -1328,6 +1344,19 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
             xset_set( "rubberband", "disable", "1" );
         }
         
+        if ( browser->view_mode == PTK_FB_ICON_VIEW )
+        {
+            set = xset_set_b_panel( p, "list_large", TRUE );
+            set->disable = TRUE;
+        }
+        else
+        {
+            set = xset_set_cb_panel( p, "list_large", on_popup_list_large,
+                                                            browser );
+            set->disable = FALSE;
+            set->b = xset_get_panel_mode( p, "list_large", mode )->b;
+        }
+        
         set = xset_set_cb_panel( p, "list_detailed", on_popup_list_detailed,
                                                                 browser );
             xset_set_ob2( set, NULL, NULL );
@@ -1416,8 +1445,8 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
 
         xset_set_cb_panel( p, "font_file", main_update_fonts, browser );
         set = xset_get( "view_list_style" );
-        desc = g_strdup_printf( "panel%d_list_detailed panel%d_list_compact panel%d_list_icons sep_v5 rubberband sep_v6 panel%d_font_file",
-                                        p, p, p, p );
+        desc = g_strdup_printf( "panel%d_list_detailed panel%d_list_compact panel%d_list_icons sep_v5 panel%d_list_large rubberband sep_v6 panel%d_font_file",
+                                        p, p, p, p, p );
         xset_set_set( set, "desc", desc );
         g_free( desc );
         set = xset_get( "view_fonts" );
