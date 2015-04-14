@@ -12,6 +12,7 @@ spacefm (0.9.9+git20150313.ad8c8f8ce6-1) experimental; urgency=medium
     debian-watch-may-check-gpg-signature.
   * debian/rules: Drop obsolete override_dh_builddeb.
   * Remove debian/source/options -- no longer needed.
+  * Update debian/watch.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 13 Mar 2015 19:28:34 +0100
 
