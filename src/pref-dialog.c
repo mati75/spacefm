@@ -105,8 +105,8 @@ static const int tool_icon_sizes[] = {
     GTK_ICON_SIZE_BUTTON,
     GTK_ICON_SIZE_DND,
     GTK_ICON_SIZE_DIALOG };
-static const int big_icon_sizes[] = { 96, 72, 64, 48, 36, 32, 24, 22 };
-static const int small_icon_sizes[] = { 48, 36, 32, 24, 22, 16, 12 };
+static const int big_icon_sizes[] = { 256, 192, 128, 96, 72, 64, 48, 36, 32, 24, 22 };
+static const int small_icon_sizes[] = { 256, 192, 128, 96, 72, 64, 48, 36, 32, 24, 22, 16, 12 };
 static const char* date_formats[] =
 {
     "%Y-%m-%d %H:%M",
@@ -551,6 +551,16 @@ static void on_response( GtkDialog* dlg, int response, FMPrefDlg* user_data )
                 vfs_dir_foreach( (GHFunc)dir_unload_thumbnails, GINT_TO_POINTER( 1 ) );
             if( small_icon != app_settings.small_icon_size )
                 vfs_dir_foreach( (GHFunc)dir_unload_thumbnails, GINT_TO_POINTER( 0 ) );
+
+            // update desktop icons
+            if ( big_icon != app_settings.big_icon_size )
+            {
+                app_settings.big_icon_size = big_icon;
+                fm_desktop_update_icons();
+            }
+            app_settings.big_icon_size = big_icon;
+            app_settings.small_icon_size = small_icon;
+
             // update all windows/all panels/all browsers
             for ( l = fm_main_window_get_all(); l; l = l->next )
             {
@@ -563,24 +573,18 @@ static void on_response( GtkDialog* dlg, int response, FMPrefDlg* user_data )
                     {
                         file_browser = PTK_FILE_BROWSER( gtk_notebook_get_nth_page(
                                                          notebook, i ) );
-                        ptk_file_browser_update_display( file_browser );
+                        // update views
+                        gtk_widget_destroy( file_browser->folder_view );
+                        file_browser->folder_view = NULL;
                         if ( file_browser->side_dir )
                         {
                             gtk_widget_destroy( file_browser->side_dir );
                             file_browser->side_dir = NULL;
-                            ptk_file_browser_update_views( NULL, file_browser );
                         }
+                        ptk_file_browser_update_views( NULL, file_browser );
                     }
                 }
             }
-            // update desktop icons
-            if ( big_icon != app_settings.big_icon_size )
-            {
-                app_settings.big_icon_size = big_icon;
-                fm_desktop_update_icons();
-            }
-            app_settings.big_icon_size = big_icon;
-            app_settings.small_icon_size = small_icon;
 
             update_bookmark_icons();            
             update_volume_icons();            

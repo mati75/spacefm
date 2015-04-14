@@ -292,7 +292,7 @@ const Handler handlers_fs[]=
         "",
         "# Mounting of iso files is performed by fuseiso in a file handler,\n# not this device handler.  Right-click on any file and select\n# Open|Handlers, and select Mount ISO to see this command.",
         FALSE,
-        "fusermount -u %a",
+        "fusermount -u \"%a\"",
         FALSE,
         "grep \"%a\" ~/.mtab.fuseiso",
         FALSE
@@ -367,7 +367,7 @@ const Handler handlers_net[]=
         "",
         "[[ -n \"$fm_url_user\" ]] && fm_url_user=\"${fm_url_user}@\"\n[[ -z \"$fm_url_port\" ]] && fm_url_port=22\necho \">>> sshfs -p $fm_url_port $fm_url_user$fm_url_host:$fm_url_path %a\"\necho\n# Run sshfs through nohup to prevent disconnect on terminal close\nsshtmp=\"$(mktemp --tmpdir spacefm-ssh-output-XXXXXXXX.tmp)\" || exit 1\nnohup sshfs -p $fm_url_port $fm_url_user$fm_url_host:$fm_url_path %a &> \"$sshtmp\"\nerr=$?\n[[ -e \"$sshtmp\" ]] && cat \"$sshtmp\" ; rm -f \"$sshtmp\"\n[[ $err -eq 0 ]]  # set error status\n\n# Alternate Method - if enabled, disable nohup line above and\n#                    uncheck Run In Terminal\n# # Run sshfs in a terminal without SpaceFM task.  sshfs disconnects when the\n# # terminal is closed\n# spacefm -s run-task cmd --terminal \"echo 'Connecting to $fm_url'; echo; sshfs -p $fm_url_port $fm_url_user$fm_url_host:$fm_url_path %a; if [ $? -ne 0 ]; then echo; echo '[ Finished ] Press Enter to close'; else echo; echo 'Press Enter to close (closing this window may unmount sshfs)'; fi; read\" & sleep 1\n",
         TRUE,
-        "fusermount -u %a",
+        "fusermount -u \"%a\"",
         FALSE,
         INFO_EXAMPLE,
         FALSE
@@ -375,11 +375,11 @@ const Handler handlers_net[]=
     {
         "hand_net_+mtp",
         "mtp",
-        "mtp mtab_fs=fuse.jmtpfs",
+        "mtp mtab_fs=fuse.jmtpfs mtab_fs=fuse.simple-mtpfs mtab_fs=fuse.mtpfs mtab_fs=fuse.DeviceFs(*",
         "",
-        "jmtpfs \"%a\"\n",
+        "mtpmount=\"$(which jmtpfs || which simple-mtpfs || which mtpfs || which go-mtpfs)\"\nif [ -z \"$mtpmount\" ]; then\n    echo \"To mount mtp:// you must install jmtpfs, simple-mtpfs, mtpfs, or go-mtpfs,\"\n    echo \"or add a custom protocol handler.\"\n    exit 1\nelif [ \"${mtpmount##*/}\" = \"go-mtpfs\" ]; then\n    # Run go-mtpfs in background, as it does not exit after mount\n    outputtmp=\"$(mktemp --tmpdir spacefm-go-mtpfs-output-XXXXXXXX.tmp)\" || exit 1\n    go-mtpfs \"%a\" &> \"$outputtmp\" &\n    sleep 2s\n    [[ -e \"$outputtmp\" ]] && cat \"$outputtmp\" ; rm -f \"$outputtmp\"\n    # set success status only if positive that mountpoint is mountpoint\n    mountpoint \"%a\"\nelse\n    $mtpmount \"%a\"\nfi\n",
         FALSE,
-        "fusermount -u %a",
+        "fusermount -u \"%a\"",
         FALSE,
         INFO_EXAMPLE,
         FALSE
@@ -391,7 +391,19 @@ const Handler handlers_net[]=
         "",
         "gphotofs \"%a\"",
         FALSE,
-        "fusermount -u %a",
+        "fusermount -u \"%a\"",
+        FALSE,
+        INFO_EXAMPLE,
+        FALSE
+    },
+    {
+        "hand_net_+ifuse",
+        "ifuse",
+        "ifuse ios mtab_fs=fuse.ifuse",
+        "",
+        "ifuse \"%a\"",
+        FALSE,
+        "fusermount -u \"%a\"",
         FALSE,
         INFO_EXAMPLE,
         FALSE
@@ -399,9 +411,21 @@ const Handler handlers_net[]=
     {
         "hand_net_+udevil",
         "udevil",
-        "ftp http https nfs smb ssh mtab_fs=fuse.sshfs",
+        "ftp http https nfs ssh mtab_fs=fuse.sshfs mtab_fs=davfs*",
         "",
         "udevil mount \"$fm_url\"",
+        TRUE,
+        "udevil umount \"%a\"",
+        FALSE,
+        INFO_EXAMPLE,
+        FALSE
+    },
+    {
+        "hand_net_+udevilsmb",
+        "udevil-smb",
+        "smb mtab_fs=cifs",
+        "",
+        "UDEVIL_RESULT=\"$(udevil mount \"$fm_url\" | grep Mounted)\"\n[ -n \"$UDEVIL_RESULT\" ] && spacefm -s set new_tab \"${UDEVIL_RESULT#* at }\"",
         TRUE,
         "udevil umount \"%a\"",
         FALSE,
@@ -1193,9 +1217,11 @@ static void config_unload_handler_settings( HandlerData* hnd )
                                   FALSE);
 
     // Resetting all widgets
-    gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_name ), g_strdup( "" ) );
-    gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_mime ), g_strdup( "" ) );
-    gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_extension ), g_strdup( "" ) );
+    gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_name ), "" );
+    gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_mime ), "" );
+    gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_extension ), "" );
+    if ( hnd->entry_handler_icon )
+        gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_icon ), "" );
     ptk_handler_load_text_view( GTK_TEXT_VIEW( hnd->view_handler_compress ), NULL );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( hnd->chkbtn_handler_compress_term ),
                                   FALSE);
@@ -1594,6 +1620,13 @@ static void on_configure_button_press( GtkButton* widget, HandlerData* hnd )
         // Exiting if remove has been pressed when no handlers are present
         if (xset_name == NULL) goto _clean_exit;
 
+        if ( xset_msg_dialog( hnd->dlg, GTK_MESSAGE_WARNING,
+                          _("Confirm Remove"), NULL,
+                          GTK_BUTTONS_YES_NO,
+                          _("Permanently remove the selected handler?"),
+                          NULL, NULL ) != GTK_RESPONSE_YES )
+            goto _clean_exit;
+        
         // Updating available archive handlers list - fetching current
         // handlers
         const char* archive_handlers_s =
@@ -1816,6 +1849,73 @@ static void on_configure_handler_enabled_check( GtkToggleButton *togglebutton,
     gtk_widget_set_sensitive( hnd->chkbtn_handler_compress_term, enabled );
     gtk_widget_set_sensitive( hnd->chkbtn_handler_extract_term, enabled );
     gtk_widget_set_sensitive( hnd->chkbtn_handler_list_term, enabled );
+}
+
+static gboolean on_handlers_key_press( GtkWidget* widget, GdkEventKey* evt,
+                                       HandlerData* hnd )
+{
+    // Current handler hasn't been changed?
+    if ( !gtk_widget_get_sensitive( hnd->btn_apply ) )
+        return FALSE;
+
+    if ( xset_msg_dialog( hnd->dlg, GTK_MESSAGE_QUESTION,
+                          _("Apply Changes ?"), NULL,
+                          GTK_BUTTONS_YES_NO,
+                          _("Apply changes to the current handler?"),
+                          NULL, NULL ) == GTK_RESPONSE_YES )
+        on_configure_button_press( GTK_BUTTON( hnd->btn_apply ), hnd );
+    
+    return TRUE;  // FALSE doesn't retain key after dialog shown
+}
+
+static gboolean on_handlers_button_press( GtkWidget* view,
+                                          GdkEventButton* evt,
+                                          HandlerData* hnd )
+{
+    // Current handler hasn't been changed?
+    if ( !gtk_widget_get_sensitive( hnd->btn_apply ) )
+        return FALSE;
+    
+    GtkTreeModel * model;
+    GtkTreePath* tree_path = NULL;
+    GtkTreeIter it;
+    GtkTreeIter it_sel;
+    GtkTreeSelection* selection;
+    gboolean item_clicked = FALSE;
+    
+    // get clicked item
+    model = gtk_tree_view_get_model( GTK_TREE_VIEW( view ) );
+    selection = gtk_tree_view_get_selection(
+                            GTK_TREE_VIEW( hnd->view_handlers ) );
+    if ( !( selection && gtk_tree_selection_get_selected(
+                                    selection, &model, &it_sel ) ) )
+    {
+        // no item is selected
+        gtk_tree_path_free( tree_path );
+        return FALSE;
+    }
+    if ( gtk_tree_view_get_path_at_pos( GTK_TREE_VIEW( view ),
+                                        evt->x, evt->y, &tree_path,
+                                        NULL, NULL, NULL ) )
+    {
+        if ( gtk_tree_model_get_iter( model, &it, tree_path ) )
+            item_clicked = TRUE;
+    }
+    if ( xset_msg_dialog( hnd->dlg, GTK_MESSAGE_QUESTION,
+                          _("Apply Changes ?"), NULL,
+                          GTK_BUTTONS_YES_NO,
+                          _("Apply changes to the current handler?"),
+                          NULL, NULL ) == GTK_RESPONSE_YES )
+        on_configure_button_press( GTK_BUTTON( hnd->btn_apply ), hnd );
+    if ( item_clicked )
+        gtk_tree_view_set_cursor(GTK_TREE_VIEW( hnd->view_handlers ),
+                                    tree_path, NULL, FALSE);
+    else if ( selection )
+        gtk_tree_selection_unselect_all( selection );
+
+    if ( tree_path )
+        gtk_tree_path_free( tree_path );
+    return TRUE;
 }
 
 #if 0
@@ -2048,14 +2148,14 @@ static gboolean validate_archive_handler( HandlerData* hnd )
                             "substitution variables should probably be in the "
                             "compression command:\n\n"
                             "One of the following:\n\n"
-                            "%%%%n: First selected file/directory to"
+                            "%%n: First selected file/directory to"
                             " archive\n"
-                            "%%%%N: All selected files/directories to"
+                            "%%N: All selected files/directories to"
                             " archive\n\n"
                             "and one of the following:\n\n"
-                            "%%%%o: Resulting single archive\n"
-                            "%%%%O: Resulting archive per source "
-                            "file/directory (see %%%%n/%%%%N)"), NULL, NULL );
+                            "%%o: Resulting single archive\n"
+                            "%%O: Resulting archive per source "
+                            "file/directory"), NULL, NULL );
             gtk_widget_grab_focus( hnd->view_handler_compress );
             ret = FALSE;
             goto _cleanup;
@@ -2073,8 +2173,8 @@ static gboolean validate_archive_handler( HandlerData* hnd )
         xset_msg_dialog( GTK_WIDGET( hnd->dlg ), GTK_MESSAGE_WARNING,
                             _(dialog_titles[hnd->mode]), NULL, FALSE,
                             _("The following "
-                            "variables should be in the extraction "
-                            "command:\n\n%%%%x: "
+                            "variables should probably be in the extraction "
+                            "command:\n\n%%x: "
                             "Archive to extract"), NULL, NULL );
         gtk_widget_grab_focus( hnd->view_handler_extract );
         ret = FALSE;
@@ -2092,8 +2192,8 @@ static gboolean validate_archive_handler( HandlerData* hnd )
         xset_msg_dialog( GTK_WIDGET( hnd->dlg ), GTK_MESSAGE_WARNING,
                             _(dialog_titles[hnd->mode]), NULL, FALSE,
                             _("The following "
-                            "variables should be in the list "
-                            "command:\n\n%%%%x: "
+                            "variables should probably be in the list "
+                            "command:\n\n%%x: "
                             "Archive to list"),
                             NULL, NULL );
         gtk_widget_grab_focus( hnd->view_handler_list );
@@ -2383,6 +2483,10 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
                         "changed",
                         G_CALLBACK( on_configure_changed ),
                         hnd );
+    g_signal_connect ( hnd->view_handlers, "button-press-event",
+                       G_CALLBACK ( on_handlers_button_press ), hnd );
+    g_signal_connect ( hnd->view_handlers, "key-press-event",
+                       G_CALLBACK ( on_handlers_key_press ), hnd );
 
     // Adding column to the treeview
     GtkTreeViewColumn* col = gtk_tree_view_column_new();

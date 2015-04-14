@@ -1744,7 +1744,7 @@ void create_side_views( PtkFileBrowser* file_browser, int mode )
 void ptk_file_browser_update_views( GtkWidget* item, PtkFileBrowser* file_browser )
 {
     int i;
-//printf("ptk_file_browser_update_views fb=%#x  (panel %d)\n", file_browser, file_browser->mypanel );
+//printf("ptk_file_browser_update_views fb=%p  (panel %d)\n", file_browser, file_browser->mypanel );
 
     FMMainWindow* main_window = (FMMainWindow*)file_browser->main_window;
     // hide/show browser widgets based on user settings
@@ -1963,7 +1963,19 @@ void ptk_file_browser_update_views( GtkWidget* item, PtkFileBrowser* file_browse
     if ( pos < 20 ) pos = -1;
 //printf( "slide_s = %d\n", pos );
     gtk_paned_set_position( GTK_PANED( file_browser->side_vpane_bottom ), pos );
-        
+    
+    // Large Icons - option for Detailed and Compact list views
+    gboolean large_icons = xset_get_b_panel( p, "list_icons" ) ||
+                    xset_get_b_panel_mode( p, "list_large", mode );
+    if ( large_icons != !!file_browser->large_icons && file_browser->folder_view )
+    {
+        // force rebuild of folder_view for icon size change
+        gtk_widget_destroy( file_browser->folder_view );
+        file_browser->folder_view = NULL;
+    }
+    file_browser->large_icons = large_icons;
+    
+    
     // List Styles
     if ( xset_get_b_panel( p, "list_detailed" ) )
     {
@@ -2056,7 +2068,7 @@ void ptk_file_browser_update_views( GtkWidget* item, PtkFileBrowser* file_browse
     ptk_file_browser_show_hidden_files( file_browser,
                             xset_get_b_panel( p, "show_hidden" ) );
     
-//printf("ptk_file_browser_update_views fb=%#x DONE\n", file_browser);
+//printf("ptk_file_browser_update_views fb=%p DONE\n", file_browser);
 }
 
 GtkWidget* ptk_file_browser_new( int curpanel, GtkWidget* notebook,
@@ -2099,6 +2111,10 @@ GtkWidget* ptk_file_browser_new( int curpanel, GtkWidget* notebook,
     }
 
     file_browser->view_mode = view_mode;  //sfm was after next line
+    // Large Icons - option for Detailed and Compact list views
+    file_browser->large_icons = view_mode == PTK_FB_ICON_VIEW ||
+                    xset_get_b_panel_mode( file_browser->mypanel, "list_large",
+        ((FMMainWindow*)main_window)->panel_context[file_browser->mypanel-1] );
     file_browser->folder_view = create_folder_view( file_browser, view_mode );
 
     gtk_container_add ( GTK_CONTAINER ( file_browser->folder_view_scroll ),
@@ -2702,62 +2718,109 @@ static void on_file_deleted( VFSDir* dir, VFSFileInfo* file,
     {
 #if GTK_CHECK_VERSION(3, 0, 0)
 #else
-        /* GTK2 treeview does not select the next row in the list when a row is
-         * deleted, so do so.  GTK3 does this automatically. */
-        if ( file_browser->view_mode == PTK_FB_LIST_VIEW )
+        /* GTK2 does not select the next row in the list when a row is deleted,
+         * so do so.  GTK3 does this automatically. */
+        GList* sel_files = NULL;
+        GtkTreeModel* model;
+        GtkTreeSelection* tree_sel = NULL;
+
+        // get model and sel_files if only one selected
+        if ( file_browser->view_mode == PTK_FB_ICON_VIEW ||
+                            file_browser->view_mode == PTK_FB_COMPACT_VIEW )
         {
-            GtkTreeSelection* tree_sel = gtk_tree_view_get_selection(
-                                        GTK_TREE_VIEW( file_browser->folder_view ) );
-            if ( gtk_tree_selection_count_selected_rows( tree_sel ) == 1 )
+            sel_files = folder_view_get_selected_items( file_browser, &model );
+            if ( sel_files && sel_files->next )
             {
-                GtkTreeModel* model;
-                GList* sel_files = gtk_tree_selection_get_selected_rows( tree_sel, &model );
-                if ( sel_files )
-                {
-                    VFSFileInfo* file_sel;
-                    GtkTreeIter it;
-                    GtkTreeIter it2;
-                    GtkTreeIter it_prev;
-                    if ( gtk_tree_model_get_iter( model, &it, ( GtkTreePath* ) sel_files->data ) )
-                    {
-                        gtk_tree_model_get( model, &it, COL_FILE_INFO, &file_sel, -1 );
-                        if ( file_sel )
-                        {
-                            if ( file_sel == file )
-                            {
-                                // currently selected file is being deleted, select next
-                                if ( gtk_tree_model_iter_next (model, &it ) )
-                                    gtk_tree_selection_select_iter (tree_sel, &it );
-                                else if ( gtk_tree_model_get_iter_first( model,
-                                                                        &it2 ) )
-                                {
-                                    // file is last in list, select previous
-                                    it_prev.stamp = 0;
-                                    do
-                                    {
-                                        if ( it2.user_data == it.user_data &&
-                                             it2.user_data2 == it.user_data2 &&
-                                             it2.user_data3 == it.user_data3 )
-                                        {
-                                            // found deleted file
-                                            if ( it_prev.stamp )
-                                                // there was a previous so select
-                                                gtk_tree_selection_select_iter(
-                                                            tree_sel, &it_prev );
-                                            break;
-                                        }
-                                        it_prev = it2;
-                                    } while ( gtk_tree_model_iter_next (model, &it2 ) );
-                                }
-                            }
-                        }
-                    }
-                }
+                // more than on file selected - do nothing
                 g_list_foreach( sel_files,
                                 ( GFunc ) gtk_tree_path_free,
                                 NULL );
                 g_list_free( sel_files );
+                sel_files = NULL;
             }
+        }
+        else if ( file_browser->view_mode == PTK_FB_LIST_VIEW )
+        {
+            tree_sel = gtk_tree_view_get_selection(
+                                GTK_TREE_VIEW( file_browser->folder_view ) );
+            if ( gtk_tree_selection_count_selected_rows( tree_sel ) == 1 )
+                sel_files = gtk_tree_selection_get_selected_rows( tree_sel,
+                                                                  &model );
+        }
+        
+        if ( sel_files )
+        {
+            VFSFileInfo* file_sel;
+            GtkTreeIter it;
+            GtkTreeIter it2;
+            GtkTreeIter it_prev;
+            GtkTreePath* tree_path = NULL;
+            if ( gtk_tree_model_get_iter( model, &it,
+                                        ( GtkTreePath* ) sel_files->data ) )
+            {
+                gtk_tree_model_get( model, &it, COL_FILE_INFO, &file_sel, -1 );
+                if ( file_sel == file )
+                {
+                    // currently selected file is being deleted, select next
+                    if ( gtk_tree_model_iter_next (model, &it ) )
+                        tree_path = gtk_tree_model_get_path( model, &it );
+                    else if ( gtk_tree_model_get_iter_first( model,
+                                                             &it2 ) )
+                    {
+                        // file is last in list, select previous
+                        it_prev.stamp = 0;
+                        do
+                        {
+                            if ( it2.user_data == it.user_data &&
+                                 it2.user_data2 == it.user_data2 &&
+                                 it2.user_data3 == it.user_data3 )
+                            {
+                                // found deleted file
+                                if ( it_prev.stamp )
+                                {
+                                    // there was a previous so select
+                                    tree_path = gtk_tree_model_get_path(
+                                            model, &it_prev );
+                                }
+                                break;
+                            }
+                            it_prev = it2;
+                        } while ( gtk_tree_model_iter_next (model, &it2 ) );
+                    }
+                    if ( tree_path )
+                    {
+                        if ( file_browser->view_mode == PTK_FB_ICON_VIEW ||
+                                file_browser->view_mode == PTK_FB_COMPACT_VIEW )
+                        {
+                            exo_icon_view_select_path(
+                                    EXO_ICON_VIEW( file_browser->folder_view ),
+                                    tree_path );
+                            exo_icon_view_set_cursor(
+                                    EXO_ICON_VIEW( file_browser->folder_view ),
+                                    tree_path, NULL, FALSE );
+                            exo_icon_view_scroll_to_path(
+                                    EXO_ICON_VIEW( file_browser->folder_view ),
+                                    tree_path, TRUE, .25, 0 );
+                        }
+                        else
+                        {
+                            gtk_tree_selection_select_path( tree_sel,
+                                    tree_path );
+                            gtk_tree_view_set_cursor(
+                                    GTK_TREE_VIEW( file_browser->folder_view ),
+                                    tree_path, NULL, FALSE );
+                            gtk_tree_view_scroll_to_cell(
+                                    GTK_TREE_VIEW( file_browser->folder_view ),
+                                    tree_path, NULL, TRUE, .25, 0 );
+                        }
+                        gtk_tree_path_free( tree_path );
+                    }
+                }
+            }
+            g_list_foreach( sel_files,
+                            ( GFunc ) gtk_tree_path_free,
+                            NULL );
+            g_list_free( sel_files );
         }
 #endif
         on_folder_content_changed( dir, file, file_browser );
@@ -2826,7 +2889,7 @@ void ptk_file_browser_update_model( PtkFileBrowser* file_browser )
         file_browser->sort_type );
 
     show_thumbnails( file_browser, list,
-                     file_browser->view_mode == PTK_FB_ICON_VIEW,
+                     file_browser->large_icons,
                      file_browser->max_thumbnail );
     g_signal_connect( list, "sort-column-changed",
                       G_CALLBACK( on_sort_col_changed ), file_browser );
@@ -2895,7 +2958,7 @@ void on_dir_file_listed( VFSDir* dir,
         {
             show_thumbnails( file_browser,
                              PTK_FILE_LIST( file_browser->file_list ),
-                             file_browser->view_mode == PTK_FB_ICON_VIEW,
+                             file_browser->large_icons,
                              file_browser->max_thumbnail );
         }
     }
@@ -4436,13 +4499,20 @@ static GtkWidget* create_folder_view( PtkFileBrowser* file_browser,
 
         if( view_mode == PTK_FB_COMPACT_VIEW )
         {
+            icon_size = file_browser->large_icons ? big_icon_size :
+                                                    small_icon_size;
+
             exo_icon_view_set_layout_mode( (ExoIconView*)folder_view, EXO_ICON_VIEW_LAYOUT_COLS );
             exo_icon_view_set_orientation( (ExoIconView*)folder_view, GTK_ORIENTATION_HORIZONTAL );
         }
         else
         {
+            icon_size = big_icon_size;
+            
             exo_icon_view_set_column_spacing( (ExoIconView*)folder_view, 4 );
-            exo_icon_view_set_item_width ( (ExoIconView*)folder_view, 110 );
+            exo_icon_view_set_item_width ( (ExoIconView*)folder_view, 
+                                                icon_size < 110 ? 110 :
+                                                icon_size );
         }
 
         exo_icon_view_set_selection_mode ( (ExoIconView*)folder_view,
@@ -4471,10 +4541,13 @@ static GtkWidget* create_folder_view( PtkFileBrowser* file_browser,
                        "follow_state", TRUE,
                        NULL );
         gtk_cell_layout_pack_start ( GTK_CELL_LAYOUT ( folder_view ), renderer, FALSE );
+        gtk_cell_layout_add_attribute ( GTK_CELL_LAYOUT ( folder_view ),
+                                    renderer,
+                                    "pixbuf",
+                                    file_browser->large_icons ?
+                                    COL_FILE_BIG_ICON : COL_FILE_SMALL_ICON );
         gtk_cell_layout_add_attribute ( GTK_CELL_LAYOUT ( folder_view ), renderer,
-                                        "pixbuf", view_mode == PTK_FB_COMPACT_VIEW ? COL_FILE_SMALL_ICON : COL_FILE_BIG_ICON );
-        gtk_cell_layout_add_attribute ( GTK_CELL_LAYOUT ( folder_view ), renderer,
-                                        "info", COL_FILE_INFO );
+                                    "info", COL_FILE_INFO );
         /* add the name renderer */
         renderer = ptk_text_renderer_new ();
 
@@ -4484,17 +4557,17 @@ static GtkWidget* create_folder_view( PtkFileBrowser* file_browser,
                            "xalign", 0.0,
                            "yalign", 0.5,
                            NULL );
-            icon_size = small_icon_size;
         }
         else
         {
             g_object_set ( G_OBJECT ( renderer ),
                            "wrap-mode", PANGO_WRAP_WORD_CHAR,
-                           "wrap-width", 109,
+                           "wrap-width",
+                            icon_size < 110 ? 109 :
+                            icon_size,
                            "xalign", 0.5,
                            "yalign", 0.0,
                            NULL );
-            icon_size = big_icon_size;
         }
         gtk_cell_layout_pack_start ( GTK_CELL_LAYOUT ( folder_view ), renderer, TRUE );
         gtk_cell_layout_add_attribute ( GTK_CELL_LAYOUT ( folder_view ), renderer,
@@ -4541,7 +4614,7 @@ static GtkWidget* create_folder_view( PtkFileBrowser* file_browser,
         exo_tree_view_set_single_click_timeout( (ExoTreeView*)folder_view, 
                     app_settings.no_single_hover ? 0 : SINGLE_CLICK_TIMEOUT );
 
-        icon_size = small_icon_size;
+        icon_size = file_browser->large_icons ? big_icon_size : small_icon_size;
 
         gtk_tree_view_enable_model_drag_source (
             GTK_TREE_VIEW( folder_view ),
@@ -4727,8 +4800,11 @@ void init_list_view( PtkFileBrowser* file_browser, GtkTreeView* list_view )
 
             gtk_tree_view_column_pack_start( col, pix_renderer, FALSE );
             gtk_tree_view_column_set_attributes( col, pix_renderer,
-                                                 "pixbuf", COL_FILE_SMALL_ICON,
-                                                 "info", COL_FILE_INFO, NULL );
+                                    "pixbuf",
+                                    file_browser->large_icons ?
+                                    COL_FILE_BIG_ICON : COL_FILE_SMALL_ICON,
+                                    "info", COL_FILE_INFO, NULL );
+
             gtk_tree_view_column_set_expand ( col, TRUE );
             gtk_tree_view_column_set_sizing( col, GTK_TREE_VIEW_COLUMN_FIXED );
             gtk_tree_view_column_set_min_width( col, 150 );
@@ -4743,7 +4819,7 @@ void init_list_view( PtkFileBrowser* file_browser, GtkTreeView* list_view )
         }
 
         if ( cols[j] == COL_FILE_SIZE )
-            gtk_cell_renderer_set_alignment( renderer, 1, 0 );
+            gtk_cell_renderer_set_alignment( renderer, 1, 0.5 );
         
         gtk_tree_view_column_pack_start( col, renderer, TRUE );       
         gtk_tree_view_column_set_attributes( col, renderer, "text", cols[ j ], NULL );
@@ -4792,7 +4868,7 @@ void ptk_file_browser_refresh( GtkWidget* item, PtkFileBrowser* file_browser )
     {
         // clear thumbnails
         show_thumbnails( file_browser, PTK_FILE_LIST( file_browser->file_list ),
-                         file_browser->view_mode == PTK_FB_ICON_VIEW, 0 );
+                         file_browser->large_icons, 0 );
         while( gtk_events_pending() )
             gtk_main_iteration();
     }
@@ -6290,14 +6366,15 @@ GtkSortType ptk_file_browser_get_sort_type( PtkFileBrowser* file_browser )
 /* FIXME: Don't recreate the view if previous view is compact view */
 void ptk_file_browser_view_as_icons( PtkFileBrowser* file_browser )
 {
-    if ( file_browser->view_mode == PTK_FB_ICON_VIEW )
+    if ( file_browser->view_mode == PTK_FB_ICON_VIEW && file_browser->folder_view )
         return ;
 
     show_thumbnails( file_browser, PTK_FILE_LIST( file_browser->file_list ),
                      TRUE, file_browser->max_thumbnail );
 
     file_browser->view_mode = PTK_FB_ICON_VIEW;
-    gtk_widget_destroy( file_browser->folder_view );
+    if ( file_browser->folder_view )
+        gtk_widget_destroy( file_browser->folder_view );
     file_browser->folder_view = create_folder_view( file_browser, PTK_FB_ICON_VIEW );
     exo_icon_view_set_model( EXO_ICON_VIEW( file_browser->folder_view ),
                              file_browser->file_list );
@@ -6311,15 +6388,16 @@ void ptk_file_browser_view_as_icons( PtkFileBrowser* file_browser )
 /* FIXME: Don't recreate the view if previous view is icon view */
 void ptk_file_browser_view_as_compact_list( PtkFileBrowser* file_browser )
 {
-    if ( file_browser->view_mode == PTK_FB_COMPACT_VIEW )
+    if ( file_browser->view_mode == PTK_FB_COMPACT_VIEW && file_browser->folder_view )
         return ;
 
     show_thumbnails( file_browser,
                      PTK_FILE_LIST( file_browser->file_list ),
-                     FALSE, file_browser->max_thumbnail );
+                     file_browser->large_icons, file_browser->max_thumbnail );
 
     file_browser->view_mode = PTK_FB_COMPACT_VIEW;
-    gtk_widget_destroy( file_browser->folder_view );
+    if ( file_browser->folder_view )
+        gtk_widget_destroy( file_browser->folder_view );
     file_browser->folder_view = create_folder_view( file_browser, PTK_FB_COMPACT_VIEW );
     exo_icon_view_set_model( EXO_ICON_VIEW( file_browser->folder_view ),
                              file_browser->file_list );
@@ -6332,14 +6410,15 @@ void ptk_file_browser_view_as_compact_list( PtkFileBrowser* file_browser )
 
 void ptk_file_browser_view_as_list ( PtkFileBrowser* file_browser )
 {
-    if ( file_browser->view_mode == PTK_FB_LIST_VIEW )
+    if ( file_browser->view_mode == PTK_FB_LIST_VIEW && file_browser->folder_view )
         return ;
 
     show_thumbnails( file_browser, PTK_FILE_LIST( file_browser->file_list ),
-                     FALSE, file_browser->max_thumbnail );
+                     file_browser->large_icons, file_browser->max_thumbnail );
 
     file_browser->view_mode = PTK_FB_LIST_VIEW;
-    gtk_widget_destroy( file_browser->folder_view );
+    if ( file_browser->folder_view )
+        gtk_widget_destroy( file_browser->folder_view );
     file_browser->folder_view = create_folder_view( file_browser, PTK_FB_LIST_VIEW );
     gtk_tree_view_set_model( GTK_TREE_VIEW( file_browser->folder_view ),
                              file_browser->file_list );
@@ -6665,11 +6744,14 @@ void ptk_file_browser_show_thumbnails( PtkFileBrowser* file_browser,
     if ( file_browser->file_list )
     {
         show_thumbnails( file_browser, PTK_FILE_LIST( file_browser->file_list ),
-                         file_browser->view_mode == PTK_FB_ICON_VIEW,
+                         file_browser->large_icons,
                          max_file_size );
     }
 }
 
+#if 0
+// no longer used because icon size changes required a rebuild of folder_view
+// due to text renderer not resizing
 void ptk_file_browser_update_display( PtkFileBrowser* file_browser )
 {
     GtkTreeSelection * tree_sel;
@@ -6683,20 +6765,28 @@ void ptk_file_browser_update_display( PtkFileBrowser* file_browser )
 
     if ( file_browser->max_thumbnail )
         show_thumbnails( file_browser, PTK_FILE_LIST( file_browser->file_list ),
-                         file_browser->view_mode == PTK_FB_ICON_VIEW,
+                         file_browser->large_icons,
                          file_browser->max_thumbnail );
 
     vfs_mime_type_get_icon_size( &big_icon_size, &small_icon_size );
 
-    if ( file_browser->view_mode == PTK_FB_ICON_VIEW || file_browser->view_mode == PTK_FB_COMPACT_VIEW )
+    if ( file_browser->view_mode == PTK_FB_ICON_VIEW ||
+         file_browser->view_mode == PTK_FB_COMPACT_VIEW )
     {
-        sel = exo_icon_view_get_selected_items( EXO_ICON_VIEW( file_browser->folder_view ) );
+        sel = exo_icon_view_get_selected_items(
+                                EXO_ICON_VIEW( file_browser->folder_view ) );
 
-        exo_icon_view_set_model( EXO_ICON_VIEW( file_browser->folder_view ), NULL );
+        exo_icon_view_set_model( EXO_ICON_VIEW( file_browser->folder_view ),
+                                                                    NULL );
         if( file_browser->view_mode == PTK_FB_ICON_VIEW )
-            gtk_cell_renderer_set_fixed_size( file_browser->icon_render, big_icon_size, big_icon_size );
+            gtk_cell_renderer_set_fixed_size( file_browser->icon_render,
+                                    big_icon_size, big_icon_size );
         else if( file_browser->view_mode == PTK_FB_COMPACT_VIEW )
-            gtk_cell_renderer_set_fixed_size( file_browser->icon_render, small_icon_size, small_icon_size );
+            gtk_cell_renderer_set_fixed_size( file_browser->icon_render,
+                                    file_browser->large_icons ? big_icon_size :
+                                                            small_icon_size,
+                                    file_browser->large_icons ? big_icon_size :
+                                                            small_icon_size );
         exo_icon_view_set_model( EXO_ICON_VIEW( file_browser->folder_view ),
                                  GTK_TREE_MODEL( file_browser->file_list ) );
 
@@ -6710,11 +6800,17 @@ void ptk_file_browser_update_display( PtkFileBrowser* file_browser )
     }
     else if ( file_browser->view_mode == PTK_FB_LIST_VIEW )
     {
-        tree_sel = gtk_tree_view_get_selection( GTK_TREE_VIEW( file_browser->folder_view ) );
+        tree_sel = gtk_tree_view_get_selection(
+                                GTK_TREE_VIEW( file_browser->folder_view ) );
         sel = gtk_tree_selection_get_selected_rows( tree_sel, NULL );
 
-        gtk_tree_view_set_model( GTK_TREE_VIEW( file_browser->folder_view ), NULL );
-        gtk_cell_renderer_set_fixed_size( file_browser->icon_render, small_icon_size, small_icon_size );
+        gtk_tree_view_set_model( GTK_TREE_VIEW( file_browser->folder_view ),
+                                                                    NULL );
+        gtk_cell_renderer_set_fixed_size( file_browser->icon_render,
+                                    file_browser->large_icons ? big_icon_size :
+                                                            small_icon_size,
+                                    file_browser->large_icons ? big_icon_size :
+                                                            small_icon_size );
         gtk_tree_view_set_model( GTK_TREE_VIEW( file_browser->folder_view ),
                                  GTK_TREE_MODEL( file_browser->file_list ) );
 
@@ -6728,6 +6824,7 @@ void ptk_file_browser_update_display( PtkFileBrowser* file_browser )
     g_list_free( sel );
     g_object_unref( G_OBJECT( file_browser->file_list ) );
 }
+#endif
 
 void ptk_file_browser_emit_open( PtkFileBrowser* file_browser,
                                  const char* path,
@@ -7328,6 +7425,15 @@ void ptk_file_browser_on_action( PtkFileBrowser* browser, char* setname )
                 on_popup_list_icons( NULL, browser );
             else if ( !strcmp( xname, "list_compact" ) )  // shared key
                 on_popup_list_compact( NULL, browser );
+            else if ( !strcmp( xname, "list_large" ) )  // shared key
+            {
+                if ( browser->view_mode != PTK_FB_ICON_VIEW )
+                {
+                    xset_set_b_panel( browser->mypanel, "list_large",
+                                                !browser->large_icons );
+                    on_popup_list_large( NULL, browser );
+                }
+            }
             else if ( !strcmp( xname, "icon_tab" )
                                         || g_str_has_prefix( xname, "font_" ) )
                 main_update_fonts( NULL, browser );
