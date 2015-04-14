@@ -4,10 +4,10 @@ spacefm (1.0.0-1) UNRELEASED; urgency=medium
   * debian/control:
     + Update homepage.
     + Add libffmpegthumbnailer-dev to build depends.
+    + Remove Breaks field - no longer needed.
   * Remove 0001-fix-issue-468.patch -- included upstream.
   * Update debian/copyright.
-  * debian/spacefm*.lintian-overrides:
-    + remove unused override.
+  * Remove debian/spacefm*.lintian-overrides.
   * Add debian/source/lintian-overrides for
     debian-watch-may-check-gpg-signature.
   * debian/rules: Drop obsolete override_dh_builddeb.
