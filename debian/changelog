@@ -1,6 +1,7 @@
-spacefm (1.0.0-1) UNRELEASED; urgency=medium
+spacefm (1.0.0-1) unstable; urgency=medium
 
   * New upstream release.
+  * Upload to unstable.
   * debian/control:
     + Update homepage.
     + Add libffmpegthumbnailer-dev to build depends.
@@ -14,7 +15,7 @@ spacefm (1.0.0-1) UNRELEASED; urgency=medium
   * Remove debian/source/options -- no longer needed.
   * Update debian/watch.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 13 Mar 2015 19:28:34 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 14 Apr 2015 15:39:36 +0200
 
 spacefm (0.9.4+git20140406-1) experimental; urgency=medium
 
