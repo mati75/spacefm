@@ -4,9 +4,9 @@ spacefm (1.0.0-1) unstable; urgency=medium
   * Upload to unstable.
   * debian/control:
     + Update homepage.
-    + Add libffmpegthumbnailer-dev to build depends.
+    + Add libffmpegthumbnailer-dev to Build-Depends.
     + Remove Breaks field - no longer needed.
-  * Remove 0001-fix-issue-468.patch -- included upstream.
+  * Remove debian/patches/0001-fix-issue-468.patch -- included upstream.
   * Update debian/copyright.
   * Remove debian/spacefm*.lintian-overrides.
   * Add debian/source/lintian-overrides for
