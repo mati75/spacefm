@@ -2,6 +2,8 @@ spacefm (1.0.0-2) UNRELEASED; urgency=medium
 
   * debian/control:
     + Add Breaks field to spacefm-common.
+  * debian/spacefm*.postrm:
+    + Add remove files from /etc/spacefm at purge. (Closes: #782975)
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 30 Apr 2015 16:35:18 +0200
 
