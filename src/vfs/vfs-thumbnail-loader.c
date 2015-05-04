@@ -326,12 +326,13 @@ void vfs_thumbnail_loader_cancel_all_requests( VFSDir* dir, gboolean is_big )
             loader->dir->thumbnail_loader = NULL;
             
             /* FIXME: added idle_handler = 0 to prevent idle_handler being
-             * removed in vfs_thumbnail_loader_free
+             * removed in vfs_thumbnail_loader_free - BUT causes a segfault
+             * in vfs_async_task_lock ??
              * If source is removed here or in vfs_thumbnail_loader_free
              * it causes a "GLib-CRITICAL **: Source ID N was not found when
              * attempting to remove it" warning.  Such a source ID is always
              * the one added in thumbnail_loader_thread at the "add2" comment. */
-            loader->idle_handler = 0;
+            //loader->idle_handler = 0;
             
             vfs_thumbnail_loader_free( loader );
             return;
@@ -424,7 +425,11 @@ static GdkPixbuf* _vfs_thumbnail_load( const char* file_path, const char* uri,
                                             create_size, create_size, NULL );
             if ( thumbnail )
             {
+                // Note: gdk_pixbuf_apply_embedded_orientation returns a new
+                // pixbuf or same with incremented ref count, so unref
+                GdkPixbuf* thumbnail_old = thumbnail;
                 thumbnail = gdk_pixbuf_apply_embedded_orientation( thumbnail );
+                g_object_unref( thumbnail_old );
                 sprintf( mtime_str, "%lu", mtime );
                 gdk_pixbuf_save( thumbnail, thumbnail_file, "png", NULL,
                                  "tEXt::Thumb::URI", uri, "tEXt::Thumb::MTime",

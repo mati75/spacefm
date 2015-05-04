@@ -40,7 +40,6 @@
 #include "ptk-location-view.h"
 #include "ptk-file-list.h"  //sfm for sort extra
 #include "pref-dialog.h"
-//#include "ptk-bookmarks.h"
 
 #include "gtk2-compat.h"
 
@@ -74,6 +73,8 @@ on_popup_open_in_new_tab_activate ( GtkMenuItem *menuitem,
 static void
 on_popup_open_in_new_win_activate ( GtkMenuItem *menuitem,
                                     PtkFileMenu* data );
+static void on_new_bookmark( GtkMenuItem *menuitem,
+                             PtkFileMenu* data );
 static void on_popup_open_in_terminal_activate( GtkMenuItem *menuitem,
                                                 PtkFileMenu* data );
 static void on_popup_handlers_activate ( GtkMenuItem *menuitem,
@@ -412,40 +413,6 @@ void on_permission( GtkMenuItem *menuitem, PtkFileMenu* data )
                                                                     data->cwd );
 }
 
-int bookmark_item_comp2( const char* item, const char* path )
-{
-    return strcmp( ptk_bookmarks_item_get_path( item ), path );
-}
-
-void on_add_bookmark( GtkMenuItem *menuitem, PtkFileMenu* data )
-{
-    char* name;
-    char* path;
-    
-    if ( !data->cwd )
-        return;
-    
-    if ( data->file_path && g_file_test( data->file_path, G_FILE_TEST_IS_DIR ) )
-        path = data->file_path;
-    else
-        path = data->cwd;
-        
-    if ( ! g_list_find_custom( app_settings.bookmarks->list,
-                               path,
-                               ( GCompareFunc ) bookmark_item_comp2 ) )
-    {
-        name = g_path_get_basename( path );
-        ptk_bookmarks_append( name, path );
-        g_free( name );
-    }
-    else
-        xset_msg_dialog( data->browser ? GTK_WIDGET( data->browser ) :
-                                         GTK_WIDGET( data->desktop ),
-                         GTK_MESSAGE_INFO,
-                         _("Bookmark Exists"), NULL, 0,
-                         _("Bookmark already exists"), NULL, NULL );
-}
-
 void on_popup_desktop_sort_activate( GtkMenuItem *menuitem,
                                             DesktopWindow* desktop, XSet* set2 )
 {
@@ -523,12 +490,6 @@ void on_popup_desktop_select( GtkMenuItem *menuitem,
         return;
     desktop_window_select( desktop, mode );
 #endif
-}
-
-void on_bookmark_activate( GtkWidget* item, const char* name )
-{
-    if ( name )
-        open_in_prog( ptk_bookmarks_item_get_path( name ) );
 }
 
 static void ptk_file_menu_free( PtkFileMenu *data )
@@ -745,6 +706,97 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
                                                 GTK_WIDGET( item ) );
         }
         
+        // Prepare archive commands
+        XSet *set_arc_extract = NULL, *set_arc_extractto, *set_arc_list;
+        handlers_slist = ptk_handler_file_has_handlers(
+                                    HANDLER_MODE_ARC, HANDLER_EXTRACT,
+                                    file_path, mime_type, FALSE, FALSE, FALSE );
+        if ( handlers_slist )
+        {
+            g_slist_free( handlers_slist );
+
+            set_arc_extract = xset_set_cb( "arc_extract",
+                                        on_popup_extract_here_activate, data );
+            xset_set_ob1( set_arc_extract, "set", set_arc_extract );
+                set_arc_extract->disable = no_write_access;
+
+            set_arc_extractto = xset_set_cb( "arc_extractto",
+                                        on_popup_extract_to_activate, data );
+            xset_set_ob1( set_arc_extractto, "set", set_arc_extractto );
+
+            set_arc_list = xset_set_cb( "arc_list",
+                                        on_popup_extract_list_activate, data );
+            xset_set_ob1( set_arc_list, "set", set_arc_list );
+
+            set = xset_get( "arc_def_open" );
+            // do NOT use set = xset_set_cb here or wrong set is passed
+            xset_set_cb( "arc_def_open", on_archive_default, set );
+            xset_set_ob2( set, NULL, NULL );
+            set_radio = set;
+
+            set = xset_get( "arc_def_ex" );
+            xset_set_cb( "arc_def_ex", on_archive_default, set );
+            xset_set_ob2( set, NULL, set_radio );
+            
+            set = xset_get( "arc_def_exto" );
+            xset_set_cb( "arc_def_exto", on_archive_default, set );
+            xset_set_ob2( set, NULL, set_radio );
+
+            set = xset_get( "arc_def_list" );
+            xset_set_cb( "arc_def_list", on_archive_default, set );
+            xset_set_ob2( set, NULL, set_radio );
+
+            set = xset_get( "arc_def_write" );
+            set->disable = geteuid() == 0 || !xset_get_b( "arc_def_parent" );
+            
+            xset_set_cb( "arc_conf2", on_archive_show_config, data );
+            
+            if ( !xset_get_b( "arc_def_open" ) )
+            {
+                // archives are not set to open with app, so list archive
+                // functions before associated apps
+                
+                // list active function first
+                if ( xset_get_b( "arc_def_ex" ) )
+                {
+                    xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                                    set_arc_extract );
+                    set_arc_extract = NULL;
+                }
+                else if ( xset_get_b( "arc_def_exto" ) )
+                {
+                    xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                                set_arc_extractto );
+                    set_arc_extractto = NULL;
+                }
+                else
+                {
+                    xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                                set_arc_list );
+                    set_arc_list = NULL;
+                }
+                
+                // add others
+                if ( set_arc_extract )
+                    xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                                set_arc_extract );
+                if ( set_arc_extractto )
+                    xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                                set_arc_extractto );
+                if ( set_arc_list )
+                    xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                                set_arc_list );
+                xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                                xset_get( "arc_default" ) );                    
+                set_arc_extract = NULL;
+                
+                // separator
+                item = GTK_MENU_ITEM( gtk_separator_menu_item_new() );
+                gtk_menu_shell_append( GTK_MENU_SHELL( submenu ),
+                                                        GTK_WIDGET( item ) );
+            }
+        }
+
         // add apps
         gtk_icon_size_lookup_for_settings( gtk_settings_get_default(),
                                            GTK_ICON_SIZE_MENU,
@@ -928,68 +980,27 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
             }
         }
 
-        // Obtaining file extension
-        char *not_used = NULL, *extension = NULL;
-        if (info)
-            not_used = get_name_extension(
-                (char*)vfs_file_info_get_name( info ), FALSE,
-                &extension );
-
-        handlers_slist = ptk_handler_file_has_handlers(
-                                    HANDLER_MODE_ARC, HANDLER_EXTRACT,
-                                    file_path, mime_type, FALSE, FALSE, FALSE );
-        if ( handlers_slist )
+        if ( set_arc_extract )
         {
-            g_slist_free( handlers_slist );
-            // Archive commands
+            // archives are set to open with app, so list archive
+            // functions after associated apps
+
+            // separator
             item = GTK_MENU_ITEM( gtk_separator_menu_item_new() );
             gtk_menu_shell_append( GTK_MENU_SHELL( submenu ), GTK_WIDGET( item ) );
 
-            set = xset_set_cb( "arc_extract", on_popup_extract_here_activate, data );
-            xset_set_ob1( set, "set", set );
-                set->disable = no_write_access;
-            xset_add_menuitem( desktop, browser, submenu, accel_group, set );    
-
-            set = xset_set_cb( "arc_extractto", on_popup_extract_to_activate, data );
-            xset_set_ob1( set, "set", set );
-            xset_add_menuitem( desktop, browser, submenu, accel_group, set );    
-
-            set = xset_set_cb( "arc_list", on_popup_extract_list_activate, data );
-            xset_set_ob1( set, "set", set );
-            xset_add_menuitem( desktop, browser, submenu, accel_group, set );    
-
-            set = xset_get( "arc_def_open" );
-            // do NOT use set = xset_set_cb here or wrong set is passed
-            xset_set_cb( "arc_def_open", on_archive_default, set );
-            xset_set_ob2( set, NULL, NULL );
-            set_radio = set;
-
-            set = xset_get( "arc_def_ex" );
-            xset_set_cb( "arc_def_ex", on_archive_default, set );
-            xset_set_ob2( set, NULL, set_radio );
-            
-            set = xset_get( "arc_def_exto" );
-            xset_set_cb( "arc_def_exto", on_archive_default, set );
-            xset_set_ob2( set, NULL, set_radio );
-
-            set = xset_get( "arc_def_list" );
-            xset_set_cb( "arc_def_list", on_archive_default, set );
-            xset_set_ob2( set, NULL, set_radio );
-
-            set = xset_get( "arc_def_write" );
-            set->disable = geteuid() == 0 || !xset_get_b( "arc_def_parent" );
-            
-            xset_set_cb( "arc_conf2", on_archive_show_config, data );
-            
             xset_add_menuitem( desktop, browser, submenu, accel_group,
-                                                        xset_get( "arc_default" ) );    
+                                            set_arc_extract );
+            xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                            set_arc_extractto );
+            xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                            set_arc_list );
+            xset_add_menuitem( desktop, browser, submenu, accel_group,
+                                            xset_get( "arc_default" ) );                    
         }
+
         g_signal_connect (submenu, "key-press-event",
                                     G_CALLBACK (app_menu_keypress), data );
-
-        // Cleaning up
-        g_free( not_used );
-        g_free( extension );
     }
 #ifdef DESKTOP_INTEGRATION
     else if ( desktop )
@@ -1077,7 +1088,7 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
             set->disable = !browser;
             set = xset_set_cb( "tab_new_here", on_popup_open_in_new_tab_here, data );
             set->disable = !browser;
-            set = xset_set_cb( "new_bookmark", on_add_bookmark, data );
+            set = xset_set_cb( "new_bookmark", on_new_bookmark, data );
             set->disable = !browser;
 
             set = xset_get( "open_new" );
@@ -1573,39 +1584,13 @@ GtkWidget* ptk_file_menu_new( DesktopWindow* desktop, PtkFileBrowser* browser,
 #endif
 
         // Desktop|Bookmarks
-        set = xset_get( "desk_book" );
+        set = xset_get( "main_book" );
+        set->lock = FALSE;  // treat as custom item for menu build
         GtkMenuItem* book_item = GTK_MENU_ITEM( xset_add_menuitem( desktop,
                                                         NULL, popup,
                                                         accel_group, set ) );
-        submenu = gtk_menu_item_get_submenu( book_item );
+        set->lock = TRUE;
 
-        GtkWidget* folder_image;
-        XSet* set = xset_get( "book_icon" );
-        const char* book_icon = set->icon;
-        int count = 0;
-        GList* l;
-        for ( l = app_settings.bookmarks->list; l; l = l->next )
-        {
-            item = GTK_MENU_ITEM( gtk_image_menu_item_new_with_label(
-                                                            (char*)l->data ) );
-            if ( book_icon )
-                folder_image = xset_get_image( book_icon, GTK_ICON_SIZE_MENU );
-            else
-                folder_image = NULL;
-            if ( !folder_image )
-                folder_image = xset_get_image( "gtk-directory", GTK_ICON_SIZE_MENU );
-            if ( folder_image )
-                gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM ( item ),
-                                                            folder_image );
-            g_signal_connect( item, "activate", G_CALLBACK( on_bookmark_activate ),
-                                                        (char*)l->data );
-            gtk_menu_shell_append( GTK_MENU_SHELL( submenu ), GTK_WIDGET( item ) );
-            if ( ++count > 200 )
-                break;
-        }
-        if ( count == 0 )
-            gtk_widget_set_sensitive( GTK_WIDGET( book_item ), FALSE );
-            
         // Desktop|Icons >
         set = xset_set_cb( "desk_sort_name", on_popup_desktop_sort_activate,
                                                                     desktop );
@@ -1860,7 +1845,6 @@ void app_job( GtkWidget* item, GtkWidget* app_item )
                                                     desktop_file->file_name, NULL );
         if ( !g_file_test( path, G_FILE_TEST_EXISTS ) )
         {
-            // need to copy
             char* share_desktop = vfs_mime_type_locate_desktop_file( NULL,
                                                         desktop_file->file_name );
             if ( !( share_desktop && strcmp( share_desktop, path ) ) )
@@ -1869,6 +1853,23 @@ void app_job( GtkWidget* item, GtkWidget* app_item )
                 g_free( path );
                 return;
             }
+
+            char* msg = g_strdup_printf( _("The file '%s' does not exist.\n\nBy copying '%s' to '%s' and editing it, you can adjust the behavior and appearance of this application for the current user.\n\nCreate this copy now?"), path, share_desktop, path );
+            if ( xset_msg_dialog( GTK_WIDGET( data->browser ),
+                          GTK_MESSAGE_QUESTION,
+                          _( "Copy Desktop File" ), NULL,
+                          GTK_BUTTONS_YES_NO,
+                          msg,
+                          NULL, "#designmode-mime-appdesktop" ) != GTK_RESPONSE_YES )
+            {
+                g_free( share_desktop );
+                g_free( path );
+                g_free( msg );
+                break;
+            }
+            g_free( msg );
+
+            // need to copy
             xset_copy_file( share_desktop, path );
             g_free( share_desktop );
             if ( !g_file_test( path, G_FILE_TEST_EXISTS ) )
@@ -1939,13 +1940,33 @@ void app_job( GtkWidget* item, GtkWidget* app_item )
         g_free( str );
         if ( !g_file_test( path, G_FILE_TEST_EXISTS ) )
         {
-            // need to create
-            char* msg = g_strdup_printf( "<?xml version='1.0' encoding='utf-8'?>\n<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>\n<mime-type type='%s'>\n\n<!-- This file was generated by SpaceFM to allow you to change the name of the\n     above mime type and to change the filename or magic patterns that define\n     this type.\n     \n     IMPORTANT:  After saving this file, restart SpaceFM.  You may need to run:\n         update-mime-database ~/.local/share/mime\n\n     Delete this file from ~/.local/share/mime/packages/ to revert to default.\n     \n     To make this definition file apply to all users, copy this file to \n     /usr/share/mime/packages/ and:  sudo update-mime-database /usr/share/mime\n\n     For help editing this file:\n     http://library.gnome.org/admin/system-admin-guide/stable/mimetypes-source-xml.html.en\n     http://www.freedesktop.org/wiki/Specifications/AddingMIMETutor\n\n     Example to define the name of a PNG file (with optional translations):\n\n        <comment>Portable Network Graphics file</comment>\n        <comment xml:lang=\"en\">Portable Network Graphics file</comment>\n     \n     Example to detect PNG files by glob pattern:\n\n        <glob pattern=\"*.png\"/>\n\n     Example to detect PNG files by file contents:\n\n        <magic priority=\"50\">\n            <match type=\"string\" value=\"\\x89PNG\" offset=\"0\"/>  \n        </magic>\n-->", mime_type->type );
-            
-            // build from /usr/share/mime type ?
             str = g_strdup_printf( "%s.xml", mime_type->type );
             char* usr_path = g_build_filename( "/usr/share/mime", str, NULL );
             g_free( str );
+
+            char* msg;
+            if ( g_file_test( usr_path, G_FILE_TEST_EXISTS ) )
+                msg = g_strdup_printf( _("The file '%s' does not exist.\n\nBy copying '%s' to '%s' and editing it, you can adjust how MIME type '%s' files are recognized for the current user.\n\nCreate this copy now?"), path, usr_path, path, mime_type->type );
+            else
+                msg = g_strdup_printf( _("The file '%s' does not exist.\n\nBy creating new file '%s' and editing it, you can define how MIME type '%s' files are recognized for the current user.\n\nCreate this file now?"), path, path, mime_type->type );
+            if ( xset_msg_dialog( GTK_WIDGET( data->browser ),
+                          GTK_MESSAGE_QUESTION,
+                          _( "Create New XML" ), NULL,
+                          GTK_BUTTONS_YES_NO,
+                          msg,
+                          NULL, "#designmode-mime-xml" ) != GTK_RESPONSE_YES )
+            {
+                g_free( usr_path );
+                g_free( path );
+                g_free( msg );
+                break;
+            }
+            g_free( msg );
+
+            // need to create
+            msg = g_strdup_printf( "<?xml version='1.0' encoding='utf-8'?>\n<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>\n<mime-type type='%s'>\n\n<!-- This file was generated by SpaceFM to allow you to change the name of the\n     above mime type and to change the filename or magic patterns that define\n     this type.\n     \n     IMPORTANT:  After saving this file, restart SpaceFM.  You may need to run:\n         update-mime-database ~/.local/share/mime\n\n     Delete this file from ~/.local/share/mime/packages/ to revert to default.\n     \n     To make this definition file apply to all users, copy this file to \n     /usr/share/mime/packages/ and:  sudo update-mime-database /usr/share/mime\n\n     For help editing this file:\n     http://library.gnome.org/admin/system-admin-guide/stable/mimetypes-source-xml.html.en\n     http://www.freedesktop.org/wiki/Specifications/AddingMIMETutor\n\n     Example to define the name of a PNG file (with optional translations):\n\n        <comment>Portable Network Graphics file</comment>\n        <comment xml:lang=\"en\">Portable Network Graphics file</comment>\n     \n     Example to detect PNG files by glob pattern:\n\n        <glob pattern=\"*.png\"/>\n\n     Example to detect PNG files by file contents:\n\n        <magic priority=\"50\">\n            <match type=\"string\" value=\"\\x89PNG\" offset=\"0\"/>  \n        </magic>\n-->", mime_type->type );
+            
+            // build from /usr/share/mime type ?
             char* contents = NULL;
             if ( g_file_get_contents ( usr_path, &contents, NULL, NULL ) )
             {
@@ -2550,77 +2571,21 @@ void on_popup_open_in_new_tab_here( GtkMenuItem *menuitem,
         ptk_file_browser_emit_open( data->browser, data->cwd, PTK_OPEN_NEW_TAB );
 }
 
-/*
-void on_popup_open_in_terminal_activate( GtkMenuItem *menuitem,
-                                         PtkFileMenu* data )
+void on_new_bookmark( GtkMenuItem *menuitem, PtkFileMenu* data )
 {
-    ptk_file_browser_open_terminal( menuitem, data->browser );
-}
-
-void on_popup_run_command( GtkMenuItem *menuitem,
-                                         PtkFileMenu* data )
-{
-    ptk_file_browser_run_command( data->browser );  //MOD Ctrl-r
-}
-
-void on_popup_open_files_activate( GtkMenuItem *menuitem,
-                                         PtkFileMenu* data )
-{
-    ptk_file_browser_open_files( data->browser, NULL );  //MOD F4
-}
-
-void on_popup_user_6( GtkMenuItem *menuitem,
-                                         PtkFileMenu* data )
-{
-    ptk_file_browser_open_files( data->browser, "/F6" );  //MOD
-}
-
-void on_popup_user_7( GtkMenuItem *menuitem,
-                                         PtkFileMenu* data )
-{
-    ptk_file_browser_open_files( data->browser, "/F7" );  //MOD
-}
-
-void on_popup_user_8( GtkMenuItem *menuitem,
-                                         PtkFileMenu* data )
-{
-    ptk_file_browser_open_files( data->browser, "/F8" );  //MOD
-}
-
-void on_popup_user_9( GtkMenuItem *menuitem,
-                                         PtkFileMenu* data )
-{
-    ptk_file_browser_open_files( data->browser, "/F9" );  //MOD
-}
-
-void on_popup_open_in_new_win_activate( GtkMenuItem *menuitem,
-                                        PtkFileMenu* data )
-{
-    GList * sel;
-    GList* sel_files = data->sel_files;
-    VFSFileInfo* file;
-    char* full_path;
-
-    if ( sel_files )
+    // if a single dir or file is selected, bookmark it instead of cwd
+    if ( data->sel_files && !data->sel_files->next )
     {
-        for ( sel = sel_files; sel; sel = sel->next )
-        {
-            file = ( VFSFileInfo* ) sel->data;
-            full_path = g_build_filename( data->cwd,
-                                          vfs_file_info_get_name( file ), NULL );
-            if ( g_file_test( full_path, G_FILE_TEST_IS_DIR ) )
-            {
-                ptk_file_browser_emit_open( data->browser, full_path, PTK_OPEN_NEW_WINDOW );
-            }
-            g_free( full_path );
-        }
+        char* full_path = g_build_filename( data->cwd,
+                vfs_file_info_get_name( (VFSFileInfo*)data->sel_files->data ),
+                NULL );
+        ptk_bookmark_view_add_bookmark( NULL, data->browser, full_path );
+        g_free( full_path );
     }
     else
-    {
-        ptk_file_browser_emit_open( data->browser, data->file_path, PTK_OPEN_NEW_WINDOW );
-    }
+        ptk_bookmark_view_add_bookmark( NULL, data->browser, NULL );
 }
-*/
+
 void
 on_popup_cut_activate ( GtkMenuItem *menuitem,
                         PtkFileMenu* data )
@@ -3053,7 +3018,7 @@ void ptk_file_menu_action( DesktopWindow* desktop, PtkFileBrowser* browser,
         else if ( !strcmp( xname, "link" ) )
             on_popup_new_link_activate( NULL, data );
         else if ( !strcmp( xname, "bookmark" ) )
-            on_add_bookmark( NULL, data );
+            ptk_bookmark_view_add_bookmark( NULL, browser, NULL );
         else if ( !strcmp( xname, "archive" ) )
         {
             if ( browser )

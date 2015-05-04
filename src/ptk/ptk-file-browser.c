@@ -42,7 +42,6 @@
 #include "ptk-input-dialog.h"
 #include "ptk-file-task.h"
 #include "ptk-file-misc.h"
-#include "ptk-bookmarks.h"
 
 #include "ptk-location-view.h"
 #include "ptk-dir-tree-view.h"
@@ -723,6 +722,12 @@ void on_toggle_sideview( GtkMenuItem* item, PtkFileBrowser* file_browser, int jo
     XSet* set = xset_get_panel_mode( p, name, mode );
     set->b = set->b == XSET_B_TRUE ? XSET_B_UNSET : XSET_B_TRUE;
     update_views_all_windows( NULL, file_browser );
+    if ( job == 1 && file_browser->side_book )
+    {
+        ptk_bookmark_view_chdir( GTK_TREE_VIEW( file_browser->side_book ),
+                                                    file_browser, TRUE );
+        gtk_widget_grab_focus( GTK_WIDGET( file_browser->side_book ) );
+    }
 }
 
 void ptk_file_browser_rebuild_side_toolbox( GtkWidget* widget,
@@ -1071,6 +1076,7 @@ void on_address_bar_activate( GtkWidget* entry, PtkFileBrowser* file_browser )
                 dir_path = g_path_get_dirname( final_path );
                 if ( strcmp( dir_path, ptk_file_browser_get_cwd( file_browser ) ) )
                 {
+                    g_free( file_browser->select_path );
                     file_browser->select_path = strdup( final_path );
                     ptk_file_browser_chdir( file_browser, dir_path, PTK_FB_CHDIR_ADD_HISTORY );
                 }
@@ -1665,6 +1671,8 @@ void ptk_file_browser_finalize( GObject *obj )
     g_free( file_browser->status_bar_custom );
     g_free( file_browser->seek_name );
     file_browser->seek_name = NULL;
+    g_free( file_browser->book_set_name );
+    file_browser->book_set_name = NULL;
     g_free( file_browser->select_path );
     file_browser->select_path = NULL;
     
@@ -2085,8 +2093,9 @@ GtkWidget* ptk_file_browser_new( int curpanel, GtkWidget* notebook,
     file_browser->main_window = main_window;
     file_browser->task_view = task_view;
     file_browser->sel_change_idle = 0;
-    file_browser->inhibit_focus = FALSE;
+    file_browser->inhibit_focus = file_browser->busy = FALSE;
     file_browser->seek_name = NULL;
+    file_browser->book_set_name = NULL;
 
     if ( xset_get_b_panel( curpanel, "list_detailed" ) )
         view_mode = PTK_FB_LIST_VIEW;
@@ -2945,10 +2954,10 @@ void on_dir_file_listed( VFSDir* dir,
 */
     if ( file_browser->side_dev )
         ptk_location_view_chdir( GTK_TREE_VIEW( file_browser->side_dev ), 
-                                ptk_file_browser_get_cwd( file_browser ) );
+                                 ptk_file_browser_get_cwd( file_browser ) );
     if ( file_browser->side_book )
         ptk_bookmark_view_chdir( GTK_TREE_VIEW( file_browser->side_book ), 
-                                ptk_file_browser_get_cwd( file_browser ) );
+                                 file_browser, TRUE );
 
     //FIXME:  This is already done in update_model, but is there any better way to
     //            reduce unnecessary code?
@@ -2984,6 +2993,7 @@ void ptk_file_browser_canon( PtkFileBrowser* file_browser, const char* path )
         char* dir_path = g_path_get_dirname( canon );
         if ( dir_path && strcmp( dir_path, cwd ) )
         {
+            g_free( file_browser->select_path );
             file_browser->select_path = strdup( canon );
             ptk_file_browser_chdir( file_browser, dir_path, PTK_FB_CHDIR_ADD_HISTORY );
         }
@@ -4834,46 +4844,79 @@ void init_list_view( PtkFileBrowser* file_browser, GtkTreeView* list_view )
 
 void ptk_file_browser_refresh( GtkWidget* item, PtkFileBrowser* file_browser )
 {
-    const char* tmpcwd;  //MOD
-    /*
-    * FIXME:
-    * Do nothing when there is unfinished task running in the
-    * working thread.
-    * This should be fixed with a better way in the future.
-    */
-//    if ( file_browser->busy )    //MOD
-//        return ;
+    if ( file_browser->busy )
+        // a dir is already loading
+        return;
+    
+    // save cursor's file path for later re-selection
+    GtkTreePath* tree_path = NULL;
+    GtkTreeModel* model = NULL;
+    GtkTreeIter it;
+    VFSFileInfo* file;
+    char* cursor_path = NULL;
+    if ( file_browser->view_mode == PTK_FB_LIST_VIEW )
+    {
+        gtk_tree_view_get_cursor( GTK_TREE_VIEW( file_browser->folder_view ),
+                                  &tree_path, NULL );
+        model = gtk_tree_view_get_model(
+                                GTK_TREE_VIEW( file_browser->folder_view ) );
+    }
+    else if ( file_browser->view_mode == PTK_FB_ICON_VIEW ||
+              file_browser->view_mode == PTK_FB_COMPACT_VIEW )
+    {
+        exo_icon_view_get_cursor( EXO_ICON_VIEW( file_browser->folder_view ),
+                                  &tree_path, NULL );
+        model = exo_icon_view_get_model(
+                                EXO_ICON_VIEW( file_browser->folder_view ) );
+    }
+    if ( tree_path && model &&
+                            gtk_tree_model_get_iter( model, &it, tree_path ) )
+    {
+        gtk_tree_model_get( model, &it, COL_FILE_INFO, &file, -1 );
+        if ( file )
+        {
+            cursor_path = g_build_filename(
+                                    ptk_file_browser_get_cwd( file_browser ),
+                                    vfs_file_info_get_name( file ), NULL );
+        }
+    }
+    gtk_tree_path_free( tree_path );
 
-    //MOD   try to trigger real reload
-    tmpcwd = ptk_file_browser_get_cwd( file_browser );
+    // these steps are similar to chdir
+    // remove old dir object
+    if ( file_browser->dir )
+    {
+        g_signal_handlers_disconnect_matched( file_browser->dir,
+                                              G_SIGNAL_MATCH_DATA,
+                                              0, 0, NULL, NULL,
+                                              file_browser );
+        g_object_unref( file_browser->dir );
+        file_browser->dir = NULL;
+    }
 
-    ptk_file_browser_chdir( file_browser,
-                            "/",
-                            PTK_FB_CHDIR_NO_HISTORY );
+    // destroy file list and create new one
     ptk_file_browser_update_model( file_browser );
 
-    if ( !ptk_file_browser_chdir( file_browser,
-                            tmpcwd,
-                            PTK_FB_CHDIR_NO_HISTORY ) )
+    // begin load dir
+    file_browser->dir = vfs_dir_get_by_path(
+                                ptk_file_browser_get_cwd( file_browser ) );
+    g_signal_emit( file_browser, signals[ BEGIN_CHDIR_SIGNAL ], 0 );
+    if ( vfs_dir_is_file_listed( file_browser->dir ) )
     {
-        char* path = xset_get_s( "go_set_default" );
-        if ( path && path[0] != '\0' )
-            ptk_file_browser_chdir( PTK_FILE_BROWSER( file_browser ), path,
-                                                        PTK_FB_CHDIR_ADD_HISTORY );
-        else
-            ptk_file_browser_chdir( PTK_FILE_BROWSER( file_browser ), g_get_home_dir(),
-                                                            PTK_FB_CHDIR_ADD_HISTORY );
+          on_dir_file_listed( file_browser->dir, FALSE, file_browser );
+          if ( cursor_path )
+              ptk_file_browser_select_file( file_browser, cursor_path );
     }
-    else if ( file_browser->max_thumbnail )
+    else
     {
-        // clear thumbnails
-        show_thumbnails( file_browser, PTK_FILE_LIST( file_browser->file_list ),
-                         file_browser->large_icons, 0 );
-        while( gtk_events_pending() )
-            gtk_main_iteration();
+        file_browser->busy = TRUE;
+        g_free( file_browser->select_path );
+        file_browser->select_path = g_strdup( cursor_path );
     }
+    g_signal_connect( file_browser->dir, "file-listed",
+                            G_CALLBACK(on_dir_file_listed), file_browser );
 
-    ptk_file_browser_update_model( file_browser );
+    g_free( cursor_path );
 }
 
 guint ptk_file_browser_get_n_all_files( PtkFileBrowser* file_browser )
@@ -6876,30 +6919,6 @@ int ptk_file_browser_no_access( const char* cwd, const char* smode )
     return no_access;
 }
 
-int bookmark_item_comp( const char* item, const char* path )
-{
-    return strcmp( ptk_bookmarks_item_get_path( item ), path );
-}
-
-void ptk_file_browser_add_bookmark( GtkMenuItem *menuitem, PtkFileBrowser* file_browser )
-{
-    const char* path = ptk_file_browser_get_cwd( PTK_FILE_BROWSER( file_browser ) );
-    gchar* name;
-
-    if ( ! g_list_find_custom( app_settings.bookmarks->list,
-                               path,
-                               ( GCompareFunc ) bookmark_item_comp ) )
-    {
-        name = g_path_get_basename( path );
-        ptk_bookmarks_append( name, path );
-        g_free( name );
-    }
-    else
-        xset_msg_dialog( GTK_WIDGET( file_browser ), GTK_MESSAGE_INFO,
-                        _("Bookmark Exists"), NULL, 0,
-                        _("Bookmark already exists"), NULL, NULL );
-}
-
 void ptk_file_browser_find_file( GtkMenuItem *menuitem, PtkFileBrowser* file_browser )
 {
     const char* cwd;
@@ -6910,32 +6929,6 @@ void ptk_file_browser_find_file( GtkMenuItem *menuitem, PtkFileBrowser* file_bro
     dirs[1] = NULL;
     fm_find_files( dirs );
 }
-
-/*
-void ptk_file_browser_open_folder_as_root( GtkMenuItem *menuitem,
-                                                PtkFileBrowser* file_browser )
-{
-    const char* cwd;
-    //char* cmd_line;
-    GError *err = NULL;
-    char* argv[5];  //MOD
-    
-    cwd = ptk_file_browser_get_cwd( file_browser );
-
-    //MOD separate arguments for ktsuss compatibility
-    //cmd_line = g_strdup_printf( "%s --no-desktop '%s'", g_get_prgname(), cwd );
-    argv[1] = g_get_prgname();
-    argv[2] = g_strdup_printf ( "--no-desktop" );
-    argv[3] = cwd;
-    argv[4] = NULL;
-    if( ! vfs_sudo_cmd_async( cwd, argv, &err ) )  //MOD
-    {
-        ptk_show_error( gtk_widget_get_toplevel( file_browser ), _("Error"), err->message );
-        g_error_free( err );
-    }
-    //g_free( cmd_line );
-}
-*/
 
 void ptk_file_browser_focus( GtkMenuItem *item, PtkFileBrowser* file_browser, int job2 )
 {
@@ -7228,25 +7221,28 @@ void ptk_file_browser_on_action( PtkFileBrowser* browser, char* setname )
     FMMainWindow* main_window = (FMMainWindow*)browser->main_window;
     char mode = main_window->panel_context[browser->mypanel-1];
 
-//printf("ptk_file_browser_on_action\n");
+//printf("ptk_file_browser_on_action %s\n", set->name );
 
     if ( g_str_has_prefix( set->name, "book_" ) )
     {
         xname = set->name + 5;
-        if ( !strcmp( xname, "icon" ) )
-            update_bookmark_icons();
-        else if ( !strcmp( xname, "new" ) )
-            ptk_file_browser_add_bookmark( NULL, browser );
-        else if ( !strcmp( xname, "rename" ) )
-            on_bookmark_rename( NULL, browser );
-        else if ( !strcmp( xname, "edit" ) )
-            on_bookmark_edit( NULL, browser );
-        else if ( !strcmp( xname, "remove" ) )
-            on_bookmark_remove( NULL, browser );
-        else if ( !strcmp( xname, "open" ) )
-            on_bookmark_open( NULL, browser );
-        else if ( !strcmp( xname, "tab" ) )
-            on_bookmark_open_tab( NULL, browser );
+        if ( !strcmp( xname, "icon" ) || !strcmp( xname, "menu_icon" ) )
+            ptk_bookmark_view_update_icons( NULL, browser );
+        else if ( !strcmp( xname, "add" ) )
+        {
+            const char* text = browser->path_bar &&
+                               gtk_widget_has_focus( browser->path_bar ) ?
+                        gtk_entry_get_text( GTK_ENTRY( browser->path_bar ) ) :
+                        NULL;
+            if ( text && ( g_file_test( text, G_FILE_TEST_EXISTS ) ||
+                           strstr( text, ":/" ) ||
+                           g_str_has_prefix( text, "//" ) ) )
+                ptk_bookmark_view_add_bookmark( NULL, browser, text );
+            else
+                ptk_bookmark_view_add_bookmark( NULL, browser, NULL );
+        }
+        else if ( !strcmp( xname, "open" ) && browser->side_book )
+            ptk_bookmark_view_on_open_reverse( NULL, browser );
     }
     else if ( g_str_has_prefix( set->name, "tool_" )
             || g_str_has_prefix( set->name, "stool_" )
@@ -7418,6 +7414,12 @@ void ptk_file_browser_on_action( PtkFileBrowser* browser, char* setname )
                 set2 = xset_get_panel_mode( browser->mypanel, xname, mode );
                 set2->b = set2->b == XSET_B_TRUE ? XSET_B_UNSET : XSET_B_TRUE;
                 update_views_all_windows( NULL, browser );
+                if ( !strcmp( xname, "show_book" ) && browser->side_book )
+                {
+                    ptk_bookmark_view_chdir( GTK_TREE_VIEW( browser->side_book ),
+                                                                browser, TRUE );
+                    gtk_widget_grab_focus( GTK_WIDGET( browser->side_book ) );
+                }                    
             }
             else if ( !strcmp( xname, "list_detailed" ) )  // shared key
                 on_popup_list_detailed( NULL, browser );

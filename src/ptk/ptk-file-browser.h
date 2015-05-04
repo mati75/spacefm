@@ -92,6 +92,7 @@ struct _PtkFileBrowser
     dev_t drag_source_dev_tree;
     gboolean is_drag : 1;
     gboolean skip_release : 1;
+    char* book_set_name;
 
     /* folder view */
     GtkWidget* folder_view;
@@ -140,6 +141,7 @@ struct _PtkFileBrowser
     GtkToolButton* up_btn[3]; 
     //gboolean button_press : 1;
     gboolean bookmark_button_press : 1;
+    GtkTreeIter book_iter_inserted;
     char* select_path;
     char* status_bar_custom;
 };
@@ -305,7 +307,6 @@ int ptk_file_browser_no_access( const char* cwd, const char* smode );
 void ptk_file_browser_update_views( GtkWidget* item, PtkFileBrowser* file_browser );
 void ptk_file_browser_go_home( GtkWidget* item, PtkFileBrowser* file_browser );
 void ptk_file_browser_go_default( GtkWidget* item, PtkFileBrowser* file_browser );
-void ptk_file_browser_add_bookmark ( GtkMenuItem *menuitem, PtkFileBrowser* file_browser );
 void ptk_file_browser_find_file( GtkMenuItem *menuitem, PtkFileBrowser* file_browser );
 void on_shortcut_new_tab_activate( GtkMenuItem* item,
                                           PtkFileBrowser* file_browser );

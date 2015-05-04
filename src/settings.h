@@ -3,7 +3,6 @@
 
 #include <glib.h>
 #include <gdk/gdk.h>
-#include "ptk-bookmarks.h"
 #include <gtk/gtk.h>  //MOD
 #include "ptk-file-browser.h"
 #include "desktop-window.h"
@@ -91,8 +90,6 @@ typedef struct
     //gboolean hide_side_pane_buttons;
     //gboolean hide_folder_content_border;
 
-    /* Bookmarks */
-    PtkBookmarks* bookmarks;
     /* Units */
     gboolean use_si_prefix;
 }
@@ -170,13 +167,16 @@ enum {
     XSET_JOB_APP,
     XSET_JOB_COMMAND,
     XSET_JOB_SUBMENU,
+    XSET_JOB_SUBMENU_BOOK,
     XSET_JOB_SEP,
     XSET_JOB_IMPORT_FILE,
     XSET_JOB_IMPORT_URL,
+    XSET_JOB_IMPORT_GTK,
     XSET_JOB_CUT,
     XSET_JOB_COPY,
     XSET_JOB_PASTE,
     XSET_JOB_REMOVE,
+    XSET_JOB_REMOVE_BOOK,
     XSET_JOB_NORMAL,
     XSET_JOB_CHECK,
     XSET_JOB_CONFIRM,
@@ -195,7 +195,8 @@ enum {
     XSET_JOB_HELP,
     XSET_JOB_HELP_NEW,
     XSET_JOB_HELP_BROWSE,
-    XSET_JOB_HELP_STYLE
+    XSET_JOB_HELP_STYLE,
+    XSET_JOB_HELP_BOOK
 };
 
 typedef struct
@@ -233,7 +234,7 @@ typedef struct
     char* parent;
     char* child;
     char* line;             // or help if lock
-    // x = line/script/app/bookmark
+    // x = XSET_CMD_LINE..XSET_CMD_BOOKMARK
     // y = user
     // z = custom executable
     char task;
@@ -377,6 +378,10 @@ void xset_set_key( GtkWidget* parent, XSet* set );
 XSet* xset_set( const char* name, const char* var, const char* value );
 XSet* xset_set_set( XSet* set, const char* var, const char* value );
 void xset_custom_delete( XSet* set, gboolean delete_next );
+void xset_custom_activate( GtkWidget* item, XSet* set );
+XSet* xset_custom_remove( XSet* set );
+GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
+                                  guint button, guint32 time );
 void xset_add_menu( DesktopWindow* desktop, PtkFileBrowser* file_browser,
                     GtkWidget* menu, GtkAccelGroup *accel_group, char* elements );
 GtkWidget* xset_add_menuitem( DesktopWindow* desktop, PtkFileBrowser* file_browser,
@@ -418,13 +423,13 @@ gboolean write_root_settings( FILE* file, const char* path );
 GList* xset_get_plugins( gboolean included );
 void install_plugin_file( gpointer main_win, const char* path,
                     const char* plug_dir, int type, int job, XSet* insert_set );
-XSet* xset_import_plugin( const char* plug_dir );
+XSet* xset_import_plugin( const char* plug_dir, gboolean* is_bookmarks );
 void clean_plugin_mirrors();
 char* plain_ascii_name( const char* orig_name );
+char* clean_label( const char* menu_label, gboolean kill_special, gboolean convert_amp );
 void xset_show_help( GtkWidget* parent, XSet* set, const char* anchor );
 gboolean xset_opener( DesktopWindow* desktop, PtkFileBrowser* file_browser,
                                                             char job );
-
 
 
 #endif

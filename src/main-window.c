@@ -38,8 +38,6 @@
 #include "ptk-utils.h"
 
 #include "pref-dialog.h"
-#include "ptk-bookmarks.h"
-#include "edit-bookmarks.h"
 #include "ptk-file-properties.h"
 #include "ptk-path-entry.h"
 
@@ -138,7 +136,6 @@ static gboolean on_window_button_press_event( GtkWidget* widget,
                                        FMMainWindow* main_window );     //sfm
 static void on_new_window_activate ( GtkMenuItem *menuitem,
                                      gpointer user_data );
-GtkWidget* create_bookmarks_menu ( FMMainWindow* main_window );
 static void fm_main_window_close( FMMainWindow* main_window );
 
 GtkWidget* main_task_view_new( FMMainWindow* main_window );
@@ -268,161 +265,6 @@ gboolean on_window_configure_event( GtkWindow *window,
         main_window->configure_evt_timer = g_timeout_add( 200,
                         ( GSourceFunc ) on_configure_evt_timer, main_window );
     return FALSE;
-}
-
-void on_bookmark_item_activate ( GtkMenuItem* menu, gpointer user_data )
-{
-    FMMainWindow * main_window = FM_MAIN_WINDOW( user_data );
-    char* path = ( char* ) g_object_get_data( G_OBJECT( menu ), "path" );
-    if ( !path )
-        return ;
-
-    PtkFileBrowser* file_browser = PTK_FILE_BROWSER( 
-                    fm_main_window_get_current_file_browser( main_window ) );
-        
-    if ( g_str_has_prefix( path, "//" ) || strstr( path, ":/" ) )
-    {
-        if ( file_browser )
-            ptk_location_view_mount_network( file_browser, path,
-                                xset_get_b( "book_newtab" ), FALSE );
-    }
-    else
-    {
-        if ( !xset_get_b( "book_newtab" ) )
-        {
-            if ( file_browser )
-                ptk_file_browser_chdir( file_browser, path, PTK_FB_CHDIR_ADD_HISTORY );
-        }
-        else
-            fm_main_window_add_new_tab( main_window, path );
-    }
-}
-
-void on_bookmarks_change( PtkBookmarks* bookmarks, FMMainWindow* main_window )
-{
-    main_window->book_menu = create_bookmarks_menu( main_window );
-    /* FIXME: We have to popupdown the menu first, if it's showed on screen.
-      * Otherwise, it's rare but possible that we try to replace the menu while it's in use.
-      *  In that way, gtk+ will hang.  So some dirty hack is used here.
-      *  We popup down the old menu, if it's currently shown.
-      */
-    GtkMenu* menu = (GtkMenu*)gtk_menu_item_get_submenu ( GTK_MENU_ITEM (
-                                            main_window->book_menu_item ) );
-    if ( menu )
-        gtk_menu_popdown( menu );
-    gtk_menu_item_set_submenu ( GTK_MENU_ITEM ( main_window->book_menu_item ),
-                                            GTK_WIDGET( main_window->book_menu ) );
-}
-
-void main_window_update_bookmarks()
-{
-    GList* l;
-    for ( l = all_windows; l; l = l->next )
-    {
-        on_bookmarks_change( NULL, (FMMainWindow*)l->data );
-    }
-}
-
-GtkWidget* create_bookmarks_menu_item ( FMMainWindow* main_window,
-                                        const char* item )
-{
-    GtkWidget * folder_image = NULL;
-    GtkWidget* menu_item;
-    const char* path;
-
-    menu_item = gtk_image_menu_item_new_with_label( item );
-    path = ptk_bookmarks_item_get_path( item );
-    g_object_set_data( G_OBJECT( menu_item ), "path", (gpointer) path );
-    
-    //folder_image = gtk_image_new_from_icon_name( "gnome-fs-directory",
-    //                                             GTK_ICON_SIZE_MENU );
-    XSet* set = xset_get( "book_icon" );
-    if ( set->icon )
-        folder_image = xset_get_image( set->icon, GTK_ICON_SIZE_MENU );
-    if ( !folder_image )
-        folder_image = xset_get_image( "gtk-directory", GTK_ICON_SIZE_MENU );
-    if ( folder_image )
-        gtk_image_menu_item_set_image ( GTK_IMAGE_MENU_ITEM ( menu_item ),
-                                                        folder_image );
-    g_signal_connect( menu_item, "activate",
-                      G_CALLBACK( on_bookmark_item_activate ), main_window );
-    return menu_item;
-}
-
-void add_bookmark( GtkWidget* item, FMMainWindow* main_window )
-{
-    PtkFileBrowser* file_browser = PTK_FILE_BROWSER( 
-                    fm_main_window_get_current_file_browser( main_window ) );
-    ptk_file_browser_add_bookmark( NULL, file_browser );
-}
-
-void show_bookmarks( GtkWidget* item, FMMainWindow* main_window )
-{
-    PtkFileBrowser* file_browser = PTK_FILE_BROWSER( 
-                        fm_main_window_get_current_file_browser( main_window ) );
-    if ( !file_browser )
-        return;
-    int mode = main_window->panel_context[file_browser->mypanel-1];
-
-    if ( !file_browser->side_book )
-    {
-        xset_set_b_panel_mode( file_browser->mypanel, "show_book", mode, TRUE );
-        update_views_all_windows( NULL, file_browser );
-    }
-    if ( file_browser->side_book )
-        gtk_widget_grab_focus( GTK_WIDGET( file_browser->side_book ) );
-}
-
-GtkWidget* create_bookmarks_menu ( FMMainWindow* main_window )
-{
-    GtkWidget * bookmark_menu;
-    GtkWidget* menu_item;
-    GList* l;
-
-    /*    this won't update with xset change so don't bother with it
-    XSet* set_add = xset_get( "book_new" );
-    XSet* set_show = xset_get( "panel1_show_book" );
-    GtkAccelGroup* accel_group = gtk_accel_group_new();
-    
-    PtkMenuItemEntry fm_bookmarks_menu[] = {
-        PTK_IMG_MENU_ITEM( N_( "_Add" ), "gtk-add", add_bookmark, set_add->key, set_add->keymod ),
-        PTK_IMG_MENU_ITEM( N_( "_Show" ), "gtk-edit", show_bookmarks, set_show->key, set_show->keymod ),
-        PTK_SEPARATOR_MENU_ITEM,
-        PTK_MENU_END
-    };
-
-    bookmark_menu = ptk_menu_new_from_data( fm_bookmarks_menu, main_window,
-                                            accel_group );
-    */
-
-    XSet* set = xset_get( "tool_book" );
-    char* book_icon = set->icon;
-    // ptk_menu_new_from_data only accept stock icons - is it?
-    if ( book_icon && !g_str_has_prefix( book_icon, "gtk-" ) )
-        book_icon = NULL;
-    if ( !book_icon )
-        book_icon = "gtk-jump-to";
-    PtkMenuItemEntry fm_bookmarks_menu[] = {
-        PTK_IMG_MENU_ITEM( N_( "_Show" ), book_icon, show_bookmarks, 0, 0 ),
-        PTK_IMG_MENU_ITEM( N_( "_Add" ), "gtk-add", add_bookmark, 0, 0 ),
-        PTK_SEPARATOR_MENU_ITEM,
-        PTK_MENU_END
-    };
-
-    bookmark_menu = ptk_menu_new_from_data( fm_bookmarks_menu, main_window,
-                                            main_window->accel_group );
-
-    int count = 0;
-    for ( l = app_settings.bookmarks->list; l; l = l->next )
-    {
-        menu_item = create_bookmarks_menu_item( main_window,
-                                                ( char* ) l->data );
-        gtk_menu_shell_append ( GTK_MENU_SHELL( bookmark_menu ), menu_item );
-        if ( ++count > 200 )
-            break;
-    }
-    gtk_widget_show_all( bookmark_menu );
-    return bookmark_menu;
 }
 
 void on_plugin_install( GtkMenuItem* item, FMMainWindow* main_window, XSet* set2 )
@@ -659,6 +501,7 @@ void import_all_plugins( FMMainWindow* main_window )
     const char* name;
     char* plug_dir;
     char* plug_file;
+    char* bookmarks_dir;
     int i;
     gboolean found = FALSE;
     gboolean found_plugins = FALSE;
@@ -704,11 +547,15 @@ void import_all_plugins( FMMainWindow* main_window )
         {
             while ( ( name = g_dir_read_name( dir ) ) )
             {
-                plug_file = g_build_filename( (char*)l->data, name, "plugin", NULL );
-                if ( g_file_test( plug_file, G_FILE_TEST_EXISTS ) )
+                bookmarks_dir = g_build_filename( (char*)l->data, name,
+                                                        "main_book", NULL );
+                plug_file = g_build_filename( (char*)l->data, name,
+                                                        "plugin", NULL );
+                if ( g_file_test( plug_file, G_FILE_TEST_EXISTS ) &&
+                     !g_file_test( bookmarks_dir, G_FILE_TEST_EXISTS ) )
                 {
                     plug_dir = g_build_filename( (char*)l->data, name, NULL );
-                    if ( xset_import_plugin( plug_dir ) )
+                    if ( xset_import_plugin( plug_dir, NULL ) )
                     {
                         found = TRUE;
                         if ( i == 1 )
@@ -719,6 +566,7 @@ void import_all_plugins( FMMainWindow* main_window )
                     g_free( plug_dir );
                 }
                 g_free( plug_file );
+                g_free( bookmarks_dir );
             }
             g_dir_close( dir );
         }
@@ -737,11 +585,9 @@ void on_devices_show( GtkMenuItem* item, FMMainWindow* main_window )
         return;
     int mode = main_window->panel_context[file_browser->mypanel-1];
 
-    if ( !file_browser->side_dev )
-    {
-        xset_set_b_panel_mode( file_browser->mypanel, "show_devmon", mode, TRUE );
-        update_views_all_windows( NULL, file_browser );
-    }
+    xset_set_b_panel_mode( file_browser->mypanel, "show_devmon", mode,
+                                                !file_browser->side_dev );
+    update_views_all_windows( NULL, file_browser );
     if ( file_browser->side_dev )
         gtk_widget_grab_focus( GTK_WIDGET( file_browser->side_dev ) );
 }
@@ -760,6 +606,7 @@ GtkWidget* create_devices_menu( FMMainWindow* main_window )
         return dev_menu;
 
     set = xset_set_cb( "main_dev", on_devices_show, main_window );
+    set->b = file_browser->side_dev ? XSET_B_TRUE : XSET_B_UNSET;
     xset_add_menuitem( NULL, file_browser, dev_menu, accel_group, set );
 
     set = xset_get( "main_dev_sep" );
@@ -1199,6 +1046,63 @@ void on_main_icon()
 void main_design_mode( GtkMenuItem *menuitem, FMMainWindow* main_window )
 {
     xset_msg_dialog( GTK_WIDGET( main_window ), 0, _("Design Mode Help"), NULL, 0, _("Design Mode allows you to change the name, shortcut key and icon of menu items, show help for an item, and add your own custom commands to most menus.\n\nTo open the design menu, simply right-click on a menu item.\n\nTo use Design Mode on a submenu, you must first close the submenu (by clicking on it).  The Bookmarks menu does not support Design Mode.\n\nTo modify a toolbar, click the leftmost tool icon to open the toolbar config menu and select Help."), NULL, "#designmode" );
+}
+
+void main_window_bookmark_changed( const char* changed_set_name )
+{
+    GList* l;
+    FMMainWindow* main_window;
+    PtkFileBrowser* a_browser;
+    int num_pages, i, p;
+    GtkWidget* notebook;
+    
+    for ( l = all_windows; l; l = l->next )
+    {
+        main_window = (FMMainWindow*)l->data;
+        for ( p = 1; p < 5; p++ )
+        {
+            notebook = main_window->panel[p-1];
+            num_pages = gtk_notebook_get_n_pages( GTK_NOTEBOOK( notebook ) );
+            for ( i = 0; i < num_pages; i++ )
+            {
+                a_browser = PTK_FILE_BROWSER( gtk_notebook_get_nth_page(
+                                         GTK_NOTEBOOK( notebook ), i ) );
+                if ( a_browser->side_book )
+                    ptk_bookmark_view_xset_changed(
+                                        GTK_TREE_VIEW( a_browser->side_book ),
+                                        a_browser, changed_set_name );
+            }
+        }
+    }
+}
+
+void main_window_update_all_bookmark_views()
+{
+    GList* l;
+    FMMainWindow* a_window;
+    PtkFileBrowser* a_browser;
+    GtkWidget* notebook;
+    int cur_tabx, p;
+    int pages;
+
+    // do all windows all panels all tabs
+    for ( l = all_windows; l; l = l->next )
+    {
+        a_window = (FMMainWindow*)l->data;
+        for ( p = 1; p < 5; p++ )
+        {
+            notebook = a_window->panel[p-1];
+            pages = gtk_notebook_get_n_pages( GTK_NOTEBOOK( notebook ) );
+            for ( cur_tabx = 0; cur_tabx < pages; cur_tabx++ )
+            {
+                a_browser = PTK_FILE_BROWSER( gtk_notebook_get_nth_page( 
+                                            GTK_NOTEBOOK( notebook ),
+                                                                cur_tabx ) );
+                if ( a_browser->side_book )
+                    ptk_bookmark_view_update_icons( NULL, a_browser );
+            }
+        }
+    }
 }
 
 void rebuild_toolbar_all_windows( int job, PtkFileBrowser* file_browser )
@@ -1763,6 +1667,25 @@ static gboolean on_menu_bar_event( GtkWidget* widget, GdkEvent* event,
     return FALSE;
 }
 
+void on_bookmarks_show( GtkMenuItem* item, FMMainWindow* main_window )
+{
+    PtkFileBrowser* file_browser = PTK_FILE_BROWSER( 
+                        fm_main_window_get_current_file_browser( main_window ) );
+    if ( !file_browser )
+        return;
+    int mode = main_window->panel_context[file_browser->mypanel-1];
+
+    xset_set_b_panel_mode( file_browser->mypanel, "show_book", mode,
+                                                !file_browser->side_book );
+    update_views_all_windows( NULL, file_browser );
+    if ( file_browser->side_book )
+    {
+        ptk_bookmark_view_chdir( GTK_TREE_VIEW( file_browser->side_book ),
+                                                    file_browser, TRUE );
+        gtk_widget_grab_focus( GTK_WIDGET( file_browser->side_book ) );
+    }
+}
+
 void rebuild_menus( FMMainWindow* main_window )
 {
     GtkWidget* newmenu;
@@ -1771,6 +1694,7 @@ void rebuild_menus( FMMainWindow* main_window )
     char* menu_elements;
     GtkAccelGroup* accel_group = gtk_accel_group_new();
     XSet* set;
+    XSet* child_set;
 
 //printf("rebuild_menus\n");
     PtkFileBrowser* file_browser = PTK_FILE_BROWSER( 
@@ -1866,13 +1790,25 @@ void rebuild_menus( FMMainWindow* main_window )
                                                     main_window->dev_menu );
     
     // Bookmarks
-    if ( !main_window->book_menu )
-    {
-        main_window->book_menu = create_bookmarks_menu( main_window );
-        gtk_menu_item_set_submenu( GTK_MENU_ITEM( main_window->book_menu_item ),
-                                                        main_window->book_menu );
-    }
-
+    newmenu = gtk_menu_new();
+    set = xset_set_cb( "book_show", on_bookmarks_show, main_window );   
+    set->b = file_browser->side_book ? XSET_B_TRUE : XSET_B_UNSET;
+    xset_add_menuitem( NULL, file_browser, newmenu, accel_group,
+                                set );
+    set = xset_set_cb( "book_add", ptk_bookmark_view_add_bookmark, file_browser );
+    set->disable = FALSE;
+    xset_add_menuitem( NULL, file_browser, newmenu, accel_group,
+                                set );
+    gtk_menu_shell_append( GTK_MENU_SHELL(newmenu),
+                                gtk_separator_menu_item_new() );
+    xset_add_menuitem( NULL, file_browser, newmenu, accel_group,
+                                ptk_bookmark_view_get_first_bookmark( NULL ) );
+    gtk_widget_show_all( GTK_WIDGET(newmenu) );
+    g_signal_connect( newmenu, "key-press-event",
+                                G_CALLBACK( xset_menu_keypress ), NULL );
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM( main_window->book_menu_item ),
+                                                            newmenu );
+    
     // Plugins
     main_window->plug_menu = create_plugins_menu( main_window );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM( main_window->plug_menu_item ),
@@ -1881,7 +1817,6 @@ void rebuild_menus( FMMainWindow* main_window )
                       G_CALLBACK( xset_menu_keypress ), NULL );
     
     // Tool
-    XSet* child_set;
     newmenu = gtk_menu_new();
     set = xset_get( "main_tool" );
     if ( !set->child )
@@ -1897,7 +1832,8 @@ void rebuild_menus( FMMainWindow* main_window )
     gtk_widget_show_all( GTK_WIDGET(newmenu) );
     g_signal_connect( newmenu, "key-press-event",
                       G_CALLBACK( xset_menu_keypress ), NULL );
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM( main_window->tool_menu_item ), newmenu );
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM( main_window->tool_menu_item ),
+                                                            newmenu );
     
     // Help
     newmenu = gtk_menu_new();
@@ -2036,9 +1972,6 @@ void fm_main_window_init( FMMainWindow* main_window )
 
     main_window->book_menu_item = gtk_menu_item_new_with_mnemonic( _("_Bookmarks") );
     gtk_menu_shell_append( GTK_MENU_SHELL( main_window->menu_bar ), main_window->book_menu_item );
-    main_window->book_menu = NULL;
-    // Set a monitor for changes of the bookmarks
-    ptk_bookmarks_add_callback( ( GFunc ) on_bookmarks_change, main_window );
 
     main_window->plug_menu_item = gtk_menu_item_new_with_mnemonic( _("_Plugins") );
     gtk_menu_shell_append( GTK_MENU_SHELL( main_window->menu_bar ), main_window->plug_menu_item );
@@ -3100,6 +3033,9 @@ void on_main_help_activate ( GtkMenuItem *menuitem, FMMainWindow* main_window )
     else if ( browser && browser->side_dev && gtk_widget_has_focus( 
                                                 GTK_WIDGET( browser->side_dev ) ) )
         help = "#devices";
+    else if ( browser && browser->side_book && gtk_widget_has_focus( 
+                                                GTK_WIDGET( browser->side_book ) ) )
+        help = "#gui-book";
     else if ( main_window->task_view && 
                     gtk_widget_has_focus( GTK_WIDGET( main_window->task_view ) ) )
         help = "#tasks-man";
@@ -3588,6 +3524,17 @@ void fm_main_window_update_status_bar( FMMainWindow* main_window,
                     _(" %s free / %s   "), size_str, total_size_str );  //MOD
     }
 #endif
+
+    // Show Reading... while still loading
+    if ( !( file_browser->dir && vfs_dir_is_file_listed( file_browser->dir ) ) )
+    {
+        msg = g_strdup_printf( _("%sReading %s ..."), free_space,
+                                ptk_file_browser_get_cwd(file_browser) );
+        gtk_statusbar_push( GTK_STATUSBAR( file_browser->status_bar ), 0,
+                                           msg );
+        g_free( msg );
+        return;
+    }
 
     // note: total size won't include content changes since last selection change
     num_sel = ptk_file_browser_get_n_sel( file_browser, &total_size );
