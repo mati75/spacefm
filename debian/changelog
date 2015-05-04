@@ -1,5 +1,6 @@
-spacefm (1.0.0-2) UNRELEASED; urgency=medium
+spacefm (1.0.1-1) UNRELEASED; urgency=medium
 
+  * New upstream release. (Closes: #737722, #750510)
   * debian/control:
     + Add Breaks field to spacefm-common.
   * debian/spacefm*.postrm:
