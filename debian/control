@@ -21,7 +21,6 @@ Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs
 Replaces: spacefm-gtk3, spacefm (<< 0.9)
 Conflicts: spacefm-hal, spacefm-gtk3
 Provides: spacefm-hal
-
 Description: Multi-panel tabbed file manager - GTK2 version
  SpaceFM is a multi-panel tabbed file and desktop manager for Linux with
  built-in VFS, udev or HAL-based device manager, customizable menu system
