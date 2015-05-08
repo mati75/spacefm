@@ -1,3 +1,10 @@
+spacefm (1.0.1-2) UNRELEASED; urgency=medium
+
+  * debian/control:
+    + Bump minimal version libffmpegthumbnailer-dev to 2.0.10.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 08 May 2015 13:35:22 +0200
+
 spacefm (1.0.1-1) unstable; urgency=medium
 
   * New upstream release. (Closes: #737722, #750510)
