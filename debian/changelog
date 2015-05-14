@@ -4,7 +4,7 @@ spacefm (1.0.1-1) unstable; urgency=medium
   * debian/control:
     + Add Breaks field to spacefm-common.
   * debian/spacefm*.postrm:
-    + Add remove files from /etc/spacefm at purge. (Closes: #782975)
+    + Add removal of /etc/spacefm during purge. (Closes: #782975)
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 08 May 2015 13:27:37 +0200
 
