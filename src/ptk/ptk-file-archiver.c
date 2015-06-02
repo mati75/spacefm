@@ -2,7 +2,7 @@
  * SpaceFM ptk-file-archiver.c
  * 
  * Copyright (C) 2015 IgnorantGuru <ignorantguru@gmx.com>
- * Copyright (C) 2013-2014 OmegaPhil <OmegaPhil+SpaceFM@gmail.com>
+ * Copyright (C) 2013-2014 OmegaPhil <OmegaPhil@startmail.com>
  * Copyright (C) 2014 IgnorantGuru <ignorantguru@gmx.com>
  * Copyright (C) 2006 Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>
  * 
@@ -1093,7 +1093,7 @@ void ptk_file_archiver_extract( DesktopWindow *desktop,
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( chk_parent ),
                                               xset_get_b( "arc_dlg" ) );
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( chk_write ),
-                                xset_get_int( "arc_dlg", "s" ) == 1 &&
+                                xset_get_int( "arc_dlg", "z" ) == 1 &&
                                 geteuid() != 0 );
         gtk_widget_set_sensitive( chk_write, xset_get_b( "arc_dlg" ) &&
                                              geteuid() != 0 );
@@ -1135,7 +1135,7 @@ void ptk_file_archiver_extract( DesktopWindow *desktop,
                 write_access = create_parent && 
                     gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( chk_write ) );
                 xset_set_b( "arc_dlg", create_parent );
-                xset_set( "arc_dlg", "s", write_access ? "1" : "0" );
+                xset_set( "arc_dlg", "z", write_access ? "1" : "0" );
                 break;
             }
             else if ( res == GTK_RESPONSE_NONE )

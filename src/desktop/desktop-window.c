@@ -512,7 +512,7 @@ gboolean on_expose( GtkWidget* w, GdkEventExpose* evt )
                         evt->area.width, evt->area.height );
 */
 
-    if ( self->transparent == TRUE )
+    if ( self->transparent )
     {
 #if !GTK_CHECK_VERSION (3, 0, 0)
         cairo_t *cr;
@@ -2469,7 +2469,7 @@ void on_realize( GtkWidget* w )
     GTK_WIDGET_CLASS(parent_class)->realize( w );
 
     const char *wmname = gdk_x11_screen_get_window_manager_name( gtk_widget_get_screen( w ) );
-    if ( ( self->transparent == TRUE ) &&  !strcmp(wmname, "Compiz") )
+    if ( self->transparent && !g_strcmp0( wmname, "Compiz" ) )
     {
         gtk_window_set_decorated( GTK_WINDOW(w), FALSE );
         gtk_window_set_keep_below( GTK_WINDOW(w), TRUE );
@@ -2528,8 +2528,24 @@ gboolean on_focus_out( GtkWidget* w, GdkEventFocus* evt )
 
 gboolean on_scroll( GtkWidget *w, GdkEventScroll *evt )
 {
-    forward_event_to_rootwin( gtk_widget_get_screen( w ), ( GdkEvent* ) evt );
-    return TRUE;
+    if ( ((DesktopWindow*)w)->transparent )
+    {
+        const char* wmname = gdk_x11_screen_get_window_manager_name(
+                                                gtk_widget_get_screen( w ) );
+        if ( !g_strcmp0( wmname, "Compiz" ) )
+        {
+            /* For Compiz transparent desktop, scroll events get passed back to
+             * the root window, because in that case, SpaceFM doesn't work as a
+             * desktop-type window. */
+            forward_event_to_rootwin( gtk_widget_get_screen( w ),
+                                                        ( GdkEvent* ) evt );
+            return TRUE;
+        }
+    }
+    /* In other cases, return FALSE to use the default scroll behavior.
+     * forward_event_to_rootwin code causes issues with scrollwheel in Openbox.
+     * Issue #524 */
+    return FALSE;
 }
 
 void on_sort_by_name ( GtkMenuItem *menuitem, DesktopWindow* self )
@@ -2683,6 +2699,9 @@ void calc_item_size( DesktopWindow* self, DesktopItem* item )
             item->len1 = line->start_index; // this the position where the first line wraps
 
             // OK, now we layout these 2 lines separately
+            // display name already contains \n ? eg Name=Firefox\n(Win+F)
+            if ( item->fi->disp_name[ item->len1 - 1 ] == '\n' )
+                item->fi->disp_name[ item->len1 - 1 ] = '\0';
             pango_layout_set_text( self->pl, item->fi->disp_name, item->len1 );
             pango_layout_get_pixel_size( self->pl, NULL, &line_h );
             item->text_rect.height = line_h;

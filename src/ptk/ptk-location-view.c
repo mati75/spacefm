@@ -3592,7 +3592,7 @@ gboolean on_button_press_event( GtkTreeView* view, GdkEventButton* evt,
         xset_set_set( set, "desc", menu_elements );
         g_free( menu_elements );
 
-        menu_elements = g_strdup_printf( "sep_dm2 dev_menu_root sep_dm3 dev_menu_settings dev_prop" );
+        menu_elements = g_strdup_printf( "sep_dm2 dev_menu_root sep_dm3 dev_prop dev_menu_settings" );
         xset_add_menu( NULL, file_browser, popup, accel_group, menu_elements );
         g_free( menu_elements );
 #endif
@@ -4270,11 +4270,12 @@ static void update_bookmark_list_item( GtkListStore* list, GtkTreeIter* it, XSet
     const char* icon1 = NULL;
     const char* icon2 = NULL;
     const char* icon3 = NULL;
+    const char* icon_name = NULL;
+    char* icon_file = NULL;
     int cmd_type;
-    const char* menu_label = NULL;
+    char* menu_label = NULL;
     VFSAppDesktop* app = NULL;
     GdkPixbuf* icon = NULL;
-    gboolean is_bookmark = FALSE;
     gboolean is_submenu = FALSE;
     gboolean is_sep = FALSE;
     XSet* set2;
@@ -4283,10 +4284,25 @@ static void update_bookmark_list_item( GtkListStore* list, GtkTreeIter* it, XSet
     if ( icon_size > PANE_MAX_ICON_SIZE )
         icon_size = PANE_MAX_ICON_SIZE;
 
+    icon_name = set->icon;
+    if ( !icon_name && !set->lock )
+    {
+        // custom 'icon' file?
+        icon_file = g_build_filename( xset_get_config_dir(), "scripts",
+                                                    set->name, "icon", NULL );
+        if ( !g_file_test( icon_file, G_FILE_TEST_EXISTS ) )
+        {
+            g_free( icon_file );
+            icon_file = NULL;
+        }
+        else
+            icon_name = icon_file;
+    }
+
     // get icon name
     if ( set->menu_style == XSET_MENU_SUBMENU )
     {
-        icon1 = set->icon;
+        icon1 = icon_name;
         if ( !icon1 )
         {
             if ( global_icon_submenu )
@@ -4312,64 +4328,31 @@ static void update_bookmark_list_item( GtkListStore* list, GtkTreeIter* it, XSet
     else
     {
         if ( set->menu_style != XSET_MENU_CHECK )
-            icon1 = set->icon;
+            icon1 = icon_name;
         cmd_type = set->x ? atoi( set->x ) : -1;
         if ( !set->lock && cmd_type == XSET_CMD_BOOKMARK )
         {
+            // Bookmark
             if ( !( set->menu_label && set->menu_label[0] ) )
-                menu_label = set->z;
-            if ( !icon1 )
+                menu_label = g_strdup( set->z );
+
+            if ( !icon_name && !( set->z && ( strstr( set->z, ":/" ) ||
+                                 g_str_has_prefix( set->z, "//" ) ) ) )
             {
-                if ( set->z && ( strstr( set->z, ":/" ) ||
-                                 g_str_has_prefix( set->z, "//" ) ) )
-                {
-                    // a bookmarked URL - show network icon
-                    set2 = xset_get( "dev_icon_network" );
-                    if ( set2->icon )
-                        icon1 = set2->icon;
-                    else
-                        icon1 = "gtk-network";
-                    icon2 = "user-bookmarks";
-                    icon3 = "gnome-fs-directory";
-                }
-                else if ( global_icon_bookmark )
+                // is non-network bookmark with no custom icon
+                if ( global_icon_bookmark )
                     icon = global_icon_bookmark;
-                else if ( ( set2 = xset_get( "book_icon" ) ) && set2->icon )
-                {
-                    icon1 = set2->icon;
-                    icon2 = "user-bookmarks";
-                    icon3 = "gnome-fs-directory";
-                    is_bookmark = TRUE;
-                }
                 else
-                {
-                    icon1 = "user-bookmarks";
-                    icon2 = "gnome-fs-directory";
-                    icon3 = "gtk-directory";
-                    is_bookmark = TRUE;
-                }
+                    icon = global_icon_bookmark =
+                            xset_custom_get_bookmark_icon( set, icon_size );
             }
+            else
+                icon = xset_custom_get_bookmark_icon( set, icon_size );
         }
-        else if ( !set->lock && cmd_type == XSET_CMD_APP && set->z &&
-                    ( !( set->menu_label && set->menu_label[0] )
-                      || !( icon1 && icon1[0] ) ) &&
-                                g_str_has_suffix( set->z, ".desktop" ) )
+        else if ( !set->lock && cmd_type == XSET_CMD_APP )
         {
-            // Application - get name and/or icon
-            if ( app = vfs_app_desktop_new( set->z ) )
-            {
-                if ( !( set->menu_label && set->menu_label[0] ) )
-                    menu_label = vfs_app_desktop_get_disp_name( app );
-                if ( !icon1 )
-                {
-                    icon = vfs_app_desktop_get_icon( app, icon_size, TRUE );
-                    if ( !icon )
-                    {
-                        // fallback
-                        icon1 = "gtk-execute";
-                    }
-                }
-            }
+            // Application
+            menu_label = xset_custom_get_app_name_icon( set, &icon, icon_size );
         }
         else if ( !icon1 && ( cmd_type == XSET_CMD_APP ||
                               cmd_type == XSET_CMD_LINE ||
@@ -4377,10 +4360,10 @@ static void update_bookmark_list_item( GtkListStore* list, GtkTreeIter* it, XSet
         {
             if ( set->menu_style != XSET_MENU_CHECK || set->b == XSET_B_TRUE )
             {
-                if ( set->menu_style == XSET_MENU_CHECK && set->icon &&
+                if ( set->menu_style == XSET_MENU_CHECK && icon_name &&
                                                     set->b == XSET_B_TRUE )
                 {
-                    icon1 = set->icon;
+                    icon1 = icon_name;
                     icon2 = "gtk-execute";
                 }
                 else
@@ -4396,8 +4379,7 @@ static void update_bookmark_list_item( GtkListStore* list, GtkTreeIter* it, XSet
     gtk_list_store_set( list, it, COL_PATH, set->name, -1 );
     gtk_list_store_set( list, it, COL_DATA, is_sep, -1 );
     g_free( name );
-    if ( app )
-        vfs_app_desktop_unref( app );   // unrefs menu_label
+    g_free( menu_label );
 
     // add icon
     if ( icon )
@@ -4415,9 +4397,7 @@ static void update_bookmark_list_item( GtkListStore* list, GtkTreeIter* it, XSet
         
         if ( icon )
         {
-            if ( is_bookmark )
-                global_icon_bookmark = icon;
-            else if ( is_submenu )
+            if ( is_submenu )
                 global_icon_submenu = icon;
             else
                 g_object_unref( icon );
@@ -4425,6 +4405,8 @@ static void update_bookmark_list_item( GtkListStore* list, GtkTreeIter* it, XSet
     }
     else
         gtk_list_store_set( list, it, COL_ICON, NULL, -1 );
+    
+    g_free( icon_file );
 }
 
 static void ptk_bookmark_view_reload_list( GtkTreeView* view, XSet* book_set )
@@ -4461,10 +4443,8 @@ static void ptk_bookmark_view_reload_list( GtkTreeView* view, XSet* book_set )
         icon_size = PANE_MAX_ICON_SIZE;
     if ( book_set->icon /*&& !strcmp( book_set->name, "main_book" )*/ )
         icon = vfs_load_icon ( icon_theme, book_set->icon, icon_size );
-    if ( !icon && ( set = xset_is( "tool_up" ) ) && set->icon )
-        icon = vfs_load_icon ( icon_theme, set->icon, icon_size );
-    //if ( !icon )
-    //    icon = vfs_load_icon ( icon_theme, "gtk-go-up", icon_size );
+    if ( !icon )
+        icon = vfs_load_icon ( icon_theme, "gtk-go-up", icon_size );
     if ( icon )
     {
         gtk_list_store_set( list, &it, COL_ICON, icon, -1 );
