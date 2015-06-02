@@ -1,7 +1,11 @@
 /*
-*
-* Copyright: See COPYING file that comes with this distribution
-*
+ * SpaceFM settings.c
+ * 
+ * Copyright (C) 2015 IgnorantGuru <ignorantguru@gmx.com>
+ * Copyright (C) 2006 Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>
+ * 
+ * License: See COPYING file
+ * 
 */
 
 #ifdef HAVE_CONFIG_H
@@ -12,7 +16,6 @@
 #define _GNU_SOURCE  // euidaccess
 #endif
 
-#include "settings.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -25,19 +28,24 @@
 #include <gtk/gtk.h>
 #include "gtk2-compat.h"
 
-#include "desktop.h"
 #include <gdk/gdkkeysyms.h>
-#include "ptk-utils.h"
 #include <errno.h>
 #include <fcntl.h>
+
+#include "settings.h"
+#include "desktop.h"
+#include "ptk-utils.h"
 #include "main-window.h"
 #include "vfs-app-desktop.h"
 #include "item-prop.h"
 #include "ptk-app-chooser.h"
 #include "ptk-handler.h"
+#include "ptk-file-menu.h"
 #include "vfs-utils.h" /* for vfs_load_icon */
 #include "ptk-location-view.h"
+#include "exo-icon-chooser-dialog.h" /* for exo_icon_chooser_dialog_new */
 
+#define CONFIG_VERSION "33"
 
 /* Dirty hack: check whether we are under LXDE or not */
 #define is_under_LXDE()     (g_getenv( "_LXSESSION_PID" ) != NULL)
@@ -45,8 +53,6 @@
 AppSettings app_settings = {0};
 /* const gboolean singleInstance_default = TRUE; */
 const gboolean show_hidden_files_default = FALSE;
-const gboolean show_side_pane_default = TRUE;
-const int side_pane_mode_default = PTK_FB_SIDE_PANE_BOOKMARKS;
 const gboolean show_thumbnail_default = FALSE;
 const int max_thumb_size_default = 8 << 20;
 const int big_icon_size_default = 48;
@@ -54,7 +60,6 @@ const int small_icon_size_default = 22;
 const int tool_icon_size_default = 0;
 const gboolean single_click_default = FALSE;
 const gboolean no_single_hover_default = FALSE;
-const gboolean show_location_bar_default = TRUE;
 
 /* FIXME: temporarily disable trash since it's not finished */
 const gboolean use_trash_can_default = FALSE;
@@ -119,22 +124,91 @@ void xset_free_all();
 void xset_custom_delete( XSet* set, gboolean delete_next );
 void xset_default_keys();
 char* xset_color_dialog( GtkWidget* parent, char* title, char* defcolor );
-GtkWidget* xset_design_additem( GtkWidget* menu, char* label, gchar* stock_icon,
-                                                            int job, XSet* set );
+GtkWidget* xset_design_additem( GtkWidget* menu, const char* label,
+                                const char* stock_icon,
+                                int job, XSet* set );
 gboolean xset_design_cb( GtkWidget* item, GdkEventButton * event, XSet* set );
 gboolean on_autosave_timer( gpointer main_window );
 const char* icon_stock_to_id( const char* name );
+void xset_builtin_tool_activate( char tool_type, XSet* set,
+                                 GdkEventButton* event );
+XSet* xset_new_builtin_toolitem( char tool_type );
+void xset_custom_insert_after( XSet* target, XSet* set );
+XSet* xset_custom_copy( XSet* set, gboolean copy_next, gboolean delete_set );
+void xset_free( XSet* set );
 
 const char* user_manual_url = "http://ignorantguru.github.io/spacefm/spacefm-manual-en.html";
 const char* homepage = "http://ignorantguru.github.io/spacefm/"; //also in aboutdlg.ui
 
 const char* enter_command_line = N_("Enter program or bash command line:\n\nUse:\n\t%%F\tselected files  or  %%f first selected file\n\t%%N\tselected filenames  or  %%n first selected filename\n\t%%d\tcurrent directory\n\t%%v\tselected device (eg /dev/sda1)\n\t%%m\tdevice mount point (eg /media/dvd);  %%l device label\n\t%%b\tselected bookmark\n\t%%t\tselected task directory;  %%p task pid\n\t%%a\tmenu item value\n\t$fm_panel, $fm_tab, $fm_command, etc");
 
-const char* icon_desc = N_("Enter an icon name, icon file path, or stock item name:\n\nNot all icons may work due to various issues.");
+const char* icon_desc = N_("Enter an icon name, icon file path, or stock item name:\n\nOr click Choose to select an icon.  Not all icons may work properly due to various issues.");
 
-const char* enter_menu_name = N_("Enter menu item name:\n\nPrecede a character with an underscore (_) to underline that character as a shortcut key if desired.");
-const char* enter_menu_name_new = N_("Enter new menu item name:\n\nPrecede a character with an underscore (_) to underline that character as a shortcut key if desired.\n\nTIP: To change this menu item later, right-click on the menu item to open the design menu.");
+const char* enter_menu_name = N_("Enter item name:\n\nPrecede a character with an underscore (_) to underline that character as a shortcut key if desired.");
+const char* enter_menu_name_new = N_("Enter new item name:\n\nPrecede a character with an underscore (_) to underline that character as a shortcut key if desired.\n\nTIP: To change this item later, right-click on the item to open the Design Menu.");
 
+static const char* builtin_tool_name[] = {  // must match XSET_TOOL_ enum
+    NULL,
+    NULL,
+    N_("Show Devices"),
+    N_("Show Bookmarks"),
+    N_("Show Tree"),
+    N_("Home"),
+    N_("Default"),
+    N_("Up"),
+    N_("Back"),
+    N_("Back History"),
+    N_("Forward"),
+    N_("Forward History"),
+    N_("Refresh"),
+    N_("New Tab"),
+    N_("New Tab Here"),
+    N_("Show Hidden"),
+    N_("Show Thumbnails"),
+    N_("Large Icons")
+};
+
+static const char* builtin_tool_icon[] = {  // must match XSET_TOOL_ enum
+    NULL,
+    NULL,
+    "gtk-harddisk",
+    "gtk-jump-to",
+    "gtk-directory",
+    "gtk-home",
+    "gtk-home",
+    "gtk-go-up",
+    "gtk-go-back",
+    "gtk-go-back",
+    "gtk-go-forward",
+    "gtk-go-forward",
+    "gtk-refresh",
+    "gtk-add",
+    "gtk-add",
+    "gtk-apply",
+    GTK_STOCK_SELECT_COLOR,
+    GTK_STOCK_ZOOM_IN
+};
+
+static const char* builtin_tool_shared_key[] = {  // must match XSET_TOOL_ enum
+    NULL,
+    NULL,
+    "panel1_show_devmon",
+    "panel1_show_book",
+    "panel1_show_dirtree",
+    "go_home",
+    "go_default",
+    "go_up",
+    "go_back",
+    "go_back",
+    "go_forward",
+    "go_forward",
+    "view_refresh",
+    "tab_new",
+    "tab_new_here",
+    "panel1_show_hidden",
+    "view_thumb",
+    "panel1_list_large"
+};
 
 static void parse_general_settings( char* line )
 {
@@ -471,12 +545,12 @@ void move_attached_to_builtin( const char* removed_name, const char* move_to_nam
                 
                 if ( set_to->tool )
                 {
-                    set_move->tool = XSET_B_TRUE;
-                    if ( !set_move->icon )
-                        set_move->icon = g_strdup( "gtk-execute" );
+                    if ( set_move->tool > XSET_TOOL_CUSTOM )
+                        g_warning( "move_attached_to_builtin moved builtin tool - changed to custom" );
+                    set_move->tool = XSET_TOOL_CUSTOM;
                 }
                 else
-                    set_move->tool = XSET_B_UNSET;
+                    set_move->tool = XSET_TOOL_NOT;
                 
                 set_to = set_move;
                 set_move = set_move_next;
@@ -801,6 +875,7 @@ void load_settings( char* config_dir )
         ptk_bookmark_view_get_first_bookmark( NULL );
         return;
     }
+/*
     if ( ver < 3 ) // < 0.5.3
     {
         set = xset_get( "toolbar_left" );
@@ -886,6 +961,7 @@ void load_settings( char* config_dir )
         if ( set->b == XSET_B_UNSET )
             set->b = XSET_B_TRUE;
     }
+*/
     if ( ver < 7 ) // < 0.7.0
     {
         // custom separators ->next xset have invalid prev
@@ -1033,12 +1109,14 @@ void load_settings( char* config_dir )
             string_copy_free( &set->icon, "drive-removable-media" );
             set->keep_terminal = XSET_B_UNSET;
         }
+        /*  > 1.0.1 no longer an xset
         set = xset_get( "stool_mount" );
         if ( !g_strcmp0( set->icon, "gtk-add" ) )
         {
             string_copy_free( &set->icon, "drive-removable-media" );
             set->keep_terminal = XSET_B_UNSET;
         }
+        */
         set = xset_get( "dev_menu_mount" );
         if ( !g_strcmp0( set->icon, "gtk-add" ) )
         {
@@ -1092,7 +1170,7 @@ void load_settings( char* config_dir )
             g_free( str );
         }
     }
-    if ( ver < 26 ) // < hand
+    if ( ver < 26 ) // < hand  (1.0.0 alpha)
     {
         XSet* handset;
         char* cmd;
@@ -1231,7 +1309,7 @@ void load_settings( char* config_dir )
         // Save settings
         xset_autosave( FALSE, FALSE );
     }
-    if ( ver < 30 ) // < 1.0.0
+    if ( ver < 30 && !xset_is( "main_book" ) ) // < 1.0.1 [31]
     {
         // Move any custom items attached to removed menu items
         move_attached_to_builtin( "book_new", "book_settings" );
@@ -1251,10 +1329,216 @@ void load_settings( char* config_dir )
         ptk_bookmark_view_import_gtk( str, NULL );
         g_free( str );
     }
-    if ( ver == 30 ) // == 1.0.0
+    if ( ver == 30 && !xset_is( "hand_net_+http" ) ) // == 1.0.0
     {
         // add http handler to top of list for 1.0.0 upgrade to later
         ptk_handler_add_new_default( HANDLER_MODE_NET, "hand_net_+http", TRUE );
+    }
+    if ( ver < 32 && !xset_is( "panel1_tool_l" ) /*only once*/ )  // < 1.0.2
+    {
+        // 1.0.0 thru 1.0.1 used set->s for both last compress handler and
+        // last Extract To Write Access.  >=1.0.2 uses set->z for write access
+        set = xset_get( "arc_dlg" );
+        if ( set->s && !strcmp( set->s, "0" ) )
+        {
+            g_free( set->z );
+            set->z = g_strdup( "0" );
+        }
+        
+        // convert old toolbars to new, remove old toolbar xsets
+        char* name;
+        char ch;
+        XSet* old_set;
+        XSet* menu_set;
+        XSet* child_set;
+        XSet* new_set;
+        int j, p;
+        const char* old_toolbar_list[] = { "tool_device", "tool_book",
+                "tool_dirtree", "tool_newtab", "tool_newtabhere", "tool_back",
+                "tool_backmenu", "tool_forward", "tool_forwardmenu", "tool_up",
+                "tool_home", "tool_default", "tool_refresh" };
+        char new_toolbar_types[] = { XSET_TOOL_DEVICES, XSET_TOOL_BOOKMARKS,
+                XSET_TOOL_TREE,  XSET_TOOL_NEW_TAB, XSET_TOOL_NEW_TAB_HERE,
+                XSET_TOOL_BACK, XSET_TOOL_BACK_MENU, XSET_TOOL_FWD,
+                XSET_TOOL_FWD_MENU, XSET_TOOL_UP, XSET_TOOL_HOME,
+                XSET_TOOL_DEFAULT, XSET_TOOL_REFRESH };
+        
+        for ( p = 1; p < 5; p++ )       // 4 panels
+        {
+            for ( j = 0; j < 3; j++ )   // left, right, and side
+            {
+                // get new toolbar menu set
+                if ( j == 0 )
+                    ch = 'l';
+                else if ( j == 1 )
+                    ch = 'r';
+                else
+                    ch = 's';
+                str = g_strdup_printf( "tool_%c", ch ); 
+                menu_set = xset_get_panel( p, str );
+                g_free( str );
+                menu_set->menu_style = XSET_MENU_SUBMENU;
+                menu_set->lock = TRUE;
+                if ( menu_set->child )
+                {
+                    child_set = xset_get( menu_set->child );
+                    while ( child_set->next )
+                        child_set = xset_get( child_set->next );
+                }
+                else
+                    child_set = NULL;
+                
+                for ( i = 0; i < G_N_ELEMENTS( old_toolbar_list ); i++ )
+                {
+                    // get old toolbar xset
+                    if ( j == 0 )
+                        name = g_strdup( old_toolbar_list[i] );
+                    else
+                        name = g_strdup_printf( "%c%s", ch,
+                                                        old_toolbar_list[i] );
+                    old_set = xset_is( name );
+                    g_free( name );
+                    if ( !old_set )
+                        continue;
+                    if ( old_set->tool == XSET_B_TRUE )
+                    {
+                        // builtin tool is shown - add to new toolbar
+                        new_set = xset_new_builtin_toolitem(
+                                                        new_toolbar_types[i] );
+                        if ( !child_set )
+                        {
+                            menu_set->child = g_strdup( new_set->name );
+                            new_set->parent = g_strdup( menu_set->name );
+                        }
+                        else
+                            xset_custom_insert_after( child_set, new_set );
+                        child_set = new_set;
+                        // copy custom menu label
+                        if ( old_set->menu_label && old_set->menu_label[0] &&
+                                        old_set->in_terminal == XSET_B_TRUE )
+                        {
+                            // in_terminal means custom label was saved
+                            g_free( new_set->menu_label );
+                            new_set->menu_label = old_set->menu_label; // steal
+                            old_set->menu_label = NULL;
+                        }
+                        // copy custom icon
+                        if ( old_set->icon && old_set->keep_terminal ==
+                                                                XSET_B_TRUE )
+                        {
+                            // keep_terminal means custom icon was saved
+                            new_set->icon = old_set->icon;  // steal string
+                            old_set->icon = NULL;
+                        }
+                    }
+                    if ( old_set->next )
+                    {
+                        // custom item(s) are attached to old toolbar xset
+                        set = xset_get( old_set->next );
+                        if ( p == 4 )
+                            new_set = set;  // move the sets for last panel
+                        else
+                        {
+                            // copy the sets (copies next...)
+                            new_set = xset_custom_copy( set, TRUE, FALSE );
+                        }
+                         // add to new toolbar (whether orig shown or not)
+                        if ( child_set )
+                        {
+                            child_set->next = g_strdup( new_set->name );
+                            g_free( new_set->prev );
+                            new_set->prev = g_strdup( child_set->name );
+                        }
+                        else
+                        {
+                            menu_set->child = g_strdup( new_set->name );
+                            new_set->parent = g_strdup( menu_set->name );
+                            g_free( new_set->prev );
+                            new_set->prev = NULL;
+                        }
+                        child_set = new_set;
+                        child_set->tool = XSET_TOOL_CUSTOM;
+                        while ( child_set->next )
+                        {
+                            child_set = xset_get( child_set->next );
+                            child_set->tool = XSET_TOOL_CUSTOM;
+                        }
+                    }
+                    // remove old set from session file
+                    if ( p == 4 )
+                        xset_free( old_set );
+                }
+            }
+        }
+        // move custom items attached to old toolbar config menu items and
+        // remove xsets
+        const char* old_toolbar_sets[] = { "toolbar_left", "toolbar_side",
+                "toolbar_right", "toolbar_hide", "toolbar_hide_side",
+                "toolbar_config", "toolbar_help", "stool_mount",
+                "stool_mountopen", "stool_eject", "sep_tool1", "sep_tool2",
+                "sep_tool3", "sep_tool4" };
+        child_set = NULL;       // set to add new toolbar items after
+        for ( i = 0; i < G_N_ELEMENTS( old_toolbar_sets ); i++ )
+        {
+            old_set = xset_is( old_toolbar_sets[i] );
+            if ( !old_set )
+                continue;
+            set = old_set;
+            if ( set->next && !child_set )
+            {
+                set = xset_is( set->next );
+                if ( !set )
+                    continue;
+
+                // Make "Moved" submenu in Tools containing set to move
+                menu_set = xset_custom_new();
+                menu_set->menu_label = g_strdup( "Lost+Found 1.0.2" );
+                menu_set->menu_style = XSET_MENU_SUBMENU;
+                menu_set->child = g_strdup( set->name );
+                g_free( set->parent );
+                set->parent = g_strdup( menu_set->name );
+                g_free( set->prev );
+                set->prev = NULL;
+                g_free( old_set->next );
+                old_set->next = NULL;
+                child_set = set;
+                
+                // Add to Tools menu
+                set = xset_get( "main_tool" );
+                if ( !set->child )
+                {
+                    // no child in Tools menu - add Moved menu as child
+                    menu_set->parent = g_strdup( "main_tool" );
+                    set->child = g_strdup( menu_set->name );
+                }
+                else
+                {
+                    // add Moved menu after last child in Tools menu
+                    set = xset_get( set->child );
+                    while ( set->next )
+                        set = xset_get( set->next );
+                    xset_custom_insert_after( set, menu_set );
+                }
+            }
+            if ( child_set )
+            {
+                // Walk to last item
+                while ( child_set->next )
+                    child_set = xset_get( child_set->next );
+                // Move any attached
+                if ( old_set->next )
+                    move_attached_to_builtin( old_set->name, child_set->name );
+            }
+            // remove old set from session file
+            xset_free( old_set );
+        }
+    }
+    if ( ver < 33 )  // also < 1.0.2
+    {
+        // Default Mount ISO file handler has new Run As Task option enabled
+        set = xset_is( "hand_f_+iso" );
+        if ( set && !set->disable )  // user changed default handler
+            set->keep_terminal = XSET_B_TRUE;
     }
 
     // add default bookmarks
@@ -1274,7 +1558,7 @@ char* save_settings( gpointer main_window_ptr )
     FMMainWindow* main_window;
 //printf("save_settings\n");
 
-    xset_set( "config_version", "s", "31" );
+    xset_set( "config_version", "s", CONFIG_VERSION );
 
     // save tabs
     gboolean save_tabs = xset_get_b( "main_save_tabs" );
@@ -2165,7 +2449,7 @@ XSet* xset_new( const char* name )
     set->title = NULL;
     set->next = NULL;
     set->context = NULL;
-    set->tool = XSET_B_UNSET;
+    set->tool = XSET_TOOL_NOT;
     set->lock = TRUE;
     set->plugin = FALSE;
     
@@ -2364,15 +2648,12 @@ gboolean xset_get_bool_panel( int panel, const char* name, const char* var )
     return bool;
 }
 
-int xset_get_int( const char* name, const char* var )
+int xset_get_int_set( XSet* set, const char* var )
 {
-    XSet* set = xset_get( name );
-    char* varstring = NULL;
-    if ( !strcmp( var, "key" ) )
-        return set->key;
-    else if ( !strcmp( var, "keymod" ) )
-        return set->keymod;
-    else if ( !strcmp( var, "x" ) )
+    if ( !set || !var )
+        return -1;
+    const char* varstring = NULL;
+    if ( !strcmp( var, "x" ) )
         varstring = set->x;
     else if ( !strcmp( var, "y" ) )
         varstring = set->y;
@@ -2380,9 +2661,19 @@ int xset_get_int( const char* name, const char* var )
         varstring = set->z;
     else if ( !strcmp( var, "s" ) )
         varstring = set->s;
+    else if ( !strcmp( var, "key" ) )
+        return set->key;
+    else if ( !strcmp( var, "keymod" ) )
+        return set->keymod;
     if ( !varstring )
         return 0;
     return atoi( varstring );
+}
+
+int xset_get_int( const char* name, const char* var )
+{
+    XSet* set = xset_get( name );
+    return xset_get_int_set( set, var );
 }
 
 int xset_get_int_panel( int panel, const char* name, const char* var )
@@ -2515,7 +2806,7 @@ static void xset_write_set( FILE* file, XSet* set )
         fprintf( file, "%s-cxt=%s\n", set->name, set->context );
     if ( set->b != XSET_B_UNSET )
         fprintf( file, "%s-b=%d\n", set->name, set->b );
-    if ( set->tool != XSET_B_UNSET )
+    if ( set->tool != XSET_TOOL_NOT )
         fprintf( file, "%s-tool=%d\n", set->name, set->tool );
     if ( !set->lock )
     {
@@ -2592,14 +2883,15 @@ void xset_parse( char* line )
             xset_set_set( set_last, var, value );
         else
         {
-            set_last = xset_set( name, var, value );
+            set_last = xset_get( name );
             if ( set_last->lock )
                 set_last->lock = FALSE;
+            xset_set_set( set_last, var, value );
         }
     }
     else
     {
-        // normal
+        // normal (lock)
         if ( !strcmp( set_last->name, name ) )
             xset_set_set( set_last, var, value );
         else
@@ -2999,7 +3291,7 @@ gboolean xset_opener( DesktopWindow* desktop, PtkFileBrowser* file_browser,
             }
             
             // valid custom type?
-            int cmd_type = atoi( set->x );
+            int cmd_type = xset_get_int_set( set, "x" );
             if ( cmd_type != XSET_CMD_APP && cmd_type != XSET_CMD_LINE &&
                  cmd_type != XSET_CMD_SCRIPT )
                 continue;
@@ -3037,6 +3329,9 @@ gboolean xset_opener( DesktopWindow* desktop, PtkFileBrowser* file_browser,
             found = TRUE;
             set->browser = file_browser;
             set->desktop = desktop;
+            char* clean = clean_label( set->menu_label, FALSE, FALSE );
+            printf( _("\nSelected Menu Item '%s' As Handler\n"), clean );
+            g_free( clean );
             xset_menu_cb( NULL, set );  // also does custom activate
         }
     }
@@ -3414,7 +3709,25 @@ GtkWidget* xset_get_image( const char* icon, int icon_size )
     if ( stockid = icon_stock_to_id( icon ) )
         image = gtk_image_new_from_stock( stockid, icon_size );
     else if ( icon[0] == '/' )
-        image = gtk_image_new_from_file( icon );
+    {
+        // icon is full path to image file
+        // get real icon size from gtk icon size
+        int icon_w, icon_h;
+        gtk_icon_size_lookup_for_settings(
+                                gtk_settings_get_default(),
+                                icon_size,
+                                &icon_w, &icon_h );
+        int real_icon_size = icon_w > icon_h ? icon_w : icon_h;
+        GtkIconTheme* icon_theme = gtk_icon_theme_get_default();
+        GdkPixbuf* pixbuf = vfs_load_icon( icon_theme, icon, real_icon_size );
+        if ( pixbuf )
+        {
+            image = gtk_image_new_from_pixbuf( pixbuf );
+            g_object_unref( pixbuf );
+        }
+        else
+            image = gtk_image_new_from_file( icon );
+    }
     else
         image = gtk_image_new_from_icon_name( icon, icon_size );
     return image;
@@ -3455,13 +3768,21 @@ GtkWidget* xset_new_menuitem( const char* label, const char* icon )
     GtkWidget* image = NULL;
     GtkWidget* item;
     
-    if ( !icon || icon[0] == '\0' )
-        return gtk_image_menu_item_new_with_mnemonic( label );
+    if ( label && strstr( label, "\\_" ) )
+    {
+        // allow escape of underscore
+        char* str = clean_label( label, FALSE, FALSE );
+        item = gtk_image_menu_item_new_with_label( str );
+        g_free( str );
+    }
+    else
+        item = gtk_image_menu_item_new_with_mnemonic( label );
+    if ( !( icon && icon[0] ) )
+        return item;
     image = xset_get_image( icon, GTK_ICON_SIZE_MENU );
     if ( !image )
-        return gtk_image_menu_item_new_with_mnemonic( label );
-    item = gtk_image_menu_item_new_with_mnemonic( label );
-    gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM(item), image );
+        return item;
+    gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( item ), image );
     return item;
 }
 
@@ -3499,6 +3820,139 @@ void xset_design_activate_item( GtkMenuItem* item, XSet* set )
     }
 }
 */
+
+char* xset_custom_get_app_name_icon( XSet* set, GdkPixbuf** icon, int icon_size )
+{
+    char* menu_label = NULL;
+    VFSAppDesktop* app = NULL;
+    GdkPixbuf* icon_new = NULL;
+    GtkIconTheme* icon_theme = gtk_icon_theme_get_default();
+
+    if ( !set->lock && xset_get_int_set( set, "x" ) == XSET_CMD_APP )
+    {
+        if ( set->z && g_str_has_suffix( set->z, ".desktop" ) &&
+                                ( app = vfs_app_desktop_new( set->z ) ) )
+        {
+            if ( !( set->menu_label && set->menu_label[0] ) )
+                menu_label = g_strdup( vfs_app_desktop_get_disp_name( app ) );
+            if ( set->icon )
+                icon_new = vfs_load_icon( icon_theme, set->icon, icon_size );
+            if ( !icon_new )
+                icon_new = vfs_app_desktop_get_icon( app, icon_size, TRUE );
+            if ( app )
+                vfs_app_desktop_unref( app );
+        }
+        else
+        {
+            // not a desktop file - probably executable
+            if ( set->icon )
+                icon_new = vfs_load_icon( icon_theme, set->icon, icon_size );
+            if ( !icon_new && set->z )
+            {
+                // guess icon name from executable name
+                char* name = g_path_get_basename( set->z );
+                if ( name && name[0] )
+                    icon_new = vfs_load_icon( icon_theme, name, icon_size );
+                g_free( name );
+            }
+        }
+        
+        if ( !icon_new )
+        {
+            // fallback
+            icon_new = vfs_load_icon( icon_theme, "gtk-execute", icon_size );
+        }
+    }
+    else
+        g_warning( "xset_custom_get_app_name_icon set is not XSET_CMD_APP" );
+    
+    if ( icon )
+        *icon = icon_new;
+    else if ( icon_new )
+        g_object_unref( icon_new );
+    
+    if ( !menu_label )
+    {
+        menu_label = set->menu_label && set->menu_label[0] ?
+                                        g_strdup( set->menu_label ) :
+                                        g_strdup( set->z );
+        if ( !menu_label )
+            menu_label = g_strdup( "Application" );
+    }
+    return menu_label;
+}
+
+GdkPixbuf* xset_custom_get_bookmark_icon( XSet* set, int icon_size )
+{
+    GdkPixbuf* icon_new = NULL;
+    const char* icon1 = NULL;
+    const char* icon2 = NULL;
+    const char* icon3 = NULL;
+    GtkIconTheme* icon_theme = gtk_icon_theme_get_default();
+
+    if ( !book_icon_set_cached )
+        book_icon_set_cached = xset_get( "book_icon" );
+
+    if ( !set->lock && xset_get_int_set( set, "x" ) == XSET_CMD_BOOKMARK )
+    {
+        if ( !set->icon && ( set->z && ( strstr( set->z, ":/" ) ||
+                         g_str_has_prefix( set->z, "//" ) ) ) )
+        {
+            // a bookmarked URL - show network icon
+            XSet* set2 = xset_get( "dev_icon_network" );
+            if ( set2->icon )
+                icon1 = set2->icon;
+            else
+                icon1 = "gtk-network";
+            icon2 = "user-bookmarks";
+            icon3 = "gnome-fs-directory";
+        }
+        else if ( set->z && ( strstr( set->z, ":/" ) ||
+                         g_str_has_prefix( set->z, "//" ) ) )
+        {
+            // a bookmarked URL - show custom or network icon
+            icon1 = set->icon;
+            XSet* set2 = xset_get( "dev_icon_network" );
+            if ( set2->icon )
+                icon2 = set2->icon;
+            else
+                icon2 = "gtk-network";
+            icon3 = "user-bookmarks";
+        }
+        else if ( !set->icon && book_icon_set_cached->icon )
+        {
+            icon1 = book_icon_set_cached->icon;
+            icon2 = "user-bookmarks";
+            icon3 = "gnome-fs-directory";
+        }
+        else if ( set->icon && book_icon_set_cached->icon )
+        {
+            icon1 = set->icon;
+            icon2 = book_icon_set_cached->icon;
+            icon3 = "user-bookmarks";
+        }
+        else if ( set->icon )
+        {
+            icon1 = set->icon;
+            icon2 = "user-bookmarks";
+            icon3 = "gnome-fs-directory";
+        }
+        else
+        {
+            icon1 = "user-bookmarks";
+            icon2 = "gnome-fs-directory";
+            icon3 = "gtk-directory";
+        }
+        icon_new = vfs_load_icon( icon_theme, icon1, icon_size );
+        if ( !icon_new )
+            icon_new = vfs_load_icon( icon_theme, icon2, icon_size );
+        if ( !icon_new )
+            icon_new = vfs_load_icon( icon_theme, icon3, icon_size );
+    }
+    else
+        g_warning( "xset_custom_get_bookmark_icon set is not XSET_CMD_BOOKMARK" );
+    return icon_new;
+}
 
 GtkWidget* xset_add_menuitem( DesktopWindow* desktop, PtkFileBrowser* file_browser,
                                     GtkWidget* menu, GtkAccelGroup *accel_group,
@@ -3557,8 +4011,8 @@ GtkWidget* xset_add_menuitem( DesktopWindow* desktop, PtkFileBrowser* file_brows
         else if ( set->menu_style )
         {
             if ( set->menu_style == XSET_MENU_CHECK &&
-                        !( !set->lock && set->x &&
-                           ( atoi( set->x ) > XSET_CMD_SCRIPT ) ) ) // app or book
+                        !( !set->lock &&
+                           ( xset_get_int_set( set, "x" ) > XSET_CMD_SCRIPT ) ) ) // app or book
             {
                 item = gtk_check_menu_item_new_with_mnemonic( set->menu_label );
                 gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
@@ -3611,101 +4065,45 @@ GtkWidget* xset_add_menuitem( DesktopWindow* desktop, PtkFileBrowser* file_brows
         }
         if ( !item )
         {
-            int cmd_type = set->x ? atoi( set->x ) : -1;
-            if ( !set->lock && cmd_type == XSET_CMD_APP && set->z &&
-                        ( !( set->menu_label && set->menu_label[0] )
-                          || !( icon_name && icon_name[0] ) ) &&
-                                    g_str_has_suffix( set->z, ".desktop" ) )
+            // get menu icon size
+            int icon_w, icon_h;
+            gtk_icon_size_lookup_for_settings(
+                                    gtk_settings_get_default(),
+                                    GTK_ICON_SIZE_MENU,
+                                    &icon_w, &icon_h );
+            int icon_size = icon_w > icon_h ? icon_w : icon_h;
+            
+            GdkPixbuf* app_icon = NULL;
+            int cmd_type = xset_get_int_set( set, "x" );
+            if ( !set->lock && cmd_type == XSET_CMD_APP )
             {
-                // Application - get name and/or icon
-                const char* menu_label = set->menu_label;
-                VFSAppDesktop* app = vfs_app_desktop_new( set->z );
-                GdkPixbuf* app_icon = NULL;
-                if ( app )
-                {
-                    if ( !( menu_label && menu_label[0] ) )
-                        menu_label = vfs_app_desktop_get_disp_name( app );
-                    if ( !( icon_name && icon_name[0] ) )
-                    {
-                        int icon_w, icon_h;
-                        gtk_icon_size_lookup_for_settings(
-                                                gtk_settings_get_default(),
-                                                GTK_ICON_SIZE_MENU,
-                                                &icon_w, &icon_h );
-                        app_icon = vfs_app_desktop_get_icon( app,
-                                    icon_w > icon_h ? icon_w : icon_h, TRUE );
-                        if ( !app_icon )
-                            icon_name = "gtk-execute";
-                    }
-                }
-                item = xset_new_menuitem( menu_label && menu_label[0] ?
-                                                        menu_label : set->z,
-                                icon_name && icon_name[0] ? icon_name : NULL );
-                if ( app_icon )
-                {
-                    GtkWidget* app_img = gtk_image_new_from_pixbuf( app_icon );
-                    if ( app_img )
-                        gtk_image_menu_item_set_image(
-                                        GTK_IMAGE_MENU_ITEM( item ), app_img );
-                    g_object_unref( app_icon );
-                }
-                if ( app )
-                    vfs_app_desktop_unref( app );
+                // Application
+                char* menu_label = xset_custom_get_app_name_icon( set,
+                                                    &app_icon, icon_size );
+                item = xset_new_menuitem( menu_label, NULL );
+                g_free( menu_label );
             }
-            else if ( !set->lock && cmd_type == XSET_CMD_BOOKMARK && set->z &&
-                                    !( icon_name && icon_name[0] ) )
+            else if ( !set->lock && cmd_type == XSET_CMD_BOOKMARK )
             {
-                // Bookmark - get default icon
+                // Bookmark
                 item = xset_new_menuitem( 
                             set->menu_label && set->menu_label[0] ?
                             set->menu_label : set->z, NULL );
-                GtkWidget* folder_image = NULL;
-                XSet* book_icon_set;
-                if ( set->z && ( strstr( set->z, ":/" ) ||
-                                 g_str_has_prefix( set->z, "//" ) ) )
-                {
-                    // a bookmarked URL - show network icon
-                    book_icon_set = xset_get( "dev_icon_network" );
-                    if ( book_icon_set->icon )
-                        folder_image = xset_get_image( book_icon_set->icon,
-                                                       GTK_ICON_SIZE_MENU );
-                    else
-                        folder_image = xset_get_image( "gtk-network",
-                                                       GTK_ICON_SIZE_MENU );
-                }
-                else
-                {
-                    if ( book_icon_set_cached )
-                        book_icon_set = book_icon_set_cached;
-                    else
-                        book_icon_set = book_icon_set_cached =
-                                                        xset_get( "book_icon" );
-                    if ( book_icon_set->icon )
-                        folder_image = xset_get_image( book_icon_set->icon,
-                                                            GTK_ICON_SIZE_MENU );
-                }
-                if ( !folder_image )
-                    folder_image = xset_get_image( "gtk-directory",
-                                                        GTK_ICON_SIZE_MENU );
-                gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( item ),
-                                                        folder_image );
+                app_icon = xset_custom_get_bookmark_icon( set, icon_size );
             }
-            else if ( !set->lock && cmd_type > XSET_CMD_SCRIPT && set->z &&
-                            !( set->menu_label && set->menu_label[0] ) )
-                // An app or bookmark with no name
-                item = xset_new_menuitem( set->z, icon_name );
             else
                 item = xset_new_menuitem( set->menu_label, icon_name );
+
+            if ( app_icon )
+            {
+                GtkWidget* app_img = gtk_image_new_from_pixbuf( app_icon );
+                if ( app_img )
+                    gtk_image_menu_item_set_image(
+                                    GTK_IMAGE_MENU_ITEM( item ), app_img );
+                g_object_unref( app_icon );
+            }
         }
-            
-        if ( set->tool == XSET_B_TRUE )
-        {
-            char* ml = g_strdup_printf( "%s *",
-                            gtk_menu_item_get_label( GTK_MENU_ITEM( item ) ) );
-            gtk_menu_item_set_label( GTK_MENU_ITEM( item ), ml );
-            g_free( ml );
-        }
-        
+                
         set->desktop = desktop;
         set->browser = file_browser;
         g_object_set_data( G_OBJECT( item ), "menu", menu );
@@ -4184,12 +4582,7 @@ XSet* xset_custom_copy( XSet* set, gboolean copy_next, gboolean delete_set )
         newset->icon = g_strdup( mset->icon );
 
     xset_custom_copy_files( set, newset );
-    if ( set->tool )
-    {
-        newset->tool = XSET_B_TRUE;
-        if ( !newset->icon )
-            newset->icon = g_strdup_printf( "gtk-execute" );
-    }
+    newset->tool = set->tool;
 
     if ( set->menu_style == XSET_MENU_SUBMENU && set->child )
     {
@@ -4621,13 +5014,9 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
                     do
                     {
                         if ( plugin_data->set->tool )
-                        {
-                            set->tool = XSET_B_TRUE;
-                            if ( !set->icon )
-                                set->icon = g_strdup_printf( "gtk-execute" );
-                        }
+                            set->tool = XSET_TOOL_CUSTOM;
                         else
-                            set->tool = XSET_B_UNSET;
+                            set->tool = XSET_TOOL_NOT;
                         if ( !set->next )
                             break;
                     }
@@ -4668,13 +5057,9 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
                     }
                     plugin_data->set->next = g_strdup( newset->name );
                     if ( plugin_data->set->tool )
-                    {
-                        newset->tool = XSET_B_TRUE;
-                        if ( !newset->icon )
-                            newset->icon = g_strdup_printf( "gtk-execute" );
-                    }
+                        newset->tool = XSET_TOOL_CUSTOM;
                     else
-                        newset->tool = XSET_B_UNSET;
+                        newset->tool = XSET_TOOL_NOT;
                     main_window_bookmark_changed( newset->name );
                 }
                 else
@@ -5239,6 +5624,13 @@ void xset_custom_activate( GtkWidget* item, XSet* set )
     char* value = NULL;
     XSet* mset;
 
+    // builtin toolitem?
+    if ( set->tool > XSET_TOOL_CUSTOM )
+    {
+        xset_builtin_tool_activate( set->tool, set, NULL );
+        return;
+    }
+    
     // plugin?
     mset = xset_get_plugin_mirror( set );
 
@@ -5262,13 +5654,13 @@ void xset_custom_activate( GtkWidget* item, XSet* set )
     
     // name
     if ( !set->plugin &&
-            !( !set->lock && set->x && 
-                        atoi( set->x ) > XSET_CMD_SCRIPT /*app or bookmark*/) )
+            !( !set->lock &&
+                        xset_get_int_set( set, "x" ) > XSET_CMD_SCRIPT /*app or bookmark*/) )
     {
         if ( !( set->menu_label && set->menu_label[0] )
                 || ( set->menu_label && !strcmp( set->menu_label, _("New _Command") ) ) )
         {
-            if ( !xset_text_dialog( parent, _("Change Menu Name"), NULL, FALSE, _(enter_menu_name_new),
+            if ( !xset_text_dialog( parent, _("Change Item Name"), NULL, FALSE, _(enter_menu_name_new),
                                             NULL, set->menu_label, &set->menu_label,
                                             NULL, FALSE, "#designmode-designmenu-new" ) )
                 return;
@@ -5283,11 +5675,16 @@ void xset_custom_activate( GtkWidget* item, XSet* set )
     else
         value = g_strdup( set->menu_label );
 
+    // is not activatable command?
+    if ( !( !set->lock && set->menu_style < XSET_MENU_SUBMENU ) )
+    {
+        xset_item_prop_dlg( xset_context, set, 0 );
+        return;
+    }
+    
     // command
     gboolean app_no_sync = FALSE;
-    if ( !set->x )
-        set->x = g_strdup( "0" );
-    int cmd_type = atoi( set->x );
+    int cmd_type = xset_get_int_set( set, "x" );
     if ( cmd_type == XSET_CMD_LINE )
     {
         // line
@@ -5566,15 +5963,141 @@ printf("    set->next = %s\n", set->next );
     if ( !set->prev && !set->next && set->parent )
     {
         set_parent = xset_get( set->parent );
-        set_child = xset_custom_new();
+        if ( set->tool )
+            set_child = xset_new_builtin_toolitem( XSET_TOOL_HOME );
+        else
+        {
+            set_child = xset_custom_new();
+            set_child->menu_label = g_strdup( _("New _Command") );
+        }
         if ( set_parent->child )
             g_free( set_parent->child );
         set_parent->child = g_strdup( set_child->name );
         set_child->parent = g_strdup( set->parent );
-        set_child->menu_label = g_strdup( _("New _Command") );
         return set_child;
     }
     return NULL;
+}
+
+#if 0
+void xset_custom_insert_before( XSet* target, XSet* set )
+{
+    XSet* target_prev;
+    XSet* target_next;
+    XSet* target_parent;
+    
+    if ( !set )
+    {
+        g_warning( "xset_custom_insert_before set == NULL" );
+        return;
+    }
+    if ( !target )
+    {
+        g_warning( "xset_custom_insert_before target_set == NULL" );
+        return;
+    }
+
+    if ( target->prev )
+    {
+        target_prev = xset_get( target->prev );
+        g_free( set->prev );
+        g_free( set->next );
+        set->prev = target->prev;       // steal string
+        set->next = target_prev->next;  // steal string or NULL
+        // replace stolen strings
+        target->prev = g_strdup( set->name );
+        target_prev->next = g_strdup( set->name );
+        
+        if ( set->parent )
+        {
+            g_free( set->parent );
+            set->parent = NULL;
+        }
+    }
+    else if ( target->parent )
+    {
+        // target is first item in submenu
+        target_parent = xset_get( target->parent );
+        g_free( set->parent );
+        set->parent = target->parent;       // steal string
+        target->parent = NULL;
+        target->prev = g_strdup( set->name );
+        g_free( set->next );
+        set->next = target_parent->child;   // steal string
+        target_parent->child = g_strdup( set->name );
+        
+        if ( !set->next )
+            set->next = g_strdup( target->name );  // failsafe
+        if ( set->prev )
+        {
+            g_free( set->prev );
+            set->prev = NULL;
+        }
+    }
+    else
+    {
+        g_warning( "xset_custom_insert_before target has no prev or parent" );
+        return;
+    }
+
+    if ( target->tool )
+    {
+        if ( set->tool < XSET_TOOL_CUSTOM )
+            set->tool = XSET_TOOL_CUSTOM;
+    }
+    else
+    {
+        if ( set->tool > XSET_TOOL_CUSTOM )
+            g_warning( "xset_custom_insert_before builtin tool inserted after non-tool" );
+        set->tool = XSET_TOOL_NOT;
+    }
+}
+#endif
+
+void xset_custom_insert_after( XSet* target, XSet* set )
+{   // inserts single set 'set', no next
+    XSet* target_next;
+
+    if ( !set )
+    {
+        g_warning( "xset_custom_insert_after set == NULL" );
+        return;
+    }
+    if ( !target )
+    {
+        g_warning( "xset_custom_insert_after target == NULL" );
+        return;
+    }
+    
+    if ( set->parent )
+    {
+        g_free( set->parent );
+        set->parent = NULL;
+    }
+    
+    g_free( set->prev );
+    g_free( set->next );
+    set->prev = g_strdup( target->name );
+    set->next = target->next;  // steal string
+    if ( target->next )
+    {
+        target_next = xset_get( target->next );
+        if ( target_next->prev )
+            g_free( target_next->prev );
+        target_next->prev = g_strdup( set->name );
+    }
+    target->next = g_strdup( set->name );
+    if ( target->tool )
+    {
+        if ( set->tool < XSET_TOOL_CUSTOM )
+            set->tool = XSET_TOOL_CUSTOM;
+    }
+    else
+    {
+        if ( set->tool > XSET_TOOL_CUSTOM )
+            g_warning( "xset_custom_insert_after builtin tool inserted after non-tool" );
+        set->tool = XSET_TOOL_NOT;
+    }
 }
 
 gboolean xset_clipboard_in_set( XSet* set )
@@ -5627,7 +6150,6 @@ XSet* xset_custom_new()
     set->task = XSET_B_TRUE;
     set->task_err = XSET_B_TRUE;
     set->task_out = XSET_B_TRUE;
-    set->x = g_strdup_printf( "0" );
     return set;
 }
 
@@ -6151,6 +6673,8 @@ void xset_set_key( GtkWidget* parent, XSet* set )
 
     if ( set->menu_label )
         name = clean_label( set->menu_label, FALSE, TRUE );
+    else if ( set->tool > XSET_TOOL_CUSTOM )
+        name = g_strdup( xset_get_builtin_toolitem_label( set->tool ) );
     else if ( g_str_has_prefix( set->name, "open_all_type_" ) )
     {
         keyset = xset_get( "open_all" );
@@ -6161,7 +6685,7 @@ void xset_set_key( GtkWidget* parent, XSet* set )
     }
     else
         name = g_strdup( "( no name )" );
-    keymsg = g_strdup_printf( _("Press your key combination for menu item '%s' then click Set.  To remove the current key assignment, click Unset."), name );
+    keymsg = g_strdup_printf( _("Press your key combination for item '%s' then click Set.  To remove the current key assignment, click Unset."), name );
     g_free( name );
     if ( parent )
         dlgparent = gtk_widget_get_toplevel( parent );
@@ -6271,11 +6795,13 @@ void xset_design_job( GtkWidget* item, XSet* set )
     GtkWidget* dlg;
     GtkClipboard* clip;
     GtkWidget* parent = NULL;
+    gboolean update_toolbars = FALSE;
     
     parent = gtk_widget_get_toplevel( set->browser ?
                                                 GTK_WIDGET( set->browser ) :
                                                 GTK_WIDGET( set->desktop ) );
     int job = GPOINTER_TO_INT( g_object_get_data( G_OBJECT(item), "job" ) );
+    int cmd_type = xset_get_int_set( set, "x" );
 
 //printf("activate job %d %s\n", job, set->name);    
     switch ( job ) {
@@ -6285,7 +6811,10 @@ void xset_design_job( GtkWidget* item, XSet* set )
     case XSET_JOB_ICON:
         mset = xset_get_plugin_mirror( set );
         char* old_icon = g_strdup( mset->icon );
-        xset_text_dialog( parent, _("Change Icon"), NULL, FALSE, _(icon_desc),
+        // Note: xset_text_dialog uses the title passed to know this is an
+        // icon chooser, so it adds a Choose button.  If you change the title,
+        // change xset_text_dialog.
+        xset_text_dialog( parent, _("Set Icon"), NULL, FALSE, _(icon_desc),
                                             NULL, mset->icon, &mset->icon,
                                             NULL, FALSE,
                                             "#designmode-designmenu-icon" );
@@ -6309,7 +6838,7 @@ void xset_design_job( GtkWidget* item, XSet* set )
         */
         break;
     case XSET_JOB_EDIT:
-        if ( atoi( set->x ) == XSET_CMD_SCRIPT )
+        if ( cmd_type == XSET_CMD_SCRIPT )
         {
             // script
             cscript = xset_custom_get_script( set, !set->plugin );
@@ -6320,7 +6849,7 @@ void xset_design_job( GtkWidget* item, XSet* set )
         }
         break;
     case XSET_JOB_EDIT_ROOT:
-        if ( atoi( set->x ) == XSET_CMD_SCRIPT )
+        if ( cmd_type == XSET_CMD_SCRIPT )
         {
             // script
             cscript = xset_custom_get_script( set, !set->plugin );
@@ -6332,12 +6861,12 @@ void xset_design_job( GtkWidget* item, XSet* set )
         break;
     case XSET_JOB_COPYNAME:
         clip = gtk_clipboard_get( GDK_SELECTION_CLIPBOARD );
-        if ( atoi( set->x ) == XSET_CMD_LINE )
+        if ( cmd_type == XSET_CMD_LINE )
         {
             // line
             gtk_clipboard_set_text ( clip, set->line , -1 );
         }
-        else if ( atoi( set->x ) == XSET_CMD_SCRIPT )
+        else if ( cmd_type == XSET_CMD_SCRIPT )
         {
             // script
             cscript = xset_custom_get_script( set, TRUE );
@@ -6346,7 +6875,7 @@ void xset_design_job( GtkWidget* item, XSet* set )
             gtk_clipboard_set_text ( clip, cscript , -1 );
             g_free( cscript );
         }
-        else if ( atoi( set->x ) == XSET_CMD_APP )
+        else if ( cmd_type == XSET_CMD_APP )
         {
             // custom
             gtk_clipboard_set_text ( clip, set->z , -1 );
@@ -6359,7 +6888,7 @@ void xset_design_job( GtkWidget* item, XSet* set )
             xset_set_set( set, "x", "0" );
         break;
     case XSET_JOB_SCRIPT:
-        xset_set_set( set, "x", "1" ); 
+        xset_set_set( set, "x", "1" );
         cscript = xset_custom_get_script( set, TRUE );
         if ( !cscript )
             break;
@@ -6410,10 +6939,11 @@ void xset_design_job( GtkWidget* item, XSet* set )
         if ( job == XSET_JOB_COMMAND )
         {
             name = g_strdup_printf( _("New _Command") );
-            if ( !xset_text_dialog( parent, _("Set Menu Name"), NULL, FALSE, _(enter_menu_name_new),
-                                                            NULL, name, &name,
-                                                            NULL, FALSE,
-                                                            "#designmode-designmenu-new" ) )
+            if ( !xset_text_dialog( parent, _("Set Item Name"), NULL, FALSE,
+                                            _(enter_menu_name_new),
+                                            NULL, name, &name,
+                                            NULL, FALSE,
+                                            "#designmode-designmenu-new" ) )
             {
                 g_free( name );
                 break;
@@ -6454,25 +6984,13 @@ void xset_design_job( GtkWidget* item, XSet* set )
             }
             name = g_path_get_basename( file );
         }
+        
+        // add new menu item
         newset = xset_custom_new();
+        xset_custom_insert_after( set, newset );
+
         newset->z = file;
-        newset->prev = g_strdup( set->name );
-        newset->next = set->next;
-        if ( set->next )
-        {
-            set_next = xset_get( set->next );
-            if ( set_next->prev )
-                g_free( set_next->prev );
-            set_next->prev = g_strdup( newset->name );
-        }
-        set->next = g_strdup( newset->name );
         newset->menu_label = name;
-        if ( set->tool )
-        {
-            newset->tool = XSET_B_TRUE;
-            if ( job == XSET_JOB_COMMAND )
-                newset->icon = g_strdup( "gtk-execute" );
-        }
         newset->browser = set->browser;
         newset->desktop = set->desktop;
         if ( job == XSET_JOB_COMMAND )
@@ -6511,34 +7029,17 @@ void xset_design_job( GtkWidget* item, XSet* set )
         name = NULL;
         if ( !xset_text_dialog( parent, _("Set Submenu Name"), NULL, FALSE, _("Enter submenu name:\n\nPrecede a character with an underscore (_) to underline that character as a shortcut key if desired."), NULL, _("New _Submenu"), &name, NULL, FALSE, "#designmode-designmenu-name" ) || !name )
             break;
+
+        // add new submenu
         newset = xset_custom_new();
-        newset->prev = g_strdup( set->name );
-        newset->next = set->next;
-        if ( set->next )
-        {
-            set_next = xset_get( set->next );
-            if ( set_next->prev )
-                g_free( set_next->prev );
-            set_next->prev = g_strdup( newset->name );
-        }
-        set->next = g_strdup( newset->name );
         newset->menu_label = name;
         newset->menu_style = XSET_MENU_SUBMENU;
-        if ( set->tool )
-        {
-            newset->tool = XSET_B_TRUE;
-            newset->icon = g_strdup_printf( "gtk-execute" );
-        }
-        if ( newset->tool )
-            newset->icon = g_strdup_printf( "gtk-execute" );
+        xset_custom_insert_after( set, newset );
+
+        // add submenu child
         childset = xset_custom_new();
         newset->child = g_strdup( childset->name );
         childset->parent = g_strdup( newset->name );
-        if ( set->tool )
-        {
-            childset->tool = XSET_B_TRUE;
-            childset->icon = g_strdup_printf( "gtk-execute" );
-        }
         if ( job == XSET_JOB_SUBMENU_BOOK || xset_is_main_bookmark( set ) )
         {
             // adding new submenu from a bookmark - fill with bookmark
@@ -6557,20 +7058,19 @@ void xset_design_job( GtkWidget* item, XSet* set )
         break;
     case XSET_JOB_SEP:
         newset = xset_custom_new();
-        newset->prev = g_strdup( set->name );
-        newset->next = set->next;
-        if ( set->next )
-        {
-            set_next = xset_get( set->next );
-            if ( set_next->prev )
-                g_free( set_next->prev );
-            set_next->prev = g_strdup( newset->name );
-        }
-        set->next = g_strdup( newset->name );
         newset->menu_style = XSET_MENU_SEP;
-        if ( set->tool )
-            newset->tool = XSET_B_TRUE;
+        xset_custom_insert_after( set, newset );
         main_window_bookmark_changed( newset->name );
+        break;
+    case XSET_JOB_ADD_TOOL:
+        job = GPOINTER_TO_INT( g_object_get_data( G_OBJECT( item ),
+                                                            "tool_type" ) );
+        if ( job < XSET_TOOL_DEVICES || job >= XSET_TOOL_INVALID 
+                                                            || !set->tool )
+            break;
+        newset = xset_new_builtin_toolitem( job );
+        if ( newset )
+            xset_custom_insert_after( set, newset );
         break;
     case XSET_JOB_IMPORT_FILE:
     case XSET_JOB_IMPORT_URL:
@@ -6651,7 +7151,7 @@ void xset_design_job( GtkWidget* item, XSet* set )
 
         // if copy bookmark, put target on real clipboard
         if ( !set->lock && set->z && set->menu_style < XSET_MENU_SUBMENU &&
-                            set->x && atoi( set->x ) == XSET_CMD_BOOKMARK )
+                            xset_get_int_set( set, "x" ) == XSET_CMD_BOOKMARK )
         {
             clip = gtk_clipboard_get( GDK_SELECTION_CLIPBOARD );
             gtk_clipboard_set_text ( clip, set->z , -1 );
@@ -6662,63 +7162,39 @@ void xset_design_job( GtkWidget* item, XSet* set )
     case XSET_JOB_PASTE:
         if ( !set_clipboard )
             break;
+        if ( set_clipboard->tool > XSET_TOOL_CUSTOM && !set->tool )
+            // failsafe - disallow pasting a builtin tool to a menu
+            break;
         if ( clipboard_is_cut )
         {
+            update_toolbars = set_clipboard->tool != XSET_TOOL_NOT;
+            if ( !update_toolbars && set_clipboard->parent )
+            {
+                newset = xset_get( set_clipboard->parent );
+                if ( newset->tool )
+                    // we are cutting the first item in a tool submenu
+                    update_toolbars = TRUE;
+            }
             xset_custom_remove( set_clipboard );
-            g_free( set_clipboard->prev );
-            g_free( set_clipboard->next );
-            set_clipboard->prev = g_strdup( set->name );
-            set_clipboard->next = set->next;  //swap string
-            if ( set->next )
-            {
-                set_next = xset_get( set->next );
-                if ( set_next->prev )
-                    g_free( set_next->prev );
-                set_next->prev = g_strdup( set_clipboard->name );
-            }
-            set->next = g_strdup( set_clipboard->name );
-            if ( set->tool )
-            {
-                set_clipboard->tool = XSET_B_TRUE;
-                if ( !set_clipboard->icon )
-                    set_clipboard->icon = g_strdup_printf( "gtk-execute" );
-            }
-            else
-                set_clipboard->tool = XSET_B_UNSET;
+            xset_custom_insert_after( set, set_clipboard );
+            
             main_window_bookmark_changed( set_clipboard->name );
             set_clipboard = NULL;
 
             if ( !set->lock )
             {
                 // update parent for bookmarks
-                while ( set->prev )
-                    set = xset_get( set->prev );
-                if ( set->parent )
-                    main_window_bookmark_changed( set->parent );
-                set = NULL;
+                newset = set;
+                while ( newset->prev )
+                    newset = xset_get( newset->prev );
+                if ( newset->parent )
+                    main_window_bookmark_changed( newset->parent );
             }
         }
         else
         {
             newset = xset_custom_copy( set_clipboard, FALSE, FALSE );
-            newset->prev = g_strdup( set->name );
-            newset->next = set->next;
-            if ( set->next )
-            {
-                set_next = xset_get( set->next );
-                if ( set_next->prev )
-                    g_free( set_next->prev );
-                set_next->prev = g_strdup( newset->name );
-            }
-            set->next = g_strdup( newset->name );
-            if ( set->tool )
-            {
-                newset->tool = XSET_B_TRUE;
-                if ( !newset->icon )
-                    newset->icon = g_strdup_printf( "gtk-execute" );
-            }
-            else
-                newset->tool = XSET_B_UNSET;
+            xset_custom_insert_after( set, newset );
             main_window_bookmark_changed( newset->name );
         }
         break;
@@ -6734,8 +7210,8 @@ void xset_design_job( GtkWidget* item, XSet* set )
         else
         {
             if ( !set->lock && set->z && set->menu_style < XSET_MENU_SUBMENU &&
-                            set->x && ( atoi( set->x ) == XSET_CMD_BOOKMARK ||
-                                        atoi( set->x ) == XSET_CMD_APP ) )
+                                    ( cmd_type == XSET_CMD_BOOKMARK ||
+                                      cmd_type == XSET_CMD_APP ) )
                 name = g_strdup( set->z );
             else
                 name = g_strdup( _("( no name )") );
@@ -6753,10 +7229,12 @@ void xset_design_job( GtkWidget* item, XSet* set )
         g_free( name );
         gboolean is_bookmark_or_app = !set->lock &&
                         set->menu_style < XSET_MENU_SUBMENU &&
-                        set->x && ( atoi( set->x ) == XSET_CMD_BOOKMARK ||
-                                    atoi( set->x ) == XSET_CMD_APP );                                    
-        if ( set->menu_style != XSET_MENU_SEP && !app_settings.no_confirm
-                                              && !is_bookmark_or_app )
+                                  ( cmd_type == XSET_CMD_BOOKMARK ||
+                                    cmd_type == XSET_CMD_APP ) &&
+                        set->tool <= XSET_TOOL_CUSTOM;
+        if ( set->menu_style != XSET_MENU_SEP && !app_settings.no_confirm &&
+                                            !is_bookmark_or_app &&
+                                            set->tool <= XSET_TOOL_CUSTOM )
         {
             if ( parent )
                 dlgparent = gtk_widget_get_toplevel( parent );
@@ -6783,6 +7261,12 @@ void xset_design_job( GtkWidget* item, XSet* set )
                                             && xset_is_main_bookmark( set ) )
             job = XSET_JOB_REMOVE_BOOK;
         
+        if ( set->parent && ( set_next = xset_is( set->parent ) ) &&
+                    set_next->tool == XSET_TOOL_CUSTOM &&
+                    set_next->menu_style == XSET_MENU_SUBMENU )
+            // this set is first item in custom toolbar submenu
+            update_toolbars = TRUE;
+        
         childset = xset_custom_remove( set );
         
         if ( childset && job == XSET_JOB_REMOVE_BOOK )
@@ -6791,11 +7275,19 @@ void xset_design_job( GtkWidget* item, XSet* set )
             folder = set->browser ?
                         (char*)ptk_file_browser_get_cwd( set->browser ) :
                         (char*)vfs_get_desktop_dir();
+            g_free( childset->menu_label );
             childset->menu_label = g_path_get_basename( folder );
             childset->z = g_strdup( folder );
             childset->x = g_strdup_printf( "%d", XSET_CMD_BOOKMARK );
             childset->task = childset->task_err = childset->task_out =
                                         childset->keep_terminal = XSET_B_UNSET;
+        }
+        else if ( set->tool )
+        {
+            update_toolbars = TRUE;
+            g_free( name );
+            g_free( prog );
+            name = prog = NULL;
         }
         else
         {
@@ -6808,13 +7300,14 @@ void xset_design_job( GtkWidget* item, XSet* set )
 
         if ( prog )
             main_window_bookmark_changed( prog );
-        else
+        else if ( name )
             main_window_bookmark_changed( name );        
         g_free( name );
         g_free( prog );
         break;
     case XSET_JOB_EXPORT:
-        if ( !set->lock || !g_strcmp0( set->name, "main_book" ) )
+        if ( ( !set->lock || !g_strcmp0( set->name, "main_book" ) ) &&
+                                        set->tool <= XSET_TOOL_CUSTOM )
             xset_custom_export( parent, set->browser, set );
         break;
     case XSET_JOB_NORMAL:
@@ -6852,18 +7345,25 @@ void xset_design_job( GtkWidget* item, XSet* set )
 
         // is a bookmark or app?
         if ( !set->lock && set->menu_style < XSET_MENU_SUBMENU &&
-                        set->x && ( atoi( set->x ) == XSET_CMD_BOOKMARK ||
-                                    atoi( set->x ) == XSET_CMD_APP ) )
+                                  ( cmd_type == XSET_CMD_BOOKMARK ||
+                                    cmd_type == XSET_CMD_APP ) )
         {
             // is a bookmark or app so show manual
             xset_show_help( dlgparent, NULL,
                     job == XSET_JOB_HELP_BOOK ? "#gui-book" : "#designmode" );
+        }
+        else if ( set->tool > XSET_TOOL_CUSTOM )
+        {
+            // is a builtin tool item so show manual
+            xset_show_help( dlgparent, NULL, "#designmode-toolbars" );
         }
         else
             // show set-specific help
             xset_show_help( dlgparent, set, NULL );
         break;
     case XSET_JOB_BROWSE_FILES:
+        if ( set->tool > XSET_TOOL_CUSTOM )
+            break;
         if ( set->plugin )
         {
             folder = g_build_filename( set->plug_dir, "files", NULL );
@@ -6907,6 +7407,8 @@ void xset_design_job( GtkWidget* item, XSet* set )
         }
         break;
     case XSET_JOB_BROWSE_DATA:
+        if ( set->tool > XSET_TOOL_CUSTOM )
+            break;
         if ( set->plugin )
         {
             mset = xset_get_plugin_mirror( set );
@@ -7015,19 +7517,24 @@ void xset_design_job( GtkWidget* item, XSet* set )
         else
             mset->scroll_lock = XSET_B_TRUE;
         break;
-    case XSET_JOB_SHOW:
-        if ( gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM( item ) ) )
-            set->tool = XSET_B_TRUE;
-        else
-            set->tool = XSET_B_FALSE;
+    case XSET_JOB_TOOLTIPS:
+        set_next = xset_get_panel( 1, "tool_l" );
+        set_next->b = set_next->b == XSET_B_TRUE ? XSET_B_UNSET : XSET_B_TRUE;
         break;
     }
 
-    //if ( set->plugin )
-    //    main_window_on_plugins_change( NULL );
-
-    if ( set && !set->lock )
+    if ( set && ( !set->lock || !strcmp( set->name, "main_book" ) ) )
+    {
         main_window_bookmark_changed( set->name );
+        if ( set->parent && ( set_next = xset_is( set->parent ) ) &&
+                    set_next->tool == XSET_TOOL_CUSTOM &&
+                    set_next->menu_style == XSET_MENU_SUBMENU )
+            // this set is first item in custom toolbar submenu
+            update_toolbars = TRUE;
+    }
+    
+    if ( ( set && !set->lock && set->tool ) || update_toolbars )
+        main_window_rebuild_all_toolbars( set ? set->browser : NULL );
     
     // autosave
     xset_autosave( FALSE, FALSE );
@@ -7057,45 +7564,14 @@ gboolean xset_job_is_valid( XSet* set, int job )
         if ( !set->plugin_top || strstr( set->plug_dir, "/included/" ) )
             no_remove = TRUE;
     }
-    
-    // only first level custom tool submenu is executable 
-    if ( set->tool && !set->lock && set->menu_style == XSET_MENU_SUBMENU )
-    {
-        sett = set;
-        while ( sett->prev )
-        {
-            sett = xset_get( sett->prev );
-            if ( sett->lock )
-            {
-                toolexecsub = TRUE;
-                break;
-            }
-        }
-        if ( !toolexecsub && sett->parent )
-        {
-            sett = xset_get( sett->parent );
-            if ( sett->lock )
-                toolexecsub = TRUE;
-        }
-    }
-
-    if ( set == set_clipboard )
-    {
-        if ( clipboard_is_cut )
-            // don't allow cut paste to self
-            no_paste = TRUE;
-    }
-    else if ( set_clipboard && set_clipboard->menu_style == XSET_MENU_SUBMENU )
-        // don't allow paste of submenu to self or below
-        no_paste = xset_clipboard_in_set( set );
-    
+        
     // control open_all item
     if ( g_str_has_prefix( set->name, "open_all_type_" ) )
         open_all = TRUE;
 
     switch ( job ) {
     case XSET_JOB_KEY:
-        return ( set->menu_style < XSET_MENU_SUBMENU || toolexecsub );
+        return set->menu_style < XSET_MENU_SUBMENU;
     case XSET_JOB_ICON:
         return ( ( set->menu_style == XSET_MENU_NORMAL 
                                         || set->menu_style == XSET_MENU_STRING 
@@ -7104,8 +7580,7 @@ gboolean xset_job_is_valid( XSet* set, int job )
                                         || set->menu_style == XSET_MENU_SUBMENU
                                         || set->tool ) && !open_all );
     case XSET_JOB_EDIT:
-        return ( !set->lock && (
-                        set->menu_style < XSET_MENU_SUBMENU || toolexecsub ) );
+        return !set->lock && set->menu_style < XSET_MENU_SUBMENU;
     case XSET_JOB_COMMAND:
         return !set->plugin;
     case XSET_JOB_CUT:
@@ -7113,9 +7588,20 @@ gboolean xset_job_is_valid( XSet* set, int job )
     case XSET_JOB_COPY:
          return !set->lock;
     case XSET_JOB_PASTE:
-        return ( set_clipboard && !no_paste && !set->plugin 
-                        && !( set->tool && set_clipboard->menu_style ==
-                                                    XSET_MENU_SUBMENU ) );
+        if ( !set_clipboard )
+            no_paste = TRUE;
+        else if ( set->plugin )
+            no_paste = TRUE;
+        else if ( set == set_clipboard && clipboard_is_cut )
+            // don't allow cut paste to self
+            no_paste = TRUE;
+        else if ( set_clipboard->tool > XSET_TOOL_CUSTOM && !set->tool )
+            // don't allow paste of builtin tool item to menu
+            no_paste = TRUE;
+        else if ( set_clipboard->menu_style == XSET_MENU_SUBMENU )
+            // don't allow paste of submenu to self or below
+            no_paste = xset_clipboard_in_set( set );
+        return !no_paste;
     case XSET_JOB_REMOVE:
         return ( !set->lock && !no_remove );
     //case XSET_JOB_CONTEXT:
@@ -7245,6 +7731,9 @@ gboolean xset_design_menu_keypress( GtkWidget* widget, GdkEventKey* event,
             case XSET_JOB_HELP_NEW:
                 help = "#designmode-designmenu-bookmark";
                 break;
+            case XSET_JOB_HELP_ADD:
+                help = "#designmode-designmenu-add";
+                break;
             case XSET_JOB_PROP:
                 help = "#designmode-props";
                 break;
@@ -7281,8 +7770,8 @@ gboolean xset_design_menu_keypress( GtkWidget* widget, GdkEventKey* event,
             case XSET_JOB_SCROLL:
                 help = "#designmode-command-scroll";
                 break;
-            case XSET_JOB_SHOW:
-                help = "#designmode-designmenu-show";
+            case XSET_JOB_TOOLTIPS:
+                help = "#designmode-designmenu-tooltips";
                 break;
             }
             if ( !help )
@@ -7295,7 +7784,7 @@ gboolean xset_design_menu_keypress( GtkWidget* widget, GdkEventKey* event,
             job = XSET_JOB_PROP;
         else if ( event->keyval == GDK_KEY_F4 )
         {
-            if ( set->x && atoi( set->x ) == XSET_CMD_SCRIPT )
+            if ( xset_get_int_set( set, "x" ) == XSET_CMD_SCRIPT )
                 job = XSET_JOB_EDIT;
             else
                 job = XSET_JOB_PROP_CMD;
@@ -7363,8 +7852,9 @@ static void set_check_menu_item_block( GtkWidget* item )
                                                 xset_design_job, NULL );
 }
 
-GtkWidget* xset_design_additem( GtkWidget* menu, char* label, gchar* stock_icon,
-                                                            int job, XSet* set )
+GtkWidget* xset_design_additem( GtkWidget* menu, const char* label,
+                                const char* stock_icon,
+                                int job, XSet* set )
 {
     GtkWidget* item;
     if ( stock_icon )
@@ -7403,18 +7893,18 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
     char* label;
     char* path;
     gboolean no_remove = FALSE;
-    gboolean toolexecsub = FALSE;
-    gboolean toolshow = FALSE;
     gboolean no_paste = FALSE;
     gboolean open_all = FALSE;
     XSet* sett;
     XSet* mset;
     XSet* insert_set;
+    int i;
     
     // book_insert is a bookmark set to be used for Paste, etc
     insert_set = book_insert ? book_insert : set;
     // to signal this is a bookmark, pass book_insert = set
     gboolean is_bookmark = !!book_insert;
+    gboolean show_keys = !is_bookmark && !set->tool;
     
     if ( set->plugin && set->shared_key )
         mset = xset_get_plugin_mirror( set );
@@ -7431,57 +7921,20 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
         else
             no_remove = TRUE;
     }
-    
-    // only first level custom tool submenu is executable
-    if ( set->tool && !set->lock && set->menu_style == XSET_MENU_SUBMENU )
-    {
-        sett = set;
-        while ( sett->prev )
-        {
-            sett = xset_get( sett->prev );
-            if ( sett->lock )
-            {
-                toolexecsub = TRUE;
-                break;
-            }
-        }
-        if ( !toolexecsub && sett->parent )
-        {
-            sett = xset_get( sett->parent );
-            if ( sett->lock )
-                toolexecsub = TRUE;
-        }
-    }
 
-    // show "Show"?
-    if ( set->tool )
-    {
-        if ( set->lock )
-            toolshow = TRUE;
-        else
-        {
-            sett = set;
-            while ( sett->prev )
-            {
-                sett = xset_get( sett->prev );
-                if ( sett->lock )
-                {
-                    toolshow = TRUE;
-                    break;
-                }
-            }
-        }
-    }
-
-    if ( set == set_clipboard )
-    {
-        if ( clipboard_is_cut )
-            // don't allow cut paste to self
-            no_paste = TRUE;
-    }
-    else if ( set_clipboard && set_clipboard->menu_style == XSET_MENU_SUBMENU )
+    if ( !set_clipboard )
+        no_paste = TRUE;
+    else if ( insert_set->plugin )
+        no_paste = TRUE;
+    else if ( insert_set == set_clipboard && clipboard_is_cut )
+        // don't allow cut paste to self
+        no_paste = TRUE;
+    else if ( set_clipboard->tool > XSET_TOOL_CUSTOM && !insert_set->tool )
+        // don't allow paste of builtin tool item to menu
+        no_paste = TRUE;
+    else if ( set_clipboard->menu_style == XSET_MENU_SUBMENU )
         // don't allow paste of submenu to self or below
-        no_paste = xset_clipboard_in_set( set );
+        no_paste = xset_clipboard_in_set( insert_set );
     
     // control open_all item
     if ( g_str_has_prefix( set->name, "open_all_type_" ) )
@@ -7490,25 +7943,11 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
     GtkWidget* design_menu = gtk_menu_new();
     GtkAccelGroup* accel_group = gtk_accel_group_new();
 
-    if ( toolshow )
-    {
-        // Show Tool
-        newitem = gtk_check_menu_item_new_with_mnemonic( _("S_how") );
-        gtk_container_add ( GTK_CONTAINER ( design_menu ), newitem );
-        g_object_set_data( G_OBJECT(newitem), "job", GINT_TO_POINTER( XSET_JOB_SHOW ) );
-        gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( newitem ),
-                                                ( set->tool == XSET_B_TRUE ) );
-        g_signal_connect( newitem, "activate", G_CALLBACK( xset_design_job ), set );
-
-        // Separator
-        gtk_container_add ( GTK_CONTAINER (design_menu ), gtk_separator_menu_item_new() );
-    }
-
     // Cut
     newitem = xset_design_additem( design_menu, _("Cu_t"),
                                 GTK_STOCK_CUT, XSET_JOB_CUT, set );
     gtk_widget_set_sensitive( newitem, !set->lock && !set->plugin );
-    if ( !is_bookmark )
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_x, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
@@ -7516,18 +7955,15 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
     newitem = xset_design_additem( design_menu, _("_Copy"),
                                 GTK_STOCK_COPY, XSET_JOB_COPY, set );
     gtk_widget_set_sensitive( newitem, !set->lock );
-    if ( !is_bookmark )
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_c, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
     // Paste
     newitem = xset_design_additem( design_menu, _("_Paste"),
                                 GTK_STOCK_PASTE, XSET_JOB_PASTE, insert_set );
-    gtk_widget_set_sensitive( newitem, set_clipboard && !no_paste
-                                                    && !insert_set->plugin 
-                        && !( insert_set->tool && set_clipboard->menu_style ==
-                                                    XSET_MENU_SUBMENU ) );
-    if ( !is_bookmark )
+    gtk_widget_set_sensitive( newitem, !no_paste );
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_v, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
@@ -7537,7 +7973,7 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
                         is_bookmark? XSET_JOB_REMOVE_BOOK : XSET_JOB_REMOVE,
                         set );
     gtk_widget_set_sensitive( newitem, !set->lock && !no_remove );
-    if ( !is_bookmark )
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_Delete, 0, GTK_ACCEL_VISIBLE);
 
@@ -7545,7 +7981,8 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
     newitem = xset_design_additem( design_menu, _("E_xport"),
                                 GTK_STOCK_SAVE, XSET_JOB_EXPORT, set );
     gtk_widget_set_sensitive( newitem, ( !set->lock
-                                    && set->menu_style < XSET_MENU_SEP )
+                                    && set->menu_style < XSET_MENU_SEP
+                                    && set->tool <= XSET_TOOL_CUSTOM )
                                     || !g_strcmp0( set->name, "main_book" ) );
 
     //// New submenu
@@ -7572,7 +8009,7 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
     // New > Command
     newitem = xset_design_additem( submenu, _("_Command"),
                                 NULL, XSET_JOB_COMMAND, insert_set );
-    if ( !is_bookmark )
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_Insert, 0, GTK_ACCEL_VISIBLE);
 
@@ -7607,6 +8044,31 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
             newitem = xset_design_additem( submenu2, _("_GTK Bookmarks"),
                                     NULL, XSET_JOB_IMPORT_GTK, set );        
 
+    if ( insert_set->tool )
+    {
+        // "Add" submenu for builtin tool items
+        newitem = gtk_image_menu_item_new_with_mnemonic( _("_Add") );
+        submenu = gtk_menu_new();
+        gtk_menu_item_set_submenu( GTK_MENU_ITEM( newitem ), submenu );
+        gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( newitem ), 
+              gtk_image_new_from_stock( GTK_STOCK_ADD, GTK_ICON_SIZE_MENU ) );
+        gtk_container_add ( GTK_CONTAINER ( design_menu ), newitem );
+        g_object_set_data( G_OBJECT( newitem ), "job",
+                                        GINT_TO_POINTER( XSET_JOB_HELP_ADD ) );
+        g_signal_connect( submenu, "key_press_event",
+                          G_CALLBACK( xset_design_menu_keypress ), set );
+
+        
+        for ( i = XSET_TOOL_DEVICES; i < G_N_ELEMENTS( builtin_tool_name ); i++ )
+        {
+            newitem = xset_design_additem( submenu, _(builtin_tool_name[i]),
+                                           builtin_tool_icon[i],
+                                           XSET_JOB_ADD_TOOL, insert_set );
+            g_object_set_data( G_OBJECT( newitem ), "tool_type",
+                                                    GINT_TO_POINTER( i ) );
+        }
+    }
+
     // Separator
     gtk_container_add ( GTK_CONTAINER ( design_menu ),
                                             gtk_separator_menu_item_new() );
@@ -7616,23 +8078,34 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
                             is_bookmark ? XSET_JOB_HELP_BOOK : XSET_JOB_HELP,
                             set );
     gtk_widget_set_sensitive( newitem, !set->lock || ( set->lock && set->line ) );
-    if ( !is_bookmark )
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_F1, 0, GTK_ACCEL_VISIBLE);
+
+    // Tooltips (toolbar)
+    if ( set->tool )
+    {
+        newitem = xset_design_additem( design_menu, _("T_ooltips"),
+                                        "@check",
+                                        XSET_JOB_TOOLTIPS,
+                                        set );
+        if ( !xset_get_b_panel( 1, "tool_l" ) )
+            set_check_menu_item_block( newitem );
+    }
 
     // Key
     newitem = xset_design_additem( design_menu, _("_Key Shortcut"),
                                     GTK_STOCK_PROPERTIES, XSET_JOB_KEY, set );
-    gtk_widget_set_sensitive( newitem, ( set->menu_style < XSET_MENU_SUBMENU
-                                        || toolexecsub ) );
-    if ( !is_bookmark )
+    gtk_widget_set_sensitive( newitem, ( set->menu_style < XSET_MENU_SUBMENU ) );
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_k, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
     // Edit (script)
-    if ( !set->lock && set->menu_style < XSET_MENU_SUBMENU && set->x )
+    if ( !set->lock && set->menu_style < XSET_MENU_SUBMENU &&
+                                        set->tool <= XSET_TOOL_CUSTOM )
     {
-        if ( atoi( set->x ) == XSET_CMD_SCRIPT )
+        if ( xset_get_int_set( set, "x" ) == XSET_CMD_SCRIPT )
         {
             char* script = xset_custom_get_script( set, FALSE );
             if ( script )
@@ -7642,7 +8115,7 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
                     // edit as user
                     newitem = xset_design_additem( design_menu, _("_Edit Script"),
                                         GTK_STOCK_EDIT, XSET_JOB_EDIT, set );
-                        if ( !is_bookmark )
+                        if ( show_keys )
                             gtk_widget_add_accelerator( newitem, "activate",
                                         accel_group,
                                         GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);
@@ -7653,7 +8126,7 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
                     newitem = xset_design_additem( design_menu, _("E_dit As Root"),
                                         GTK_STOCK_DIALOG_WARNING,
                                         XSET_JOB_EDIT_ROOT, set );
-                    if ( geteuid() == 0 && !is_bookmark )
+                    if ( geteuid() == 0 && show_keys )
                         gtk_widget_add_accelerator( newitem, "activate",
                                         accel_group,
                                         GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);                
@@ -7661,12 +8134,12 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
                 g_free( script );
             }
         }
-        else if ( atoi( set->x ) == XSET_CMD_LINE )
+        else if ( xset_get_int_set( set, "x" ) == XSET_CMD_LINE )
         {
             // edit command line
             newitem = xset_design_additem( design_menu, _("_Edit Command"),
                                 GTK_STOCK_EDIT, XSET_JOB_PROP_CMD, set );
-                if ( !is_bookmark )
+                if ( show_keys )
                     gtk_widget_add_accelerator( newitem, "activate",
                                 accel_group,
                                 GDK_KEY_F4, 0, GTK_ACCEL_VISIBLE);
@@ -7676,7 +8149,7 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
     // Properties
     newitem = xset_design_additem( design_menu, _("_Properties"),
                                 GTK_STOCK_PROPERTIES, XSET_JOB_PROP, set );
-    if ( !is_bookmark )
+    if ( show_keys )
         gtk_widget_add_accelerator( newitem, "activate", accel_group,
                             GDK_KEY_F3, 0, GTK_ACCEL_VISIBLE);
 
@@ -7705,7 +8178,9 @@ gboolean xset_design_cb( GtkWidget* item, GdkEventButton* event, XSet* set )
         
 //printf("xset_design_cb\n");
         
-    GtkWidget* menu = (GtkWidget*)g_object_get_data( G_OBJECT(item), "menu" );
+    GtkWidget* menu = item ? 
+                    (GtkWidget*)g_object_get_data( G_OBJECT(item), "menu" ) :
+                    NULL;
     int keymod = ( event->state & ( GDK_SHIFT_MASK | GDK_CONTROL_MASK |
                  GDK_MOD1_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK | GDK_META_MASK ) );
 
@@ -7719,20 +8194,14 @@ gboolean xset_design_cb( GtkWidget* item, GdkEventButton* event, XSet* set )
             // test: gtk2 Crux theme with touchpad on Edit|Copy To|Location
             // https://github.com/IgnorantGuru/spacefm/issues/31
             // https://github.com/IgnorantGuru/spacefm/issues/228
-            if ( set && set->tool )
-            {
-                // is in a toolbar config menu - show the design menu
-                xset_design_show_menu( menu, set, NULL, event->button, event->time );
-            }
-            else
-            {
-                if ( menu )
-                    gtk_menu_shell_deactivate( GTK_MENU_SHELL( menu ) );
-                gtk_menu_item_activate( GTK_MENU_ITEM( item ) );
-            }
+            if ( menu )
+                gtk_menu_shell_deactivate( GTK_MENU_SHELL( menu ) );
+            gtk_menu_item_activate( GTK_MENU_ITEM( item ) );
             return TRUE;
         }
-        return FALSE;
+        // TRUE for issue #521 where a right-click also left-clicks the first
+        // menu item in some GTK2/3 themes.
+        return TRUE;
     }
     else if ( event->type != GDK_BUTTON_PRESS )
         return FALSE;
@@ -7747,6 +8216,15 @@ gboolean xset_design_cb( GtkWidget* item, GdkEventButton* event, XSet* set )
             {
                 // right
                 xset_design_show_menu( menu, set, NULL, event->button, event->time );
+                return TRUE;
+            }
+            else if ( event->button == 1 && set->tool && !set->lock )
+            {
+                // activate
+                if ( set->tool == XSET_TOOL_CUSTOM )
+                    xset_menu_cb( NULL, set );
+                else
+                    xset_builtin_tool_activate( set->tool, set, event );
                 return TRUE;
             }
         }
@@ -7784,7 +8262,7 @@ gboolean xset_design_cb( GtkWidget* item, GdkEventButton* event, XSet* set )
             }
             else
             {
-                if ( set->x && atoi( set->x ) == XSET_CMD_SCRIPT )
+                if ( xset_get_int_set( set, "x" ) == XSET_CMD_SCRIPT )
                     job = XSET_JOB_EDIT;
                 else
                     job = XSET_JOB_PROP_CMD;
@@ -7867,7 +8345,7 @@ gboolean xset_menu_keypress( GtkWidget* widget, GdkEventKey* event,
             job = XSET_JOB_PROP;
         else if ( event->keyval == GDK_KEY_F4 )
         {
-            if ( set->x && atoi( set->x ) == XSET_CMD_SCRIPT )
+            if ( xset_get_int_set( set, "x" ) == XSET_CMD_SCRIPT )
                 job = XSET_JOB_EDIT;
             else
                 job = XSET_JOB_PROP_CMD;
@@ -7894,7 +8372,7 @@ gboolean xset_menu_keypress( GtkWidget* widget, GdkEventKey* event,
             }
             else
             {
-                if ( set->x && atoi( set->x ) == XSET_CMD_SCRIPT )
+                if ( xset_get_int_set( set, "x" ) == XSET_CMD_SCRIPT )
                     job = XSET_JOB_EDIT;
                 else
                     job = XSET_JOB_PROP_CMD;
@@ -7939,7 +8417,8 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
         cb_func = (void *)g_object_get_data( G_OBJECT(item), "cb_func" );
         cb_data = g_object_get_data( G_OBJECT(item), "cb_data" );
     }
-    
+
+/*
     if ( set->tool )
     {
         // get current browser for toolbar button
@@ -7951,7 +8430,8 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
             set->browser = NULL;
         set->desktop = NULL;
     }
-    
+*/
+
     parent = set->browser ? GTK_WIDGET( set->browser ) :
                             GTK_WIDGET( set->desktop );
 
@@ -7983,6 +8463,8 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
         else if ( !rset->lock )
             xset_custom_activate( item, rset );
     }
+    else if ( rset->menu_style == XSET_MENU_SEP )
+    {}
     else if ( rset->menu_style == XSET_MENU_CHECK )
     {
         if ( mset->b == XSET_B_TRUE )
@@ -7993,6 +8475,8 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
             (*cb_func) ( item, cb_data );
         else if ( !rset->lock )
             xset_custom_activate( item, rset );
+        if ( set->tool == XSET_TOOL_CUSTOM )
+            ptk_file_browser_update_toolbar_widgets( set->browser, set, -1 );
     }
     else if ( rset->menu_style == XSET_MENU_STRING ||
               rset->menu_style == XSET_MENU_CONFIRM )
@@ -8084,6 +8568,9 @@ void xset_menu_cb( GtkWidget* item, XSet* set )
     }
     else if ( rset->menu_style == XSET_MENU_ICON )
     {
+        // Note: xset_text_dialog uses the title passed to know this is an
+        // icon chooser, so it adds a Choose button.  If you change the title,
+        // change xset_text_dialog.
         if ( xset_text_dialog( parent, rset->title ? rset->title : _("Set Icon"),
                                 NULL, FALSE,
                                 rset->desc? rset->desc : _(icon_desc), NULL,
@@ -8367,12 +8854,98 @@ static gboolean on_input_keypress ( GtkWidget *widget, GdkEventKey *event, GtkWi
     return FALSE;
 }
 
+static void on_icon_buffer_changed( GtkTextBuffer* buf, GtkWidget* button )
+{
+    GtkTextIter iter, siter;
+    gtk_text_buffer_get_start_iter( buf, &siter );
+    gtk_text_buffer_get_end_iter( buf, &iter );
+    char* icon = gtk_text_buffer_get_text( buf, &siter, &iter, FALSE );
+    gtk_button_set_image( GTK_BUTTON( button ),
+                        xset_get_image(
+                        icon && icon[0] ? icon :
+                        GTK_STOCK_OPEN,
+                        GTK_ICON_SIZE_BUTTON ) );
+    g_free( icon );
+}
+
+char* xset_icon_chooser_dialog( GtkWindow* parent, const char* def_icon )
+{
+    GtkTextIter iter, siter;
+    GtkAllocation allocation;
+    int width, height;
+    char* icon = NULL;
+
+    // set busy cursor
+    GdkCursor* cursor = gdk_cursor_new_for_display(
+                                gtk_widget_get_display( GTK_WIDGET( parent ) ),
+                                                                GDK_WATCH );
+    if ( cursor )
+    {
+        gdk_window_set_cursor( gtk_widget_get_window( GTK_WIDGET( parent ) ),
+                                                                cursor );
+        gdk_cursor_unref( cursor );
+        while( gtk_events_pending() )
+            gtk_main_iteration();
+    }
+
+#if GTK_CHECK_VERSION (3, 0, 0)
+#else
+    // btn_icon_choose clicked - preparing the exo icon chooser dialog
+    GtkWidget* icon_chooser = exo_icon_chooser_dialog_new (
+                            _("Choose Icon"),
+                            GTK_WINDOW( parent ),
+                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                            GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                            NULL );
+    // Set icon chooser dialog size
+    width = xset_get_int( "main_icon", "x" );
+    height = xset_get_int( "main_icon", "y" );
+    if ( width && height )
+        gtk_window_set_default_size( GTK_WINDOW( icon_chooser ),
+                                                    width, height );
+
+    // Load current icon
+    if ( def_icon && def_icon[0] )
+        exo_icon_chooser_dialog_set_icon(
+                        EXO_ICON_CHOOSER_DIALOG( icon_chooser ), def_icon );
+    
+    // Prompting user to pick icon
+    int response_icon_chooser = gtk_dialog_run( GTK_DIALOG( icon_chooser ) );
+    if ( response_icon_chooser == -3 /* OK */ )
+    {
+        /* Fetching selected icon */
+        icon = exo_icon_chooser_dialog_get_icon(
+                            EXO_ICON_CHOOSER_DIALOG( icon_chooser ) );
+    }
+    
+    // Save icon chooser dialog size
+    gtk_widget_get_allocation( GTK_WIDGET( icon_chooser ), &allocation );
+    if ( allocation.width && allocation.height )
+    {
+        char* str = g_strdup_printf( "%d", allocation.width );
+        xset_set( "main_icon", "x", str );
+        g_free( str );
+        str = g_strdup_printf( "%d", allocation.height );
+        xset_set( "main_icon", "y", str );
+        g_free( str );
+    }
+    gtk_widget_destroy( icon_chooser );
+#endif
+
+    // remove busy cursor
+    gdk_window_set_cursor( gtk_widget_get_window( GTK_WIDGET( parent ) ),
+                                                                    NULL );
+
+    return icon;
+}
+
 gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* image,
                             gboolean large, const char* msg1, const char* msg2,
                             const char* defstring, char** answer, const char* defreset,
                             gboolean edit_care, const char* help )
 {   
     GtkTextIter iter, siter;
+    GtkAllocation allocation;
     int width, height;
     GtkWidget* dlgparent = NULL;
 
@@ -8432,6 +9005,7 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
     GtkWidget* btn_edit;
     GtkWidget* btn_help = NULL;
     GtkWidget* btn_default = NULL;
+    GtkWidget* btn_icon_choose = NULL;
     if ( help )
     {
         btn_help = gtk_button_new_with_mnemonic( _("_Help") );
@@ -8449,6 +9023,29 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
                                                             GTK_ICON_SIZE_BUTTON ) );
         gtk_button_set_focus_on_click( GTK_BUTTON( btn_edit ), FALSE );
         gtk_text_view_set_editable( input, FALSE );
+    }
+
+    /* Special hack to add an icon chooser button when this dialog is called
+     * to set icons - see xset_menu_cb() and set init "main_icon"
+     * and xset_design_job */
+    if ( !g_strcmp0( title, _("Set Icon") ) ||
+                                !g_strcmp0( title, _("Set Window Icon") ) )
+    {
+        btn_icon_choose = gtk_button_new_with_mnemonic( _("C_hoose") );
+        gtk_dialog_add_action_widget( GTK_DIALOG( dlg ), btn_icon_choose,
+                                      GTK_RESPONSE_ACCEPT );
+        gtk_button_set_image( GTK_BUTTON( btn_icon_choose ),
+                                        xset_get_image(
+                                        defstring && defstring[0] ? defstring :
+                                        GTK_STOCK_OPEN,
+                                        GTK_ICON_SIZE_BUTTON ) );
+        gtk_button_set_focus_on_click( GTK_BUTTON( btn_icon_choose ), FALSE );
+        g_signal_connect( G_OBJECT( buf ), "changed",
+                    G_CALLBACK( on_icon_buffer_changed ), btn_icon_choose );
+#if GTK_CHECK_VERSION (3, 6, 0)
+        // keep this
+        gtk_button_set_always_show_image( GTK_BUTTON( btn_icon_choose ), TRUE );
+#endif
     }
 
     if ( defreset )
@@ -8469,6 +9066,13 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
 
     // show
     gtk_widget_show_all( dlg );
+#if GTK_CHECK_VERSION (3, 0, 0)
+    if ( btn_icon_choose )
+    {
+        gtk_widget_set_sensitive( btn_icon_choose, FALSE );
+        gtk_widget_hide( btn_icon_choose );
+    }
+#endif
 
     if ( title )
         gtk_window_set_title( GTK_WINDOW( dlg ), title );
@@ -8482,6 +9086,7 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
     char* ans;
     char* trim_ans;
     int response;
+    char* icon;
     gboolean ret = FALSE;
     while ( response = gtk_dialog_run( GTK_DIALOG( dlg ) ) )
     {
@@ -8525,6 +9130,23 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
                                         gtk_toggle_button_get_active( 
                                         GTK_TOGGLE_BUTTON( btn_edit ) ) );
         }
+        else if ( response == GTK_RESPONSE_ACCEPT )
+        {
+            // get current icon
+            gtk_text_buffer_get_start_iter( buf, &siter );
+            gtk_text_buffer_get_end_iter( buf, &iter );
+            icon = gtk_text_buffer_get_text( buf, &siter, &iter, FALSE );
+            
+            // show icon chooser
+            char* new_icon = xset_icon_chooser_dialog( GTK_WINDOW( dlg ),
+                                                       icon );
+            g_free( icon );
+            if ( new_icon )
+            {
+                gtk_text_buffer_set_text( buf, new_icon, -1 );
+                g_free( new_icon );
+            }
+        }
         else if ( response == GTK_RESPONSE_NO )
         {
             // btn_default clicked
@@ -8551,7 +9173,6 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
                                     || response == GTK_RESPONSE_DELETE_EVENT )
             break;
     }
-    GtkAllocation allocation;
     gtk_widget_get_allocation( GTK_WIDGET( dlg ), &allocation );
     width = allocation.width;
     height = allocation.height;
@@ -8795,241 +9416,849 @@ char* xset_color_dialog( GtkWidget* parent, char* title, char* defcolor )
     return scolor;
 }
 
-GtkWidget* xset_add_toolitem( GtkWidget* parent, PtkFileBrowser* file_browser,
-                        GtkWidget* toolbar, int icon_size, XSet* set )
+void xset_builtin_tool_activate( char tool_type, XSet* set,
+                                 GdkEventButton* event )
 {
-    GtkWidget* image = NULL;
-    GtkWidget* btn;
-    XSet* set_next;
-    int cmd_type;
+    XSet* set2;
+    int p;
+    char mode;
+    PtkFileBrowser* file_browser = NULL;
+    FMMainWindow* main_window = fm_main_window_get_last_active();
     
-    if ( set->tool == XSET_B_TRUE )
+    // set may be a submenu that doesn't match tool_type
+    if ( !( set && !set->lock && tool_type > XSET_TOOL_CUSTOM ) )
     {
-        // button
-        const char* icon_name = set->icon;
-        if ( !set->menu_style || set->menu_style == XSET_MENU_STRING )
-        {
-            cmd_type = set->x ? atoi( set->x ) : -1;
-            if ( !set->lock && cmd_type == XSET_CMD_APP && set->z &&
-                        ( !( set->menu_label && set->menu_label[0] )
-                          || !( icon_name && icon_name[0] ) ) &&
-                                g_str_has_suffix( set->z, ".desktop" ) )
-            {
-                // Application - get name and/or icon
-                const char* menu_label = set->menu_label;
-                VFSAppDesktop* app = vfs_app_desktop_new( set->z );
-                if ( app )
-                {
-                    if ( !( menu_label && menu_label[0] ) )
-                        menu_label = vfs_app_desktop_get_disp_name( app );
-                    if ( !( icon_name && icon_name[0] ) )
-                        icon_name = (char*)vfs_app_desktop_get_icon_name( app );
-                }
-                image = xset_get_image( icon_name, icon_size );
-                btn = GTK_WIDGET( gtk_tool_button_new( image,
-                                            menu_label && menu_label[0] ?
-                                                menu_label : set->z ) );
-                if ( app )
-                    vfs_app_desktop_unref( app );
-            }
-            else if ( !set->lock && cmd_type == XSET_CMD_BOOKMARK && set->z &&
-                                !( icon_name && icon_name[0] ) )
-            {
-                // Bookmark - get default icon
-                if ( icon_name && icon_name[0] )
-                    image = xset_get_image( icon_name, icon_size );
-                else
-                {
-                    image = NULL;
-                    XSet* book_icon_set = xset_get( "book_icon" );
-                    if ( book_icon_set->icon )
-                        image = xset_get_image( book_icon_set->icon,
-                                                            icon_size );
-                    if ( !image )
-                        image = xset_get_image( "gtk-directory",
-                                                            icon_size );
-                }
-                btn = GTK_WIDGET( gtk_tool_button_new( image,
-                                        set->menu_label && set->menu_label[0] ?
-                                            set->menu_label : set->z ) );
-            }
-            else if ( !set->lock && cmd_type > XSET_CMD_SCRIPT && set->z &&
-                                !( set->menu_label && set->menu_label[0] ) )
-            {
-                // An app or bookmark with no name
-                image = xset_get_image( set->icon, icon_size );
-                btn = GTK_WIDGET( gtk_tool_button_new( image, set->z ) );
-            }
-            else
-            {
-                image = xset_get_image( set->icon, icon_size );
-                btn = GTK_WIDGET( gtk_tool_button_new( image, set->menu_label ) );
-            }
-            // pass btn back to add_toolbar caller
-            set->ob2_data = btn;
-            // ob2 in use ?
-            if ( set->ob2 )
-            {
-                g_free( set->ob2 );
-                set->ob2 = NULL;
-                g_warning( "add_toolbar_item style normal set->ob2 != NULL" );
-            }
-        }
-        else if ( set->menu_style == XSET_MENU_CHECK )
-        {
-            image = xset_get_image( set->icon, icon_size );
-            btn = GTK_WIDGET( gtk_toggle_tool_button_new() );
-            gtk_tool_button_set_icon_widget( GTK_TOOL_BUTTON( btn ), image );
-            gtk_tool_button_set_label( GTK_TOOL_BUTTON( btn ), set->menu_label );
-            gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( btn ),
-                                                        xset_get_b_set( set ) );
-            // pass btn back to add_toolbar caller
-            set->ob2_data = btn;
-            // ob2 in use ?
-            if ( set->ob2 )
-            {
-                g_free( set->ob2 );
-                set->ob2 = NULL;
-                g_warning( "add_toolbar_item style check set->ob2 != NULL" );
-            }
-        }
-        else if ( set->menu_style == XSET_MENU_SUBMENU )
-        {
-            image = xset_get_image( set->icon, icon_size );
-            btn = GTK_WIDGET( gtk_menu_tool_button_new( image, set->menu_label ) );
-            if ( set->lock )
-            {
-                // Create initial menu for btn
-                gtk_menu_tool_button_set_menu( GTK_MENU_TOOL_BUTTON( btn ),
-                                                                gtk_menu_new() );
-                // pass btn back to add_toolbar caller
-                set->ob2_data = btn;
-                // ob2 in use ?
-                if ( set->ob2 )
-                {
-                    g_free( set->ob2 );
-                    set->ob2 = NULL;
-                    g_warning( "add_toolbar_item style submenu set->ob2 != NULL" );
-                }
-            }
-            else if ( set->child )
-            {
-                GtkWidget* submenu = gtk_menu_new();
-                GtkAccelGroup* accel_group = gtk_accel_group_new();
-                XSet* set_child = xset_get( set->child );
-                xset_add_menuitem( NULL, file_browser, submenu, accel_group, set_child );
-                gtk_menu_tool_button_set_menu( GTK_MENU_TOOL_BUTTON( btn ), submenu );
-                gtk_widget_show_all( submenu );
-            }
-        }
-        else if ( set-> menu_style == XSET_MENU_SEP )
-        {
-            btn = GTK_WIDGET( gtk_separator_tool_item_new() );
-            gtk_separator_tool_item_set_draw( GTK_SEPARATOR_TOOL_ITEM( btn ), TRUE ); 
-        }
-        else
-            return NULL;
-
-        g_object_set_data( G_OBJECT( btn ), "toolbar", toolbar );
-
-        if ( set->ob1 )
-            g_object_set_data( G_OBJECT( btn ), set->ob1, set->ob1_data );
-        if ( set->ob2 )
-            g_object_set_data( G_OBJECT( btn ), set->ob2, set->ob2_data );
-
-        set->browser = file_browser;
-        
-        // callback
-        if ( set->menu_style <= XSET_MENU_SUBMENU )
-        {
-            if ( set->lock )
-            {
-                if ( set->cb_func )
-                {
-                    if ( set->menu_style == XSET_MENU_CHECK )
-                        g_signal_connect( btn, "toggled", G_CALLBACK( set->cb_func ),
-                                                                        set->cb_data);
-                    else
-                        g_signal_connect( btn, "clicked", G_CALLBACK( set->cb_func ),
-                                                                        set->cb_data);
-                }
-            }
-            else
-            {   // cb_func is always unset for !lock????  this can be trimmed?
-                set->cb_func = NULL;
-                set->cb_data = NULL;
-                if ( !set->cb_func || set->menu_style )
-                {
-                    // use xset menu callback
-                    if ( set->menu_style == XSET_MENU_CHECK )
-                        g_signal_connect( btn, "toggled", G_CALLBACK( xset_menu_cb ),
-                                                                                set );
-                    else
-                        g_signal_connect( btn, "clicked", G_CALLBACK( xset_menu_cb ),
-                                                                                set );
-                    g_object_set_data( G_OBJECT(btn), "cb_func", set->cb_func );
-                    g_object_set_data( G_OBJECT(btn), "cb_data", set->cb_data );
-                }
-                else if ( set->cb_func )
-                {
-                    // use custom callback directly
-                    if ( set->menu_style == XSET_MENU_CHECK )
-                        g_signal_connect( btn, "toggled", G_CALLBACK( set->cb_func ),
-                                                                            set->cb_data );
-                    else
-                        g_signal_connect( btn, "clicked", G_CALLBACK( set->cb_func ),
-                                                                            set->cb_data );
-                }
-            }
-        }        
-
-        // tooltip
-        //if ( set->x )
-        //    gtk_tool_item_set_tooltip( GTK_TOOL_ITEM( btn ), tooltips, set->x, NULL);
-
-        gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), GTK_TOOL_ITEM( btn ), -1 );
+        g_warning( "xset_builtin_tool_activate invalid" );
+        return;
     }
-    
-    // next toolitem
-    if ( set->next )
+    //printf("xset_builtin_tool_activate  %s\n", set->menu_label );
+
+    // get current browser, panel, and mode
+    if ( main_window )
     {
-        set_next = xset_get( set->next );
-        xset_add_toolitem( parent, file_browser, toolbar, icon_size, set_next );
-    }
-
-    return btn;
-}
-
-void xset_add_toolbar( GtkWidget* parent, PtkFileBrowser* file_browser,
-            GtkWidget* toolbar, const char* elements )
-{
-    char* space;
-    XSet* set;
-    
-    if ( !elements )
+        file_browser = PTK_FILE_BROWSER( 
+                    fm_main_window_get_current_file_browser( main_window ) );
+        p = file_browser->mypanel;
+        mode = main_window->panel_context[p-1];
+    }    
+    if ( !PTK_IS_FILE_BROWSER( file_browser ) )
         return;
 
-    GtkIconSize icon_size = gtk_toolbar_get_icon_size( GTK_TOOLBAR( toolbar ) );
-        
-    while ( elements[0] == ' ' )
-        elements++;
-
-    while ( elements && elements[0] != '\0' )
-    {
-        space = strchr( elements, ' ' );
-        if ( space )
-            space[0] = '\0';
-        set = xset_get( elements );
-        if ( space )
-            space[0] = ' ';
-        elements = space;
-        xset_add_toolitem( parent, file_browser, toolbar, icon_size, set );
-        if ( elements )
+    switch ( tool_type ) {
+    case XSET_TOOL_DEVICES:
+        set2 = xset_get_panel_mode( p, "show_devmon", mode );
+        set2->b = set2->b == XSET_B_TRUE ? XSET_B_UNSET : XSET_B_TRUE;
+        update_views_all_windows( NULL, file_browser );
+        break;
+    case XSET_TOOL_BOOKMARKS:
+        set2 = xset_get_panel_mode( p, "show_book", mode );
+        set2->b = set2->b == XSET_B_TRUE ? XSET_B_UNSET : XSET_B_TRUE;
+        update_views_all_windows( NULL, file_browser );
+        if ( file_browser->side_book )
         {
-            while ( elements[0] == ' ' )
-                elements++;
+            ptk_bookmark_view_chdir( GTK_TREE_VIEW( file_browser->side_book ),
+                                                        file_browser, TRUE );
+            gtk_widget_grab_focus( GTK_WIDGET( file_browser->side_book ) );
+        }
+        break;
+    case XSET_TOOL_TREE:
+        set2 = xset_get_panel_mode( p, "show_dirtree", mode );
+        set2->b = set2->b == XSET_B_TRUE ? XSET_B_UNSET : XSET_B_TRUE;
+        update_views_all_windows( NULL, file_browser );
+        break;
+    case XSET_TOOL_HOME:
+        ptk_file_browser_go_home( NULL, file_browser );
+        break;
+    case XSET_TOOL_DEFAULT:
+        ptk_file_browser_go_default( NULL, file_browser );
+        break;
+    case XSET_TOOL_UP:
+        ptk_file_browser_go_up( NULL, file_browser );
+        break;
+    case XSET_TOOL_BACK:
+        ptk_file_browser_go_back( NULL, file_browser );
+        break;
+    case XSET_TOOL_BACK_MENU:
+        ptk_file_browser_show_history_menu( file_browser, TRUE, event );
+        break;
+    case XSET_TOOL_FWD:
+        ptk_file_browser_go_forward( NULL, file_browser );
+        break;
+    case XSET_TOOL_FWD_MENU:
+        ptk_file_browser_show_history_menu( file_browser, FALSE, event );
+        break;
+    case XSET_TOOL_REFRESH:
+        ptk_file_browser_refresh( NULL, file_browser );
+        break;
+    case XSET_TOOL_NEW_TAB:
+        ptk_file_browser_new_tab( NULL, file_browser );
+        break;
+    case XSET_TOOL_NEW_TAB_HERE:
+        ptk_file_browser_new_tab_here( NULL, file_browser );
+        break;
+    case XSET_TOOL_SHOW_HIDDEN:
+        set2 = xset_get_panel( p, "show_hidden" );
+        set2->b = set2->b == XSET_B_TRUE ? XSET_B_UNSET : XSET_B_TRUE;        
+        ptk_file_browser_show_hidden_files( file_browser, set2->b );
+        break;
+    case XSET_TOOL_SHOW_THUMB:
+        main_window_toggle_thumbnails_all_windows();
+        break;
+    case XSET_TOOL_LARGE_ICONS:
+        if ( file_browser->view_mode != PTK_FB_ICON_VIEW )
+        {
+            xset_set_b_panel( p, "list_large", !file_browser->large_icons );
+            on_popup_list_large( NULL, file_browser );
+        }
+        break;
+    default:
+        g_warning( "xset_builtin_tool_activate invalid tool_type" );
+    }
+}
+
+const char* xset_get_builtin_toolitem_label( char tool_type )
+{
+    if ( tool_type < XSET_TOOL_DEVICES || tool_type >= XSET_TOOL_INVALID )
+        return NULL;
+    return _(builtin_tool_name[ tool_type ]);
+}
+
+XSet* xset_new_builtin_toolitem( char tool_type )
+{
+    if ( tool_type < XSET_TOOL_DEVICES || tool_type >= XSET_TOOL_INVALID )
+        return NULL;
+
+    XSet* set = xset_custom_new();
+    set->tool = tool_type;
+    set->task = set->task_err = set->task_out = set->keep_terminal = 0;
+    
+    return set;
+}
+
+gboolean on_tool_icon_button_press( GtkWidget *widget,
+                                    GdkEventButton* event, XSet* set )
+{
+    int job = -1;
+
+    //printf("on_tool_icon_button_press  %s   button = %d\n", set->menu_label,
+    //                                                    event->button );
+    if ( event->type != GDK_BUTTON_PRESS )
+        return FALSE;
+    int keymod = ( event->state & ( GDK_SHIFT_MASK | GDK_CONTROL_MASK |
+                 GDK_MOD1_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK | GDK_META_MASK ) );
+
+    // get and focus browser
+    PtkFileBrowser* file_browser = (PtkFileBrowser*)g_object_get_data(
+                                    G_OBJECT( widget ), "browser" );
+    if ( !PTK_IS_FILE_BROWSER( file_browser ) )
+        return TRUE;
+    ptk_file_browser_focus_me( file_browser );
+    set->browser = file_browser;
+    set->desktop = NULL;
+
+    // get context
+    XSetContext* context = xset_context_new();
+    main_context_fill( file_browser, context );
+    if ( !context->valid )
+        return TRUE;
+
+    if ( event->button == 1 || event->button == 3 )
+    {
+        // left or right click
+        if ( keymod == 0 )
+        {
+            // no modifier
+            if ( event->button == 1 )
+            {
+                // left click
+                if ( set->tool == XSET_TOOL_CUSTOM &&
+                                        set->menu_style == XSET_MENU_SUBMENU )
+                {
+                    XSet* set_child = xset_is( set->child );
+                    if ( set_child )
+                    {
+                        // activate first item in custom submenu
+                        xset_menu_cb( NULL, set_child );
+                    }
+                }
+                else if ( set->tool == XSET_TOOL_CUSTOM )
+                {
+                    // activate
+                    xset_menu_cb( NULL, set );
+                }
+                else if ( set->tool == XSET_TOOL_BACK_MENU )
+                    xset_builtin_tool_activate( XSET_TOOL_BACK, set, event );
+                else if ( set->tool == XSET_TOOL_FWD_MENU )
+                    xset_builtin_tool_activate( XSET_TOOL_FWD, set, event );
+                else if ( set->tool )
+                    xset_builtin_tool_activate( set->tool, set, event );
+                return TRUE;
+            }
+            else //if ( event->button == 3 )
+            {
+                // right-click show design menu for submenu set
+                xset_design_cb( NULL, event, set );
+                return TRUE;
+            }            
+        }
+        else if ( keymod == GDK_CONTROL_MASK )
+        {
+            // ctrl
+            job = XSET_JOB_COPY;
+        }
+        else if ( keymod == GDK_MOD1_MASK )
+        {
+            // alt
+            job = XSET_JOB_CUT;
+        }
+        else if ( keymod == GDK_SHIFT_MASK )
+        {
+            // shift
+            job = XSET_JOB_PASTE;
+        }
+        else if ( keymod == ( GDK_CONTROL_MASK | GDK_SHIFT_MASK ) )
+        {
+            // ctrl + shift
+            job = XSET_JOB_COMMAND;
         }
     }
+    else if ( event->button == 2 )
+    {
+        // middle click
+        if ( keymod == 0 )
+        {
+            // no modifier
+            if ( set->tool == XSET_TOOL_CUSTOM &&
+                            xset_get_int_set( set, "x" ) == XSET_CMD_SCRIPT )
+                job = XSET_JOB_EDIT;
+            else
+                job = XSET_JOB_PROP_CMD;
+        }
+        else if ( keymod == GDK_CONTROL_MASK )
+        {
+            // ctrl
+            job = XSET_JOB_KEY;
+        }
+        else if ( keymod == GDK_MOD1_MASK )
+        {
+            // alt
+            job = XSET_JOB_HELP;
+        }
+        else if ( keymod == GDK_SHIFT_MASK )
+        {
+            // shift
+            job = XSET_JOB_ICON;
+        }
+        else if ( keymod == ( GDK_CONTROL_MASK | GDK_SHIFT_MASK ) )
+        {
+            // ctrl + shift
+            job = XSET_JOB_REMOVE;
+        }
+        else if ( keymod == ( GDK_CONTROL_MASK | GDK_MOD1_MASK ) )
+        {
+            // ctrl + alt
+            job = XSET_JOB_PROP;
+        }
+    }
+    if ( job != -1 )
+    {
+        if ( xset_job_is_valid( set, job ) )
+        {
+            g_object_set_data( G_OBJECT( widget ), "job", GINT_TO_POINTER( job ) );
+            xset_design_job( widget, set );
+        }
+        else
+        {
+            // right-click show design menu for submenu set
+            xset_design_cb( NULL, event, set );
+        }
+        return TRUE;
+    }
+    return TRUE;
+}
+
+gboolean on_tool_menu_button_press( GtkWidget *widget,
+                                    GdkEventButton* event, XSet* set )
+{
+    //printf("on_tool_menu_button_press  %s   button = %d\n", set->menu_label,
+    //                                                    event->button );
+    if ( event->type != GDK_BUTTON_PRESS )
+        return FALSE;
+    int keymod = ( event->state & ( GDK_SHIFT_MASK | GDK_CONTROL_MASK |
+                 GDK_MOD1_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK | GDK_META_MASK ) );
+    if ( keymod != 0 || event->button != 1 )
+        return on_tool_icon_button_press( widget, event, set );
+
+    // get and focus browser
+    PtkFileBrowser* file_browser = (PtkFileBrowser*)g_object_get_data(
+                                    G_OBJECT( widget ), "browser" );
+    if ( !PTK_IS_FILE_BROWSER( file_browser ) )
+        return TRUE;
+    ptk_file_browser_focus_me( file_browser );
+
+    // get context
+    XSetContext* context = xset_context_new();
+    main_context_fill( file_browser, context );
+    if ( !context->valid )
+        return TRUE;
+
+    if ( event->button == 1 )
+    {
+        if ( set->tool == XSET_TOOL_CUSTOM )
+        {
+            // show custom submenu
+            XSet* set_child;
+            if ( !( set && !set->lock && set->child &&
+                        set->menu_style == XSET_MENU_SUBMENU &&
+                        ( set_child = xset_is( set->child ) ) ) )
+                return TRUE;
+            GtkWidget* menu = gtk_menu_new();
+            GtkAccelGroup* accel_group = gtk_accel_group_new();
+            xset_add_menuitem( NULL, file_browser, menu, accel_group,
+                                                                set_child );
+            gtk_widget_show_all( GTK_WIDGET( menu ) );
+            gtk_menu_popup( GTK_MENU( menu ), NULL, NULL, NULL, NULL,
+                                                        event->button,
+                                                        event->time );
+        }
+        else
+            xset_builtin_tool_activate( set->tool, set, event );
+        return TRUE;
+    }
+    return TRUE;
+}
+
+#if GTK_CHECK_VERSION (3, 0, 0)
+static void set_gtk3_widget_padding( GtkWidget* widget, int left_right,
+                                                        int top_bottom )
+{
+    char* str = g_strdup_printf(
+                            "GtkWidget { padding-left: %dpx; padding-right: %dpx; "
+                            "padding-top: %dpx; padding-bottom: %dpx; }",
+                            left_right, left_right, top_bottom, top_bottom );
+
+    GtkCssProvider* provider = gtk_css_provider_get_default();
+    gtk_css_provider_load_from_data ( GTK_CSS_PROVIDER( provider ),
+                                        str, -1, NULL );
+    GtkStyleContext* context = gtk_widget_get_style_context( widget );
+    gtk_style_context_add_provider ( context,
+                                     GTK_STYLE_PROVIDER( provider ),
+                                     GTK_STYLE_PROVIDER_PRIORITY_APPLICATION );
+    g_free( str );
+}
+#endif
+
+GtkWidget* xset_add_toolitem( GtkWidget* parent, PtkFileBrowser* file_browser,
+                        GtkWidget* toolbar, int icon_size, XSet* set,
+                        gboolean show_tooltips )
+{
+    GtkWidget* image = NULL;
+    GtkWidget* item = NULL;
+    GtkWidget* btn;
+    GtkRequisition req;
+    XSet* set_next;
+    char* new_menu_label = NULL;
+    GdkPixbuf* pixbuf = NULL;
+    char* icon_file = NULL;
+    int cmd_type;
+    char* str;
+    
+    if ( set->lock )
+        return NULL;
+
+    if ( set->tool == XSET_TOOL_NOT )
+    {
+        g_warning( "xset_add_toolitem set->tool == XSET_TOOL_NOT" );
+        set->tool = XSET_TOOL_CUSTOM;
+    }
+
+    // get real icon size from gtk icon size
+    int icon_w, icon_h;
+    gtk_icon_size_lookup_for_settings(
+                            gtk_settings_get_default(),
+                            icon_size,
+                            &icon_w, &icon_h );
+    int real_icon_size = icon_w > icon_h ? icon_w : icon_h;
+
+    set->browser = file_browser;
+    set->desktop = NULL;
+    
+    // builtin toolitems set shared_key on build
+    if ( set->tool >= XSET_TOOL_INVALID )
+    {
+        // looks like an unknown built-in toolitem from a future version - skip
+        goto _next_toolitem;
+    }
+    if ( set->tool > XSET_TOOL_CUSTOM && set->tool < XSET_TOOL_INVALID &&
+                                                        !set->shared_key )
+        set->shared_key = g_strdup( builtin_tool_shared_key[set->tool] );
+
+    // builtin toolitems don't have menu_style set
+    int menu_style;
+    switch ( set->tool )
+    {
+        case XSET_TOOL_DEVICES:
+        case XSET_TOOL_BOOKMARKS:
+        case XSET_TOOL_TREE:
+        case XSET_TOOL_SHOW_HIDDEN:
+        case XSET_TOOL_SHOW_THUMB:
+        case XSET_TOOL_LARGE_ICONS:
+            menu_style = XSET_MENU_CHECK;
+            break;
+        case XSET_TOOL_BACK_MENU:
+        case XSET_TOOL_FWD_MENU:
+            menu_style = XSET_MENU_SUBMENU;
+            break;
+        default:
+            menu_style = set->menu_style;
+    }
+
+    const char* icon_name = set->icon;
+    if ( !icon_name && set->tool == XSET_TOOL_CUSTOM )
+    {
+        // custom 'icon' file?
+        icon_file = g_build_filename( settings_config_dir, "scripts",
+                                                    set->name, "icon", NULL );
+        if ( !g_file_test( icon_file, G_FILE_TEST_EXISTS ) )
+        {
+            g_free( icon_file );
+            icon_file = NULL;
+        }
+        else
+            icon_name = icon_file;
+    }
+    
+    char* menu_label = set->menu_label;
+    if ( !menu_label && set->tool > XSET_TOOL_CUSTOM )
+        menu_label = (char*)xset_get_builtin_toolitem_label( set->tool );
+
+    if ( !menu_style || menu_style == XSET_MENU_STRING )
+    {
+        // normal item
+        cmd_type = xset_get_int_set( set, "x" );
+        if ( set->tool > XSET_TOOL_CUSTOM )
+        {
+            // builtin tool item
+            if ( icon_name )
+                image = xset_get_image( icon_name, icon_size );
+            else if ( set->tool > XSET_TOOL_CUSTOM &&
+                                            set->tool < XSET_TOOL_INVALID )
+                image = xset_get_image( builtin_tool_icon[set->tool],
+                                                                icon_size );
+        }
+        else if ( !set->lock && cmd_type == XSET_CMD_APP )
+        {
+            // Application
+            new_menu_label = xset_custom_get_app_name_icon( set, &pixbuf,
+                                                            real_icon_size );
+        }
+        else if ( !set->lock && cmd_type == XSET_CMD_BOOKMARK )
+        {
+            // Bookmark
+            pixbuf = xset_custom_get_bookmark_icon( set, real_icon_size );
+            if ( !( set->menu_label && set->menu_label[0] ) )
+                new_menu_label = g_strdup( set->z );
+        }
+
+        if ( pixbuf )
+        {
+            image = gtk_image_new_from_pixbuf( pixbuf );
+            g_object_unref( pixbuf );
+        }
+        if ( !image )
+            image = xset_get_image( icon_name ? icon_name : "gtk-execute",
+                                                                icon_size );
+        if ( !new_menu_label )
+            new_menu_label = g_strdup( menu_label );
+
+        // can't use gtk_tool_button_new because icon doesn't obey size
+        //btn = GTK_WIDGET( gtk_tool_button_new( image, new_menu_label ) );
+        btn = GTK_WIDGET( gtk_button_new() );
+        gtk_widget_show( image );
+        gtk_button_set_image( GTK_BUTTON( btn ), image );
+        gtk_button_set_relief( GTK_BUTTON( btn ), GTK_RELIEF_NONE );
+        // These don't seem to do anything
+#if GTK_CHECK_VERSION (3, 0, 0)
+        gtk_widget_set_margin_left( btn, 0 );
+        gtk_widget_set_margin_right( btn, 0 );
+        gtk_widget_set_margin_top( btn, 0 );
+        gtk_widget_set_margin_bottom( btn, 0 );
+        gtk_widget_set_hexpand( btn, FALSE );
+        gtk_widget_set_vexpand( btn, FALSE );
+        set_gtk3_widget_padding( btn, 0, 0 );
+#else
+    gtk_widget_size_request( btn, &req );
+    gtk_widget_set_size_request( GTK_WIDGET( btn ), req.width - 4, -1 );
+#endif
+#if GTK_CHECK_VERSION (3, 6, 0)
+        gtk_button_set_always_show_image( GTK_BUTTON( btn ), TRUE );
+#endif
+#if GTK_CHECK_VERSION (3, 12, 0)
+        gtk_widget_set_margin_start( btn, 0 );
+        gtk_widget_set_margin_end( btn, 0 );
+#endif
+
+        // create tool item containing an ebox to capture click on button
+        item = GTK_WIDGET( gtk_tool_item_new() );
+        GtkWidget* ebox = gtk_event_box_new();
+        gtk_container_add( GTK_CONTAINER( item ), ebox );
+        gtk_container_add( GTK_CONTAINER( ebox ), btn );
+        gtk_event_box_set_visible_window( GTK_EVENT_BOX( ebox ), FALSE );
+        gtk_event_box_set_above_child( GTK_EVENT_BOX( ebox ), TRUE );
+        g_signal_connect( ebox, "button-press-event",
+                            G_CALLBACK( on_tool_icon_button_press ), set );
+        g_object_set_data( G_OBJECT( ebox ), "browser", file_browser );
+        ptk_file_browser_add_toolbar_widget( set, btn );
+
+        // tooltip
+        if ( show_tooltips )
+        {
+            str = clean_label( new_menu_label, FALSE, FALSE );
+            gtk_widget_set_tooltip_text( ebox, str );
+            g_free( str );
+        }
+        g_free( new_menu_label );
+    }
+    else if ( menu_style == XSET_MENU_CHECK )
+    {
+        if ( !icon_name && set->tool > XSET_TOOL_CUSTOM &&
+                                        set->tool < XSET_TOOL_INVALID )
+            // builtin tool item
+            image = xset_get_image( builtin_tool_icon[set->tool],
+                                                                icon_size );
+        else
+            image = xset_get_image( icon_name ? icon_name : "gtk-execute",
+                                                                icon_size );
+        
+        // can't use gtk_tool_button_new because icon doesn't obey size
+        //btn = GTK_WIDGET( gtk_toggle_tool_button_new() );
+        //gtk_tool_button_set_icon_widget( GTK_TOOL_BUTTON( btn ), image );
+        //gtk_tool_button_set_label( GTK_TOOL_BUTTON( btn ), set->menu_label );
+        btn = gtk_toggle_button_new();
+        gtk_widget_show( image );
+        gtk_button_set_image( GTK_BUTTON( btn ), image );
+        gtk_button_set_relief( GTK_BUTTON( btn ), GTK_RELIEF_NONE );
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn ),
+                                                    xset_get_b_set( set ) );
+#if GTK_CHECK_VERSION (3, 0, 0)
+        gtk_widget_set_margin_left( btn, 0 );
+        gtk_widget_set_margin_right( btn, 0 );
+        gtk_widget_set_margin_top( btn, 0 );
+        gtk_widget_set_margin_bottom( btn, 0 );
+        gtk_widget_set_hexpand( btn, FALSE );
+        gtk_widget_set_vexpand( btn, FALSE );
+        set_gtk3_widget_padding( btn, 0, 0 );
+#endif
+#if GTK_CHECK_VERSION (3, 6, 0)
+        gtk_button_set_always_show_image( GTK_BUTTON( btn ), TRUE );
+#endif
+#if GTK_CHECK_VERSION (3, 12, 0)
+        gtk_widget_set_margin_start( btn, 0 );
+        gtk_widget_set_margin_end( btn, 0 );
+#endif
+
+        // create tool item containing an ebox to capture click on button
+        item = GTK_WIDGET( gtk_tool_item_new() );
+        GtkWidget* ebox = gtk_event_box_new();
+        gtk_container_add( GTK_CONTAINER( item ), ebox );
+        gtk_container_add( GTK_CONTAINER( ebox ), btn );
+        gtk_event_box_set_visible_window( GTK_EVENT_BOX( ebox ), FALSE );
+        gtk_event_box_set_above_child( GTK_EVENT_BOX( ebox ), TRUE );
+        g_signal_connect( ebox, "button-press-event",
+                            G_CALLBACK( on_tool_icon_button_press ), set );
+        g_object_set_data( G_OBJECT( ebox ), "browser", file_browser );
+        ptk_file_browser_add_toolbar_widget( set, btn );
+
+        // tooltip
+        if ( show_tooltips )
+        {
+            str = clean_label( menu_label, FALSE, FALSE );
+            gtk_widget_set_tooltip_text( ebox, str );
+            g_free( str );
+        }
+    }
+    else if ( menu_style == XSET_MENU_SUBMENU )
+    {
+        menu_label = NULL;
+        // create a tool button
+        XSet* set_child = NULL;
+        if ( set->tool == XSET_TOOL_CUSTOM )
+            set_child = xset_is( set->child );
+        
+        if ( !icon_name && set_child && set_child->icon )
+            // take the user icon from the first item in the submenu
+            icon_name = set_child->icon;
+        else if ( !icon_name && set->tool > XSET_TOOL_CUSTOM &&
+                                set->tool < XSET_TOOL_INVALID )
+            icon_name = builtin_tool_icon[ set->tool ];
+        else if ( !icon_name && set_child && set->tool == XSET_TOOL_CUSTOM )
+        {
+            // take the auto icon from the first item in the submenu
+            cmd_type = xset_get_int_set( set_child, "x" );
+            if ( cmd_type == XSET_CMD_APP )
+            {
+                // Application
+                new_menu_label = menu_label = xset_custom_get_app_name_icon(
+                                        set_child, &pixbuf, real_icon_size );
+            }
+            else if ( cmd_type == XSET_CMD_BOOKMARK )
+            {
+                // Bookmark
+                pixbuf = xset_custom_get_bookmark_icon( set_child,
+                                                        real_icon_size );
+                if ( !( set_child->menu_label && set_child->menu_label[0] ) )
+                    menu_label = set_child->z;
+            }
+            else
+                icon_name = "gtk-execute";
+            if ( pixbuf )
+            {
+                image = gtk_image_new_from_pixbuf( pixbuf );
+                g_object_unref( pixbuf );
+            }
+        }
+        
+        if ( !menu_label )
+        {
+            if ( set->tool == XSET_TOOL_BACK_MENU )
+                menu_label = _(builtin_tool_name[ XSET_TOOL_BACK ]);
+            else if ( set->tool == XSET_TOOL_FWD_MENU )
+                menu_label = _(builtin_tool_name[ XSET_TOOL_FWD ]);
+            else if ( set->tool == XSET_TOOL_CUSTOM && set_child )
+                menu_label = set_child->menu_label;
+            else if ( set->tool > XSET_TOOL_CUSTOM && !set->menu_label )
+                menu_label = (char*)xset_get_builtin_toolitem_label( set->tool );
+            else
+                menu_label = set->menu_label;
+        }
+        
+        if ( !image )
+            image = xset_get_image( icon_name ? icon_name : "gtk-directory",
+                                                                icon_size );
+        
+        // can't use gtk_tool_button_new because icon doesn't obey size
+        //btn = GTK_WIDGET( gtk_tool_button_new( image, menu_label ) );
+        btn = GTK_WIDGET( gtk_button_new() );
+        gtk_widget_show( image );
+        gtk_button_set_image( GTK_BUTTON( btn ), image );
+        gtk_button_set_relief( GTK_BUTTON( btn ), GTK_RELIEF_NONE );
+#if GTK_CHECK_VERSION (3, 0, 0)
+        gtk_widget_set_margin_left( btn, 0 );
+        gtk_widget_set_margin_right( btn, 0 );
+        gtk_widget_set_margin_top( btn, 0 );
+        gtk_widget_set_margin_bottom( btn, 0 );
+        gtk_widget_set_hexpand( btn, FALSE );
+        gtk_widget_set_vexpand( btn, FALSE );
+        set_gtk3_widget_padding( btn, 0, 0 );
+#else
+        gtk_widget_size_request( btn, &req );
+        gtk_widget_set_size_request( GTK_WIDGET( btn ), req.width - 4, -1 );
+#endif
+#if GTK_CHECK_VERSION (3, 6, 0)
+        gtk_button_set_always_show_image( GTK_BUTTON( btn ), TRUE );
+#endif
+#if GTK_CHECK_VERSION (3, 12, 0)
+        gtk_widget_set_margin_start( btn, 0 );
+        gtk_widget_set_margin_end( btn, 0 );
+#endif
+
+        // create eventbox for btn
+        GtkWidget* ebox = gtk_event_box_new();
+        gtk_event_box_set_visible_window( GTK_EVENT_BOX( ebox ), FALSE );
+        gtk_event_box_set_above_child( GTK_EVENT_BOX( ebox ), TRUE );
+        gtk_container_add( GTK_CONTAINER( ebox ), btn );
+        g_signal_connect( G_OBJECT( ebox ), "button_press_event",
+                                G_CALLBACK( on_tool_icon_button_press ), set );
+        g_object_set_data( G_OBJECT( ebox ), "browser", file_browser );
+        ptk_file_browser_add_toolbar_widget( set, btn );
+
+        // pack into hbox
+        GtkWidget* hbox = gtk_hbox_new( FALSE, 0 );
+        gtk_box_pack_start ( GTK_BOX( hbox ), ebox, FALSE, FALSE, 0 );
+        // tooltip
+        if ( show_tooltips )
+        {
+            str = clean_label( menu_label, FALSE, FALSE );
+            gtk_widget_set_tooltip_text( ebox, str );
+            g_free( str );
+        }
+        g_free( new_menu_label );
+
+        // reset menu_label for below
+        menu_label = set->menu_label;
+        if ( !menu_label && set->tool > XSET_TOOL_CUSTOM )
+            menu_label = (char*)xset_get_builtin_toolitem_label( set->tool );
+
+        ///////// create a menu_tool_button to steal the button from
+        ebox = gtk_event_box_new();
+        gtk_event_box_set_visible_window( GTK_EVENT_BOX( ebox ), FALSE );
+        gtk_event_box_set_above_child( GTK_EVENT_BOX( ebox ), TRUE );
+        GtkWidget* menu_btn = GTK_WIDGET(
+                                gtk_menu_tool_button_new( NULL, NULL ) );
+        GtkWidget* hbox_menu = gtk_bin_get_child( GTK_BIN( menu_btn ) );
+        GList* children = gtk_container_get_children( GTK_CONTAINER( hbox_menu ) );
+        btn = GTK_WIDGET( children->next->data );
+        if ( !btn || !GTK_IS_WIDGET( btn ) )
+        {
+            // failed so just create a button
+            btn = GTK_WIDGET( gtk_button_new() );
+            gtk_button_set_label( GTK_BUTTON( btn ), "." );
+            gtk_button_set_relief( GTK_BUTTON( btn ), GTK_RELIEF_NONE );
+            gtk_container_add( GTK_CONTAINER( ebox ), btn );
+        }
+        else
+        {
+            // steal the drop-down button
+            gtk_widget_reparent( btn, ebox );
+            gtk_button_set_relief( GTK_BUTTON( btn ), GTK_RELIEF_NONE );
+        }
+#if GTK_CHECK_VERSION (3, 0, 0)
+        gtk_widget_set_margin_left( btn, 0 );
+        gtk_widget_set_margin_right( btn, 0 );
+        gtk_widget_set_margin_top( btn, 0 );
+        gtk_widget_set_margin_bottom( btn, 0 );
+        gtk_widget_set_hexpand( btn, FALSE );
+        gtk_widget_set_vexpand( btn, FALSE );
+        set_gtk3_widget_padding( btn, 0, 0 );
+#endif
+#if GTK_CHECK_VERSION (3, 6, 0)
+        gtk_button_set_always_show_image( GTK_BUTTON( btn ), TRUE );
+#endif
+#if GTK_CHECK_VERSION (3, 12, 0)
+        gtk_widget_set_margin_start( btn, 0 );
+        gtk_widget_set_margin_end( btn, 0 );
+#endif
+
+        g_list_free( children );
+        gtk_widget_destroy( menu_btn );
+
+        gtk_box_pack_start ( GTK_BOX( hbox ), ebox, FALSE, FALSE, 0 );
+        g_signal_connect( G_OBJECT( ebox ), "button_press_event",
+                                G_CALLBACK( on_tool_menu_button_press ), set );
+        g_object_set_data( G_OBJECT( ebox ), "browser", file_browser );
+        ptk_file_browser_add_toolbar_widget( set, btn );
+
+        item = GTK_WIDGET( gtk_tool_item_new() );        
+        gtk_container_add( GTK_CONTAINER( item ), hbox );
+        gtk_widget_show_all( item );
+
+        // tooltip
+        if ( show_tooltips )
+        {
+            str = clean_label( menu_label, FALSE, FALSE );
+            gtk_widget_set_tooltip_text( ebox, str );
+            g_free( str );
+        }
+    }
+    else if ( menu_style == XSET_MENU_SEP )
+    {
+        // create tool item containing an ebox to capture click on sep
+        btn = GTK_WIDGET( gtk_separator_tool_item_new() );
+        gtk_separator_tool_item_set_draw( GTK_SEPARATOR_TOOL_ITEM( btn ),
+                                                                    TRUE ); 
+        item = GTK_WIDGET( gtk_tool_item_new() );
+        GtkWidget* ebox = gtk_event_box_new();
+        gtk_container_add( GTK_CONTAINER( item ), ebox );
+        gtk_container_add( GTK_CONTAINER( ebox ), btn );
+        gtk_event_box_set_visible_window( GTK_EVENT_BOX( ebox ), FALSE );
+        gtk_event_box_set_above_child( GTK_EVENT_BOX( ebox ), TRUE );
+        g_signal_connect( ebox, "button-press-event",
+                            G_CALLBACK( on_tool_icon_button_press ), set );
+        g_object_set_data( G_OBJECT( ebox ), "browser", file_browser );
+    }
+    else
+        return NULL;
+
+    g_free( icon_file );
+    gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), GTK_TOOL_ITEM( item ), -1 );
+    
+//printf("    set=%s   set->next=%s\n", set->name, set->next );
+    // next toolitem
+_next_toolitem:
+    if ( set_next = xset_is( set->next ) )
+    {
+//printf("    NEXT %s\n", set_next->name );
+        xset_add_toolitem( parent, file_browser, toolbar, icon_size, set_next,
+                                                            show_tooltips );
+    }
+
+    return item;
+}
+
+void xset_fill_toolbar( GtkWidget* parent, PtkFileBrowser* file_browser,
+                        GtkWidget* toolbar, XSet* set_parent,
+                        gboolean show_tooltips )
+{    
+    const char default_tools[] =
+    {
+        XSET_TOOL_BOOKMARKS,
+        XSET_TOOL_TREE,
+        XSET_TOOL_NEW_TAB_HERE,
+        XSET_TOOL_BACK_MENU,
+        XSET_TOOL_FWD_MENU,
+        XSET_TOOL_UP,
+        XSET_TOOL_DEFAULT
+    };
+    int i, stop_b4;
+    XSet* set;
+    XSet* set_target;
+    
+    //printf("xset_fill_toolbar %s\n", set_parent->name );
+    if ( !( file_browser && toolbar && set_parent ) )
+        return;
+
+    set_parent->lock = TRUE;
+    set_parent->menu_style = XSET_MENU_SUBMENU;
+    
+    GtkIconSize icon_size = gtk_toolbar_get_icon_size( GTK_TOOLBAR( toolbar ) );
+
+    XSet* set_child = NULL;
+    if ( set_parent->child )
+        set_child = xset_is( set_parent->child );
+    if ( !set_child )
+    {
+        // toolbar is empty - add default items
+        set_child = xset_new_builtin_toolitem(
+                                strstr( set_parent->name, "tool_r" ) ?
+                                    XSET_TOOL_REFRESH : XSET_TOOL_DEVICES );
+        set_parent->child = g_strdup( set_child->name );
+        set_child->parent = g_strdup( set_parent->name );
+        if ( !strstr( set_parent->name, "tool_r" ) )
+        {
+            if ( strstr( set_parent->name, "tool_s" ) )
+                stop_b4 = 2;
+            else
+                stop_b4 = G_N_ELEMENTS( default_tools );
+            set_target = set_child;
+            for ( i = 0; i < stop_b4; i++ )
+            {
+                set = xset_new_builtin_toolitem( default_tools[i] );
+                xset_custom_insert_after( set_target, set );
+                set_target = set;
+            }
+        }
+    }
+
+    xset_add_toolitem( parent, file_browser, toolbar, icon_size, set_child,
+                                                        show_tooltips );
+
+    // These don't seem to do anything
+    gtk_container_set_border_width( GTK_CONTAINER( toolbar ), 0 );
+#if GTK_CHECK_VERSION (3, 0, 0)
+    gtk_widget_set_margin_left( toolbar, 0 );
+    gtk_widget_set_margin_right( toolbar, 0 );
+    gtk_widget_set_margin_top( toolbar, 0 );
+    gtk_widget_set_margin_bottom( toolbar, 0 );
+
+    // remove padding from GTK3 toolbar - this works
+    set_gtk3_widget_padding( toolbar, 0, 2 );
+#endif
+#if GTK_CHECK_VERSION (3, 12, 0)
+    gtk_widget_set_margin_start( toolbar, 0 );
+    gtk_widget_set_margin_end( toolbar, 0 );
+#endif
+
+    gtk_widget_show_all( toolbar );
 }
 
 void open_in_prog( const char* path )
@@ -9170,7 +10399,16 @@ char* clean_label( const char* menu_label, gboolean kill_special, gboolean escap
 {
     char* s1;
     char* s2;
-    s1 = replace_string( menu_label, "_", "", FALSE );
+    if ( menu_label && strstr( menu_label, "\\_" ) )
+    {
+        s1 = replace_string( menu_label, "\\_", "@UNDERSCORE@", FALSE );
+        s2 = replace_string( s1, "_", "", FALSE );
+        g_free( s1 );
+        s1 = replace_string( s2, "@UNDERSCORE@", "_", FALSE );
+        g_free( s2 );
+    }
+    else
+        s1 = replace_string( menu_label, "_", "", FALSE );
     if ( kill_special )
     {
         s2 = replace_string( s1, "&", "", FALSE );
@@ -9246,263 +10484,6 @@ void xset_defaults()
     // set_last must be set (to anything)
     set_last = xset_get( "separator" );
     set_last->menu_style = XSET_MENU_SEP;
-
-    // toolbars
-    set = xset_get( "sep_tool1" );
-    set->menu_style = XSET_MENU_SEP;
-
-    set = xset_get( "sep_tool2" );
-    set->menu_style = XSET_MENU_SEP;
-
-    set = xset_get( "sep_tool3" );
-    set->menu_style = XSET_MENU_SEP;
-
-    set = xset_get( "sep_tool4" );
-    set->menu_style = XSET_MENU_SEP;
-
-    set = xset_set( "toolbar_left", "lbl", _("_Left Toolbar") );
-    xset_set_set( set, "desc", "tool_device tool_book tool_dirtree tool_newtab tool_newtabhere tool_back tool_backmenu tool_forward tool_forwardmenu tool_up tool_home tool_default tool_refresh" );
-    set->menu_style = XSET_MENU_SUBMENU;
-
-    set = xset_set( "toolbar_right", "lbl", _("_Right Toolbar") );
-    xset_set_set( set, "desc", "rtool_device rtool_book rtool_dirtree rtool_newtab rtool_newtabhere rtool_back rtool_backmenu rtool_forward rtool_forwardmenu rtool_up rtool_refresh rtool_home rtool_default" );
-    set->menu_style = XSET_MENU_SUBMENU;
-
-    set = xset_set( "toolbar_side", "lbl", _("_Side Toolbar") );
-    xset_set_set( set, "desc", "stool_device stool_book stool_dirtree stool_newtab stool_newtabhere stool_back stool_backmenu stool_forward stool_forwardmenu stool_up stool_refresh stool_home stool_default" );  // stool_mount stool_mountopen stool_eject
-    set->menu_style = XSET_MENU_SUBMENU;
-
-    set = xset_set( "toolbar_hide", "lbl", _("_Hide") );
-    xset_set_set( set, "shared_key", "panel1_show_toolbox" );
-
-    set = xset_set( "toolbar_hide_side", "lbl", _("_Hide") );
-    xset_set_set( set, "shared_key", "panel1_show_sidebar" );
-
-    set = xset_set( "toolbar_config", "lbl", _("Configure Toolbar") );
-    xset_set_set( set, "icn", "gtk-properties" );
-    set->tool = XSET_B_TRUE;
-
-    set = xset_set( "toolbar_help", "lbl", _("H_elp") );
-    xset_set_set( set, "icn", "gtk-help" );
-
-    // toolitems left
-    set = xset_set( "tool_dirtree", "lbl", _("Tree") );
-    xset_set_set( set, "icn", "gtk-directory" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "panel1_show_dirtree" );
-
-    set = xset_set( "tool_book", "lbl", _("Bookmarks") );
-    xset_set_set( set, "icn", "gtk-jump-to" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "panel1_show_book" );
-
-    set = xset_set( "tool_device", "lbl", _("Devices") );
-    xset_set_set( set, "icn", "gtk-harddisk" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "panel1_show_devmon" );
-
-    set = xset_set( "tool_newtab", "lbl", _("New Tab") );
-    xset_set_set( set, "icn", "gtk-add" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "tab_new" );
-
-    set = xset_set( "tool_newtabhere", "lbl", _("New Tab Here") );
-    xset_set_set( set, "icn", "gtk-add" );
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "tab_new_here" );
-
-    set = xset_set( "tool_back", "lbl", _("Back") );
-    xset_set_set( set, "icn", "gtk-go-back" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_back" );
-
-    set = xset_set( "tool_backmenu", "lbl", _("Back Menu") );
-    xset_set_set( set, "icn", "gtk-go-back" );
-    set->menu_style = XSET_MENU_SUBMENU;
-    set->tool = XSET_B_TRUE;
-
-    set = xset_set( "tool_forward", "lbl", _("Forward") );
-    xset_set_set( set, "icn", "gtk-go-forward" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_forward" );
-
-    set = xset_set( "tool_forwardmenu", "lbl", _("Forward Menu") );
-    xset_set_set( set, "icn", "gtk-go-forward" );
-    set->menu_style = XSET_MENU_SUBMENU;
-    set->tool = XSET_B_TRUE;
-
-    set = xset_set( "tool_up", "lbl", _("Up") );
-    xset_set_set( set, "icn", "gtk-go-up" );
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "go_up" );
-
-    set = xset_set( "tool_refresh", "lbl", _("Refresh") );
-    xset_set_set( set, "icn", "gtk-refresh" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "view_refresh" );
-
-    set = xset_set( "tool_home", "lbl", _("Home") );
-    xset_set_set( set, "icn", "gtk-home" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_home" );
-
-    set = xset_set( "tool_default", "lbl", _("Default") );
-    xset_set_set( set, "icn", "gtk-home" );
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "go_default" );
-
-
-    // toolitems right
-    set = xset_set( "rtool_dirtree", "lbl", _("Tree") );
-    xset_set_set( set, "icn", "gtk-directory" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "panel1_show_dirtree" );
-
-    set = xset_set( "rtool_book", "lbl", _("Bookmarks") );
-    xset_set_set( set, "icn", "gtk-jump-to" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "panel1_show_book" );
-
-    set = xset_set( "rtool_device", "lbl", _("Devices") );
-    xset_set_set( set, "icn", "gtk-harddisk" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "panel1_show_devmon" );
-
-    set = xset_set( "rtool_newtab", "lbl", _("New Tab") );
-    xset_set_set( set, "icn", "gtk-add" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "tab_new" );
-
-    set = xset_set( "rtool_newtabhere", "lbl", _("New Tab Here") );
-    xset_set_set( set, "icn", "gtk-add" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "tab_new_here" );
-
-    set = xset_set( "rtool_back", "lbl", _("Back") );
-    xset_set_set( set, "icn", "gtk-go-back" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_back" );
-
-    set = xset_set( "rtool_backmenu", "lbl", _("Back Menu") );
-    xset_set_set( set, "icn", "gtk-go-back" );
-    set->menu_style = XSET_MENU_SUBMENU;
-    set->tool = XSET_B_FALSE;
-
-    set = xset_set( "rtool_forward", "lbl", _("Forward") );
-    xset_set_set( set, "icn", "gtk-go-forward" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_forward" );
-
-    set = xset_set( "rtool_forwardmenu", "lbl", _("Forward Menu") );
-    xset_set_set( set, "icn", "gtk-go-forward" );
-    set->menu_style = XSET_MENU_SUBMENU;
-    set->tool = XSET_B_FALSE;
-
-    set = xset_set( "rtool_up", "lbl", _("Up") );
-    xset_set_set( set, "icn", "gtk-go-up" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_up" );
-
-    set = xset_set( "rtool_refresh", "lbl", _("Refresh") );
-    xset_set_set( set, "icn", "gtk-refresh" );
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "view_refresh" );
-
-    set = xset_set( "rtool_home", "lbl", _("Home") );
-    xset_set_set( set, "icn", "gtk-home" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_home" );
-
-    set = xset_set( "rtool_default", "lbl", _("Default") );
-    xset_set_set( set, "icn", "gtk-home" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_default" );
-
-    // toolitems side
-    set = xset_set( "stool_dirtree", "lbl", _("Tree") );
-    xset_set_set( set, "icn", "gtk-directory" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "panel1_show_dirtree" );
-
-    set = xset_set( "stool_book", "lbl", _("Bookmarks") );
-    xset_set_set( set, "icn", "gtk-jump-to" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "panel1_show_book" );
-
-    set = xset_set( "stool_device", "lbl", _("Devices") );
-    xset_set_set( set, "icn", "gtk-harddisk" );
-    set->menu_style = XSET_MENU_CHECK;
-    set->tool = XSET_B_TRUE;
-    xset_set_set( set, "shared_key", "panel1_show_devmon" );
-
-    set = xset_set( "stool_newtab", "lbl", _("New Tab") );
-    xset_set_set( set, "icn", "gtk-add" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "tab_new" );
-
-    set = xset_set( "stool_newtabhere", "lbl", _("New Tab Here") );
-    xset_set_set( set, "icn", "gtk-add" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "tab_new_here" );
-
-    set = xset_set( "stool_back", "lbl", _("Back") );
-    xset_set_set( set, "icn", "gtk-go-back" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_back" );
-
-    set = xset_set( "stool_backmenu", "lbl", _("Back Menu") );
-    xset_set_set( set, "icn", "gtk-go-back" );
-    set->menu_style = XSET_MENU_SUBMENU;
-    set->tool = XSET_B_FALSE;
-
-    set = xset_set( "stool_forward", "lbl", _("Forward") );
-    xset_set_set( set, "icn", "gtk-go-forward" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_forward" );
-
-    set = xset_set( "stool_forwardmenu", "lbl", _("Forward Menu") );
-    xset_set_set( set, "icn", "gtk-go-forward" );
-    set->menu_style = XSET_MENU_SUBMENU;
-    set->tool = XSET_B_FALSE;
-
-    set = xset_set( "stool_up", "lbl", _("Up") );
-    xset_set_set( set, "icn", "gtk-go-up" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_up" );
-
-    set = xset_set( "stool_refresh", "lbl", _("Refresh") );
-    xset_set_set( set, "icn", "gtk-refresh" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "view_refresh" );
-
-    set = xset_set( "stool_home", "lbl", _("Home") );
-    xset_set_set( set, "icn", "gtk-home" );
-    set->tool = XSET_B_FALSE;
-
-    set = xset_set( "stool_default", "lbl", _("Default") );
-    xset_set_set( set, "icn", "gtk-home" );
-    set->tool = XSET_B_FALSE;
-    xset_set_set( set, "shared_key", "go_default" );
-
-    set = xset_set( "stool_mount", "lbl", _("Mount") );//not added
-    xset_set_set( set, "icn", "drive-removable-media" );
-    set->tool = XSET_B_FALSE;
-
-    set = xset_set( "stool_mountopen", "lbl", _("Mount & Open") );//not added
-    xset_set_set( set, "icn", "gtk-open" );
-    set->tool = XSET_B_TRUE;
-
-    set = xset_set( "stool_eject", "lbl", _("Remove") );//not added
-    xset_set_set( set, "icn", "gtk-disconnect" );
-    set->tool = XSET_B_TRUE;
 
     // dev menu
     set = xset_get( "sep_dm1" );
@@ -9740,6 +10721,7 @@ void xset_defaults()
     
     set = xset_set( "dev_prop", "lbl", _("_Properties") );
     set->line = g_strdup( "#devices-menu-properties" );
+    xset_set_set( set, "icn", "gtk-properties" );
 
     set = xset_set( "dev_menu_settings", "lbl", _("Setti_ngs") );
     xset_set_set( set, "icn", "gtk-properties" );
@@ -10391,8 +11373,12 @@ void xset_defaults()
 
     set = xset_set( "main_icon", "lbl", _("_Window Icon") );
     set->menu_style = XSET_MENU_ICON;
+    // Note: xset_text_dialog uses the title passed to know this is an
+    // icon chooser, so it adds a Choose button.  If you change the title,
+    // change xset_text_dialog.
     set->title = g_strdup( _("Set Window Icon") );
-    set->desc = g_strdup( _("Enter an icon name, icon file path, or stock item name:\n\nNot all icons may work due to various issues.\n\nProvided alternate SpaceFM icons:\n\tspacefm-[48|128]-[cube|pyramid]-[blue|green|red]\n\tspacefm-48-folder-[blue|red]\n\nFor example: spacefm-48-pyramid-green") );
+    set->desc = g_strdup( _("Enter an icon name, icon file path, or stock item name:\n\nOr click Choose to select an icon.  Not all icons may work properly due to various issues.\n\nProvided alternate SpaceFM icons:\n\tspacefm-[48|128]-[cube|pyramid]-[blue|green|red]\n\tspacefm-48-folder-[blue|red]\n\nFor example: spacefm-48-pyramid-green") );
+    // x and y store global icon chooser dialog size
 
     set = xset_set( "main_full", "lbl", _("_Fullscreen") );
     set->menu_style = XSET_MENU_CHECK;
@@ -10408,6 +11394,9 @@ void xset_defaults()
 
     set = xset_get( "root_bar" );  // in Preferences
     set->b = XSET_B_TRUE;
+
+    set = xset_set( "view_thumb", "lbl", _("_Thumbnails (global)") );  // in View|Panel View|Style
+    set->menu_style = XSET_MENU_CHECK;
 
     // Plugins
     set = xset_set( "plug_install", "lbl", _("_Install") );
@@ -10851,7 +11840,7 @@ void xset_defaults()
     set = xset_set( "open_other", "lbl", _("_Choose...") );
     xset_set_set( set, "icn", "gtk-open" );
 
-    set = xset_set( "open_hand", "lbl", _("_Handlers...") );
+    set = xset_set( "open_hand", "lbl", _("File _Handlers...") );
     xset_set_set( set, "icn", "gtk-preferences" );
     set->line = g_strdup( "#handlers-fil" );
 
@@ -10976,8 +11965,8 @@ void xset_defaults()
         xset_set_set( set, "icn", "gtk-save-as" );
 
         set = xset_get( "arc_dlg" );
-        set->b = XSET_B_TRUE;
-        xset_set_set( set, "s", "1" );
+        set->b = XSET_B_TRUE;           // Extract To - Create Subfolder
+        set->z = g_strdup( "1" );       // Extract To - Write Access
         
         set = xset_set( "tab_new", "lbl", C_("New|", "_Tab") );
         xset_set_set( set, "icn", "gtk-add" );

@@ -251,45 +251,84 @@ GdkPixbuf* vfs_mime_type_get_icon( VFSMimeType* mime_type, gboolean big )
         return icon ? g_object_ref( icon ) : NULL;
     }
 
-    sep = strchr( mime_type->type, '/' );
-    if ( sep )
+    // get description and icon from freedesktop XML - these are fetched
+    // together for performance.
+    char* xml_icon = NULL;
+    char* xml_desc = mime_type_get_desc_icon( mime_type->type, NULL, &xml_icon );
+    if ( xml_icon )
     {
-        /* convert mime-type foo/bar to foo-bar */
-        strcpy( icon_name, mime_type->type );
-        icon_name[ (sep - mime_type->type) ] = '-';
-        /* is there an icon named foo-bar? */
-        icon = vfs_load_icon ( icon_theme, icon_name, size );
-        if ( ! icon )
+        if ( xml_icon[0] )
+            icon = vfs_load_icon( icon_theme, xml_icon, size );
+        g_free( xml_icon );
+    }
+    if ( xml_desc )
+    {
+        if ( !mime_type->description && xml_desc[0] )
+            mime_type->description = xml_desc;
+        else
+            g_free( xml_desc );
+    }
+    if ( !mime_type->description )
+    {
+        g_warning( "mime-type %s has no description (comment)", mime_type->type );
+        VFSMimeType* vfs_mime = vfs_mime_type_get_from_type(
+                                                    XDG_MIME_TYPE_UNKNOWN );
+        if ( vfs_mime )
         {
-            /* maybe we can find a legacy icon named gnome-mime-foo-bar */
-            strcpy( icon_name, "gnome-mime-" );
-            strncat( icon_name, mime_type->type, ( sep - mime_type->type ) );
-            strcat( icon_name, "-" );
-            strcat( icon_name, sep + 1 );
-            icon = vfs_load_icon ( icon_theme, icon_name, size );
+            mime_type->description = g_strdup( vfs_mime_type_get_description(
+                                                            vfs_mime ) );
+            vfs_mime_type_unref( vfs_mime );
         }
-        // hack for x-xz-compressed-tar missing icon
-        if ( !icon && strstr( mime_type->type, "compressed" ) )
+    }
+
+    if ( !icon )
+    {
+        // guess icon
+        sep = strchr( mime_type->type, '/' );
+        if ( sep )
         {
-            icon = vfs_load_icon ( icon_theme, "application-x-archive", size );
-            if ( !icon )
-                icon = vfs_load_icon ( icon_theme, "gnome-mime-application-x-archive",
-                                                                            size );
-        }
-        /* try gnome-mime-foo */
-        if ( G_UNLIKELY( ! icon ) )
-        {
-            icon_name[ 11 ] = '\0'; /* strlen("gnome-mime-") = 11 */
-            strncat( icon_name, mime_type->type, ( sep - mime_type->type ) );
+            /* convert mime-type foo/bar to foo-bar */
+            strcpy( icon_name, mime_type->type );
+            icon_name[ (sep - mime_type->type) ] = '-';
+            /* is there an icon named foo-bar? */
             icon = vfs_load_icon ( icon_theme, icon_name, size );
-        }
-        /* try foo-x-generic */
-        if ( G_UNLIKELY( ! icon ) )
-        {
-            strncpy( icon_name, mime_type->type, ( sep - mime_type->type ) );
-            icon_name[ (sep - mime_type->type) ] = '\0';
-            strcat( icon_name, "-x-generic" );
-            icon = vfs_load_icon ( icon_theme, icon_name, size );
+            if ( ! icon )
+            {
+                /* maybe we can find a legacy icon named gnome-mime-foo-bar */
+                strcpy( icon_name, "gnome-mime-" );
+                strncat( icon_name, mime_type->type,
+                                                ( sep - mime_type->type ) );
+                strcat( icon_name, "-" );
+                strcat( icon_name, sep + 1 );
+                icon = vfs_load_icon ( icon_theme, icon_name, size );
+            }
+            // hack for x-xz-compressed-tar missing icon
+            if ( !icon && strstr( mime_type->type, "compressed" ) )
+            {
+                icon = vfs_load_icon ( icon_theme, "application-x-archive",
+                                                                    size );
+                if ( !icon )
+                    icon = vfs_load_icon ( icon_theme,
+                                           "gnome-mime-application-x-archive",
+                                           size );
+            }
+            /* try gnome-mime-foo */
+            if ( G_UNLIKELY( ! icon ) )
+            {
+                icon_name[ 11 ] = '\0'; /* strlen("gnome-mime-") = 11 */
+                strncat( icon_name, mime_type->type,
+                                                ( sep - mime_type->type ) );
+                icon = vfs_load_icon ( icon_theme, icon_name, size );
+            }
+            /* try foo-x-generic */
+            if ( G_UNLIKELY( ! icon ) )
+            {
+                strncpy( icon_name, mime_type->type,
+                                                ( sep - mime_type->type ) );
+                icon_name[ (sep - mime_type->type) ] = '\0';
+                strcat( icon_name, "-x-generic" );
+                icon = vfs_load_icon ( icon_theme, icon_name, size );
+            }
         }
     }
 
@@ -381,12 +420,20 @@ const char* vfs_mime_type_get_description( VFSMimeType* mime_type )
 {
     if ( G_UNLIKELY( ! mime_type->description ) )
     {
-        mime_type->description = mime_type_get_desc( mime_type->type, NULL );
-        /* FIXME: should handle this better */
-        if ( G_UNLIKELY( ! mime_type->description || ! *mime_type->description ) )
+        mime_type->description = mime_type_get_desc_icon( mime_type->type,
+                                                        NULL, NULL );
+        if ( G_UNLIKELY( !mime_type->description || !*mime_type->description ) )
         {
-            g_warning( "mime-type %s has no desc", mime_type->type );
-            mime_type->description = mime_type_get_desc( XDG_MIME_TYPE_UNKNOWN, NULL );
+            g_warning( "mime-type %s has no description (comment)",
+                                                            mime_type->type );
+            VFSMimeType* vfs_mime = vfs_mime_type_get_from_type(
+                                                    XDG_MIME_TYPE_UNKNOWN );
+            if ( vfs_mime )
+            {
+                mime_type->description = g_strdup(
+                                vfs_mime_type_get_description( vfs_mime ) );
+                vfs_mime_type_unref( vfs_mime );
+            }
         }
     }
     return mime_type->description;
@@ -464,15 +511,16 @@ void vfs_mime_type_set_default_action( VFSMimeType* mime_type,
     vfs_mime_type_add_action( mime_type, desktop_id, &cust_desktop );
     if( cust_desktop )
         desktop_id = cust_desktop;
-    mime_type_set_default_action( mime_type->type, desktop_id );
-
+    mime_type_update_association( mime_type->type, desktop_id,
+                                                MIME_TYPE_ACTION_DEFAULT );
     g_free( cust_desktop );
 }
 
 void vfs_mime_type_remove_action( VFSMimeType* mime_type,
                                        const char* desktop_id )
 {
-    mime_type_remove_action( mime_type->type, desktop_id );
+    mime_type_update_association( mime_type->type, desktop_id,
+                                                MIME_TYPE_ACTION_REMOVE );
 }
 
 /* If user-custom desktop file is created, it's returned in custom_desktop. */
@@ -543,6 +591,6 @@ char* vfs_mime_type_locate_desktop_file( const char* dir, const char* desktop_id
 
 void vfs_mime_type_append_action( const char* type, const char* desktop_id )
 {
-    mime_type_append_action( type, desktop_id );
+    mime_type_update_association( type, desktop_id, MIME_TYPE_ACTION_APPEND );
 }
 

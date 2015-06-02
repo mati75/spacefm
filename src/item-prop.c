@@ -50,7 +50,7 @@ typedef struct
     GtkWidget* item_target;
     GtkWidget* item_choose;
     GtkWidget* item_browse;
-    GtkWidget* show_tool;
+    GtkWidget* icon_choose_btn;
     
     // Context Page
     GtkWidget* vbox_context;
@@ -498,6 +498,10 @@ void enable_context( ContextData* ctxt )
                 text = _("Current: Hide");
             else if ( action == CONTEXT_DISABLE )
                 text = _("Current: Disable");
+            else if ( action == CONTEXT_SHOW && gtk_combo_box_get_active(
+                                GTK_COMBO_BOX( ctxt->box_action ) ) ==
+                                                            CONTEXT_DISABLE )
+                text = _("Current: Enable");
         }
         gtk_label_set_text( ctxt->test, text );
     }
@@ -1281,7 +1285,8 @@ void replace_item_props( ContextData* ctxt )
     XSet* mset = xset_get_plugin_mirror( rset );
 
     if ( !rset->lock && rset->menu_style != XSET_MENU_SUBMENU &&
-                        rset->menu_style != XSET_MENU_SEP )
+                        rset->menu_style != XSET_MENU_SEP &&
+                        rset->tool <= XSET_TOOL_CUSTOM )
     {
         // custom bookmark, app, or command
         gboolean is_bookmark_or_app = FALSE;
@@ -1314,7 +1319,10 @@ void replace_item_props( ContextData* ctxt )
         if ( x >= 0 )
         {
             g_free( rset->x );
-            rset->x = g_strdup_printf( "%d", x );
+            if ( x == 0 )
+                rset->x = NULL;
+            else
+                rset->x = g_strdup_printf( "%d", x );
         }
         if ( !rset->plugin )
         {
@@ -1345,7 +1353,15 @@ void replace_item_props( ContextData* ctxt )
         // command line
         g_free( rset->line );
         if ( x == XSET_CMD_LINE )
+        {
             rset->line = get_text_view( GTK_TEXT_VIEW( ctxt->cmd_script ) );
+            if ( rset->line && strlen( rset->line ) > 2000 )
+                xset_msg_dialog( ctxt->dlg, GTK_MESSAGE_WARNING,
+                   _("Command Line Too Long"), NULL,
+                   GTK_BUTTONS_OK,
+                   _("Your command line is greater than 2000 characters and may be truncated when saved.  Consider using a command script instead by selecting Script on the Command tab."),
+                   NULL, NULL );
+        }
         else
             rset->line = g_strdup( ctxt->temp_cmd_line );
 
@@ -1401,7 +1417,13 @@ void replace_item_props( ContextData* ctxt )
             rset->in_terminal = XSET_B_TRUE;
 
         g_free( rset->menu_label );
-        rset->menu_label = g_strdup( gtk_entry_get_text(
+        if ( rset->tool > XSET_TOOL_CUSTOM && !g_strcmp0( gtk_entry_get_text(
+                                            GTK_ENTRY( ctxt->item_name ) ),
+                             xset_get_builtin_toolitem_label( rset->tool ) ) )
+            // don't save default label of builtin toolitems
+            rset->menu_label = NULL;
+        else
+            rset->menu_label = g_strdup( gtk_entry_get_text(
                                             GTK_ENTRY( ctxt->item_name ) ) );
     }
     // icon
@@ -1431,23 +1453,6 @@ void replace_item_props( ContextData* ctxt )
     xset_set_b( "context_dlg",
             gtk_toggle_button_get_active(
                                 GTK_TOGGLE_BUTTON( ctxt->ignore_context ) ) );
-
-    // Show In Toolbar
-    if ( rset->tool )
-    {
-        int show_tool = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(
-                                                            ctxt->show_tool ) )
-                                        ? XSET_B_TRUE : XSET_B_FALSE;
-        if ( show_tool != rset->tool )
-        {
-            rset->tool = show_tool;
-            if ( rset->browser )
-            {
-                rebuild_toolbar_all_windows( 0, rset->browser );
-                rebuild_toolbar_all_windows( 1, rset->browser );
-            }
-        }
-    }
 }
 
 void on_script_font_change( GtkMenuItem* item, GtkTextView *input )
@@ -1502,6 +1507,44 @@ void on_prop_notebook_switch_page( GtkNotebook *notebook,
     g_idle_add( (GSourceFunc)delayed_focus, widget );
 }
 
+static void on_icon_choose_button_clicked( GtkWidget* widget, ContextData* ctxt )
+{
+    // get current icon
+    char* new_icon;
+    const char* icon = gtk_entry_get_text( GTK_ENTRY( ctxt->item_icon ) );
+
+    new_icon = xset_icon_chooser_dialog( GTK_WINDOW( ctxt->dlg ), icon );
+    
+    if ( new_icon )
+    {
+        gtk_entry_set_text( GTK_ENTRY( ctxt->item_icon ), new_icon );
+        g_free( new_icon );
+    }
+}
+
+static void on_entry_buffer_inserted_text( GtkEntryBuffer* buf,
+                                           guint position,
+                                           gchar* chars,
+                                           guint n_chars,
+                                           ContextData* ctxt )
+{
+    // update icon of icon choose button
+    const char* icon = gtk_entry_get_text( GTK_ENTRY( ctxt->item_icon ) );
+    gtk_button_set_image( GTK_BUTTON( ctxt->icon_choose_btn ),
+                        xset_get_image(
+                        icon && icon[0] ? icon :
+                        GTK_STOCK_OPEN,
+                        GTK_ICON_SIZE_BUTTON ) );
+}
+
+static void on_entry_buffer_deleted_text( GtkEntryBuffer* buf,
+                                           guint position,
+                                           guint n_chars,
+                                           ContextData* ctxt )
+{
+    on_entry_buffer_inserted_text( buf, position, NULL, n_chars, ctxt );
+}
+               
 void on_entry_activate( GtkWidget* entry, ContextData* ctxt )
 {
     gtk_button_clicked( GTK_BUTTON( ctxt->btn_ok ) );
@@ -1541,7 +1584,6 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
 
     if ( !context || !set )
         return;
-    
     ContextData* ctxt = g_slice_new0( ContextData );
     ctxt->context = context;
     ctxt->set = set;
@@ -1628,6 +1670,7 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     gtk_table_attach( table, label, 0, 1, row, row + 1,
                                     GTK_FILL, GTK_SHRINK, 0, 0 );
     ctxt->item_key = gtk_button_new_with_label( " " );
+    gtk_button_set_focus_on_click( GTK_BUTTON( ctxt->item_key ), FALSE );
     gtk_table_attach( table, ctxt->item_key, 1, 2, row, row + 1,
                                     GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0 );
 
@@ -1636,8 +1679,30 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     row++;
     gtk_table_attach( table, label, 0, 1, row, row + 1, 
                                     GTK_FILL, GTK_SHRINK, 0, 0 );
+    GtkWidget* hbox = gtk_hbox_new( FALSE, 0 );
+    ctxt->icon_choose_btn = gtk_button_new_with_mnemonic( _("C_hoose") );
+    gtk_button_set_image( GTK_BUTTON( ctxt->icon_choose_btn ),
+                                  xset_get_image( GTK_STOCK_OPEN,
+                                                  GTK_ICON_SIZE_BUTTON ) );
+    gtk_button_set_focus_on_click( GTK_BUTTON( ctxt->icon_choose_btn ), FALSE );
+#if GTK_CHECK_VERSION (3, 6, 0)
+    // keep this
+    gtk_button_set_always_show_image( GTK_BUTTON( ctxt->icon_choose_btn ), TRUE );
+#endif
     ctxt->item_icon = gtk_entry_new();
-    gtk_table_attach( table, ctxt->item_icon, 1, 2, row, row + 1,
+    g_signal_connect( G_OBJECT(
+                    gtk_entry_get_buffer( GTK_ENTRY( ctxt->item_icon ) ) ),
+                    "inserted-text",
+                    G_CALLBACK( on_entry_buffer_inserted_text ), ctxt );
+    g_signal_connect( G_OBJECT(
+                    gtk_entry_get_buffer( GTK_ENTRY( ctxt->item_icon ) ) ),
+                    "deleted-text",
+                    G_CALLBACK( on_entry_buffer_deleted_text ), ctxt );
+    gtk_box_pack_start( GTK_BOX( hbox ),
+                        GTK_WIDGET( ctxt->item_icon ), TRUE, TRUE, 0 );
+    gtk_box_pack_start( GTK_BOX( hbox ),
+                        GTK_WIDGET( ctxt->icon_choose_btn ), FALSE, TRUE, 0 );
+    gtk_table_attach( table, hbox, 1, 2, row, row + 1,
                                     GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox ), GTK_WIDGET( table ), FALSE, TRUE, 0 );
@@ -1649,6 +1714,10 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     gtk_misc_set_alignment( GTK_MISC ( ctxt->target_label ), 0, 0.5 );
 
     GtkWidget* scroll = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW ( scroll ),
+                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW( scroll ),
+                                                    GTK_SHADOW_ETCHED_IN );
     ctxt->item_target = GTK_WIDGET( multi_input_new( 
                             GTK_SCROLLED_WINDOW( scroll ), NULL, FALSE ) );
     gtk_widget_set_size_request( GTK_WIDGET( ctxt->item_target ), -1, 100 );
@@ -1659,19 +1728,21 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     gtk_box_pack_start( GTK_BOX( ctxt->target_vbox ),
                         GTK_WIDGET( scroll ), FALSE, TRUE, 0 );
 
-    GtkWidget* hbox = gtk_hbox_new( FALSE, 0 );
+    hbox = gtk_hbox_new( FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( hbox ),
                         GTK_WIDGET( gtk_label_new( NULL ) ), TRUE, TRUE, 0 );
     ctxt->item_choose = gtk_button_new_with_mnemonic( _("C_hoose") );
     gtk_button_set_image( GTK_BUTTON( ctxt->item_choose ),
                                   xset_get_image( GTK_STOCK_OPEN,
                                                   GTK_ICON_SIZE_BUTTON ) );
+    gtk_button_set_focus_on_click( GTK_BUTTON( ctxt->item_choose ), FALSE );
     //align = gtk_alignment_new( 1, 0.5, 0.2, 1 );
     //gtk_container_add ( GTK_CONTAINER ( align ), ctxt->item_choose );
     gtk_box_pack_start( GTK_BOX( hbox ),
                         GTK_WIDGET( ctxt->item_choose ), FALSE, TRUE, 12 );
 
     ctxt->item_browse = gtk_button_new_with_mnemonic( _("_Browse") );
+    gtk_button_set_focus_on_click( GTK_BUTTON( ctxt->item_browse ), FALSE );
     //align = gtk_alignment_new( 1, 0.5, 0.2, 1 );
     //gtk_container_add ( GTK_CONTAINER ( align ), ctxt->item_browse );
     gtk_box_pack_start( GTK_BOX( hbox ),
@@ -1683,10 +1754,10 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     gtk_box_pack_start( GTK_BOX( vbox ),
                         GTK_WIDGET( ctxt->target_vbox ), FALSE, TRUE, 4 );
 
-    ctxt->show_tool = gtk_check_button_new_with_mnemonic(
-                                                    _("S_how In Toolbar") );
-    gtk_box_pack_start( GTK_BOX( vbox ),
-                        GTK_WIDGET( ctxt->show_tool ), FALSE, TRUE, 16 );
+    //ctxt->show_tool = gtk_check_button_new_with_mnemonic(
+    //                                                _("S_how In Toolbar") );
+    //gtk_box_pack_start( GTK_BOX( vbox ),
+    //                    GTK_WIDGET( ctxt->show_tool ), FALSE, TRUE, 16 );
 
 
     // Context Page  =======================================================
@@ -1709,6 +1780,8 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     scroll = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW ( scroll ),
                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW( scroll ),
+                                                    GTK_SHADOW_ETCHED_IN );
     gtk_container_add( GTK_CONTAINER( scroll ), ctxt->view );    
     g_signal_connect( G_OBJECT( ctxt->view ), "row-activated",
                           G_CALLBACK( on_context_row_activated ), ctxt );
@@ -2029,6 +2102,9 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     ctxt->cmd_scroll_script = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW ( ctxt->cmd_scroll_script ),
                                      GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(
+                                                ctxt->cmd_scroll_script ),
+                                                    GTK_SHADOW_ETCHED_IN );
     ctxt->cmd_script = GTK_WIDGET( gtk_text_view_new() );
     // ubuntu shows input too small so use mininum height
     gtk_widget_set_size_request( GTK_WIDGET( ctxt->cmd_script ), -1, 50 );
@@ -2041,7 +2117,7 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     gtk_container_add ( GTK_CONTAINER ( ctxt->cmd_scroll_script ),  
                                             GTK_WIDGET( ctxt->cmd_script ) );
     gtk_box_pack_start( GTK_BOX( vbox ),
-                        GTK_WIDGET( ctxt->cmd_scroll_script ), TRUE, TRUE, 0 );
+                        GTK_WIDGET( ctxt->cmd_scroll_script ), TRUE, TRUE, 4 );
 
     // Option Page  =====================================================
     align = gtk_alignment_new( 0, 0, 1, 1 );
@@ -2146,6 +2222,8 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     ctxt->cmd_scroll_msg = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW ( ctxt->cmd_scroll_msg ),
                                      GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW( ctxt->cmd_scroll_msg ),
+                                                    GTK_SHADOW_ETCHED_IN );
     ctxt->cmd_msg = GTK_WIDGET( gtk_text_view_new() );
     // ubuntu shows input too small so use mininum height
     gtk_widget_set_size_request( GTK_WIDGET( ctxt->cmd_msg ), -1, 50 );
@@ -2155,7 +2233,7 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     gtk_container_add ( GTK_CONTAINER ( ctxt->cmd_scroll_msg ),  
                                             GTK_WIDGET( ctxt->cmd_msg ) );
     gtk_box_pack_start( GTK_BOX( ctxt->cmd_vbox_msg ),
-                        GTK_WIDGET( ctxt->cmd_scroll_msg ), TRUE, TRUE, 0 );
+                        GTK_WIDGET( ctxt->cmd_scroll_msg ), TRUE, TRUE, 4 );
     gtk_box_pack_start( GTK_BOX( vbox_frame ),
                         GTK_WIDGET( ctxt->cmd_vbox_msg ), TRUE, TRUE, 0 );
 
@@ -2209,15 +2287,18 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     // type
     int item_type = -1;
 
-    const char* item_type_str = NULL;
-    if ( rset->menu_style == XSET_MENU_SUBMENU )
-        item_type_str = _("Submenu");
+    char* item_type_str = NULL;
+    if ( set->tool > XSET_TOOL_CUSTOM )
+        item_type_str = g_strdup_printf( "%s: %s", _("Built-In Toolbar Item"),
+                            xset_get_builtin_toolitem_label( set->tool ) );
+    else if ( rset->menu_style == XSET_MENU_SUBMENU )
+        item_type_str = g_strdup( _("Submenu") );
     else if  ( rset->menu_style == XSET_MENU_SEP )
-        item_type_str = _("Separator");
+        item_type_str = g_strdup( _("Separator") );
     else if ( set->lock )
     {
         // built-in
-        item_type_str = _("Built-In Command");
+        item_type_str = g_strdup( _("Built-In Command") );
     }
     else
     {
@@ -2226,9 +2307,7 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
             gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT(
                                                         ctxt->item_type ),
                                                         _(item_types[i]) );
-        if ( !rset->x )
-            rset->x = g_strdup( "0" );
-        x = atoi( rset->x );
+        x = rset->x ? atoi( rset->x ) : 0;
         if ( x < XSET_CMD_APP )  // line or script
             item_type = ITEM_TYPE_COMMAND;
         else if ( x == XSET_CMD_APP )
@@ -2248,11 +2327,13 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
                                                             item_type_str );
         gtk_combo_box_set_active( GTK_COMBO_BOX ( ctxt->item_type ), 0 );
         gtk_widget_set_sensitive( ctxt->item_type, FALSE );
+        g_free( item_type_str );
     }
 
     ctxt->temp_cmd_line = !set->lock ? g_strdup( rset->line ) : NULL;
     if ( set->lock || rset->menu_style == XSET_MENU_SUBMENU ||
-                      rset->menu_style == XSET_MENU_SEP )
+                      rset->menu_style == XSET_MENU_SEP ||
+                      set->tool > XSET_TOOL_CUSTOM )
     {
         gtk_widget_hide( gtk_notebook_get_nth_page(
                                     GTK_NOTEBOOK( ctxt->notebook ), 2 ) );
@@ -2279,11 +2360,16 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     {
         if ( set->menu_label )
             gtk_entry_set_text( GTK_ENTRY( ctxt->item_name ), set->menu_label );
+        else if ( set->tool > XSET_TOOL_CUSTOM )
+            gtk_entry_set_text( GTK_ENTRY( ctxt->item_name ),
+                                xset_get_builtin_toolitem_label( set->tool ) );
     }
     else
         gtk_widget_set_sensitive( ctxt->item_name, FALSE );
     // key
-    if ( rset->menu_style < XSET_MENU_SUBMENU )
+    if ( rset->menu_style < XSET_MENU_SUBMENU ||
+                            set->tool == XSET_TOOL_BACK_MENU ||
+                            set->tool == XSET_TOOL_FWD_MENU )
     {
         XSet* keyset;
         if ( set->shared_key )
@@ -2305,7 +2391,14 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
                     rset->menu_style != XSET_MENU_SEP );
                     // toolbar checkbox items have icon
                     //( rset->menu_style != XSET_MENU_CHECK || rset->tool ) );
-
+#if GTK_CHECK_VERSION (3, 0, 0)
+    gtk_widget_set_sensitive( ctxt->icon_choose_btn, FALSE );
+    gtk_widget_hide( ctxt->icon_choose_btn );
+#else
+    gtk_widget_set_sensitive( ctxt->icon_choose_btn, 
+                    rset->menu_style != XSET_MENU_RADIO &&
+                    rset->menu_style != XSET_MENU_SEP );
+#endif
     if ( set->plugin )
     {
         gtk_widget_set_sensitive( ctxt->item_type, FALSE );
@@ -2323,13 +2416,14 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
     }
     if ( set->tool )
     {
+        // Hide Context tab
         gtk_widget_hide( gtk_notebook_get_nth_page(
                                     GTK_NOTEBOOK( ctxt->notebook ), 1 ) );
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( ctxt->show_tool ),
-                                      set->tool == XSET_B_TRUE );
+        //gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( ctxt->show_tool ),
+        //                              set->tool == XSET_B_TRUE );
     }
-    else
-        gtk_widget_hide( ctxt->show_tool );
+    //else
+    //    gtk_widget_hide( ctxt->show_tool );
     
     // signals
     g_signal_connect( G_OBJECT( ctxt->opt_terminal ), "toggled",
@@ -2354,6 +2448,8 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
                           G_CALLBACK( on_target_keypress ), ctxt );
     g_signal_connect( G_OBJECT( ctxt->item_key ), "clicked",
                                 G_CALLBACK( on_key_button_clicked ), ctxt );
+    g_signal_connect( G_OBJECT( ctxt->icon_choose_btn ), "clicked",
+                            G_CALLBACK( on_icon_choose_button_clicked ), ctxt );
     g_signal_connect( G_OBJECT( ctxt->item_choose ), "clicked",
                                 G_CALLBACK( on_browse_button_clicked ), ctxt );
     g_signal_connect( G_OBJECT( ctxt->item_browse ), "clicked",
@@ -2376,7 +2472,7 @@ void xset_item_prop_dlg( XSetContext* context, XSet* set, int page )
 
     // run
     enable_context( ctxt );
-    if ( page && gtk_widget_is_sensitive( gtk_notebook_get_nth_page( 
+    if ( page && gtk_widget_get_visible( gtk_notebook_get_nth_page( 
                                 GTK_NOTEBOOK( ctxt->notebook ), page ) ) )
         gtk_notebook_set_current_page( GTK_NOTEBOOK( ctxt->notebook ), page );
     else

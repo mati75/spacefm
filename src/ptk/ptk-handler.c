@@ -1,9 +1,8 @@
 /*
  * SpaceFM ptk-handler.c
  * 
- * Copyright (C) 2015 IgnorantGuru <ignorantguru@gmx.com>
- * Copyright (C) 2013-2014 OmegaPhil <OmegaPhil+SpaceFM@gmail.com>
- * Copyright (C) 2014 IgnorantGuru <ignorantguru@gmx.com>
+ * Copyright (C) 2014-2015 IgnorantGuru <ignorantguru@gmx.com>
+ * Copyright (C) 2013-2015 OmegaPhil <OmegaPhil@startmail.com>
  * Copyright (C) 2006 Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>
  * 
  * License: See COPYING file
@@ -68,6 +67,14 @@ const char* dialog_titles[] =
     N_("File Handlers")
 };
 
+const char* dialog_mnemonics[] =
+{
+    N_("Archive Hand_lers"),
+    N_("Device Hand_lers"),
+    N_("Protocol Hand_lers"),
+    N_("File Hand_lers")
+};
+
 const char* modes[] = { "archive", "device", "protocol", "file" };
 const char* cmds_arc[] = { "compress", "extract", "list" };
 const char* cmds_mnt[] = { "mount", "unmount", "info" };
@@ -112,6 +119,7 @@ typedef struct
     GtkWidget* btn_cancel;
     GtkWidget* btn_defaults;
     GtkWidget* btn_defaults0;
+    GtkWidget* icon_choose_btn;
 } HandlerData;
 
 typedef struct _Handler
@@ -124,10 +132,9 @@ typedef struct _Handler
     const char* compress_cmd;   // or mount          (script)
     gboolean compress_term;     //                   set->in_terminal
     const char* extract_cmd;    // or unmount        (script)
-    gboolean extract_term;      //                   set->keep_terminal
+    gboolean extract_term;      // or run task file  set->keep_terminal
     const char* list_cmd;       // or info           (script)
     gboolean list_term;         //                   set->scroll_lock
-    
     /* save as custom item
     set->lock = FALSE;
     if handler equals default, don't save in session
@@ -290,7 +297,7 @@ const Handler handlers_fs[]=
         "fuseiso unmount",
         "*fuseiso",
         "",
-        "# Mounting of iso files is performed by fuseiso in a file handler,\n# not this device handler.  Right-click on any file and select\n# Open|Handlers, and select Mount ISO to see this command.",
+        "# Mounting of iso files is performed by fuseiso in a file handler,\n# not this device handler.  Right-click on any file and select\n# Open|File Handlers, and select Mount ISO to see this command.",
         FALSE,
         "fusermount -u \"%a\"",
         FALSE,
@@ -302,7 +309,7 @@ const Handler handlers_fs[]=
         "udevil iso unmount",
         "iso9660",
         "",
-        "# Mounting of iso files is performed by udevil in a file handler,\n# not this device handler.  Right-click on any file and select\n# Open|Handlers, and select Mount ISO to see this command.",
+        "# Mounting of iso files is performed by udevil in a file handler,\n# not this device handler.  Right-click on any file and select\n# Open|File Handlers, and select Mount ISO to see this command.",
         FALSE,
         "# Note: non-iso9660 types will fall through to Default unmount handler\nudevil umount \"%a\"\n",
         FALSE,
@@ -365,7 +372,7 @@ const Handler handlers_net[]=
         "ftp",
         "ftp",
         "",
-        "options=\"nonempty\"\nif [ -n \"%user%\" ]; then\n    user=\",user=%user%\"\n    [[ -n \"%pass%\" ]] && user=\"$user:%pass%\"\nfi\n[[ -n \"%port%\" ]] && portcolon=:\necho \">>> curlftpfs -o $options$user ftp://%host%$portcolon%port%%path% %a\"\necho\ncurlftpfs -o $options$user ftp://%host%$portcolon%port%%path% \"%a\"\n[[ $? -eq 0 ]] && sleep 1 && ls \"%a\"  # set error status or wait until ready\n",
+        "options=\"nonempty\"\nif [ -n \"%user%\" ]; then\n    user=\",user=%user%\"\n    [[ -n \"%pass%\" ]] && user=\"$user:%pass%\"\nfi\n[[ -n \"%port%\" ]] && portcolon=:\necho \">>> curlftpfs -o $options$user ftp://%host%${portcolon}%port%%path% %a\"\necho\ncurlftpfs -o $options$user ftp://%host%${portcolon}%port%%path% \"%a\"\n[[ $? -eq 0 ]] && sleep 1 && ls \"%a\"  # set error status or wait until ready\n",
         TRUE,
         "fusermount -u \"%a\"",
         FALSE,
@@ -473,7 +480,8 @@ const Handler handlers_net[]=
 const Handler handlers_file[]=
 {
     /* %a custom mount point
-     * Plus standard bash variables are accepted. */
+     * Plus standard bash variables are accepted.
+     * For file handlers, extract_term is used for Run As Task. */
     {
         "hand_f_+iso",
         "Mount ISO",
@@ -482,7 +490,7 @@ const Handler handlers_file[]=
         "# Note: Unmounting of iso files is performed by the fuseiso or udevil device\n# handler, not this handler.\n\n# Use fuseiso or udevil ?\nfuse=\"$(which fuseiso)\"  # remove this line to use udevil only\nif [[ -z \"$fuse\" ]]; then\n    udevil=\"$(which udevil)\"\n    if [[ -z \"$udevil\" ]]; then\n        echo \"You must install fuseiso or udevil to mount ISOs with this handler.\"\n        exit 1\n    fi\n    # use udevil - attempt mount\n    uout=\"$($udevil mount \"$fm_file\" 2>&1)\"\n    err=$?; echo \"$uout\"\n    if [ $err -eq 2 ]; then\n        # is file already mounted? (english only)\n        point=\"${uout#* is already mounted at }\"\n        if [ \"$point\" != \"$uout\" ]; then\n            point=\"${point% (*}\"\n            if [ -x \"$point\" ]; then\n                spacefm -t \"$point\"\n                exit 0\n            fi\n        fi\n    fi\n    [[ $err -ne 0 ]] && exit 1\n    point=\"${uout#Mounted }\"\n    [[ \"$point\" = \"$uout\" ]] && exit 0\n    point=\"${point##* at }\"\n    [[ -d \"$point\" ]] && spacefm \"$point\" &\n    exit 0\nfi\n# use fuseiso - is file already mounted?\ncanon=\"$(readlink -f \"$fm_file\" 2>/dev/null)\"\nif [ -n \"$canon\" ]; then\n    canon_enc=\"${canon// /\\\\040}\" # encode spaces for mtab+grep\n    if grep -q \"^$canon_enc \" ~/.mtab.fuseiso 2>/dev/null; then\n        # file is mounted - get mount point\n        point=\"$(grep -m 1 \"^$canon_enc \" ~/.mtab.fuseiso \\\n                 | sed 's/.* \\(.*\\) fuseiso .*/\\1/' )\"\n    if [ -x \"$point\" ]; then\n            spacefm \"$point\" &\n            exit\n        fi\n    fi\nfi\n# mount & open\nfuseiso %f %a && spacefm %a &\n",
         FALSE,
         "",
-        FALSE,
+        TRUE,  // Run As Task
         "",
         FALSE
     }
@@ -1090,13 +1098,12 @@ void ptk_handler_add_new_default( int mode, const char* default_name,
             string_copy_free( &set->x, handler->ext );
             set->in_terminal = handler->compress_term ?
                                         XSET_B_TRUE : XSET_B_UNSET;
-            if ( mode != HANDLER_MODE_FILE )
-            {
-                set->keep_terminal = handler->extract_term ?
+            // extract in terminal or (file handler) run as task
+            set->keep_terminal = handler->extract_term ?
                                             XSET_B_TRUE : XSET_B_UNSET;
+            if ( mode != HANDLER_MODE_FILE )
                 set->scroll_lock = handler->list_term ?
                                             XSET_B_TRUE : XSET_B_UNSET;
-            }
             set->b = XSET_B_TRUE;
             set->lock = FALSE;
             // handler equals default, so don't save in session
@@ -1178,13 +1185,12 @@ void ptk_handler_add_defaults( int mode, gboolean overwrite,
                 string_copy_free( &set->x, handler->ext );
                 set->in_terminal = handler->compress_term ?
                                             XSET_B_TRUE : XSET_B_UNSET;
-                if ( mode != HANDLER_MODE_FILE )
-                {
-                    set->keep_terminal = handler->extract_term ?
+                // extract in terminal or (file handler) run as task
+                set->keep_terminal = handler->extract_term ?
                                                 XSET_B_TRUE : XSET_B_UNSET;
+                if ( mode != HANDLER_MODE_FILE )
                     set->scroll_lock = handler->list_term ?
                                                 XSET_B_TRUE : XSET_B_UNSET;
-                }
                 set->b = XSET_B_TRUE;
                 set->lock = FALSE;
                 // handler equals default, so don't save in session
@@ -1557,6 +1563,8 @@ static void on_configure_button_press( GtkButton* widget, HandlerData* hnd )
         xset_set_set( new_handler_xset, "x", handler_extension );  // Extension(s) or blacklist
         new_handler_xset->in_terminal = handler_compress_term ?
                                                 XSET_B_TRUE : XSET_B_UNSET;
+        new_handler_xset->keep_terminal = handler_extract_term ?
+                                                XSET_B_TRUE : XSET_B_UNSET;
         err_msg = ptk_handler_save_script( hnd->mode, HANDLER_COMPRESS,
                                 new_handler_xset,
                                 GTK_TEXT_VIEW( hnd->view_handler_compress ), NULL );
@@ -1567,8 +1575,6 @@ static void on_configure_button_press( GtkButton* widget, HandlerData* hnd )
         }
         else
         {
-            new_handler_xset->keep_terminal = handler_extract_term ?
-                                                    XSET_B_TRUE : XSET_B_UNSET;
             new_handler_xset->scroll_lock = handler_list_term ?
                                                     XSET_B_TRUE : XSET_B_UNSET;
             if ( !err_msg )
@@ -1673,6 +1679,8 @@ static void on_configure_button_press( GtkButton* widget, HandlerData* hnd )
         xset_set_set( handler_xset, "x", handler_extension );
         handler_xset->in_terminal = handler_compress_term ?
                                                 XSET_B_TRUE : XSET_B_UNSET;
+        handler_xset->keep_terminal = handler_extract_term ?
+                                                XSET_B_TRUE : XSET_B_UNSET;
         if ( hnd->compress_changed || was_default )
         {
             err_msg = ptk_handler_save_script( hnd->mode, HANDLER_COMPRESS,
@@ -1686,8 +1694,6 @@ static void on_configure_button_press( GtkButton* widget, HandlerData* hnd )
         }
         else
         {
-            handler_xset->keep_terminal = handler_extract_term ?
-                                                    XSET_B_TRUE : XSET_B_UNSET;
             handler_xset->scroll_lock = handler_list_term ?
                                                     XSET_B_TRUE : XSET_B_UNSET;
             if ( hnd->extract_changed || was_default )
@@ -1961,7 +1967,7 @@ static gboolean on_handlers_key_press( GtkWidget* widget, GdkEventKey* evt,
                                        HandlerData* hnd )
 {
     // Current handler hasn't been changed?
-    if ( !gtk_widget_get_sensitive( hnd->btn_apply ) )
+    if ( !hnd->changed /* was !gtk_widget_get_sensitive( hnd->btn_apply )*/ )
         return FALSE;
 
     if ( xset_msg_dialog( hnd->dlg, GTK_MESSAGE_QUESTION,
@@ -1970,7 +1976,8 @@ static gboolean on_handlers_key_press( GtkWidget* widget, GdkEventKey* evt,
                           _("Apply changes to the current handler?"),
                           NULL, NULL ) == GTK_RESPONSE_YES )
         on_configure_button_press( GTK_BUTTON( hnd->btn_apply ), hnd );
-    
+    else
+        hnd->changed = FALSE;
     return TRUE;  // FALSE doesn't retain key after dialog shown
 }
 
@@ -2150,11 +2157,9 @@ static void restore_defaults( HandlerData* hnd, gboolean all )
         set->s = (char*)handler->type;
         set->x = (char*)handler->ext;
         set->in_terminal = handler->compress_term ? XSET_B_TRUE : XSET_B_UNSET;
+        set->keep_terminal = handler->extract_term ? XSET_B_TRUE : XSET_B_UNSET;
         if ( hnd->mode != HANDLER_MODE_FILE )
-        {
-            set->keep_terminal = handler->extract_term ? XSET_B_TRUE : XSET_B_UNSET;
             set->scroll_lock = handler->list_term ? XSET_B_TRUE : XSET_B_UNSET;
-        }
         set->b = XSET_B_TRUE;
         set->icon = NULL;
 
@@ -2177,12 +2182,6 @@ static gboolean validate_archive_handler( HandlerData* hnd )
                                     GTK_ENTRY ( hnd->entry_handler_mime ) );
     const gchar* handler_extension = gtk_entry_get_text(
                                     GTK_ENTRY ( hnd->entry_handler_extension ) );
-    const gboolean handler_compress_term = gtk_toggle_button_get_active(
-                        GTK_TOGGLE_BUTTON ( hnd->chkbtn_handler_compress_term ) );
-    const gboolean handler_extract_term = gtk_toggle_button_get_active(
-                        GTK_TOGGLE_BUTTON ( hnd->chkbtn_handler_extract_term ) );
-    const gboolean handler_list_term = gtk_toggle_button_get_active(
-                        GTK_TOGGLE_BUTTON ( hnd->chkbtn_handler_list_term ) );
 
     /* Validating data. Note that data straight from widgets shouldnt
      * be modified or stored
@@ -2457,18 +2456,26 @@ void on_entry_text_insert( GtkEntryBuffer* buffer, guint position,
         gtk_widget_set_sensitive( hnd->btn_apply,
                                 gtk_widget_get_sensitive( hnd->btn_remove ) );
     }
+    if ( hnd->entry_handler_icon &&
+            gtk_entry_get_buffer( GTK_ENTRY( hnd->entry_handler_icon ) ) ==
+                                                            buffer )
+    {
+        // update icon of icon choose button
+        const char* icon = gtk_entry_get_text(
+                                    GTK_ENTRY( hnd->entry_handler_icon ) );
+        gtk_button_set_image( GTK_BUTTON( hnd->icon_choose_btn ),
+                            xset_get_image(
+                            icon && icon[0] ? icon :
+                            GTK_STOCK_OPEN,
+                            GTK_ICON_SIZE_BUTTON ) );
+    }
 }
-               
+
 void on_entry_text_delete( GtkEntryBuffer* buffer, guint position,
                                  guint n_chars,
                                  HandlerData* hnd )
 {
-    if ( !hnd->changed )
-    {
-        hnd->changed = TRUE;
-        gtk_widget_set_sensitive( hnd->btn_apply,
-                                gtk_widget_get_sensitive( hnd->btn_remove ) );
-    }
+    on_entry_text_insert( buffer, position, NULL, n_chars, hnd );
 }
 
 void on_terminal_toggled( GtkToggleButton* togglebutton, HandlerData* hnd )
@@ -2478,6 +2485,21 @@ void on_terminal_toggled( GtkToggleButton* togglebutton, HandlerData* hnd )
         hnd->changed = TRUE;
         gtk_widget_set_sensitive( hnd->btn_apply,
                                 gtk_widget_get_sensitive( hnd->btn_remove ) );
+    }
+}
+
+static void on_icon_choose_button_clicked( GtkWidget* widget, HandlerData* hnd )
+{
+    // get current icon
+    char* new_icon;
+    const char* icon = gtk_entry_get_text( GTK_ENTRY( hnd->entry_handler_icon ) );
+
+    new_icon = xset_icon_chooser_dialog( GTK_WINDOW( hnd->dlg ), icon );
+    
+    if ( new_icon )
+    {
+        gtk_entry_set_text( GTK_ENTRY( hnd->entry_handler_icon ), new_icon );
+        g_free( new_icon );
     }
 }
 
@@ -2547,8 +2569,8 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
 
     // Generating left-hand side of dialog
     GtkWidget* lbl_handlers = gtk_label_new( NULL );
-    char* str = g_strdup_printf("<b>%s</b>", _(dialog_titles[mode]) );
-    gtk_label_set_markup( GTK_LABEL( lbl_handlers ), str );
+    char* str = g_strdup_printf("<b>%s</b>", _(dialog_mnemonics[mode]) );
+    gtk_label_set_markup_with_mnemonic( GTK_LABEL( lbl_handlers ), str );
     g_free( str );
     gtk_misc_set_alignment( GTK_MISC( lbl_handlers ), 0, 0 );
 
@@ -2611,6 +2633,10 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
 
     // Set column to take all available space - false by default
     gtk_tree_view_column_set_expand ( col, TRUE );
+
+    // Mnemonically attaching treeview to main label
+    gtk_label_set_mnemonic_widget( GTK_LABEL( lbl_handlers ),
+                                   GTK_WIDGET( hnd->view_handlers ) );
 
     // Treeview widgets
     hnd->btn_remove = gtk_button_new_with_mnemonic( _("_Remove") );
@@ -2719,8 +2745,24 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
     hnd->entry_handler_name = gtk_entry_new();
     hnd->entry_handler_mime = gtk_entry_new();
     hnd->entry_handler_extension = gtk_entry_new();
-    hnd->entry_handler_icon = mode == HANDLER_MODE_FILE ? gtk_entry_new() :
-                                                                    NULL;
+    if ( mode == HANDLER_MODE_FILE )
+    {
+        hnd->entry_handler_icon = gtk_entry_new();
+        hnd->icon_choose_btn = gtk_button_new_with_mnemonic( _("C_hoose") );
+        gtk_button_set_image( GTK_BUTTON( hnd->icon_choose_btn ),
+                                      xset_get_image( GTK_STOCK_OPEN,
+                                                      GTK_ICON_SIZE_BUTTON ) );
+        gtk_button_set_focus_on_click( GTK_BUTTON( hnd->icon_choose_btn ),
+                                                                    FALSE );
+#if GTK_CHECK_VERSION (3, 6, 0)
+        // keep this
+        gtk_button_set_always_show_image( GTK_BUTTON( hnd->icon_choose_btn ),
+                                                                    TRUE );
+#endif
+    }
+    else
+        hnd->entry_handler_icon = hnd->icon_choose_btn = NULL;
+
     g_signal_connect(
         G_OBJECT( gtk_entry_get_buffer( GTK_ENTRY( hnd->entry_handler_name ) ) ),
             "inserted-text", G_CALLBACK( on_entry_text_insert ), hnd );
@@ -2747,6 +2789,8 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
         g_signal_connect(
             G_OBJECT( gtk_entry_get_buffer( GTK_ENTRY( hnd->entry_handler_icon ) ) ),
                 "deleted-text", G_CALLBACK( on_entry_text_delete ), hnd );
+        g_signal_connect( G_OBJECT( hnd->icon_choose_btn ), "clicked",
+                            G_CALLBACK( on_icon_choose_button_clicked ), hnd );
     }
 
     /* Creating new textviews in scrolled windows */
@@ -2828,7 +2872,9 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
     hnd->chkbtn_handler_compress_term =
                 gtk_check_button_new_with_label( _("Run In Terminal") );
     hnd->chkbtn_handler_extract_term =
-                gtk_check_button_new_with_label( _("Run In Terminal") );
+                gtk_check_button_new_with_label( mode == HANDLER_MODE_FILE ?
+                                                    _("Run As Task") :
+                                                    _("Run In Terminal") );
     hnd->chkbtn_handler_list_term =
                 gtk_check_button_new_with_label( _("Run In Terminal") );
     gtk_button_set_focus_on_click( GTK_BUTTON( hnd->chkbtn_handler_compress_term ),
@@ -2941,11 +2987,16 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
     if ( mode == HANDLER_MODE_FILE )
     {
         gtk_table_attach( GTK_TABLE( tbl_settings ),
-                            GTK_WIDGET( lbl_handler_icon ), 0, 1, 3, 4,
-                            GTK_FILL, GTK_FILL, 0, 0 );
+                        GTK_WIDGET( lbl_handler_icon ), 0, 1, 3, 4,
+                        GTK_FILL, GTK_FILL, 0, 0 );
+        GtkWidget* hbox_icon = gtk_hbox_new( FALSE, 4 );
+        gtk_box_pack_start( GTK_BOX( hbox_icon ),
+                        GTK_WIDGET( hnd->entry_handler_icon ), TRUE, TRUE, 0 );
+        gtk_box_pack_start( GTK_BOX( hbox_icon ),
+                        GTK_WIDGET( hnd->icon_choose_btn ), FALSE, TRUE, 0 );
         gtk_table_attach( GTK_TABLE( tbl_settings ),
-                            GTK_WIDGET( hnd->entry_handler_icon ), 1, 4, 3, 4,
-                            GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0 );
+                        GTK_WIDGET( hbox_icon ), 1, 4, 3, 4,
+                        GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0 );
     }
 
     // Make sure widgets do not separate too much vertically
@@ -2958,6 +3009,10 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
     gtk_box_pack_start( GTK_BOX( hbox_compress_header ),
                         GTK_WIDGET( lbl_handler_compress ), TRUE, TRUE,
                         4 );
+    if ( mode == HANDLER_MODE_FILE )
+        // for file handlers, extract_term is used for Run As Task
+        gtk_box_pack_start( GTK_BOX( hbox_compress_header ),
+                        hnd->chkbtn_handler_extract_term, FALSE, TRUE, 4 );
     gtk_box_pack_start( GTK_BOX( hbox_compress_header ),
                         hnd->chkbtn_handler_compress_term, FALSE, TRUE, 4 );
     gtk_box_pack_end( GTK_BOX( hbox_compress_header ),
@@ -2973,7 +3028,8 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
     gtk_box_pack_start( GTK_BOX( hbox_extract_header ),
                         GTK_WIDGET( lbl_handler_extract ), TRUE, TRUE,
                         4 );
-    gtk_box_pack_start( GTK_BOX( hbox_extract_header ),
+    if ( mode != HANDLER_MODE_FILE )
+        gtk_box_pack_start( GTK_BOX( hbox_extract_header ),
                         hnd->chkbtn_handler_extract_term, FALSE, TRUE, 4 );
     gtk_box_pack_end( GTK_BOX( hbox_extract_header ),
                         GTK_WIDGET( lbl_edit1 ), FALSE,
@@ -3015,6 +3071,10 @@ void ptk_handler_show_config( int mode, PtkFileBrowser* file_browser,
         gtk_widget_hide( hbox_list_header );
         gtk_widget_hide( view_handler_extract_scroll );
         gtk_widget_hide( view_handler_list_scroll );
+#if GTK_CHECK_VERSION (3, 0, 0)
+        gtk_widget_set_sensitive( hnd->icon_choose_btn, FALSE );
+        gtk_widget_hide( hnd->icon_choose_btn );
+#endif
     }
     
     /* Rendering dialog - while loop is used to deal with standard
