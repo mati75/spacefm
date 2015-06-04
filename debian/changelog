@@ -3,6 +3,8 @@ spacefm (1.0.2-1) UNRELEASED; urgency=medium
   * New upstream release.
   * debian/control:
     + Bump minimal version libffmpegthumbnailer-dev to 2.0.10.
+  * Add debian/patches/ee45e43d10efaa45e855d02317be7a21fae26183.patch to
+    fix FTBFS on arm.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 08 May 2015 13:35:22 +0200
 
