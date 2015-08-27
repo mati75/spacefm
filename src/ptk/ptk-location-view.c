@@ -105,6 +105,7 @@ typedef struct _AutoOpen
     char* device_file;
     dev_t devnum;
     char* mount_point;
+    gboolean keep_point;
     int job;
 }AutoOpen;
 
@@ -728,6 +729,35 @@ void update_volume( VFSVolume* vol )
         g_object_unref( icon );
 }
 
+char* ptk_location_view_get_mount_point_dir( const char* name )
+{
+    char* parent = NULL;
+    
+    // clean mount points
+    if ( name )
+        vfs_volume_clean_mount_points();
+
+    XSet* set = xset_get( "dev_automount_dirs" );
+    if ( set->s )
+    {
+        if ( g_str_has_prefix( set->s, "~/" ) )
+            parent = g_build_filename( g_get_home_dir(), set->s + 2, NULL );
+        else
+            parent = g_strdup( set->s );
+        if ( !have_rw_access( parent ) )
+        {
+            g_free( parent );
+            parent = NULL;
+        }
+    }
+    if ( !parent )
+        return g_build_filename( g_get_user_cache_dir(), "spacefm", name,
+                                                                    NULL );
+    char* path = g_build_filename( parent, name, NULL );
+    g_free( parent );
+    return path;
+}
+
 char* ptk_location_view_create_mount_point( int mode, VFSVolume* vol,
                                     netmount_t* netmount, const char* path )
 {
@@ -815,11 +845,11 @@ char* ptk_location_view_create_mount_point( int mode, VFSVolume* vol,
         mname = g_strdup( "mount" );
 
     // complete mount point
-    char* point1 = g_build_filename( g_get_user_cache_dir(), "spacefm", mname,
-                                                                        NULL );
+    char* point1 = ptk_location_view_get_mount_point_dir( mname );
     g_free( mname );
     int r = 2;
     char* point = g_strdup( point1 );
+
     // attempt to remove existing dir - succeeds only if empty and unmounted
     rmdir( point );
     while ( g_file_test( point, G_FILE_TEST_EXISTS ) )
@@ -1029,11 +1059,13 @@ void on_autoopen_net_cb( VFSFileTask* task, AutoOpen* ao )
             }
         }
     }
-
+    
+    if ( !ao->keep_point )
+        vfs_volume_clean_mount_points();
+    
     g_free( ao->device_file );
     g_free( ao->mount_point );
     g_slice_free( AutoOpen, ao );
-    vfs_volume_clean_mount_points();
 }
 
 void ptk_location_view_mount_network( PtkFileBrowser* file_browser,
@@ -1187,6 +1219,7 @@ void ptk_location_view_mount_network( PtkFileBrowser* file_browser,
     // autoopen
     if ( !ssh_udevil )  // !sync
     {
+        const char* terminal;
         AutoOpen* ao;
         ao = g_slice_new0( AutoOpen );
         ao->device_file = g_strdup( netmount->url );
@@ -1198,6 +1231,14 @@ void ptk_location_view_mount_network( PtkFileBrowser* file_browser,
             ao->job = PTK_OPEN_NEW_TAB;
         else
             ao->job = PTK_OPEN_DIR;
+        /* These terminals provide no option to start a new instance; child
+         * exit occurs immediately so can't delete mount point dir on exit. */
+        ao->keep_point = ( run_in_terminal &&
+                           ( terminal = xset_get_s( "main_terminal" ) ) &&
+                           ( strstr( terminal, "lxterminal" ) ||
+                             strstr( terminal, "urxvtc" ) ||
+                             strstr( terminal, "konsole" ) ||
+                             strstr( terminal, "gnome-terminal" ) ) );
         task->complete_notify = (GFunc)on_autoopen_net_cb;
         task->user_data = ao;
     }
@@ -3130,7 +3171,7 @@ static void on_handler_show_config( GtkMenuItem* item, GtkWidget* view, XSet* se
         return;
     PtkFileBrowser* file_browser = (PtkFileBrowser*)g_object_get_data( G_OBJECT(view),
                                                                 "file_browser" );
-    ptk_handler_show_config( mode, file_browser, NULL );
+    ptk_handler_show_config( mode, NULL, file_browser, NULL );
 }
 
 #endif

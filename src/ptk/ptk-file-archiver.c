@@ -328,8 +328,9 @@ void ptk_file_archiver_create( DesktopWindow *desktop,
 
     char *cmd_to_run = NULL, *desc = NULL, *dest_file = NULL,
         *ext = NULL, *s1 = NULL, *str = NULL, *udest_file = NULL,
-        *archive_name = NULL, *final_command = NULL;
+        *udest_quote = NULL, *final_command = NULL;
     int i, n, format, res;
+    struct stat64 statbuf;
 
     /* Generating dialog - extra NULL on the NULL-terminated list to
      * placate an irrelevant compilation warning. See notes in
@@ -417,7 +418,7 @@ void ptk_file_archiver_create( DesktopWindow *desktop,
                         "configured. You must add a handler before "
                         "creating an archive."),
                         NULL, NULL);
-        ptk_handler_show_config( HANDLER_MODE_ARC, file_browser, NULL );
+        ptk_handler_show_config( HANDLER_MODE_ARC, desktop, file_browser, NULL );
         return;
     }
 
@@ -779,7 +780,8 @@ void ptk_file_archiver_create( DesktopWindow *desktop,
              * config dialog then exit, as this dialog would need to be
              * reconstructed if changes occur */
             gtk_widget_destroy( dlg );
-            ptk_handler_show_config( HANDLER_MODE_ARC, file_browser, NULL );
+            ptk_handler_show_config( HANDLER_MODE_ARC, desktop, file_browser,
+                                                                    NULL );
             return;
         }
         else if ( res == GTK_RESPONSE_HELP )
@@ -836,11 +838,36 @@ void ptk_file_archiver_create( DesktopWindow *desktop,
              * so the resulting archive name is based on the filename and
              * substituted every time */
 
-            // Obtaining archive name, quoting and substituting for %O
-            archive_name = g_strconcat( desc, ext, NULL );
-            s1 = archive_name;
-            archive_name = bash_quote( archive_name );
-            g_free(s1);
+            // Obtaining valid quoted UTF8 archive path to substitute for %O
+            if ( i == 0 )
+            {
+                // First archive - use user-selected destination
+                udest_file = g_filename_display_name( dest_file );
+            }
+            else
+            {
+                /* For subsequent archives, base archive name on the filename
+                 * being compressed, in the user-selected dir */
+                char* dest_dir = g_path_get_dirname( dest_file );
+                udest_file = g_strconcat( dest_dir, "/", desc, ext, NULL );
+
+                // Looping to find a path that doesnt exist
+                n = 1;
+                while ( lstat64( udest_file, &statbuf ) == 0 )
+                {
+                    g_free( udest_file );
+                    udest_file = g_strdup_printf( "%s/%s-%s%d%s",
+                                                   dest_dir,
+                                                   desc,
+                                                   _("copy"),
+                                                    ++n,
+                                                   ext );
+                }
+                g_free( dest_dir );
+            }
+            udest_quote = bash_quote( udest_file );
+            g_free( udest_file );
+            udest_file = NULL;
 
             /* Bash quoting desc - desc original value comes from the
              * VFSFileInfo struct and therefore should not be freed */
@@ -859,8 +886,8 @@ void ptk_file_archiver_create( DesktopWindow *desktop,
             cmd_to_run = replace_archive_subs( command,
                             i == 0 ? desc : "",  // first run only %n = desc
                             desc,  // Replace %N with nth file (NOT ALL FILES)
-                            archive_name, NULL, NULL );
-            g_free( archive_name );
+                            udest_quote, NULL, NULL );
+            g_free( udest_quote );
             g_free( desc );
             
             // Appending to final command as appropriate
@@ -1008,7 +1035,8 @@ static void on_create_subfolder_toggled( GtkToggleButton *togglebutton,
 void ptk_file_archiver_extract( DesktopWindow *desktop,
                                 PtkFileBrowser *file_browser,
                                 GList *files, const char *cwd,
-                                const char *dest_dir, int job )
+                                const char *dest_dir, int job,
+                                gboolean archive_presence_checked )
 {   /* This function is also used to list the contents of archives */
     GtkWidget* dlg;
     GtkWidget* dlgparent = NULL;
@@ -1018,21 +1046,60 @@ void ptk_file_archiver_extract( DesktopWindow *desktop,
     char* parent_quote = NULL;
     VFSFileInfo* file;
     VFSMimeType* mime_type;
-    const char *dest, *type;
+    const char *dest;
     GList* l;
     char *dest_quote = NULL, *full_path = NULL, *full_quote = NULL,
-        *mkparent = NULL, *perm = NULL,
-        *cmd = NULL, *str = NULL, *final_command = NULL, *s1 = NULL, *extension;
+        *perm = NULL, *cmd = NULL, *str = NULL, *final_command = NULL,
+        *s1 = NULL, *extension = NULL;
     int i, n, j, res;
     struct stat64 statbuf;
+    GSList *handlers_slist = NULL;
 
     // Making sure files to act on have been passed
     if( !files || job == HANDLER_COMPRESS )
         return;
 
-    // Detecting whether this function call is actually to list the
-    // contents of the archive or not...
+    /* Detecting whether this function call is actually to list the
+     * contents of the archive or not... */
     list_contents = job == HANDLER_LIST;
+
+    /* Setting desired archive operation and keeping in terminal while
+     * listing */
+    int archive_operation = list_contents ? ARC_LIST : ARC_EXTRACT;
+    keep_term = list_contents;
+
+    /* Ensuring archives are actually present in files, if this hasn't already
+     * been verified - i.e. the function was triggered by a keyboard shortcut */
+    if (!archive_presence_checked)
+    {
+        gboolean archive_found = FALSE;
+
+        // Looping for all files to attempt to list/extract
+        for ( l = files; l; l = l->next )
+        {
+            // Fetching file details
+            file = (VFSFileInfo*)l->data;
+            mime_type = vfs_file_info_get_mime_type( file );
+            full_path = g_build_filename( cwd, vfs_file_info_get_name( file ),
+                                          NULL );
+
+            // Checking for enabled handler with non-empty command
+            handlers_slist = ptk_handler_file_has_handlers(
+                                    HANDLER_MODE_ARC, archive_operation,
+                                    full_path, mime_type, TRUE, FALSE, TRUE );
+            g_free(full_path);
+            vfs_mime_type_unref( mime_type );
+            if ( handlers_slist )
+            {
+                archive_found = TRUE;
+                g_slist_free( handlers_slist );
+                break;
+            }
+        }
+
+        if (!archive_found)
+            return;
+    }
 
     // Determining parent of dialog
     if ( file_browser )
@@ -1144,7 +1211,8 @@ void ptk_file_archiver_extract( DesktopWindow *desktop,
                  * config dialog then exit, as this dialog would need to be
                  * reconstructed if changes occur */
                 gtk_widget_destroy( dlg );
-                ptk_handler_show_config( HANDLER_MODE_ARC, file_browser, NULL );
+                ptk_handler_show_config( HANDLER_MODE_ARC, desktop,
+                                                        file_browser, NULL );
                 return;
             }
             else if ( res == GTK_RESPONSE_HELP )
@@ -1202,11 +1270,6 @@ void ptk_file_archiver_extract( DesktopWindow *desktop,
                                NULL;
     XSet* handler_xset = NULL;
 
-    /* Setting desired archive operation and keeping in terminal while
-     * listing */
-    int archive_operation = list_contents ? ARC_LIST : ARC_EXTRACT;
-    keep_term = list_contents;
-
     // Looping for all files to attempt to list/extract
     for ( l = files; l; l = l->next )
     {
@@ -1219,7 +1282,7 @@ void ptk_file_archiver_extract( DesktopWindow *desktop,
                                       NULL );
 
         // Get handler with non-empty command
-        GSList* handlers_slist = ptk_handler_file_has_handlers(
+        handlers_slist = ptk_handler_file_has_handlers(
                                         HANDLER_MODE_ARC, archive_operation,
                                         full_path, mime_type, TRUE, FALSE, TRUE );
         if ( handlers_slist )

@@ -278,7 +278,7 @@ void on_plugin_install( GtkMenuItem* item, FMMainWindow* main_window, XSet* set2
     char* plug_dir;
     char* msg;
     int type = 0;
-    int job = 0;
+    int job = PLUGIN_JOB_INSTALL;
     
     if ( !item )
         set = set2;
@@ -288,7 +288,7 @@ void on_plugin_install( GtkMenuItem* item, FMMainWindow* main_window, XSet* set2
         return;
     
     if ( g_str_has_suffix( set->name, "cfile" ) || g_str_has_suffix( set->name, "curl" ) )
-        job = 1;  // copy
+        job = PLUGIN_JOB_COPY;
 
     if ( g_str_has_suffix( set->name, "file" ) )
     {
@@ -319,7 +319,7 @@ void on_plugin_install( GtkMenuItem* item, FMMainWindow* main_window, XSet* set2
         type = 1;  //url
     }
 
-    if ( job == 0 )
+    if ( job == PLUGIN_JOB_INSTALL )
     {
         // install job
         char* filename = g_path_get_basename( path );
@@ -400,7 +400,7 @@ void on_plugin_install( GtkMenuItem* item, FMMainWindow* main_window, XSet* set2
         }
     }
 
-    install_plugin_file( main_window, path, plug_dir, type, job, NULL );
+    install_plugin_file( main_window, NULL, path, plug_dir, type, job, NULL );
     g_free( path );
     g_free( plug_dir );
 }
@@ -3833,13 +3833,14 @@ gboolean on_main_window_focus( GtkWidget* main_window,
 static gboolean on_main_window_keypress( FMMainWindow* main_window, GdkEventKey* event,
                                                                 gpointer user_data)
 {
-    //MOD intercept xset key
 //printf("main_keypress %d %d\n", event->keyval, event->state );
 
     GList* l;
     XSet* set;
+    XSet* set_orig;
     PtkFileBrowser* browser;
-
+    guint nonlatin_key = 0;
+    
     if ( event->keyval == 0 )
         return FALSE;
 
@@ -3868,6 +3869,15 @@ static gboolean on_main_window_keypress( FMMainWindow* main_window, GdkEventKey*
             return FALSE;  // send to pathbar
     }
 
+    // need to transpose nonlatin keyboard layout ?
+    if ( !( ( GDK_KEY_0 <= event->keyval && event->keyval <= GDK_KEY_9 ) ||
+            ( GDK_KEY_A <= event->keyval && event->keyval <= GDK_KEY_Z ) ||
+            ( GDK_KEY_a <= event->keyval && event->keyval <= GDK_KEY_z ) ) )
+    {
+        nonlatin_key = event->keyval;
+        transpose_nonlatin_keypress( event );
+    }
+
     if ( ( evt_win_key->s || evt_win_key->ob2_data ) && 
             main_window_event( main_window, evt_win_key, "evt_win_key", 0, 0, NULL,
                                             event->keyval, 0, keymod, TRUE ) )
@@ -3878,8 +3888,11 @@ static gboolean on_main_window_keypress( FMMainWindow* main_window, GdkEventKey*
         if ( ((XSet*)l->data)->shared_key )
         {
             // set has shared key
+            // nonlatin key match is for nonlatin keycodes set prior to 1.0.3
             set = xset_get( ((XSet*)l->data)->shared_key );
-            if ( set->key == event->keyval && set->keymod == keymod )
+            if ( ( set->key == event->keyval ||
+                            ( nonlatin_key && set->key == nonlatin_key ) ) &&
+                        set->keymod == keymod )
             {
                 // shared key match
                 if ( g_str_has_prefix( set->name, "panel" ) )
@@ -3902,8 +3915,10 @@ static gboolean on_main_window_keypress( FMMainWindow* main_window, GdkEventKey*
             else
                 continue;
         }
-            
-        if ( ((XSet*)l->data)->key == event->keyval
+        
+        // nonlatin key match is for nonlatin keycodes set prior to 1.0.3
+        if ( ( ((XSet*)l->data)->key == event->keyval ||
+               ( nonlatin_key && ((XSet*)l->data)->key == nonlatin_key ) )
                                         && ((XSet*)l->data)->keymod == keymod )
         {
             set = (XSet*)l->data;
@@ -3912,6 +3927,7 @@ _key_found:
                         fm_main_window_get_current_file_browser( main_window ) );
             if ( !browser )
                 return TRUE;
+            
             char* xname;
             int i;
 
@@ -4044,8 +4060,15 @@ g_warning( _("Device manager key shortcuts are disabled in HAL mode") );
         }
     }
 
+    if ( nonlatin_key != 0 )
+    {
+        // use literal keycode for pass-thru, eg for find-as-you-type search
+        event->keyval = nonlatin_key;
+    }
+
     if ( ( event->state & GDK_MOD1_MASK ) )
         rebuild_menus( main_window );
+
     return FALSE;
 }
 
