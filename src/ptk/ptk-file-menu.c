@@ -397,7 +397,8 @@ void on_archive_default( GtkMenuItem *menuitem, XSet* set )
 
 void on_archive_show_config( GtkMenuItem *menuitem, PtkFileMenu* data )
 {
-    ptk_handler_show_config( HANDLER_MODE_ARC, data->browser, NULL );
+    ptk_handler_show_config( HANDLER_MODE_ARC, data->desktop, data->browser,
+                                                                    NULL );
 }
 
 void on_hide_file( GtkMenuItem *menuitem, PtkFileMenu* data )
@@ -1738,7 +1739,8 @@ on_popup_open_with_another_activate ( GtkMenuItem *menuitem,
 void on_popup_handlers_activate ( GtkMenuItem *menuitem,
                                        PtkFileMenu* data )
 {
-    ptk_handler_show_config( HANDLER_MODE_FILE, data->browser, NULL );
+    ptk_handler_show_config( HANDLER_MODE_FILE, data->desktop, data->browser,
+                                                                NULL );
 }
 
 void on_popup_open_all( GtkMenuItem *menuitem, PtkFileMenu* data )
@@ -2251,7 +2253,8 @@ static void show_app_menu( GtkWidget* menu, GtkWidget* app_item, PtkFileMenu* da
     {
         // is a file handler - open file handler config
         gtk_menu_shell_deactivate( GTK_MENU_SHELL( menu ) );
-        ptk_handler_show_config( HANDLER_MODE_FILE, data->browser, handler_set );
+        ptk_handler_show_config( HANDLER_MODE_FILE, data->desktop,
+                                                data->browser, handler_set );
         return;
     }
     
@@ -2799,22 +2802,31 @@ void on_popup_compress_activate ( GtkMenuItem *menuitem,
 void on_popup_extract_to_activate ( GtkMenuItem *menuitem,
                                     PtkFileMenu* data )
 {
+    /* If menuitem is set, function was called from GUI so files will contain
+     * an archive */
     ptk_file_archiver_extract( data->desktop, data->browser, data->sel_files,
-                               data->cwd, NULL, HANDLER_EXTRACT );
+                               data->cwd, NULL, HANDLER_EXTRACT,
+                               menuitem ? TRUE : FALSE );
 }
 
 void on_popup_extract_here_activate ( GtkMenuItem *menuitem,
                                       PtkFileMenu* data )
 {
+    /* If menuitem is set, function was called from GUI so files will contain
+     * an archive */
     ptk_file_archiver_extract( data->desktop, data->browser, data->sel_files,
-                               data->cwd, data->cwd, HANDLER_EXTRACT );
+                               data->cwd, data->cwd, HANDLER_EXTRACT,
+                               menuitem ? TRUE : FALSE );
 }
 
 void on_popup_extract_list_activate ( GtkMenuItem *menuitem,
                                       PtkFileMenu* data )
 {
+    /* If menuitem is set, function was called from GUI so files will contain
+     * an archive */
     ptk_file_archiver_extract( data->desktop, data->browser, data->sel_files,
-                               data->cwd, NULL, HANDLER_LIST );
+                               data->cwd, NULL, HANDLER_LIST,
+                               menuitem ? TRUE : FALSE );
 }
 
 void on_autoopen_create_cb( gpointer task, AutoOpenCreate* ao )

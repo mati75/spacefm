@@ -1642,6 +1642,8 @@ static void vfs_file_task_exec( char* src_file, VFSFileTask* task )
          * and let trap delete on exit.
 
          * These terminals will not work properly with Run As Task.
+         * ! WHEN CHANGING THIS LIST, also see similar checks in pref-dialog.c
+         * and ptk-location-view.c.
         
          * Note for konsole:  if you create a link to it and execute the
          * link, it will start a new instance (might also work for lxterminal?)
@@ -1742,10 +1744,13 @@ static void vfs_file_task_exec( char* src_file, VFSFileTask* task )
             argv[a++] = g_strdup_printf( "--disable-sm" );
             argv[a++] = g_strdup_printf( "--separate" );
         }
+        else if ( strstr( terminal, "lilyterm" ) )
+            argv[a++] = g_strdup_printf( "--separate" );
         else if ( strstr( terminal, "xfce4-terminal" )
                                 || g_str_has_suffix( terminal, "/terminal" ) )
             argv[a++] = g_strdup_printf( "--disable-server" );
 
+        // add option to execute command in terminal
         if ( strstr( terminal, "xfce4-terminal" ) 
                                 || strstr( terminal, "gnome-terminal" )
                                 || strstr( terminal, "terminator" )
