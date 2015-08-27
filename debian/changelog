@@ -1,4 +1,4 @@
-spacefm (1.0.2-1) unstable; urgency=medium
+spacefm (1.0.3-1) unstable; urgency=medium
 
   * New upstream release.
   * debian/control:
@@ -7,7 +7,7 @@ spacefm (1.0.2-1) unstable; urgency=medium
     + Cherry-pick upstream patch to prevent FTBFS on architectures
        where MMX instructions are not available.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 10 Jun 2015 17:07:45 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 27 Aug 2015 16:58:55 +0200
 
 spacefm (1.0.1-1) unstable; urgency=medium
 
