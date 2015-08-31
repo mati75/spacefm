@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
     configure)
-	if [ -x /usr/bin/update-mime-database ] && [ -x /usr/bin/update-desktop-database ]; then
+	if which update-mime-database >/dev/null 2>&1 && which update-desktop-database >/dev/null 2>&1; then
         update-mime-database /usr/share/mime > /dev/null
         update-desktop-database -q
 	fi
