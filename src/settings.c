@@ -4321,7 +4321,7 @@ char* xset_custom_get_help( GtkWidget* parent, XSet* set )
         if ( file )
         {
             // write default readme
-            fputs( "README\n------\n\nFill this text file with detailed information about this command.  For\ncontext-sensitive help within SpaceFM, this file must be named README,\nREADME.txt, or README.mkd.\n\nIf you plan to distribute this command as a plugin, the following information\nis recommended:\n\n\nCommand Name:\n\nRelease Version and Date:\n\nPlugin Homepage or Download Link:\n\nAuthor's Contact Information or Feedback Instructions:\n\nDependencies or Requirements:\n\nDescription:\n\nInstructions For Use:\n\nCopyright and License Information:\n\n    Copyright (C) YEAR AUTHOR <EMAIL>\n\n    This program is free software: you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation, either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    GNU General Public License for more details.\n\n    You should have received a copy of the GNU General Public License\n    along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\n", file );
+            fputs( "README\n------\n\nFill this text file with detailed information about this command.  For\ncontext-sensitive help within SpaceFM, this file must be named README,\nREADME.txt, or README.mkd.\n\nIf you plan to distribute this command as a plugin, the following information\nis recommended:\n\n\nCommand Name:\n\nRelease Version and Date:\n\nPlugin Homepage or Download Link:\n\nAuthor's Contact Information or Feedback Instructions:\n\nDependencies or Requirements:\n\nDescription:\n\nInstructions For Use:\n\nCopyright and License Information:\n\n    Copyright (C) YEAR AUTHOR <EMAIL>\n\n    This program is free software: you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation, either version 3 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    GNU General Public License for more details.\n\n    You should have received a copy of the GNU General Public License\n    along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\n", file );
             fclose( file );
         }
         chmod( path, S_IRUSR | S_IWUSR );
@@ -4783,13 +4783,21 @@ XSet* xset_get_by_plug_name( const char* plug_dir, const char* plug_name )
     return set;
 }
 
-void xset_parse_plugin( const char* plug_dir, char* line )
+void xset_parse_plugin( const char* plug_dir, char* line, int use )
 {
     char* sep = strchr( line, '=' );
     char* name;
     char* value;
     XSet* set;
     XSet* set2;
+    const char* prefix;
+    const char* handler_prefix[] =
+    {
+        "hand_arc_",
+        "hand_fs_",
+        "hand_net_",
+        "hand_f_"
+    };
 
     if ( !sep )
         return ;
@@ -4802,71 +4810,83 @@ void xset_parse_plugin( const char* plug_dir, char* line )
     char* var = sep + 1;
     *sep = '\0';
 
-    if ( !strncmp( name, "cstm_", 5 ) )
+    if ( use < PLUGIN_USE_BOOKMARKS )
+    {
+        // handler
+        prefix = handler_prefix[use];
+    }
+    else
+        prefix = "cstm_";
+    
+    if ( g_str_has_prefix( name, prefix ) )
     {
         set = xset_get_by_plug_name( plug_dir, name );
         xset_set_set( set, var, value );
-        // map plug names to new set names
-        if ( set->prev && !strcmp( var, "prev" ) )
+        
+        if ( use >= PLUGIN_USE_BOOKMARKS )
         {
-            if ( !strncmp( set->prev, "cstm_", 5 ) )
+            // map plug names to new set names (does not apply to handlers)
+            if ( set->prev && !strcmp( var, "prev" ) )
             {
-                set2 = xset_get_by_plug_name( plug_dir, set->prev );
-                g_free( set->prev );
-                set->prev = g_strdup( set2->name );
+                if ( !strncmp( set->prev, "cstm_", 5 ) )
+                {
+                    set2 = xset_get_by_plug_name( plug_dir, set->prev );
+                    g_free( set->prev );
+                    set->prev = g_strdup( set2->name );
+                }
+                else
+                {
+                    g_free( set->prev );
+                    set->prev = NULL;
+                }
             }
-            else
+            else if ( set->next && !strcmp( var, "next" ) )
             {
-                g_free( set->prev );
-                set->prev = NULL;
+                if ( !strncmp( set->next, "cstm_", 5 ) )
+                {
+                    set2 = xset_get_by_plug_name( plug_dir, set->next );
+                    g_free( set->next );
+                    set->next = g_strdup( set2->name );
+                }
+                else
+                {
+                    g_free( set->next );
+                    set->next = NULL;
+                }
             }
-        }
-        else if ( set->next && !strcmp( var, "next" ) )
-        {
-            if ( !strncmp( set->next, "cstm_", 5 ) )
+            else if ( set->parent && !strcmp( var, "parent" ) )
             {
-                set2 = xset_get_by_plug_name( plug_dir, set->next );
-                g_free( set->next );
-                set->next = g_strdup( set2->name );
+                if ( !strncmp( set->parent, "cstm_", 5 ) )
+                {
+                    set2 = xset_get_by_plug_name( plug_dir, set->parent );
+                    g_free( set->parent );
+                    set->parent = g_strdup( set2->name );
+                }
+                else
+                {
+                    g_free( set->parent );
+                    set->parent = NULL;
+                }
             }
-            else
+            else if ( set->child && !strcmp( var, "child" ) )
             {
-                g_free( set->next );
-                set->next = NULL;
-            }
-        }
-        else if ( set->parent && !strcmp( var, "parent" ) )
-        {
-            if ( !strncmp( set->parent, "cstm_", 5 ) )
-            {
-                set2 = xset_get_by_plug_name( plug_dir, set->parent );
-                g_free( set->parent );
-                set->parent = g_strdup( set2->name );
-            }
-            else
-            {
-                g_free( set->parent );
-                set->parent = NULL;
-            }
-        }
-        else if ( set->child && !strcmp( var, "child" ) )
-        {
-            if ( !strncmp( set->child, "cstm_", 5 ) )
-            {
-                set2 = xset_get_by_plug_name( plug_dir, set->child );
-                g_free( set->child );
-                set->child = g_strdup( set2->name );
-            }
-            else
-            {
-                g_free( set->child );
-                set->child = NULL;
+                if ( !strncmp( set->child, "cstm_", 5 ) )
+                {
+                    set2 = xset_get_by_plug_name( plug_dir, set->child );
+                    g_free( set->child );
+                    set->child = g_strdup( set2->name );
+                }
+                else
+                {
+                    g_free( set->child );
+                    set->child = NULL;
+                }
             }
         }
     }
 }
 
-XSet* xset_import_plugin( const char* plug_dir, gboolean* is_bookmarks )
+XSet* xset_import_plugin( const char* plug_dir, int* use )
 {
     char line[ 2048 ];
     char* section_name;
@@ -4874,8 +4894,8 @@ XSet* xset_import_plugin( const char* plug_dir, gboolean* is_bookmarks )
     GList* l;
     XSet* set;
 
-    if ( is_bookmarks )
-        *is_bookmarks = FALSE;
+    if ( use )
+        *use = PLUGIN_USE_NORMAL;
     
     // clear all existing plugin sets with this plug_dir
     // ( keep the mirrors to retain user prefs )
@@ -4921,13 +4941,26 @@ XSet* xset_import_plugin( const char* plug_dir, gboolean* is_bookmarks )
         }
         if ( func )
         {
-            if ( g_str_has_prefix( line, "main_book-child=" ) )
+            if ( use && *use == PLUGIN_USE_NORMAL )
             {
-                // This plugin is an export of all bookmarks
-                if ( is_bookmarks )
-                    *is_bookmarks = TRUE;
+                if ( g_str_has_prefix( line, "main_book-child=" ) )
+                {
+                    // This plugin is an export of all bookmarks
+                    *use = PLUGIN_USE_BOOKMARKS;
+                }
+                else if ( g_str_has_prefix( line, "hand_" ) )
+                {
+                    if ( g_str_has_prefix( line, "hand_fs_" ) )
+                        *use = PLUGIN_USE_HAND_FS;
+                    else if ( g_str_has_prefix( line, "hand_arc_" ) )
+                        *use = PLUGIN_USE_HAND_ARC;
+                    else if ( g_str_has_prefix( line, "hand_net_" ) )
+                        *use = PLUGIN_USE_HAND_NET;
+                    else if ( g_str_has_prefix( line, "hand_f_" ) )
+                        *use = PLUGIN_USE_HAND_FILE;
+                }
             }
-            xset_parse_plugin( plug_dir, line );
+            xset_parse_plugin( plug_dir, line, use ? *use : PLUGIN_USE_NORMAL );
             if ( !plugin_good )
                 plugin_good = TRUE;
         }
@@ -4958,6 +4991,7 @@ XSet* xset_import_plugin( const char* plug_dir, gboolean* is_bookmarks )
 typedef struct _PluginData
 {
     FMMainWindow* main_window;
+    GtkWidget* handler_dlg;
     char* plug_dir;
     XSet* set;
     int job;
@@ -4968,7 +5002,7 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
     XSet* set;
     char* msg;
 //printf("on_install_plugin_cb\n");
-    if ( plugin_data->job == 2 ) // uninstall
+    if ( plugin_data->job == PLUGIN_JOB_REMOVE ) // uninstall
     {
         if ( !g_file_test( plugin_data->plug_dir, G_FILE_TEST_EXISTS ) )
         {
@@ -4982,8 +5016,8 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
         char* plugin = g_build_filename( plugin_data->plug_dir, "plugin", NULL );
         if ( g_file_test( plugin, G_FILE_TEST_EXISTS ) )
         {
-            gboolean is_bookmarks = FALSE;
-            set = xset_import_plugin( plugin_data->plug_dir, &is_bookmarks );
+            int use = PLUGIN_USE_NORMAL;
+            set = xset_import_plugin( plugin_data->plug_dir, &use );
             if ( !set )
             {
                 msg = g_strdup_printf( _("The imported plugin folder does not contain a valid plugin.\n\n(%s/)"), plugin_data->plug_dir );
@@ -4992,10 +5026,10 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
                                         NULL, 0, msg, NULL, NULL );
                 g_free( msg );
             }
-            else if ( is_bookmarks )
+            else if ( use == PLUGIN_USE_BOOKMARKS )
             {
                 // bookmarks 
-                if ( plugin_data->job != 1 || !plugin_data->set )
+                if ( plugin_data->job != PLUGIN_JOB_COPY || !plugin_data->set )
                 {
                     // This dialog should never be seen - failsafe
                     GDK_THREADS_ENTER(); // due to dialog run causes low level thread lock
@@ -5039,7 +5073,23 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
                         main_window_bookmark_changed( set->parent );
                 }
             }
-            else if ( plugin_data->job == 1 )
+            else if ( use < PLUGIN_USE_BOOKMARKS )
+            {
+                // handler
+                if ( plugin_data->job == PLUGIN_JOB_INSTALL )
+                {
+                    // This dialog should never be seen - failsafe
+                    GDK_THREADS_ENTER(); // due to dialog run causes low level thread lock
+                    xset_msg_dialog( plugin_data->main_window ?
+                                GTK_WIDGET( plugin_data->main_window ) : NULL,
+                                GTK_MESSAGE_ERROR, "Handler Plugin",
+                                NULL, 0, "This file contains a handler plugin which cannot be installed as a plugin.\n\nYou can import handlers from a handler configuration window, or use Plugins|Import.", NULL, NULL );
+                    GDK_THREADS_LEAVE();
+                }
+                else
+                    ptk_handler_import( use, plugin_data->handler_dlg, set );
+            }
+            else if ( plugin_data->job == PLUGIN_JOB_COPY )
             {
                 // copy
                 set->plugin_top = FALSE;  // don't show tmp plugin in Plugins menu
@@ -5067,7 +5117,7 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
                     // place on design clipboard
                     set_clipboard = set;
                     clipboard_is_cut = FALSE;
-                    if ( xset_get_b( "plug_cverb" ) )
+                    if ( xset_get_b( "plug_cverb" ) || plugin_data->handler_dlg )
                     {
                         char* label = clean_label( set->menu_label, FALSE, FALSE );
                         if ( geteuid() == 0 )
@@ -5134,15 +5184,16 @@ void xset_remove_plugin( GtkWidget* parent, PtkFileBrowser* file_browser, XSet* 
     plugin_data->main_window = NULL;
     plugin_data->plug_dir = g_strdup( set->plug_dir );
     plugin_data->set = set;
-    plugin_data->job = 2;
+    plugin_data->job = PLUGIN_JOB_REMOVE;
     task->complete_notify = (GFunc)on_install_plugin_cb;
     task->user_data = plugin_data;
 
     ptk_file_task_run( task );
 }
 
-void install_plugin_file( gpointer main_win, const char* path,
-                    const char* plug_dir, int type, int job, XSet* insert_set )
+void install_plugin_file( gpointer main_win, GtkWidget* handler_dlg,
+                          const char* path, const char* plug_dir, int type,
+                          int job, XSet* insert_set )
 {
     char* wget;
     char* file_path;
@@ -5187,7 +5238,7 @@ void install_plugin_file( gpointer main_win, const char* path,
         rem = g_strdup_printf( "; rm -f %s", file_path_q );
     }
 
-    if ( job == 0 )
+    if ( job == PLUGIN_JOB_INSTALL )
     {
         // install
         own = g_strdup_printf( "chown -R root:root %s && chmod -R go+rX-w %s",
@@ -5213,12 +5264,15 @@ void install_plugin_file( gpointer main_win, const char* path,
         else
             insert_set = NULL;   // failsafe
     }
-    if ( job == 0 || !insert_set )
+    if ( job == PLUGIN_JOB_INSTALL || !insert_set )
     {
-        // prevent install of exported bookmarks as plugin or design clipboard
-        book = " || [ -e main_book ]";
+        // prevent install of exported bookmarks or handler as plugin or design clipboard
+        if ( job == PLUGIN_JOB_INSTALL )
+            book = " || [ -e main_book ] || [ -d hand_* ]";
+        else
+            book = " || [ -e main_book ]";
     }
-
+    
     task->task->exec_command = g_strdup_printf( "rm -rf %s ; mkdir -p %s && cd %s %s&& tar --exclude='/*' --keep-old-files -x%sf %s ; err=$?; if [ $err -ne 0 ] || [ ! -e plugin ]%s; then rm -rf %s ; echo 'Error installing plugin (invalid plugin file?)'; exit 1 ; fi ; %s %s",
                                 plug_dir_q, plug_dir_q, plug_dir_q,
                                 wget, compression, file_path_q, book,
@@ -5235,6 +5289,7 @@ void install_plugin_file( gpointer main_win, const char* path,
     
     PluginData* plugin_data = g_slice_new0( PluginData );
     plugin_data->main_window = main_window;
+    plugin_data->handler_dlg = handler_dlg;
     plugin_data->plug_dir = g_strdup( plug_dir );
     plugin_data->job = job;
     plugin_data->set = insert_set;
@@ -5382,6 +5437,14 @@ void xset_custom_export( GtkWidget* parent, PtkFileBrowser* file_browser,
         }
         if ( !strcmp( set->name, "main_book" ) )
             deffile = g_strdup_printf( "%s.spacefm-bookmarks.tar.gz", s2 );
+        else if ( g_str_has_prefix( set->name, "hand_arc_" ) )
+            deffile = g_strdup_printf( "%s.spacefm-archive-handler.tar.gz", s2 );
+        else if ( g_str_has_prefix( set->name, "hand_fs_" ) )
+            deffile = g_strdup_printf( "%s.spacefm-device-handler.tar.gz", s2 );
+        else if ( g_str_has_prefix( set->name, "hand_net_" ) )
+            deffile = g_strdup_printf( "%s.spacefm-protocol-handler.tar.gz", s2 );
+        else if ( g_str_has_prefix( set->name, "hand_f_" ) )
+            deffile = g_strdup_printf( "%s.spacefm-file-handler.tar.gz", s2 );
         else
             deffile = g_strdup_printf( "%s.spacefm-plugin.tar.gz", s2 );
         g_free( s1 );
@@ -6616,6 +6679,16 @@ gboolean on_set_key_keypress( GtkWidget *widget, GdkEventKey *event,
         }
     }
 
+    // need to transpose nonlatin keyboard layout ?
+    guint nonlatin_key = 0;
+    if ( !( ( GDK_KEY_0 <= event->keyval && event->keyval <= GDK_KEY_9 ) ||
+            ( GDK_KEY_A <= event->keyval && event->keyval <= GDK_KEY_Z ) ||
+            ( GDK_KEY_a <= event->keyval && event->keyval <= GDK_KEY_z ) ) )
+    {
+        nonlatin_key = event->keyval;
+        transpose_nonlatin_keypress( event );
+    }
+
     *newkey = 0;
     *newkeymod = 0;
     if ( set->shared_key )
@@ -6644,8 +6717,14 @@ gboolean on_set_key_keypress( GtkWidget *widget, GdkEventKey *event,
                 name = g_strdup( "( no name )" );
 
             keyname = xset_get_keyname( NULL, event->keyval, keymod );
-            gtk_message_dialog_format_secondary_text( GTK_MESSAGE_DIALOG( dlg ), _("\t%s\n\tKeycode: %#4x  Modifier: %#x\n\n%s is already assigned to '%s'.\n\nPress a different key or click Set to replace the current key assignment."), keyname,
-                                        event->keyval, keymod, keyname, name );
+            if ( nonlatin_key == 0 )
+                gtk_message_dialog_format_secondary_text( GTK_MESSAGE_DIALOG( dlg ), _("\t%s\n\tKeycode: %#4x  Modifier: %#x\n\n%s is already assigned to '%s'.\n\nPress a different key or click Set to replace the current key assignment."),
+                                        keyname, event->keyval,
+                                        keymod, keyname, name );
+            else
+                gtk_message_dialog_format_secondary_text( GTK_MESSAGE_DIALOG( dlg ), _("\t%s\n\tKeycode: %#4x [%#4x]  Modifier: %#x\n\n%s is already assigned to '%s'.\n\nPress a different key or click Set to replace the current key assignment."),
+                                        keyname, event->keyval, nonlatin_key,
+                                        keymod, keyname, name );
             g_free( name );
             g_free( keyname );
             *newkey = event->keyval;
@@ -7125,8 +7204,10 @@ void xset_design_job( GtkWidget* item, XSet* set )
             g_free( hex8 );
         }
         install_plugin_file( set->browser ? set->browser->main_window : NULL,
+                             NULL,
                              file, folder,
-                             job == XSET_JOB_IMPORT_FILE ? 0 : 1, 1, set );                             
+                             job == XSET_JOB_IMPORT_FILE ? 0 : 1,
+                             PLUGIN_JOB_COPY, set );                             
         g_free( file );
         g_free( folder );
         break;
@@ -7627,8 +7708,10 @@ gboolean xset_design_menu_keypress( GtkWidget* widget, GdkEventKey* event,
     int keymod = ( event->state & ( GDK_SHIFT_MASK | GDK_CONTROL_MASK |
                  GDK_MOD1_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK | GDK_META_MASK ) );
     
+    transpose_nonlatin_keypress( event );
+    
     if ( keymod == 0 )
-    {        
+    {
         if ( event->keyval == GDK_KEY_F1 )
         {
             char* help = NULL;
@@ -8330,6 +8413,8 @@ gboolean xset_menu_keypress( GtkWidget* widget, GdkEventKey* event,
     int keymod = ( event->state & ( GDK_SHIFT_MASK | GDK_CONTROL_MASK |
                  GDK_MOD1_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK | GDK_META_MASK ) );
     
+    transpose_nonlatin_keypress( event );
+
     if ( keymod == 0 )
     {        
         if ( event->keyval == GDK_KEY_F1 )
@@ -8888,8 +8973,6 @@ char* xset_icon_chooser_dialog( GtkWindow* parent, const char* def_icon )
             gtk_main_iteration();
     }
 
-#if GTK_CHECK_VERSION (3, 0, 0)
-#else
     // btn_icon_choose clicked - preparing the exo icon chooser dialog
     GtkWidget* icon_chooser = exo_icon_chooser_dialog_new (
                             _("Choose Icon"),
@@ -8911,7 +8994,7 @@ char* xset_icon_chooser_dialog( GtkWindow* parent, const char* def_icon )
     
     // Prompting user to pick icon
     int response_icon_chooser = gtk_dialog_run( GTK_DIALOG( icon_chooser ) );
-    if ( response_icon_chooser == -3 /* OK */ )
+    if ( response_icon_chooser == GTK_RESPONSE_ACCEPT)
     {
         /* Fetching selected icon */
         icon = exo_icon_chooser_dialog_get_icon(
@@ -8930,7 +9013,6 @@ char* xset_icon_chooser_dialog( GtkWindow* parent, const char* def_icon )
         g_free( str );
     }
     gtk_widget_destroy( icon_chooser );
-#endif
 
     // remove busy cursor
     gdk_window_set_cursor( gtk_widget_get_window( GTK_WIDGET( parent ) ),
@@ -9066,13 +9148,6 @@ gboolean xset_text_dialog( GtkWidget* parent, const char* title, GtkWidget* imag
 
     // show
     gtk_widget_show_all( dlg );
-#if GTK_CHECK_VERSION (3, 0, 0)
-    if ( btn_icon_choose )
-    {
-        gtk_widget_set_sensitive( btn_icon_choose, FALSE );
-        gtk_widget_hide( btn_icon_choose );
-    }
-#endif
 
     if ( title )
         gtk_window_set_title( GTK_WINDOW( dlg ), title );
@@ -10778,7 +10853,7 @@ void xset_defaults()
 
     set = xset_set( "dev_menu_auto", "lbl", _("_Auto Mount") );
     set->menu_style = XSET_MENU_SUBMENU;
-    xset_set_set( set, "desc", "dev_automount_optical dev_automount_removable dev_ignore_udisks_nopolicy dev_automount_volumes dev_auto_open dev_unmount_quit" );
+    xset_set_set( set, "desc", "dev_automount_optical dev_automount_removable dev_ignore_udisks_nopolicy dev_automount_volumes dev_automount_dirs dev_auto_open dev_unmount_quit" );
     set->line = g_strdup( "#devices-settings-optical" );
 
         set = xset_set( "dev_automount_optical", "lbl", _("Mount _Optical") );
@@ -10790,6 +10865,17 @@ void xset_defaults()
         set->b = geteuid() == 0 ? XSET_B_FALSE : XSET_B_TRUE;
         set->menu_style = XSET_MENU_CHECK;
         set->line = g_strdup( "#devices-settings-remove" );
+
+        set = xset_set( "dev_automount_volumes", "lbl", _("Mount _Volumes...") );
+        xset_set_set( set, "title", _("Auto-Mount Volumes") );
+        xset_set_set( set, "desc", _("To force or prevent automounting of some volumes, overriding other settings, you can specify the devices, volume labels, or device IDs in the space-separated list below.\n\nExample:  +/dev/sdd1 -Label With Space +ata-OCZ-part4\nThis would cause /dev/sdd1 and the OCZ device to be auto-mounted when detected, and the volume with label \"Label With Space\" to be ignored.\n\nThere must be a space between entries and a plus or minus sign directly before each item.  This list is case-sensitive.\n\n") );
+        set->line = g_strdup( "#devices-settings-mvol" );
+
+        set = xset_set( "dev_automount_dirs", "lbl", _("Mount _Dirs...") );
+        xset_set_set( set, "title", _("Automatic Mount Point Dirs") );
+        set->menu_style = XSET_MENU_STRING;
+        xset_set_set( set, "desc", _("Enter the directory where SpaceFM should automatically create mount point directories for fuse and similar filesystems (%%a in handler commands).  This directory must exist and be user-writable (do NOT use /media), and empty subdirectories will be removed.  If left blank, ~/.cache/spacefm/ (or $XDG_CACHE_HOME/spacefm/) is used.\n\nNote that some handlers or mount programs may not obey this setting.\n\n") );
+        set->line = g_strdup( "#devices-settings-mdirs" );
 
         set = xset_set( "dev_auto_open", "lbl", _("Open _Tab") );
         set->b = XSET_B_TRUE;
@@ -10850,13 +10936,8 @@ void xset_defaults()
     set->menu_style = XSET_MENU_CHECK;
     set->line = g_strdup( "#devices-settings-nopolicy" );
 
-    set = xset_set( "dev_automount_volumes", "lbl", _("Mount _Volumes...") );
-    xset_set_set( set, "title", _("Auto-Mount Volumes") );
-    xset_set_set( set, "desc", _("To force or prevent automounting of some volumes, overriding other settings, you can specify the devices, volume labels, or device IDs in the space-separated list below.\n\nExample:  +/dev/sdd1 -Label With Space +ata-OCZ-part4\nThis would cause /dev/sdd1 and the OCZ device to be auto-mounted when detected, and the volume with label \"Label With Space\" to be ignored.\n\nThere must be a space between entries and a plus or minus sign directly before each item.  This list is case-sensitive.\n\n") );
-    set->line = g_strdup( "#devices-settings-mvol" );
-
     set = xset_set( "dev_mount_options", "lbl", _("_Mount Options") );
-    xset_set_set( set, "desc", _("Enter your comma- or space-separated list of default mount options below (to be used for all mounts).\n\nIn addition to regular options, you can also specify options to be added or removed for a specific filesystem type by using the form OPTION+FSTYPE or OPTION-FSTYPE.\n\nExample:  nosuid, sync+vfat, sync+ntfs, noatime, noatime-ext4\nThis will add nosuid and noatime for all filesystem types, add sync for vfat and ntfs only, and remove noatime for ext4.\n\nNote: Some options, such as nosuid, may be added by the mount program even if you don't include them.  Options in fstab take precedence.  pmount ignores options set here.") );
+    xset_set_set( set, "desc", _("Enter your comma- or space-separated list of default mount options below (%%o in handlers).\n\nIn addition to regular options, you can also specify options to be added or removed for a specific filesystem type by using the form OPTION+FSTYPE or OPTION-FSTYPE.\n\nExample:  nosuid, sync+vfat, sync+ntfs, noatime, noatime-ext4\nThis will add nosuid and noatime for all filesystem types, add sync for vfat and ntfs only, and remove noatime for ext4.\n\nNote: Some options, such as nosuid, may be added by the mount program even if you don't include them.  Options in fstab take precedence.  pmount and some handlers may ignore options set here.") );
     set->menu_style = XSET_MENU_STRING;
     xset_set_set( set, "title", _("Default Mount Options") );
     xset_set_set( set, "s", "noexec, nosuid, noatime" );

@@ -11,7 +11,7 @@ Author: Mateusz Łukasik <mati75@linuxmint.pl>
 --- a/data/spacefm.desktop.in
 +++ b/data/spacefm.desktop.in
 @@ -10,3 +10,4 @@ Terminal=false
- MimeType=inode/directory;inode/mount-point;x-scheme-handler/ssh;x-scheme-handler/smb;x-scheme-handler/nfs;x-scheme-handler/ftp;
+ X-KDE-Protocols=ftp,smb,ssh,ptp,mtp,nfs,webdav,http,https
  _GenericName=File Manager
  _Comment=Browse the file system
 +_Keywords=file;manager;file-manager;
