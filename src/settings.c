@@ -45,7 +45,9 @@
 #include "ptk-location-view.h"
 #include "exo-icon-chooser-dialog.h" /* for exo_icon_chooser_dialog_new */
 
-#define CONFIG_VERSION "33"
+#define CONFIG_VERSION "34"   // 1.0.4
+
+#define DEFAULT_TMP_DIR "/tmp"
 
 /* Dirty hack: check whether we are under LXDE or not */
 #define is_under_LXDE()     (g_getenv( "_LXSESSION_PID" ) != NULL)
@@ -56,6 +58,7 @@ const gboolean show_hidden_files_default = FALSE;
 const gboolean show_thumbnail_default = FALSE;
 const int max_thumb_size_default = 8 << 20;
 const int big_icon_size_default = 48;
+const int max_icon_size = 512;
 const int small_icon_size_default = 22;
 const int tool_icon_size_default = 0;
 const gboolean single_click_default = FALSE;
@@ -235,13 +238,15 @@ static void parse_general_settings( char* line )
     else if ( 0 == strcmp( name, "big_icon_size" ) )
     {
         app_settings.big_icon_size = atoi( value );
-        if( app_settings.big_icon_size <= 0 || app_settings.big_icon_size > 256 )
+        if( app_settings.big_icon_size <= 0 || app_settings.big_icon_size >
+                                                                max_icon_size )
             app_settings.big_icon_size = big_icon_size_default;
     }
     else if ( 0 == strcmp( name, "small_icon_size" ) )
     {
         app_settings.small_icon_size = atoi( value );
-        if( app_settings.small_icon_size <= 0 || app_settings.small_icon_size > 256 )
+        if( app_settings.small_icon_size <= 0 || app_settings.small_icon_size >
+                                                                max_icon_size )
             app_settings.small_icon_size = small_icon_size_default;
     }
     else if ( 0 == strcmp( name, "tool_icon_size" ) )
@@ -419,7 +424,7 @@ static void parse_interface_settings( char* line )
     //    app_settings.hide_folder_content_border = atoi( value );
 }
 
-static void parse_conf( char* line )
+static void parse_conf( const char* etc_path, char* line )
 {
     char * sep = strstr( line, "=" );
     char* name;
@@ -430,45 +435,67 @@ static void parse_conf( char* line )
     value = sep + 1;
     *sep = '\0';
     char* sname = g_strstrip( name );
+    char* svalue = g_strdup( g_strstrip( value ) );
     
-    if ( !strcmp( sname, "tmp_dir" ) )
+    if ( !( sname && sname[0] && svalue && svalue[0] ) )
+    {}
+    else if ( strpbrk( svalue, " $%\\()&#|:;?<>{}[]*\"'" ) )
+        g_warning( _("%s: %s contains invalid characters - ignored"), etc_path,
+                                                sname );
+    else if ( !strcmp( sname, "tmp_dir" ) )
     {
-        settings_tmp_dir = g_strdup( g_strstrip( value ) );
-        if ( settings_tmp_dir && settings_tmp_dir[0] == '\0' )
+        if ( svalue[0] != '/' || !g_file_test( svalue, G_FILE_TEST_IS_DIR ) )
+            g_warning( _("%s: tmp_dir '%s' does not exist - reverting to %s"),
+                                                etc_path, svalue,
+                                                DEFAULT_TMP_DIR );
+        else
         {
-            g_free( settings_tmp_dir );
-            settings_tmp_dir = NULL;
-        }
-        else if ( settings_tmp_dir && strpbrk( settings_tmp_dir, " $%\\()&#|:;?<>{}[]*\"'" ) )
-        {
-            g_free( settings_tmp_dir );
-            settings_tmp_dir = NULL;
-            g_warning( _("custom tmp_dir contains invalid chars - reverting to /tmp") );
-        }
-        else if ( settings_tmp_dir && !g_file_test( settings_tmp_dir, G_FILE_TEST_IS_DIR ) )
-        {
-            g_free( settings_tmp_dir );
-            settings_tmp_dir = NULL;
-            g_warning( _("custom tmp_dir does not exist - reverting to /tmp") );
+            settings_tmp_dir = svalue;
+            svalue = NULL;
         }
     }
+    else if ( !strcmp( sname, "terminal_su" ) ||
+                                            !strcmp( sname, "graphical_su" ) )
+    {
+        if ( svalue[0] != '/' || !g_file_test( svalue, G_FILE_TEST_EXISTS ) )
+            g_warning( "%s: %s '%s' %s", etc_path, sname, svalue,
+                                                _("file not found") );
+        else if ( !strcmp( sname, "terminal_su" ) )
+        {
+            settings_terminal_su = svalue;
+            svalue = NULL;
+        }
+        else
+        {
+            settings_graphical_su = svalue;
+            svalue = NULL;
+        }
+    }
+    g_free( svalue );
 }
 
 void load_conf()
 {
     // load spacefm.conf
     char line[ 2048 ];
-    FILE* file = fopen( "/etc/spacefm/spacefm.conf", "r" );
+
+    settings_terminal_su = NULL;
+    settings_graphical_su = NULL;
+
+    char* etc_path = g_build_filename( SYSCONFDIR, "spacefm", "spacefm.conf",
+                                                            NULL );
+    FILE* file = fopen( etc_path, "r" );
     if ( file )
     {
         while ( fgets( line, sizeof( line ), file ) )
-            parse_conf( line );
+            parse_conf( etc_path, line );
         fclose( file );
     }
+    g_free( etc_path );
     
-    // set tmp dirs
+    // set tmp dir
     if ( !settings_tmp_dir )
-        settings_tmp_dir = g_strdup( "/tmp" );
+        settings_tmp_dir = g_strdup( DEFAULT_TMP_DIR );
 }        
 
 void swap_menu_label( const char* set_name, const char* old_name,
@@ -576,7 +603,6 @@ void load_settings( char* config_dir )
         settings_config_dir = config_dir;
     else
         settings_config_dir = g_build_filename( g_get_user_config_dir(), "spacefm", NULL );
-    /* set default value */
 
     /* General */
     /* app_settings.show_desktop = show_desktop_default; */
@@ -644,7 +670,7 @@ void load_settings( char* config_dir )
 
     // set tmp dirs
     if ( !settings_tmp_dir )
-        settings_tmp_dir = g_strdup( "/tmp" );
+        settings_tmp_dir = g_strdup( DEFAULT_TMP_DIR );
         
     // shared tmp
     settings_shared_tmp_dir = g_build_filename( settings_tmp_dir, "spacefm.tmp", NULL );
@@ -658,16 +684,18 @@ void load_settings( char* config_dir )
     }
 
     // copy /etc/xdg/spacefm
+    char* xdg_path = g_build_filename( SYSCONFDIR, "xdg", "spacefm", NULL );
     if ( !g_file_test( settings_config_dir, G_FILE_TEST_EXISTS ) 
-                && g_file_test( "/etc/xdg/spacefm", G_FILE_TEST_IS_DIR ) )
+                && g_file_test( xdg_path, G_FILE_TEST_IS_DIR ) )
     {
-        char* command = g_strdup_printf( "cp -r /etc/xdg/spacefm '%s'",
-                                                        settings_config_dir );
+        char* command = g_strdup_printf( "cp -r %s '%s'",
+                                        xdg_path, settings_config_dir );
         printf( "COMMAND=%s\n", command );
         g_spawn_command_line_sync( command, NULL, NULL, NULL, NULL );
         g_free( command );
         chmod( settings_config_dir, S_IRWXU );
     }
+    g_free( xdg_path );
     if ( !g_file_test( settings_config_dir, G_FILE_TEST_EXISTS ) )
         g_mkdir_with_parents( settings_config_dir, 0700 );
 
@@ -864,6 +892,7 @@ void load_settings( char* config_dir )
     evt_pnl_focus = xset_get( "evt_pnl_focus" );
     evt_pnl_sel = xset_get( "evt_pnl_sel" );
     evt_tab_new = xset_get( "evt_tab_new" );
+    evt_tab_chdir = xset_get( "evt_tab_chdir" );
     evt_tab_focus = xset_get( "evt_tab_focus" );
     evt_tab_close = xset_get( "evt_tab_close" );
     evt_device = xset_get( "evt_device" );
@@ -1971,89 +2000,104 @@ void xset_autosave_cancel()
     }
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-//MOD extra settings below
-
-
 char* get_valid_su()  // may return NULL
 {
-    char* set_su = NULL;
     int i;
-    if ( xset_get_s( "su_command" ) )
-        set_su = g_strdup( xset_get_s( "su_command" ) );
+    char* use_su = NULL;
+    char* custom_su = NULL;
+    
+    use_su = g_strdup( xset_get_s( "su_command" ) );
 
-    if ( set_su )
+    if ( settings_terminal_su )
+        // get su from /etc/spacefm/spacefm.conf
+        custom_su = g_find_program_in_path( settings_terminal_su );
+
+    if ( custom_su && ( !use_su || use_su[0] == '\0' ) )
     {
-        // is set_su valid su command?
-        for ( i = 0; i < G_N_ELEMENTS( su_commands ); i++ )
+        // no su set in Prefs, use custom
+        xset_set( "su_command", "s", custom_su );
+        g_free( use_su );
+        use_su = g_strdup( custom_su );
+    }
+    if ( use_su )
+    {
+        if ( !custom_su || g_strcmp0( custom_su, use_su ) )
         {
-            if ( !strcmp( su_commands[i], set_su ) )
-                break;
-        }
-        if ( i == G_N_ELEMENTS( su_commands ) )
-        {
-            // invalid
-            g_free( set_su );
-            set_su = NULL;
+            // is Prefs use_su in list of valid su commands?
+            for ( i = 0; i < G_N_ELEMENTS( su_commands ); i++ )
+            {
+                if ( !strcmp( su_commands[i], use_su ) )
+                    break;
+            }
+            if ( i == G_N_ELEMENTS( su_commands ) )
+            {
+                // not in list - invalid
+                g_free( use_su );
+                use_su = NULL;
+            }
         }
     }
-    if ( !set_su )
+    if ( !use_su )
     {
         // discovery
         for ( i = 0; i < G_N_ELEMENTS( su_commands ); i++ )
         {
-            if ( set_su = g_find_program_in_path( su_commands[i] ) )
+            if ( use_su = g_find_program_in_path( su_commands[i] ) )
                 break;
         }
-        if ( !set_su )
-            set_su = g_strdup( su_commands[0] );
-        xset_set( "su_command", "s", set_su );
+        if ( !use_su )
+            use_su = g_strdup( su_commands[0] );
+        xset_set( "su_command", "s", use_su );
     }
-    char* str = g_find_program_in_path( set_su );
-    g_free( set_su );
-    return str;
+    char* su_path = g_find_program_in_path( use_su );
+    g_free( use_su );
+    g_free( custom_su );
+    return su_path;
 }
 
 char* get_valid_gsu()  // may return NULL
 {
     int i;
-    char* set_gsu = NULL;
+    char* use_gsu = NULL;
     char* custom_gsu = NULL;
-    if ( xset_get_s( "gsu_command" ) )
-        set_gsu = g_strdup( xset_get_s( "gsu_command" ) );
+    
+    // get gsu set in Prefs
+    use_gsu = g_strdup( xset_get_s( "gsu_command" ) );
+    
+    if ( settings_graphical_su )
+        // get gsu from /etc/spacefm/spacefm.conf
+        custom_gsu = g_find_program_in_path( settings_graphical_su );
 #ifdef PREFERABLE_SUDO_PROG
-    custom_gsu = g_find_program_in_path( PREFERABLE_SUDO_PROG );
+    if ( !custom_gsu )
+        // get build-time gsu
+        custom_gsu = g_find_program_in_path( PREFERABLE_SUDO_PROG );
 #endif
-    if ( custom_gsu )
+    if ( custom_gsu && ( !use_gsu || use_gsu[0] == '\0' ) )
     {
-        if ( !set_gsu || set_gsu[0] == '\0' )
-        {
-            xset_set( "gsu_command", "s", custom_gsu );
-            if ( set_gsu )
-                g_free( set_gsu );
-            set_gsu = g_strdup( custom_gsu );
-        }
+        // no gsu set in Prefs, use custom
+        xset_set( "gsu_command", "s", custom_gsu );
+        g_free( use_gsu );
+        use_gsu = g_strdup( custom_gsu );
     }
-    if ( set_gsu )
+    if ( use_gsu )
     {
-        if ( !custom_gsu || strcmp( custom_gsu, set_gsu ) )
+        if ( !custom_gsu || g_strcmp0( custom_gsu, use_gsu ) )
         {
-            // is set_gsu valid gsu command?
+            // is Prefs use_gsu in list of valid gsu commands?
             for ( i = 0; i < G_N_ELEMENTS( gsu_commands ); i++ )
             {
-                if ( !strcmp( gsu_commands[i], set_gsu ) )
+                if ( !strcmp( gsu_commands[i], use_gsu ) )
                     break;
             }
             if ( i == G_N_ELEMENTS( gsu_commands ) )
             {
-                // invalid
-                g_free( set_gsu );
-                set_gsu = NULL;
+                // not in list - invalid
+                g_free( use_gsu );
+                use_gsu = NULL;
             }
         }
     }
-    if ( !set_gsu )
+    if ( !use_gsu )
     {
         // discovery
         for ( i = 0; i < G_N_ELEMENTS( gsu_commands ); i++ )
@@ -2061,20 +2105,17 @@ char* get_valid_gsu()  // may return NULL
             // don't automatically select gksudo
             if ( strcmp( gsu_commands[i], "/usr/bin/gksudo" ) )
             {
-                if ( set_gsu = g_find_program_in_path( gsu_commands[i] ) )
+                if ( use_gsu = g_find_program_in_path( gsu_commands[i] ) )
                     break;
             }
         }
-        if ( !set_gsu )
-            set_gsu = g_strdup( gsu_commands[0] );
-        xset_set( "gsu_command", "s", set_gsu );
+        if ( !use_gsu )
+            use_gsu = g_strdup( gsu_commands[0] );
+        xset_set( "gsu_command", "s", use_gsu );
     }
     
-    if ( custom_gsu )
-        g_free( custom_gsu );
-    char* str = g_find_program_in_path( set_gsu );
-    
-    if ( !str && !strcmp( set_gsu, "/usr/bin/kdesu" ) )
+    char* gsu_path = g_find_program_in_path( use_gsu );
+    if ( !gsu_path && !g_strcmp0( use_gsu, "/usr/bin/kdesu" ) )
     {
         // kdesu may be in libexec path
         char* stdout;
@@ -2082,19 +2123,20 @@ char* get_valid_gsu()  // may return NULL
                                             &stdout, NULL, NULL, NULL ) 
                                             && stdout && stdout[0] != '\0' )
         {
-            if ( str = strchr( stdout, '\n' ) )
-               str[0] = '\0';
-            str = g_build_filename( stdout, "kdesu", NULL );
+            if ( gsu_path = strchr( stdout, '\n' ) )
+               gsu_path[0] = '\0';
+            gsu_path = g_build_filename( stdout, "kdesu", NULL );
             g_free( stdout );
-            if ( !g_file_test( str, G_FILE_TEST_EXISTS ) )
+            if ( !g_file_test( gsu_path, G_FILE_TEST_EXISTS ) )
             {
-                g_free( str );
-                str = NULL;
+                g_free( gsu_path );
+                gsu_path = NULL;
             }
         }
     }
-    g_free( set_gsu );
-    return str;
+    g_free( use_gsu );
+    g_free( custom_gsu );
+    return gsu_path;
 }
 
 char* randhex8()
@@ -3189,29 +3231,35 @@ XSet* xset_set_panel_mode( int panel, const char* name, char mode,
     return set;
 }
 
-XSet* xset_find_menu( const char* menu_name )
+XSet* xset_find_custom( const char* search )
 {
+    // find a custom command or submenu by label or xset name
     XSet* set;
     GList* l;
     char* str;
     
-    char* name = clean_label( menu_name, TRUE, FALSE );
+    char* label = clean_label( search, TRUE, FALSE );
     for ( l = xsets; l; l = l->next )
     {
         set = l->data;
-        if ( !set->lock && set->menu_style == XSET_MENU_SUBMENU && set->child )
+        if ( !set->lock && (
+                    ( set->menu_style == XSET_MENU_SUBMENU && set->child ) ||
+                    ( set->menu_style < XSET_MENU_SUBMENU &&
+                      xset_get_int_set( set, "x" ) <= XSET_CMD_BOOKMARK ) ) )
         {
+            // custom submenu or custom command - label or name matches?
             str = clean_label( set->menu_label, TRUE, FALSE );
-            if ( !g_strcmp0( str, name ) )
+            if ( !g_strcmp0( set->name, search ) || !g_strcmp0( str, label ) )
             {
+                // match
                 g_free( str );
-                g_free( name );
+                g_free( label );
                 return set;
             }
             g_free( str );
         }
     }
-    g_free( name );
+    g_free( label );
     return NULL;
 }
 
@@ -3359,7 +3407,7 @@ gboolean write_root_settings( FILE* file, const char* path )
     if ( !file )
         return FALSE;
 
-    fprintf( file, "\n# save root settings\nmkdir -p /etc/spacefm\necho -e '# SpaceFM As-Root Session File\\n\\n# THIS FILE IS NOT DESIGNED TO BE EDITED\\n\\n' > '%s'\n", path );
+    fprintf( file, "\n# save root settings\nmkdir -p %s/spacefm\necho -e '# SpaceFM As-Root Session File\\n\\n# THIS FILE IS NOT DESIGNED TO BE EDITED\\n\\n' > '%s'\n", SYSCONFDIR, path );
 
     for ( l = xsets ; l; l = l->next )
     {
@@ -3387,17 +3435,7 @@ gboolean write_root_settings( FILE* file, const char* path )
         }
     }
     
-    // create spacefm.conf
-    if ( !g_file_test( "/etc/spacefm/spacefm.conf", G_FILE_TEST_EXISTS ) )
-    {
-        fprintf( file, "echo \"# spacefm.conf\" >> /etc/spacefm/spacefm.conf\n" );
-        fprintf( file, "echo >> /etc/spacefm/spacefm.conf\n" );
-        fprintf( file, "echo \"# tmp_dir should be a root-protected user-writable dir like /tmp\" >> /etc/spacefm/spacefm.conf\n" );
-        fprintf( file, "echo \"# tmp_dir must NOT contain spaces or special chars - keep it simple\" >> /etc/spacefm/spacefm.conf\n" );
-        fprintf( file, "echo \"# tmp_dir=/tmp\" >> /etc/spacefm/spacefm.conf\n" );
-    }
-
-    fprintf( file, "chmod -R go-w+rX /etc/spacefm\n\n" );
+    fprintf( file, "chmod -R go-w+rX %s/spacefm\n\n", SYSCONFDIR );
     return TRUE;
 }
 
@@ -3412,12 +3450,12 @@ void read_root_settings()
         return;
     
     char* root_set_path= g_strdup_printf(
-                    "/etc/spacefm/%s-as-root", g_get_user_name() );
+                    "%s/spacefm/%s-as-root", SYSCONFDIR, g_get_user_name() );
     if ( !g_file_test( root_set_path, G_FILE_TEST_EXISTS ) )
     {
         g_free( root_set_path );
         root_set_path= g_strdup_printf(
-                                    "/etc/spacefm/%d-as-root", geteuid() );
+                                    "%s/spacefm/%d-as-root", SYSCONFDIR, geteuid() );
     }
     
     file = fopen( root_set_path, "r" );
@@ -3425,9 +3463,9 @@ void read_root_settings()
     if ( !file )
     {
         if ( g_file_test( root_set_path, G_FILE_TEST_EXISTS ) )
-            g_warning( _("Error reading root settings from /etc/spacefm/  Commands run as root may present a security risk") );
+            g_warning( _("Error reading root settings from %s/spacefm/  Commands run as root may present a security risk"), SYSCONFDIR );
         else
-            g_warning( _("No root settings found in /etc/spacefm/  Setting a root editor in Preferences should remove this warning on startup.   Otherwise commands run as root may present a security risk.") );
+            g_warning( _("No root settings found in %s/spacefm/  Setting a root editor in Preferences should remove this warning on startup.   Otherwise commands run as root may present a security risk."), SYSCONFDIR );
         g_free( root_set_path );
         return;
     }
@@ -5215,6 +5253,7 @@ void install_plugin_file( gpointer main_win, GtkWidget* handler_dlg,
         // file
         wget = g_strdup( "" );
         if ( g_str_has_suffix( path, ".tar.xz" ) )
+            //TODO: OmegaPhil reports -J is never required for any compression
             compression = "J";
         file_path_q = bash_quote( path );
     }
@@ -5927,6 +5966,7 @@ void xset_custom_activate( GtkWidget* item, XSet* set )
     task->task->exec_show_output = ( mset->task_out == XSET_B_TRUE );
     task->task->exec_show_error = ( mset->task_err == XSET_B_TRUE );
     task->task->exec_scroll_lock = ( mset->scroll_lock == XSET_B_TRUE );
+    task->task->exec_checksum = set->plugin;
     task->task->exec_export = TRUE;
 //task->task->exec_keep_tmp = TRUE;
 
@@ -7212,13 +7252,21 @@ void xset_design_job( GtkWidget* item, XSet* set )
         g_free( folder );
         break;
     case XSET_JOB_IMPORT_GTK:
+        // both GTK2 and GTK3 now use new location?
+        file = g_build_filename( g_get_user_config_dir(), "gtk-3.0",
+                                                        "bookmarks", NULL );
+        if ( !( file && g_file_test( file, G_FILE_TEST_EXISTS ) ) )
+            file = g_build_filename( g_get_home_dir(), ".gtk-bookmarks", NULL );
+        msg = g_strdup_printf( _("GTK bookmarks (%s) will be imported into the current or selected submenu.  Note that importing large numbers of bookmarks (eg more than 500) may impact performance."), file );
         if ( xset_msg_dialog( parent, GTK_MESSAGE_QUESTION,
                               _( "Import GTK Bookmarks" ), NULL,
-                              GTK_BUTTONS_OK_CANCEL,
-                              _( "GTK bookmarks (~/.gtk-bookmarks) will be imported into the current or selected submenu.  Note that importing large numbers of bookmarks (eg more than 500) may impact performance." ),
+                              GTK_BUTTONS_OK_CANCEL, msg,
                               NULL, NULL ) != GTK_RESPONSE_OK )
+        {
+            g_free( msg );
             break;
-        file = g_build_filename( g_get_home_dir(), ".gtk-bookmarks", NULL );
+        }
+        g_free( msg );
         ptk_bookmark_view_import_gtk( file, set );
         g_free( file );
         break;
@@ -7704,7 +7752,7 @@ gboolean xset_design_menu_keypress( GtkWidget* widget, GdkEventKey* event,
     GtkWidget* item = gtk_menu_shell_get_selected_item( GTK_MENU_SHELL( widget ) );
     if ( !item )
         return FALSE;
-    
+
     int keymod = ( event->state & ( GDK_SHIFT_MASK | GDK_CONTROL_MASK |
                  GDK_MOD1_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK | GDK_META_MASK ) );
     
@@ -8252,6 +8300,11 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
                       G_CALLBACK( gtk_widget_destroy ), NULL );
     g_signal_connect( design_menu, "key_press_event",
                       G_CALLBACK( xset_design_menu_keypress ), set );
+
+    gtk_menu_shell_set_take_focus( GTK_MENU_SHELL( design_menu ), TRUE );
+    // this is required when showing the menu via F2 or Menu key for focus
+    gtk_menu_shell_select_first( GTK_MENU_SHELL( design_menu ), TRUE );
+    
     return design_menu;
 }
 
@@ -8421,7 +8474,7 @@ gboolean xset_menu_keypress( GtkWidget* widget, GdkEventKey* event,
         {
             job = XSET_JOB_HELP;
         }
-        else if ( event->keyval == GDK_KEY_F2 )
+        else if ( event->keyval == GDK_KEY_F2 || event->keyval == GDK_KEY_Menu )
         {
             xset_design_show_menu( widget, set, NULL, 0, event->time );
             return TRUE;
@@ -11418,7 +11471,7 @@ void xset_defaults()
 
         set = xset_set( "auto_tab", "lbl", C_("View|Events|", "_Tab") );
         set->menu_style = XSET_MENU_SUBMENU;
-        xset_set_set( set, "desc", "evt_tab_new evt_tab_focus evt_tab_close" );
+        xset_set_set( set, "desc", "evt_tab_new evt_tab_chdir evt_tab_focus evt_tab_close" );
         set->line = g_strdup( "#sockets-menu" );
 
             set = xset_set( "evt_tab_new", "lbl", _("_New") );
@@ -11426,6 +11479,12 @@ void xset_defaults()
             xset_set_set( set, "title", _("Set New Tab Command") );
             xset_set_set( set, "desc", _("Enter program or bash command line to be run automatically whenever a new tab is opened:\n\nUse:\n\t%%e\tevent type  (evt_tab_new)\n\t%%w\twindow id  (see spacefm -s help)\n\t%%p\tpanel\n\t%%t\ttab\n\nExported bash variables (eg $fm_pwd, etc) can be used in this command.") );
             set->line = g_strdup( "#sockets-events-tabnew" );
+
+            set = xset_set( "evt_tab_chdir", "lbl", _("_Change Dir") );
+            set->menu_style = XSET_MENU_STRING;
+            xset_set_set( set, "title", _("Set Tab Change Dir Command") );
+            xset_set_set( set, "desc", _("Enter program or bash command line to be run automatically whenever a tab changes to a different directory:\n\nUse:\n\t%%e\tevent type  (evt_tab_chdir)\n\t%%w\twindow id  (see spacefm -s help)\n\t%%p\tpanel\n\t%%t\ttab\n\t%%d\tnew directory\n\nExported bash variables (eg $fm_pwd, etc) can be used in this command.") );
+            set->line = g_strdup( "#sockets-events-tabchdir" );
 
             set = xset_set( "evt_tab_focus", "lbl", _("_Focus") );
             set->menu_style = XSET_MENU_STRING;

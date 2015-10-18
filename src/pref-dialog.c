@@ -107,8 +107,10 @@ static const int tool_icon_sizes[] = {
     GTK_ICON_SIZE_BUTTON,
     GTK_ICON_SIZE_DND,
     GTK_ICON_SIZE_DIALOG };
-static const int big_icon_sizes[] = { 256, 192, 128, 96, 72, 64, 48, 36, 32, 24, 22 };
-static const int small_icon_sizes[] = { 256, 192, 128, 96, 72, 64, 48, 36, 32, 24, 22, 16, 12 };
+// also change max_icon_size in settings.c & lists in prefdlg.ui prefdlg2.ui
+// see create_size in vfs-thumbnail-loader.c:_vfs_thumbnail_load()
+static const int big_icon_sizes[] = { 512, 256, 192, 128, 96, 72, 64, 48, 36, 32, 24, 22 };
+static const int small_icon_sizes[] = { 512, 256, 192, 128, 96, 72, 64, 48, 36, 32, 24, 22, 16, 12 };
 static const char* date_formats[] =
 {
     "%Y-%m-%d %H:%M",
@@ -685,41 +687,49 @@ static void on_response( GtkDialog* dlg, int response, FMPrefDlg* user_data )
         xset_set( "drag_action", "x", s );
         g_free( s );
 
-        //MOD su command
+        // terminal su command
         char* custom_su = NULL;
-        int set_x = gtk_combo_box_get_active( GTK_COMBO_BOX( data->su_command ) );
-        if ( set_x > -1 )
+        if ( settings_terminal_su )
+            // get su from /etc/spacefm/spacefm.conf
+            custom_su = g_find_program_in_path( settings_terminal_su );
+        int idx = gtk_combo_box_get_active( GTK_COMBO_BOX( data->su_command ) );
+        if ( idx > -1 )
         {
             if ( custom_su )
             {
-                if ( set_x == 0 )
+                if ( idx == 0 )
                     xset_set( "su_command", "s", custom_su );
                 else
-                    xset_set( "su_command", "s", su_commands[set_x - 1] );
+                    xset_set( "su_command", "s", su_commands[idx - 1] );
                 g_free( custom_su );
             }
             else
-                xset_set( "su_command", "s", su_commands[set_x] );
+                xset_set( "su_command", "s", su_commands[idx] );
         }
         
-        //MOD gsu command
+        // graphical su command
         char* custom_gsu = NULL;
-        set_x = gtk_combo_box_get_active( GTK_COMBO_BOX( data->gsu_command ) );
+        if ( settings_graphical_su )
+            // get gsu from /etc/spacefm/spacefm.conf
+            custom_gsu = g_find_program_in_path( settings_graphical_su );
 #ifdef PREFERABLE_SUDO_PROG
-    custom_gsu = g_find_program_in_path( PREFERABLE_SUDO_PROG );
+        if ( !custom_gsu )
+            // get build-time gsu
+            custom_gsu = g_find_program_in_path( PREFERABLE_SUDO_PROG );
 #endif
-        if ( set_x > -1 )
+        idx = gtk_combo_box_get_active( GTK_COMBO_BOX( data->gsu_command ) );
+        if ( idx > -1 )
         {
             if ( custom_gsu )
             {
-                if ( set_x == 0 )
+                if ( idx == 0 )
                     xset_set( "gsu_command", "s", custom_gsu );
                 else
-                    xset_set( "gsu_command", "s", gsu_commands[set_x - 1] );
+                    xset_set( "gsu_command", "s", gsu_commands[idx - 1] );
                 g_free( custom_gsu );
             }
             else
-                xset_set( "gsu_command", "s", gsu_commands[set_x] );
+                xset_set( "gsu_command", "s", gsu_commands[idx] );
         }
         
         //MOD editors
@@ -812,7 +822,9 @@ static void on_response( GtkDialog* dlg, int response, FMPrefDlg* user_data )
             if ( root_set_change )
             {
                 // task
-                xset_msg_dialog( GTK_WIDGET( dlg ), 0, _("Save Root Settings"), NULL, 0, _("You will now be asked for your root password to save the root settings for this user to a file in /etc/spacefm/  Supplying the password in the next window is recommended.  Because SpaceFM runs some commands as root via su, these settings are best protected by root."), NULL, NULL );
+                char* msg = g_strdup_printf( _("You will now be asked for your root password to save the root settings for this user to a file in %s/spacefm/  Supplying the password in the next window is recommended.  Because SpaceFM runs some commands as root via su, these settings are best protected by root."), SYSCONFDIR );
+                xset_msg_dialog( GTK_WIDGET( dlg ), 0, _("Save Root Settings"), NULL, 0, msg, NULL, NULL );
+                g_free( msg );
                 PtkFileTask* task = ptk_file_exec_new( _("Save Root Settings"), NULL, NULL,
                                                                     NULL );
                 task->task->exec_command = g_strdup_printf( "echo" );
@@ -1194,72 +1206,91 @@ gboolean fm_edit_preference( GtkWindow* parent, int page )
         g_free( str );
 
 
-        //MOD Advanced Tab ==================================================
+        // Advanced Tab ==================================================
      
-        // su
-        int set_x;
+        // terminal su
+        int idx;
         GtkTreeIter it;
         char* custom_su = NULL;
-        char* set_su;
+        char* use_su;
         data->su_command = (GtkWidget*)gtk_builder_get_object( builder,
                                                                 "su_command" );
-        set_su = xset_get_s( "su_command" );
-        if ( !set_su )
-            set_x = 0;
+        use_su = xset_get_s( "su_command" );
+        if ( settings_terminal_su )
+            // get su from /etc/spacefm/spacefm.conf
+            custom_su = g_find_program_in_path( settings_terminal_su );
+        if ( custom_su )
+        {
+            GtkListStore* su_list = GTK_LIST_STORE( gtk_combo_box_get_model( 
+                                        GTK_COMBO_BOX( data->su_command ) ) );
+            gtk_list_store_prepend( su_list, &it );
+            gtk_list_store_set( GTK_LIST_STORE( su_list ), &it, 0, custom_su,
+                                                                        -1 );
+        }
+        if ( !use_su )
+            idx = 0;
+        else if ( custom_su && !g_strcmp0( custom_su, use_su ) )
+            idx = 0;
         else
         {
             for ( i = 0; i < G_N_ELEMENTS( su_commands ); i++ )
             {
-                if ( !strcmp( su_commands[i], set_su ) )
+                if ( !strcmp( su_commands[i], use_su ) )
                     break;
             }
             if ( i == G_N_ELEMENTS( su_commands ) )
-                set_x = 0;
+                idx = 0;
+            else if ( custom_su )
+                idx = i + 1;
             else
-                set_x = i;
+                idx = i;
         }
-        gtk_combo_box_set_active( GTK_COMBO_BOX( data->su_command ), set_x );
-        if ( custom_su )
-            g_free( custom_su );
+        gtk_combo_box_set_active( GTK_COMBO_BOX( data->su_command ), idx );
+        g_free( custom_su );
         
-        // gsu
+        // graphical su
         char* custom_gsu = NULL;
-        char* set_gsu;
+        char* use_gsu;
         data->gsu_command = (GtkWidget*)gtk_builder_get_object( builder,
                                                                 "gsu_command" );
-        set_gsu = xset_get_s( "gsu_command" );
+        use_gsu = xset_get_s( "gsu_command" );
+        if ( settings_graphical_su )
+            // get gsu from /etc/spacefm/spacefm.conf
+            custom_gsu = g_find_program_in_path( settings_graphical_su );
 #ifdef PREFERABLE_SUDO_PROG
-    custom_gsu = g_find_program_in_path( PREFERABLE_SUDO_PROG );
+        if ( !custom_gsu )
+            // get build-time gsu
+            custom_gsu = g_find_program_in_path( PREFERABLE_SUDO_PROG );
 #endif
         if ( custom_gsu )
         {
             GtkListStore* gsu_list = GTK_LIST_STORE( gtk_combo_box_get_model( 
                                         GTK_COMBO_BOX( data->gsu_command ) ) );
             gtk_list_store_prepend( gsu_list, &it );
-            gtk_list_store_set( GTK_LIST_STORE( gsu_list ), &it, 0, custom_gsu, -1 );
+            gtk_list_store_set( GTK_LIST_STORE( gsu_list ), &it, 0, custom_gsu,
+                                                                        -1 );
         }
         
-        if ( !set_gsu )
-            set_x = 0;
-        else if ( custom_gsu && !strcmp( custom_gsu, set_gsu ) )
-            set_x = 0;
+        if ( !use_gsu )
+            idx = 0;
+        else if ( custom_gsu && !g_strcmp0( custom_gsu, use_gsu ) )
+            idx = 0;
         else
         {
             for ( i = 0; i < G_N_ELEMENTS( gsu_commands ); i++ )
             {
-                if ( !strcmp( gsu_commands[i], set_gsu ) )
+                if ( !strcmp( gsu_commands[i], use_gsu ) )
                     break;
             }
             if ( i == G_N_ELEMENTS( gsu_commands ) )
-                set_x = 0;
+                idx = 0;
             else if ( custom_gsu )
-                set_x = i + 1;
+                idx = i + 1;
             else
-                set_x = i;
+                idx = i;
         }
-        gtk_combo_box_set_active( GTK_COMBO_BOX( data->gsu_command ), set_x );
-        if ( custom_gsu )
-            g_free( custom_gsu );
+        gtk_combo_box_set_active( GTK_COMBO_BOX( data->gsu_command ), idx );
+        g_free( custom_gsu );
     
         // date format
         data->date_format = (GtkWidget*)gtk_builder_get_object( builder,

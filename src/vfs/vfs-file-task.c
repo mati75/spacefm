@@ -1613,7 +1613,7 @@ static void vfs_file_task_exec( char* src_file, VFSFileTask* task )
             if ( this_user && this_user[0] != '\0' )
             {
                 char* root_set_path= g_strdup_printf(
-                                "/etc/spacefm/%s-as-root", this_user );
+                                "%s/spacefm/%s-as-root", SYSCONFDIR, this_user );
                 write_root_settings( file, root_set_path );
                 g_free( root_set_path );
                 //g_free( this_user );  DON'T
@@ -1621,7 +1621,7 @@ static void vfs_file_task_exec( char* src_file, VFSFileTask* task )
             else
             {
                 char* root_set_path= g_strdup_printf(
-                                "/etc/spacefm/%d-as-root", geteuid() );
+                                "%s/spacefm/%d-as-root", SYSCONFDIR, geteuid() );
                 write_root_settings( file, root_set_path );
                 g_free( root_set_path );
             }
@@ -1707,7 +1707,9 @@ static void vfs_file_task_exec( char* src_file, VFSFileTask* task )
         else
             // run as self or as root
             chmod( task->exec_script, S_IRWXU );
-        if ( task->exec_as_user && geteuid() != 0 )
+        
+        // use checksum
+        if ( geteuid() != 0 && ( task->exec_as_user || task->exec_checksum ) )
             sum_script = get_sha256sum( task->exec_script );
     }
 
@@ -1842,7 +1844,8 @@ static void vfs_file_task_exec( char* src_file, VFSFileTask* task )
             argv[a++] = g_strdup_printf( "%s %s%s %s %s",
                                 BASHPATH,
                                 auth,
-                                !strcmp( task->exec_as_user, "root" ) ? " root" : "",
+                                !g_strcmp0( task->exec_as_user, "root" ) ?
+                                                                " root" : "",
                                 task->exec_script,
                                 sum_script );
             g_free( auth );
@@ -1851,7 +1854,7 @@ static void vfs_file_task_exec( char* src_file, VFSFileTask* task )
         {
             argv[a++] = g_strdup( BASHPATH );
             argv[a++] = auth;
-            if ( !strcmp( task->exec_as_user, "root" ) )
+            if ( !g_strcmp0( task->exec_as_user, "root" ) )
                 argv[a++] = g_strdup( "root" );
             argv[a++] = g_strdup( task->exec_script );
             argv[a++] = g_strdup( sum_script );
@@ -2260,6 +2263,7 @@ VFSFileTask* vfs_task_new ( VFSFileTaskType type,
     task->exec_is_error = FALSE;
     task->exec_scroll_lock = FALSE;
     task->exec_write_root = FALSE;
+    task->exec_checksum = FALSE;
     task->exec_set = NULL;
     task->exec_cond = NULL;
     task->exec_ptask = NULL;

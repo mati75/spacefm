@@ -130,8 +130,8 @@ static gboolean on_main_window_focus( GtkWidget* main_window,
                                       GdkEventFocus *event,
                                       gpointer user_data );
 
-static gboolean on_main_window_keypress( FMMainWindow* widget,
-                                         GdkEventKey* event, gpointer data);
+static gboolean on_main_window_keypress( FMMainWindow* main_window,
+                                         GdkEventKey* event, XSet* known_set );
 //static gboolean on_main_window_keyrelease( FMMainWindow* widget,
 //                                        GdkEventKey* event, gpointer data);
 static gboolean on_window_button_press_event( GtkWidget* widget, 
@@ -1080,6 +1080,65 @@ void main_window_bookmark_changed( const char* changed_set_name )
     }
 }
 
+void main_window_refresh_all_tabs_matching( const char* path )
+{
+    // This function actually closes the tabs because refresh doesn't work.
+    // dir objects have multiple refs and unreffing them all wouldn't finalize
+    // the dir object for unknown reason.
+    
+    // This breaks auto open of tabs on automount
+    return;
+#if 0
+    GList* l;
+    FMMainWindow* a_window;
+    PtkFileBrowser* a_browser;
+    GtkWidget* notebook;
+    int cur_tabx, p;
+    int pages;
+    char* cwd_canon;
+    
+//printf("main_window_refresh_all_tabs_matching %s\n", path );
+    // canonicalize path
+    char buf[ PATH_MAX + 1 ];
+    char* canon = g_strdup( realpath( path, buf ) );
+    if ( !canon )
+        canon = g_strdup( path );
+
+    if ( !g_file_test( canon, G_FILE_TEST_IS_DIR ) )
+    {
+        g_free( canon );
+        return;
+    }
+
+    // do all windows all panels all tabs
+    for ( l = all_windows; l; l = l->next )
+    {
+        a_window = (FMMainWindow*)l->data;
+        for ( p = 1; p < 5; p++ )
+        {
+            notebook = a_window->panel[p-1];
+            pages = gtk_notebook_get_n_pages( GTK_NOTEBOOK( notebook ) );
+            for ( cur_tabx = 0; cur_tabx < pages; cur_tabx++ )
+            {
+                a_browser = PTK_FILE_BROWSER( gtk_notebook_get_nth_page( 
+                                            GTK_NOTEBOOK( notebook ),
+                                                                cur_tabx ) );
+                cwd_canon = realpath( ptk_file_browser_get_cwd( a_browser ),
+                                                                    buf );
+                if ( !g_strcmp0( canon, cwd_canon ) && g_file_test( canon, G_FILE_TEST_IS_DIR ) )
+                {
+                    on_close_notebook_page( NULL, a_browser );
+                    pages = gtk_notebook_get_n_pages( GTK_NOTEBOOK( notebook ) );
+                    cur_tabx--;
+                    //ptk_file_browser_refresh( NULL, a_browser );
+                }
+            }
+        }
+    }
+    g_free( canon );
+#endif
+}
+
 void main_window_rebuild_all_toolbars( PtkFileBrowser* file_browser )
 {
     GList* l;
@@ -1216,7 +1275,9 @@ void main_window_toggle_thumbnails_all_windows()
     /* Ensuring free space at the end of the heap is freed to the OS,
      * mainly to deal with the possibility thousands of large thumbnails
      * have been freed but the memory not actually released by SpaceFM */
+#if defined (__GLIBC__)
     malloc_trim(0);
+#endif
 }
 
 void focus_panel( GtkMenuItem* item, gpointer mw, int p )
@@ -1825,6 +1886,8 @@ void rebuild_menus( FMMainWindow* main_window )
     main_window->dev_menu = create_devices_menu( main_window );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM( main_window->dev_menu_item ),
                                                     main_window->dev_menu );
+    g_signal_connect( main_window->dev_menu, "key-press-event",
+                      G_CALLBACK( xset_menu_keypress ), NULL );
     
     // Bookmarks
     newmenu = gtk_menu_new();
@@ -2741,6 +2804,10 @@ void on_file_browser_after_chdir( PtkFileBrowser* file_browser,
     }
     if ( xset_get_b( "main_save_tabs" ) )
         xset_autosave( FALSE, TRUE );
+
+    if ( evt_tab_chdir->s || evt_tab_chdir->ob2_data )
+        main_window_event( main_window, evt_tab_chdir, "evt_tab_chdir", 0, 0, NULL,
+                                                                0, 0, 0, TRUE );
 }
 
 GtkWidget* fm_main_window_create_tab_label( FMMainWindow* main_window,
@@ -3830,17 +3897,22 @@ gboolean on_main_window_focus( GtkWidget* main_window,
     return FALSE;
 }
 
-static gboolean on_main_window_keypress( FMMainWindow* main_window, GdkEventKey* event,
-                                                                gpointer user_data)
+static gboolean on_main_window_keypress( FMMainWindow* main_window,
+                                         GdkEventKey* event, XSet* known_set )
 {
 //printf("main_keypress %d %d\n", event->keyval, event->state );
 
     GList* l;
     XSet* set;
-    XSet* set_orig;
     PtkFileBrowser* browser;
     guint nonlatin_key = 0;
     
+    if ( known_set )
+    {
+        set = known_set;
+        goto _key_found;
+    }
+
     if ( event->keyval == 0 )
         return FALSE;
 
@@ -7883,18 +7955,19 @@ _invalid_get:
         }
         gdk_event_free( (GdkEvent*)event );     
     }
-    else if ( !strcmp( argv[0], "show-menu" ) )
+    else if ( !strcmp( argv[0], "activate" ) ||
+              !strcmp( argv[0], "show-menu" ) /* backwards compat <1.0.4 */ )
     {
         if ( !argv[i] )
         {
             *reply = g_strdup_printf( _("spacefm: command %s requires an argument\n"),
                                                                     argv[0] );
             return 1;
-        }        
-        XSet* set = xset_find_menu( argv[i] );
+        }
+        XSet* set = xset_find_custom( argv[i] );
         if ( !set )
         {
-            *reply = g_strdup_printf( _("spacefm: custom submenu '%s' not found\n"),
+            *reply = g_strdup_printf( _("spacefm: custom command or submenu '%s' not found\n"),
                                                                     argv[i] );
             return 2;
         }
@@ -7906,18 +7979,27 @@ _invalid_get:
                         xset_context_test( context, set->context, FALSE ) != 
                                                                 CONTEXT_SHOW )
             {
-                *reply = g_strdup_printf( _("spacefm: menu '%s' context hidden or disabled\n"),
+                *reply = g_strdup_printf( _("spacefm: item '%s' context hidden or disabled\n"),
                                                                         argv[i] );
-                return 2;        
+                return 2;
             }
         }
-        set = xset_get( set->child );
-        widget = gtk_menu_new();
-        GtkAccelGroup* accel_group = gtk_accel_group_new();
- 
-        xset_add_menuitem( NULL, file_browser, GTK_WIDGET( widget ), accel_group,
-                                                                set );
-        g_idle_add( (GSourceFunc)delayed_show_menu, widget );
+        if ( set->menu_style == XSET_MENU_SUBMENU )
+        {
+            // show submenu as popup menu
+            set = xset_get( set->child );
+            widget = gtk_menu_new();
+            GtkAccelGroup* accel_group = gtk_accel_group_new();
+     
+            xset_add_menuitem( NULL, file_browser, GTK_WIDGET( widget ), accel_group,
+                                                                    set );
+            g_idle_add( (GSourceFunc)delayed_show_menu, widget );
+        }
+        else
+        {
+            // activate item
+            on_main_window_keypress( NULL, NULL, set );
+        }
     }
     else if ( !strcmp( argv[0], "add-event" ) ||
               !strcmp( argv[0], "replace-event" ) ||
@@ -8049,6 +8131,8 @@ gboolean run_event( FMMainWindow* main_window, PtkFileBrowser* file_browser,
         replace = "ewptkm";
     else if ( set == evt_pnl_show )
         replace = "ewptfv";
+    else if ( set == evt_tab_chdir )
+        replace = "ewptd";
 
     char* str;
     char* rep;
@@ -8069,6 +8153,7 @@ gboolean run_event( FMMainWindow* main_window, PtkFileBrowser* file_browser,
         %m  modifier
         %b  button
         %v  visible
+        %d  cwd
         */
         var[1] = replace[i];
         str = cmd;
@@ -8122,6 +8207,14 @@ gboolean run_event( FMMainWindow* main_window, PtkFileBrowser* file_browser,
             else if ( var[1] == 'm' )
             {
                 rep = g_strdup_printf( "%#x", state );
+                cmd = replace_string( str, var, rep, FALSE );
+                g_free( rep );
+            }
+            else if ( var[1] == 'd' )
+            {
+                rep = bash_quote( file_browser ?
+                                    ptk_file_browser_get_cwd(
+                                                    file_browser ) : NULL );
                 cmd = replace_string( str, var, rep, FALSE );
                 g_free( rep );
             }
