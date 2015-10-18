@@ -320,6 +320,7 @@ XSet* evt_pnl_show;
 XSet* evt_pnl_focus;
 XSet* evt_pnl_sel;
 XSet* evt_tab_new;
+XSet* evt_tab_chdir;
 XSet* evt_tab_focus;
 XSet* evt_tab_close;
 XSet* evt_device;
@@ -368,6 +369,10 @@ static const char* gsu_commands[] = // order and contents must match prefdlg.ui
     "/bin/su",
     "/usr/bin/sudo"
 };
+
+// These will contain the su and gsu settings from /etc/spacefm/spacefm.conf
+char* settings_terminal_su;
+char* settings_graphical_su;
 
 typedef struct
 {
@@ -447,7 +452,7 @@ XSet* xset_set_ob1_int( XSet* set, const char* ob1, int ob1_int );
 XSet* xset_set_ob1( XSet* set, const char* ob1, gpointer ob1_data );
 XSet* xset_set_ob2( XSet* set, const char* ob2, gpointer ob2_data );
 XSet* xset_is( const char* name );
-XSet* xset_find_menu( const char* menu_name );
+XSet* xset_find_custom( const char* search );
 
 void xset_menu_cb( GtkWidget* item, XSet* set );
 gboolean xset_menu_keypress( GtkWidget* widget, GdkEventKey* event,

@@ -53,7 +53,7 @@ on_dir_tree_view_button_press( GtkWidget* view,
 static gboolean
 on_dir_tree_view_key_press( GtkWidget* view,
                             GdkEventKey* evt,
-                            gpointer user_data );
+                            PtkFileBrowser* browser );
 
 static gboolean sel_func ( GtkTreeSelection *selection,
                            GtkTreeModel *model,
@@ -158,7 +158,7 @@ GtkWidget* ptk_dir_tree_view_new( PtkFileBrowser* browser,
     dir_tree_view = GTK_TREE_VIEW( gtk_tree_view_new () );
     gtk_tree_view_set_headers_visible( dir_tree_view, FALSE );
     gtk_tree_view_set_enable_tree_lines(dir_tree_view, TRUE);
-    
+
 //MOD enabled DND   FIXME: Temporarily disable drag & drop since it doesn't work right now.
 /*    exo_icon_view_enable_model_drag_dest (
             EXO_ICON_VIEW( dir_tree_view ),
@@ -216,7 +216,7 @@ GtkWidget* ptk_dir_tree_view_new( PtkFileBrowser* browser,
 
     g_signal_connect ( dir_tree_view, "key-press-event",
                        G_CALLBACK ( on_dir_tree_view_key_press ),
-                       NULL );
+                       browser );
 
     //MOD drag n drop
     g_signal_connect ( ( gpointer ) dir_tree_view, "drag-data-received",
@@ -434,45 +434,81 @@ gboolean on_dir_tree_view_button_press( GtkWidget* view,
                                         GdkEventButton* evt,
                                         PtkFileBrowser* browser )
 {
-    if ( evt->type == GDK_BUTTON_PRESS && evt->button == 3 )
-    {
-        GtkTreeModel * model;
-        GtkTreePath* tree_path;
-        GtkTreeIter it;
+    GtkTreeModel* model;
+    GtkTreePath* tree_path;
+    GtkTreeViewColumn* tree_col;
+    GtkTreeIter it;
 
+    if ( evt->type == GDK_BUTTON_PRESS &&
+                                    ( evt->button == 1 || evt->button == 3 ) )
+    {
+        // middle click 2 handled in ptk-file-browser.c on_dir_tree_button_press
         model = gtk_tree_view_get_model( GTK_TREE_VIEW( view ) );
         if ( gtk_tree_view_get_path_at_pos( GTK_TREE_VIEW( view ),
-                                            evt->x, evt->y, &tree_path, NULL, NULL, NULL ) )
+                                            evt->x, evt->y, &tree_path,
+                                            &tree_col, NULL, NULL ) )
         {
             if ( gtk_tree_model_get_iter( model, &it, tree_path ) )
             {
-                VFSFileInfo * file;
-                gtk_tree_model_get( model, &it,
-                                    COL_DIR_TREE_INFO,
-                                    &file, -1 );
-                if ( file )
+                gtk_tree_view_set_cursor( GTK_TREE_VIEW( view ),
+                                                            tree_path,
+                                                            tree_col, FALSE );
+                gtk_tree_view_row_activated( GTK_TREE_VIEW( view ),
+                                                            tree_path,
+                                                            tree_col );
+                if ( evt->button == 3 )
                 {
-                    GtkWidget * popup;
-                    char* file_path;
-                    GList* sel_files;
-                    char* dir_name;
-                    file_path = ptk_dir_view_get_dir_path( model, &it );
+                    // right click
+                    VFSFileInfo * file;
+                    gtk_tree_model_get( model, &it,
+                                        COL_DIR_TREE_INFO,
+                                        &file, -1 );
+                    if ( file )
+                    {
+                        GtkWidget * popup;
+                        char* file_path;
+                        GList* sel_files;
+                        char* dir_name;
+                        file_path = ptk_dir_view_get_dir_path( model, &it );
 
-                    sel_files = g_list_prepend( NULL, vfs_file_info_ref(file) );
-                    dir_name = g_path_get_dirname( file_path );
-                    popup = ptk_file_menu_new( NULL, browser,
-                                file_path, file,
-                                dir_name, sel_files );
-                    g_free( dir_name );
-                    g_free( file_path );
-                    if ( popup )
-                        gtk_menu_popup( GTK_MENU( popup ), NULL, NULL,
-                                    NULL, NULL, 3, evt->time );
+                        sel_files = g_list_prepend( NULL, vfs_file_info_ref(file) );
+                        dir_name = g_path_get_dirname( file_path );
+                        /* FIXME: New|Tab Here and New|File etc work on the
+                         * wrong location because dir_name is really incorrect.
+                         * But if set to cur dir it breaks Copy, etc. */
+                        popup = ptk_file_menu_new( NULL, browser,
+                                    file_path, file,
+                                    dir_name, sel_files );
+                        g_free( dir_name );
+                        g_free( file_path );
+                        if ( popup )
+                            gtk_menu_popup( GTK_MENU( popup ), NULL, NULL,
+                                        NULL, NULL, 3, evt->time );
 
-                    vfs_file_info_unref( file );
+                        vfs_file_info_unref( file );
+                        gtk_tree_path_free( tree_path );
+                        return TRUE;
+                    }
                 }
             }
             gtk_tree_path_free( tree_path );
+        }
+    }
+    else if ( evt->type == GDK_2BUTTON_PRESS && evt->button == 1 )
+    {
+        // double click - expand/collapse
+        if ( gtk_tree_view_get_path_at_pos( GTK_TREE_VIEW( view ),
+                                            evt->x, evt->y, &tree_path,
+                                            NULL, NULL, NULL ) )
+        {
+            if ( gtk_tree_view_row_expanded( GTK_TREE_VIEW( view ),
+                                                                tree_path ) )
+                gtk_tree_view_collapse_row( GTK_TREE_VIEW( view ), tree_path );
+            else
+                gtk_tree_view_expand_row( GTK_TREE_VIEW( view ), tree_path,
+                                                                FALSE );
+            gtk_tree_path_free( tree_path );
+            return TRUE;
         }
     }
     return FALSE;
@@ -480,22 +516,18 @@ gboolean on_dir_tree_view_button_press( GtkWidget* view,
 
 gboolean on_dir_tree_view_key_press( GtkWidget* view,
                                      GdkEventKey* evt,
-                                     gpointer user_data )
+                                     PtkFileBrowser* browser )
 {
-    switch(evt->keyval) {
-    case GDK_KEY_Left:
-    case GDK_KEY_Right:
-        break;
-    default:
-        return FALSE;
-    }
-
-
-    GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+    VFSFileInfo* file;
     GtkTreeModel *model;
     GtkTreeIter iter;
+    GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+    
     if(!gtk_tree_selection_get_selected(select, &model, &iter))
         return FALSE;
+
+    int keymod = ( evt->state & ( GDK_SHIFT_MASK | GDK_CONTROL_MASK |
+            GDK_MOD1_MASK | GDK_SUPER_MASK | GDK_HYPER_MASK | GDK_META_MASK ) );
 
     GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
 
@@ -520,9 +552,46 @@ gboolean on_dir_tree_view_key_press( GtkWidget* view,
             gtk_tree_view_set_cursor(GTK_TREE_VIEW(view), path, NULL, FALSE);
         }
         break;
+    case GDK_KEY_F10:
+    case GDK_KEY_Menu:
+        if ( evt->keyval == GDK_KEY_F10 && keymod != GDK_SHIFT_MASK )
+        {
+            gtk_tree_path_free( path );
+            return FALSE;
+        }
+        gtk_tree_model_get( gtk_tree_view_get_model( GTK_TREE_VIEW( view ) ),
+                            &iter,
+                            COL_DIR_TREE_INFO,
+                            &file, -1 );
+        if ( file )
+        {
+            GtkWidget * popup;
+            char* file_path;
+            GList* sel_files;
+            char* dir_name;
+            file_path = ptk_dir_view_get_dir_path(
+                    gtk_tree_view_get_model( GTK_TREE_VIEW( view ) ), &iter );
+
+            sel_files = g_list_prepend( NULL, vfs_file_info_ref(file) );
+            dir_name = g_path_get_dirname( file_path );
+            popup = ptk_file_menu_new( NULL, browser,
+                        file_path, file,
+                        dir_name, sel_files );
+            g_free( dir_name );
+            g_free( file_path );
+            if ( popup )
+                gtk_menu_popup( GTK_MENU( popup ), NULL, NULL,
+                            NULL, NULL, 3, evt->time );
+
+            vfs_file_info_unref( file );
+        }
+        break;
+    default:
+        gtk_tree_path_free( path );
+        return FALSE;
     }
     gtk_tree_path_free( path );
-    return TRUE;  
+    return TRUE;
 }
 
 //MOD drag n drop

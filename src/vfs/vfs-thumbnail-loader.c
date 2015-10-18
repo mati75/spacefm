@@ -367,8 +367,15 @@ static GdkPixbuf* _vfs_thumbnail_load( const char* file_path, const char* uri,
     int i, w, h;
     struct stat statbuf;
     GdkPixbuf* thumbnail, *result = NULL;
-    int create_size = size > 128 ? 256 : 128;
-
+    int create_size;
+    
+    if ( size > 256 )
+        create_size = 512;
+    else if ( size > 128 )
+        create_size = 256;
+    else
+        create_size = 128;
+    
     gboolean file_is_video = FALSE;
 #ifdef HAVE_FFMPEG
     VFSMimeType* mimetype = vfs_mime_type_get_from_file_name( file_path );
@@ -420,11 +427,19 @@ static GdkPixbuf* _vfs_thumbnail_load( const char* file_path, const char* uri,
             mtime = statbuf.st_mtime;
     }
 
+    if ( file_is_video && time( NULL ) - mtime < 5 )
+        /* if mod time of video being thumbnailed is less than 5 sec ago,
+         * don't create a thumbnail (is copying?)
+         * FIXME: This means that a newly saved file may not show a thumbnail
+         * until refresh. */
+        return NULL;
+
     /* load existing thumbnail */
     thumbnail = gdk_pixbuf_new_from_file( thumbnail_file, NULL );
-    if ( !thumbnail || !( thumb_mtime = gdk_pixbuf_get_option( thumbnail,
+    if ( !thumbnail ||
+                !( thumb_mtime = gdk_pixbuf_get_option( thumbnail,
                                                 "tEXt::Thumb::MTime" ) ) ||
-            atol( thumb_mtime ) != mtime )
+                atol( thumb_mtime ) != mtime )
     {
         if( thumbnail )
             g_object_unref( thumbnail );
