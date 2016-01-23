@@ -318,8 +318,8 @@ const Handler handlers_fs[]=
     {
         "hand_fs_+udiso",
         "udevil iso unmount",
-        "iso9660",
-        "",
+        "+iso9660 +dev=/dev/loop*",
+        "optical=1 removable=1",
         "# Mounting of iso files is performed by udevil in a file handler,\n# not this device handler.  Right-click on any file and select\n# Open|File Handlers, and select Mount ISO to see this command.",
         FALSE,
         "# Note: non-iso9660 types will fall through to Default unmount handler\nudevil umount \"%a\"\n",
@@ -871,22 +871,22 @@ gboolean ptk_handler_values_in_list( const char* list, GSList* values,
             element =  elements[i];
             required = FALSE;
         }
-        if ( msg )
-            match = FALSE;
+        match = FALSE;
         for ( l = values; l; l = l->next )
         {
             if ( fnmatch( element, (char*)l->data, 0 ) == 0 )
             {
                 // match
                 ret = match = TRUE;
+                break;
             }
-            else if ( required )
-            {
-                // no match of required
-                g_strfreev( elements );
-                g_free( ret_msg );
-                return FALSE;
-            }
+        }
+        if ( required && !match )
+        {
+            // no match of required
+            g_strfreev( elements );
+            g_free( ret_msg );
+            return FALSE;
         }
         if ( msg )
         {
@@ -3015,6 +3015,9 @@ void ptk_handler_show_config( int mode, DesktopWindow* desktop,
     hnd->view_handlers = exo_tree_view_new();
     gtk_tree_view_set_model( GTK_TREE_VIEW( hnd->view_handlers ),
                                     GTK_TREE_MODEL( hnd->list ) );
+    // gtk_tree_view_set_model adds a ref
+    g_object_unref( hnd->list );
+
 /*igcr probably doesn't need to be single click, as you're not using row
  * activation, only selection changed? */
     exo_tree_view_set_single_click( ((ExoTreeView*)hnd->view_handlers), TRUE );

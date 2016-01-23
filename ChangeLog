@@ -1,3 +1,24 @@
+1.0.5   2016-01-20:
+    recreate too small cached thumbnails #584
+    read $XDG_TEMPLATES_DIR via glib for user-dirs.dirs support #581
+    Devices|Settings|Auto-Mount|Mount Dirs accept XDG vars, mkdir #558
+    fix Paste in dir tree pastes to wrong dir #596
+    menu key in dir tree changes dir and acts on correct dir #596
+    [desktop] show video thumbnails on desktop
+    Prefs add 384x384 icon size option
+    obey StartupNotify when opening with desktop app
+    configure.ac set G_LOG_DOMAIN
+    fix main.c debug_gdk_threads_leave
+    change detection blacklist detect new files #478 #582
+    get mime type of only reg and link files, not char dev
+    fix segfault in ptk_bookmark_view_reload_list to vfs_load_icon
+    prevent filesystem find loop hang in new file/folder dialog #601
+    fix crash on GTK icon theme reload; fix liststore memory leaks #566
+    udevil iso unmount device handler new whitelist/blacklist #606
+    fix broken key shortcuts in Open|In Panel menu #610
+    add lxqt-sudo and lxsu to list of su frontends #617
+    add support for qterminal in list of terminals
+    make Paste As Target paste canonicalized final target when possible
 1.0.4   2015-10-17:
     new spacefm-installer replaces self-extrct and install #571
     README rewritten and manual updated for new installer #571

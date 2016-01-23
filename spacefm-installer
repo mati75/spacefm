@@ -161,8 +161,9 @@ if [ -n "$branch" ] || [ ! -e configure ]; then
         echo "SpaceFM Network Install"
         echo
         echo "Suggested branches:"
-        echo "    next    (Rolling Release)"
-        echo "    master  (Stable Release)"
+        echo "    next    ( Rolling Release )"
+        echo "    master  ( Stable Release )"
+        echo "    alpha   ( Testing - not always available )"
         echo
         # repeat until branch doesn't contain spaces
         while [ -z "$branch" ] || [ "$branch" != "${branch/ /}" ]; do
@@ -358,7 +359,7 @@ deps_sn="libstartup-notification0 libstartup-notification0-dev"
 deps_dbus="dbus libdbus-1-3 libdbus-1-dev"
 deps_mount="fuseiso curlftpfs jmtpfs gphotofs ifuse"
 deps_debug="gdb libc6-dbg libglib2.0-0-dbg libgtk2.0-0-dbg|libgtk-3-0-dbg librsvg2-dbg"
-deps_rec="eject lsof wget udevil|pmount|udisks gksu|kdesu|ktsuss"
+deps_rec="eject lsof wget udevil|pmount|udisks gksu|kdesu|lxqt-sudo|ktsuss"
 n=$'\n'
 
 deps="------ Dependencies -------------------------------------------------${n}The following packages are required for this build (below are Debian package${n}names - packages on other distros will be similar):${n}$deps_base"
@@ -532,13 +533,17 @@ To run spacefm with the debugger (see Dependencies above), run:
 
         gdb spacefm
 
-    In gdb, enter 'run' at the prompt.  SpaceFM will start.  When the crash
-    occurs, gdb will freeze SpaceFM.  If SpaceFM hangs, press Ctrl-C in gdb to
-    interrupt it, or run 'killall -s KILL spacefm' in another terminal.
+    In gdb, enter 'run' at the prompt.  Or, to make gdb halt on any
+    warnings, use 'run --g-fatal-warnings'.
 
-    In the terminal running gdb enter 'bt full'.  Provide the output with your
-    detailed bug report at https://github.com/IgnorantGuru/spacefm/issues
+    SpaceFM will start.  When the crash occurs, gdb will freeze SpaceFM.
+    Or if SpaceFM hangs, press Ctrl-C in gdb to interrupt it, or in another
+    terminal run:   killall -s KILL spacefm
 
+    In gdb enter:  thread apply all bt full
+    Provide the output with your detailed bug report at
+    https://github.com/IgnorantGuru/spacefm/issues
+    
     NOTE: When SpaceFM is built this way, it may run more slowly and use more
     memory.  Once you are done debugging, be sure to install a normal
     (optimized) build.

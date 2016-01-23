@@ -166,6 +166,7 @@ void on_popup_list_detailed( GtkMenuItem *menuitem, PtkFileBrowser* browser )
 
     if ( xset_get_b_panel( p, "list_detailed" ) )
     {
+        // setting b to XSET_B_UNSET does not work here
         xset_set_b_panel( p, "list_icons", FALSE );
         xset_set_b_panel( p, "list_compact", FALSE );
     }
@@ -184,6 +185,7 @@ void on_popup_list_icons( GtkMenuItem *menuitem, PtkFileBrowser* browser )
 
     if ( xset_get_b_panel( p, "list_icons" ) )
     {
+        // setting b to XSET_B_UNSET does not work here
         xset_set_b_panel( p, "list_detailed", FALSE );
         xset_set_b_panel( p, "list_compact", FALSE );
     }
@@ -202,6 +204,7 @@ void on_popup_list_compact( GtkMenuItem *menuitem, PtkFileBrowser* browser )
 
     if ( xset_get_b_panel( p, "list_compact" ) )
     {
+        // setting b to XSET_B_UNSET does not work here
         xset_set_b_panel( p, "list_detailed", FALSE );
         xset_set_b_panel( p, "list_icons", FALSE );
     }
@@ -501,7 +504,7 @@ void ptk_file_menu_add_panel_view_menu( PtkFileBrowser* browser,
     XSet* set_radio;
     char* desc;
     
-    if ( !browser || !menu )
+    if ( !browser || !menu || !browser->file_list )
         return;
     int p = browser->mypanel;
 
@@ -635,6 +638,7 @@ void ptk_file_menu_add_panel_view_menu( PtkFileBrowser* browser,
         set->b = browser->sort_type == GTK_SORT_DESCENDING ?
                                                 XSET_B_TRUE : XSET_B_FALSE;
     
+    // this crashes if !browser->file_list so don't allow
     if ( browser->file_list )
     {
         set = xset_set_cb( "sortx_natural", on_popup_sort_extra, browser );
@@ -3031,7 +3035,8 @@ void ptk_file_menu_action( DesktopWindow* desktop, PtkFileBrowser* browser,
     data->accel_group = NULL;
 
     // action
-    if ( g_str_has_prefix( set->name, "open_" ) )
+    if ( g_str_has_prefix( set->name, "open_" ) &&
+                            !g_str_has_prefix( set->name, "open_in_" ) )
     {
         xname = set->name + 5;
         if ( !strcmp( xname, "edit" ) )
