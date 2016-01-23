@@ -1,10 +1,13 @@
 README for SpaceFM v1.0
 
-Homepage        http://ignorantguru.github.io/spacefm/
-
-Downloads       https://github.com/IgnorantGuru/spacefm/releases
-
-Official Forum  https://sourceforge.net/p/spacefm/discussion/general/
+    Homepage       http://ignorantguru.github.io/spacefm/
+    Downloads      https://github.com/IgnorantGuru/spacefm/releases
+    News           http://ignorantguru.github.io/spacefm/news.html
+    Wiki           https://github.com/IgnorantGuru/spacefm/wiki
+    Screenshots    https://github.com/IgnorantGuru/spacefm/wiki/Screenshots
+    Users Manual   http://ignorantguru.github.io/spacefm/spacefm-manual-en.html
+    Forum          https://sourceforge.net/p/spacefm/discussion/general/
+    Report Issues  https://github.com/IgnorantGuru/spacefm/issues
 
 
 CONTENTS
@@ -97,7 +100,8 @@ DEPENDENCIES
 
     For optional dbus support: dbus libdbus-1-3 libdbus-1-dev
 
-    RECOMMENDED: eject lsof wget udevil|pmount|udisks gksu|kdesu|ktsuss
+    RECOMMENDED: udevil|pmount|udisks gksu|kdesu|ktsuss|lxqt-sudo eject lsof
+                 wget
 
     For additional mounting support: fuseiso curlftpfs jmtpfs gphotofs ifuse
 
@@ -185,11 +189,12 @@ INSTALL
 
     For additional configure options, see:  ./configure --help
 
-    To run root commands, SpaceFM supports ktsuss, gksu, gksudo, gnomesu,
-    kdesu, kdesudo, su-to-root, xdg-su, su, and sudo.  To configure an
-    additional terminal or graphical su program see /etc/spacefm/spacefm.conf.
-    Or, to build with an additional graphical su program ('/usr/bin/mysu' in
-    this example), add:  --with-preferable-sudo=/usr/bin/mysu
+    To run root commands, SpaceFM supports gksu, gksudo, gnomesu, kdesu,
+    kdesudo, ktsuss, lxqt-sudo, xdg-su, su-to-root, su, and sudo.  To configure
+    an additional terminal or graphical su program see
+    /etc/spacefm/spacefm.conf. Or, to build with an additional graphical su
+    program ('/usr/bin/mysu' in this example), add:
+        --with-preferable-sudo=/usr/bin/mysu
 
     Note: When using older distros, enabling kernel polling may be required. If
     you insert a CD and SpaceFM still says 'no media', please see the ENABLE
@@ -222,12 +227,17 @@ BUILD DEBUG
 
             gdb spacefm
 
-        In gdb, enter 'run' at the prompt.  SpaceFM will start.  When the crash
-        occurs, gdb will freeze SpaceFM.  If SpaceFM hangs, press Ctrl-C in gdb
-        to interrupt it, or run 'killall -s KILL spacefm' in another terminal.
+        In gdb, enter 'run' at the prompt.  Or, to make gdb halt on any
+        warnings, use 'run --g-fatal-warnings'.
 
-    5)  In the terminal running gdb enter 'bt full'.  Provide the output with
-        your detailed bug report at https://github.com/IgnorantGuru/spacefm/issues
+        SpaceFM will start.  When the crash occurs, gdb will freeze SpaceFM.
+        Or if SpaceFM hangs, press Ctrl-C in gdb to interrupt it, or in another
+        terminal run:   killall -s KILL spacefm
+
+    5)  In gdb enter:  thread apply all bt full
+
+        Provide the output with your detailed bug report at
+        https://github.com/IgnorantGuru/spacefm/issues
 
     NOTE: When SpaceFM is built this way, it may run more slowly and use more
     memory.  Once you are done debugging, be sure to install a normal
@@ -252,14 +262,14 @@ UNINSTALL
     Otherwise, run these commands AS ROOT:
 
         rm /usr/bin/spacefm /usr/bin/spacefm-auth /usr/bin/spacefm-installer
-        rm -r /usr/share/spacefm
+        rm -r /usr/share/spacefm     # this may remove SpaceFM plugins
         rm /usr/share/pixmaps/spacefm.png
         rm /usr/share/pixmaps/spacefm-*.png
         rm /usr/share/icons/hicolor/*/apps/spacefm.png
         rm /usr/share/icons/hicolor/*/apps/spacefm-*.png
         rm /usr/share/icons/Faenza/apps/48/spacefm.png
         rm /usr/share/icons/Faenza/apps/48/spacefm-*.png
-        rm /usr/sharee/*/LC_MESSAGES/spacefm.mo
+        rm /usr/share/*/LC_MESSAGES/spacefm.mo
         rm /usr/share/applications/spacefm*.desktop
         rm /usr/share/mime/packages/spacefm-mime.xml
         update-mime-database /usr/share/mime > /dev/null
@@ -408,7 +418,7 @@ RELEASE
 
 LICENSE
 
-    SpaceFM - Copyright (C) 2015  GPL3+
+    SpaceFM - Copyright (C) 2016 IgnorantGuru   GPL3+
 
     This program is free software; you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by the

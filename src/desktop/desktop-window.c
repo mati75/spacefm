@@ -868,10 +868,22 @@ void desktop_window_set_icon_size( DesktopWindow* win, int size )
                                             gtk_icon_theme_get_default(),
                                             "folder-home", size, 0, NULL );
         }
-        else if( vfs_file_info_is_image( fi ) && ! fi->big_thumbnail )
-        {
+        else if ( /* app_settings.show_thumbnail && */ !fi->big_thumbnail && (
+#ifdef HAVE_FFMPEG
+             vfs_file_info_is_video( fi ) ||
+#endif
+             ( fi->size < app_settings.max_thumb_size &&
+                            vfs_file_info_is_image( fi ) ) ) )
             vfs_thumbnail_loader_request( win->dir, fi, TRUE );
+        /* thumbnails are always shown on the desktop
+        else if ( !app_settings.show_thumbnail )
+        {
+            vfs_thumbnail_loader_cancel_all_requests( win->dir, TRUE );
+            // Thumbnails are being disabled so ensure the large thumbnails are
+            // freed - with up to 256x256 images this is a lot of memory
+            vfs_dir_unload_thumbnails(win->dir, TRUE );
         }
+        */
     }
 }
 
@@ -2991,7 +3003,13 @@ void on_file_listed( VFSDir* dir, gboolean is_cancelled, DesktopWindow* self )
         }
         else
             items = g_list_prepend( items, item );
-        if ( vfs_file_info_is_image( fi ) )
+
+        if ( /* app_settings.show_thumbnail && */ (
+#ifdef HAVE_FFMPEG
+             vfs_file_info_is_video( fi ) ||
+#endif
+             ( fi->size < app_settings.max_thumb_size &&
+                            vfs_file_info_is_image( fi ) ) ) )
             vfs_thumbnail_loader_request( dir, fi, TRUE );
     }
     g_mutex_unlock( dir->mutex );
@@ -3080,7 +3098,13 @@ void on_file_created( VFSDir* dir, VFSFileInfo* file, gpointer user_data )
 
     item = g_slice_new0( DesktopItem );
     item->fi = vfs_file_info_ref( file );
-    if ( !item->fi->big_thumbnail && vfs_file_info_is_image( item->fi ) )
+
+    if ( !item->fi->big_thumbnail && (
+#ifdef HAVE_FFMPEG
+             vfs_file_info_is_video( item->fi ) ||
+#endif
+             ( item->fi->size < app_settings.max_thumb_size
+                                && vfs_file_info_is_image( item->fi ) ) ) )
         vfs_thumbnail_loader_request( dir, item->fi, TRUE );
 
     GCompareDataFunc comp_func = get_sort_func( self );
@@ -3237,7 +3261,15 @@ void on_file_changed( VFSDir* dir, VFSFileInfo* file, gpointer user_data )
     if( l ) /* found */
     {
         item = (DesktopItem*)l->data;
-        if ( !item->fi->big_thumbnail && vfs_file_info_is_image( item->fi ) )
+        /* check if reloading of thumbnail is needed.
+         * See also ptk-file-list.c:_ptk_file_list_file_changed() */
+        if ( !item->fi->big_thumbnail && (
+#ifdef HAVE_FFMPEG
+         ( vfs_file_info_is_video( item->fi ) &&
+           time( NULL ) - *vfs_file_info_get_mtime( item->fi ) > 5 ) ||
+#endif
+             ( item->fi->size < app_settings.max_thumb_size
+                                && vfs_file_info_is_image( item->fi ) ) ) )
             vfs_thumbnail_loader_request( dir, item->fi, TRUE );
 
         if( gtk_widget_get_visible( w ) )
@@ -3783,7 +3815,7 @@ int comp_item_by_type( DesktopItem* item1, DesktopItem* item2, DesktopWindow* wi
     int ret;
     if( ret = COMP_VIRTUAL( item1, item2 ) )
         return ret;
-    ret = strcmp( item1->fi->mime_type->type, item2->fi->mime_type->type );
+    ret = g_strcmp0( item1->fi->mime_type->type, item2->fi->mime_type->type );
 
     if ( ret == 0 )  //sfm
         ret = g_utf8_collate( item1->fi->disp_name, item2->fi->disp_name );
@@ -4002,6 +4034,16 @@ void desktop_window_add_application( DesktopWindow* desktop )
     GList* sel_files = desktop_window_get_selected_files( desktop );
     if ( sel_files )
     {
+        if ( !((VFSFileInfo*)sel_files->data)->mime_type )
+        {
+            char* full_path = g_build_filename( desktop->dir->path,
+                    vfs_file_info_get_name( (VFSFileInfo*)sel_files->data ),
+                    NULL );
+            if ( full_path )
+                vfs_file_info_reload_mime_type( (VFSFileInfo*)sel_files->data,
+                                                    full_path );
+            g_free( full_path );
+        }
         mime_type = vfs_file_info_get_mime_type( (VFSFileInfo*)sel_files->data );
         if ( G_LIKELY( ! mime_type ) )
             mime_type = vfs_mime_type_get_from_type( XDG_MIME_TYPE_UNKNOWN );

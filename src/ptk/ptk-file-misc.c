@@ -1820,15 +1820,35 @@ char* get_unique_name( const char* dir, const char* ext )
 
 char* get_template_dir()
 {
-    char* templates_path = g_strdup( g_getenv( "XDG_TEMPLATES_DIR" ) );
+    char* templates_path = NULL;
+
+#if GLIB_CHECK_VERSION(2, 14, 0)
+    templates_path = g_strdup( g_get_user_special_dir(
+                                            G_USER_DIRECTORY_TEMPLATES ) );
+#endif
+    if ( !templates_path )
+    {
+        templates_path = g_strdup( g_getenv( "XDG_TEMPLATES_DIR" ) );
+    }
+    if ( !g_strcmp0( templates_path, g_get_home_dir() ) )
+    {
+        /* If $XDG_TEMPLATES_DIR == $HOME this means it is disabled. Don't
+         * recurse it as this is too many files/folders and may slow
+         * dialog open and cause filesystem find loops.
+         * https://wiki.freedesktop.org/www/Software/xdg-user-dirs/ */
+        g_free( templates_path );
+        templates_path = NULL;
+    }
     if ( !dir_has_files( templates_path ) )
     {
         g_free( templates_path );
-        templates_path = g_build_filename( g_get_home_dir(), "Templates", NULL );
+        templates_path = g_build_filename( g_get_home_dir(), "Templates",
+                                                                NULL );
         if ( !dir_has_files( templates_path ) )
         {
             g_free( templates_path );
-            templates_path = g_build_filename( g_get_home_dir(), ".templates", NULL );
+            templates_path = g_build_filename( g_get_home_dir(),
+                                                    ".templates", NULL );
             if ( !dir_has_files( templates_path ) )
             {
                 g_free( templates_path );
@@ -1873,8 +1893,10 @@ GList* get_templates( const char* templates_dir, const char* subdir,
                         subsubdir = g_strdup( name );
                     templates = g_list_prepend( templates,
                                             g_strdup_printf( "%s/", subsubdir ) );
-                    templates = get_templates( templates_dir, subsubdir, templates,
-                                                                        getdir );
+                    // prevent filesystem loops during recursive find
+                    if ( !g_file_test( path, G_FILE_TEST_IS_SYMLINK ) )
+                        templates = get_templates( templates_dir, subsubdir,
+                                                   templates, getdir );
                     g_free( subsubdir );
                 }
             }
@@ -1888,7 +1910,9 @@ GList* get_templates( const char* templates_dir, const char* subdir,
                     else
                         templates = g_list_prepend( templates, g_strdup( name ) );
                 }
-                else if ( g_file_test( path, G_FILE_TEST_IS_DIR ) )
+                else if ( g_file_test( path, G_FILE_TEST_IS_DIR ) &&
+                          // prevent filesystem loops during recursive find
+                          !g_file_test( path, G_FILE_TEST_IS_SYMLINK ) )
                 {
                     if ( subdir )
                     {    
@@ -2311,7 +2335,8 @@ int ptk_rename_file( DesktopWindow* desktop, PtkFileBrowser* file_browser,
         {
             templates = g_list_sort( templates, (GCompareFunc) g_strcmp0 );
             GList* l;
-            for ( l = templates; l; l = l->next )
+            int x = 0;
+            for ( l = templates; l && x++ < 500; l = l->next )
             {
                 gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( mset->combo_template ),
                                                                     (char*)l->data );
@@ -3790,7 +3815,8 @@ void ptk_open_files_with_app( const char* cwd,
                     err = NULL;
                     if ( ! vfs_exec_on_screen ( screen, cwd, argv, NULL,
                                                 vfs_file_info_get_disp_name( file ),
-                                                VFS_EXEC_DEFAULT_FLAGS, &err ) )
+                                                VFS_EXEC_DEFAULT_FLAGS, 
+                                                TRUE, &err ) )
                     {
                         toplevel = file_browser ? gtk_widget_get_toplevel(
                                                 GTK_WIDGET( file_browser ) ) :

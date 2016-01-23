@@ -1607,11 +1607,28 @@ exo_icon_view_realize (GtkWidget *widget)
     gdk_window_set_user_data (priv->bin_window, widget);
 
 #if !GTK_CHECK_VERSION (3, 0, 0)
-    /* Attach style/background - this breaks 'dark theme version' styles in GTK3
-     *  but appears to be needed for GTK2 - https://github.com/IgnorantGuru/spacefm/issues/578 */
-    gtk_widget_set_style (widget, gtk_style_attach (gtk_widget_get_style (widget), gtk_widget_get_window(widget)));
-    gdk_window_set_background (priv->bin_window, &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
-    gdk_window_set_background (gtk_widget_get_window (widget), &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
+    /* Attach style/background for GTK2 - this breaks 'dark theme version' styles
+     * in GTK3 - https://github.com/IgnorantGuru/spacefm/issues/578 */
+
+    /* This widget is fully reimplementing realize, so must attach a style
+     * (nothing is there currently) - there is no need to then call
+     * gtk_widget_set_style, however if you do with a non-NULL style, GTK
+     * considers the style hardcoded and therefore outside of its inherited 'rc
+     * style' system, which results in exo_icon_view_style_set no longer being
+     * called on a theme change */
+    widget->style = gtk_style_attach (widget->style, widget->window);
+
+    /* However the true widget window background remains black without the below
+     * call- the documentation recommends to call gtk_style_set_background,
+     * however this has no effect with any requested GtkStateType */
+    gdk_window_set_background (priv->bin_window,
+           &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
+
+#else
+    /* Adding style class (styling works fine for me without this, but one user
+     * so far has reported breakage) */
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (widget)),
+                                 GTK_STYLE_CLASS_VIEW);
 #endif
 
     /* map the icons window */
@@ -1755,9 +1772,13 @@ exo_icon_view_style_set (GtkWidget *widget,
     /* let GtkWidget do its work */
     (*GTK_WIDGET_CLASS (exo_icon_view_parent_class)->style_set) (widget, previous_style);
 
-    /* apply the new style for the bin_window if we're realized */
+#if !GTK_CHECK_VERSION (3, 0, 0)
+    /* Apply the new style for the bin_window if we're realized - GTK3 handles
+     * this on its own, the background colour is wrong if you do this for GTK3 */
     if (gtk_widget_get_realized (widget))
-        gdk_window_set_background (icon_view->priv->bin_window, &gtk_widget_get_style(widget)->base[gtk_widget_get_state(widget)]);
+        gdk_window_set_background (icon_view->priv->bin_window,
+             &gtk_widget_get_style(widget)->base[gtk_widget_get_state(widget)]);
+#endif
 }
 
 
@@ -3991,7 +4012,10 @@ exo_icon_view_queue_draw_item (ExoIconView     *icon_view,
     rect.height = item->area.height + 2 * focus_width;
 
     if (icon_view->priv->bin_window)
+    {
+        //printf("draw_item %d,%d %dx%d\n", rect.x, rect.y, rect.width, rect.height );
         gdk_window_invalidate_rect (icon_view->priv->bin_window, &rect, TRUE);
+    }
 }
 
 
@@ -6029,7 +6053,6 @@ exo_icon_view_set_pixbuf_column (ExoIconView *icon_view,
     g_object_notify (G_OBJECT (icon_view), "pixbuf-column");
 
 }
-
 
 
 /**
