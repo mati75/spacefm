@@ -4,6 +4,7 @@ spacefm (1.0.5-1) UNRELEASED; urgency=medium
   * debian/copyright:
     + Update dates.
     + Change license for Makefile.in to GAP~Makefile.in.
+  * Drop debian/menu file.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 23 Jan 2016 16:21:07 +0100
 
