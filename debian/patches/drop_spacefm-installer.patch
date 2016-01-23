@@ -1,0 +1,28 @@
+Description: Drop spacefm-installer to install, it is exactly
+ no needed in binary distributions like Debian. You can download
+ this script by hand from upstream git repository. I recommended
+ update spacefm to unstable version by that way.
+Author: Mateusz Łukasik <mati75@linuxmint.pl>
+
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -5,7 +5,7 @@ SUBDIRS = etc src data po
+ mimedir = $(datadir)/mime/packages
+ mime_DATA = src/mime-type/spacefm-mime.xml
+ 
+-bin_SCRIPTS = spacefm-installer
++bin_SCRIPTS =
+ 
+ EXTRA_DIST = \
+ 	autogen.sh \
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -386,7 +386,7 @@ top_srcdir = @top_srcdir@
+ SUBDIRS = etc src data po
+ mimedir = $(datadir)/mime/packages
+ mime_DATA = src/mime-type/spacefm-mime.xml
+-bin_SCRIPTS = spacefm-installer
++bin_SCRIPTS =
+ EXTRA_DIST = \
+ 	autogen.sh \
+ 	$(mime_DATA) \
