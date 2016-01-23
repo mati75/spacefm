@@ -3,7 +3,7 @@ Upstream-Name: spacefm
 Source: https://github.com/IgnorantGuru/spacefm/tree/master/packages/
 
 Files: *
-Copyright: 2013-2014, IgnorantGuru <ignorantguru@gmx.com>
+Copyright: 2013-2016, IgnorantGuru <ignorantguru@gmx.com>
            2013-2014, BwackNinja <BwackNinja@gmail.com>
 License: GPL-3+
 
@@ -55,7 +55,7 @@ Copyright: 2003-2004, Gary Kramlich
 License: GPL-2+
 
 Files: debian/*
-Copyright: 2013-2015 Mateusz Łukasik <mati75@linuxmint.pl>
+Copyright: 2013-2016 Mateusz Łukasik <mati75@linuxmint.pl>
 License: GPL-3+
 
 License: GPL-2+
