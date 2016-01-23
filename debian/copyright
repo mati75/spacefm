@@ -27,7 +27,7 @@ License: permissive
 
 Files: Makefile.in data/Makefile.in src/Makefile.in
 Copyright: 1994-2013, Free Software Foundation, Inc.
-License: permissive
+License: GAP~Makefile.in
  This Makefile.in is free software; the Free Software Foundation
  gives unlimited permission to copy and/or distribute it,
  with or without modifications, as long as this notice is preserved.
