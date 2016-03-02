@@ -8,7 +8,9 @@ spacefm (1.0.5-1) UNRELEASED; urgency=medium
   * Add debian/patches/drop_spacefm-installer.patch to drop spacefm-installer
     script which is no needed in binary system like Debian.
   * Add debian/patches/fix-spelling-error.patch to fix lintian warning.
-  * debian/control: Bump to standards-version to 3.9.7.
+  * debian/control: 
+    + Bump to Standards-Version to 3.9.7.
+    + Use https for vcs-git.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 23 Jan 2016 16:21:07 +0100
 

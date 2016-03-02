@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 9), dh-autoreconf, libgtk2.0-dev (>= 2.24),
  libffmpegthumbnailer-dev 
 Standards-Version: 3.9.7
 Homepage: http://ignorantguru.github.io/spacefm/
-Vcs-Git: git://github.com/mati75/spacefm.git
+Vcs-Git: https://github.com/mati75/spacefm.git
 Vcs-Browser: https://github.com/mati75/spacefm.git
 
 Package: spacefm
