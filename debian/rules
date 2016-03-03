@@ -7,6 +7,7 @@ CONFIGURE_FLAGS_gtk3 = --with-gtk3
 CONFIGURE_COMMON_FLAGS += --disable-pixmaps
 
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
 	dh $@ --with autoreconf
@@ -33,9 +34,6 @@ override_dh_install:
 	sh debian/ubuntu-unity.sh
  endif
 	dh_install --fail-missing
-
-override_dh_installman:
-	dh_installman
 
 override_dh_auto_clean:
 	rm -rf debian/build-gtk2 debian/build-gtk3
