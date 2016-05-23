@@ -3,6 +3,7 @@ spacefm (1.0.5+-1) UNRELEASED; urgency=medium
   * debian/control:
     + Drop libdbus-1-dev from B-D and move dbus from Depends to Suggests.
     (Closes: #)
+    + Bump to Standards-Version to 3.9.8.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 05 Mar 2016 16:34:12 +0100
 
