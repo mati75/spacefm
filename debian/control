@@ -21,6 +21,7 @@ Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs, dbus
 Replaces: spacefm-gtk3, spacefm (<< 0.9)
 Conflicts: spacefm-hal, spacefm-gtk3
 Provides: spacefm-hal
+Breaks: spacefm-common (<< 1.0.5-2)
 Description: Multi-panel tabbed file manager - GTK2 version
  SpaceFM is a multi-panel tabbed file and desktop manager for Linux with
  built-in VFS, udev or HAL-based device manager, customizable menu system
@@ -43,7 +44,7 @@ Package: spacefm-common
 Architecture: all
 Depends: ${misc:Depends}
 Replaces: spacefm (<< 0.9)
-Breaks: spacefm (<< 0.9)
+Breaks: spacefm (<< 0.9),
 Recommends: spacefm | spacefm-gtk3, hicolor-icon-theme | faenza-icon-theme
 Description: Multi-panel tabbed file manager - common files
  SpaceFM is a multi-panel tabbed file and desktop manager for Linux with
@@ -61,6 +62,7 @@ Recommends: udisks2
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs, dbus
 Replaces: spacefm, spacefm-gtk3
 Conflicts: spacefm-hal, spacefm
+Breaks: spacefm-common (<< 1.0.5-2)
 Description: Multi-panel tabbed file manager - GTK3 version  
  SpaceFM is a multi-panel tabbed file and desktop manager for Linux with 
  built-in VFS, udev or HAL-based device manager, customizable menu system 

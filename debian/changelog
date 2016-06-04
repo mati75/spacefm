@@ -3,6 +3,7 @@ spacefm (1.0.5-2) UNRELEASED; urgency=medium
   * debian/control:
     + Drop libdbus-1-dev from B-D and move dbus from Depends to Suggests.
     + Bump to Standards-Version to 3.9.8.
+    + Add Breaks for spacefm-common (<< 1.0.5-2).
   * debian/watch: Bump to version 4.
   * debian/*.install: move /etc/spacefm/spacefm.conf from spacefm-common to
     spacefm{,-gtk3}.
