@@ -8,7 +8,8 @@ spacefm (1.0.5-2) UNRELEASED; urgency=medium
   * debian/*.install: move /etc/spacefm/spacefm.conf from spacefm-common to
     spacefm{,-gtk3}. (Closes: #825568)
   * Cherry-pick fixes from upstream next git branch:
-    + cf19fb3: Rename dlg canonicalize Copy Target/Link Target target when possible
+    + cf19fb3: Rename dlg canonicalize Copy Target/Link Target target when 
+      possible
     + 9ca8616: [installer] fix mktemp template and error handling for busybox
     + 83332d0: [GTK2] fix black background dir load regression
     + d75271e: [GTK2] fix black background dir load regression
