@@ -1,4 +1,4 @@
-spacefm (1.0.5-2) UNRELEASED; urgency=medium
+spacefm (1.0.5-2) unstable; urgency=medium
 
   * debian/control:
     + Drop libdbus-1-dev from B-D and move dbus from Depends to Suggests.
@@ -15,7 +15,7 @@ spacefm (1.0.5-2) UNRELEASED; urgency=medium
     + d75271e: [GTK2] fix black background dir load regression
     + 6ee12b2: [GTK3.20] fix theme parse warnings re close btn css
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 05 Mar 2016 16:34:12 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 10 Jun 2016 10:42:45 +0200
 
 spacefm (1.0.5-1) unstable; urgency=medium
 
