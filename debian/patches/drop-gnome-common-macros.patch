@@ -1,0 +1,21 @@
+Description: Drop deprecated gnome-common macros/variables
+Author: Mateusz Łukasik <mati75@linuxmint.pl>
+Bug-Debian: https://bugs.debian.org/830003
+
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -7,14 +7,6 @@ configure_ac=configure.ac
+ 
+ DIE=0
+ 
+-if [ -n "$GNOME2_DIR" ]; then
+-	ACLOCAL_FLAGS="-I $GNOME2_DIR/share/aclocal $ACLOCAL_FLAGS"
+-	LD_LIBRARY_PATH="$GNOME2_DIR/lib:$LD_LIBRARY_PATH"
+-	PATH="$GNOME2_DIR/bin:$PATH"
+-	export PATH
+-	export LD_LIBRARY_PATH
+-fi
+-
+ (test -f $srcdir/$configure_ac) || {
+     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
+     echo " top-level package directory"
