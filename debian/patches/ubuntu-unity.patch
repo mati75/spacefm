@@ -1,0 +1,20 @@
+Description: Fix style issues with the Unity Global Menu bar
+Author: Mateusz Łukasik <mati75@linuxmint.pl>
+
+Origin: upstream
+Bug: https://github.com/IgnorantGuru/spacefm/issues/49
+Bug-Ubuntu: https://launchpad.net/bugs/673302
+Forwarded: not-needed
+Last-Update: 2016-10-04
+
+--- a/data/spacefm.desktop.in
++++ b/data/spacefm.desktop.in
+@@ -2,7 +2,7 @@
+ Version=1.0
+ _Name=SpaceFM
+ Categories=System;FileTools;Utility;Core;GTK;FileManager;
+-Exec=spacefm %F
++Exec=env UBUNTU_MENUPROXY= spacefm %F
+ Icon=spacefm
+ StartupNotify=true
+ Type=Application

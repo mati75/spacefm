@@ -30,9 +30,6 @@ doinstall-%:
 override_dh_install:
 	find debian/tmp -name \*.la -delete
 	sh debian/clean_gtk3.sh
- ifeq ($(shell dpkg-vendor --query vendor),Ubuntu)
-	sh debian/ubuntu-unity.sh
- endif
 	dh_install --fail-missing
 
 override_dh_auto_clean:

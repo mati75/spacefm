@@ -1,0 +1,10 @@
+update_desktop_files.patch
+drop_spacefm-installer.patch
+fix-spelling-error.patch
+cf19fb3c7e63fff2a14aa981013d2851a1ba81fc.patch
+9ca8616e6fba5257f7678c0283e37d757832fa46.patch
+83332d008a9487a81293ab14524a6c3b1c8312f1.patch
+d75271ee6c6a6c90921fbb325efcc45aa27bb59d.patch
+6ee12b2cb5df91a43c210b93c3d85f33ca3b06b5.patch
+drop-gnome-common-macros.patch
+ubuntu-unity.patch
