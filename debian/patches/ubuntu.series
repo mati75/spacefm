@@ -9,3 +9,4 @@ d75271ee6c6a6c90921fbb325efcc45aa27bb59d.patch
 drop-gnome-common-macros.patch
 a790d3f0f665601a873a50e350bbf684bdf1ac04.patch
 ubuntu-unity.patch
+fix-ftbfs.patch
