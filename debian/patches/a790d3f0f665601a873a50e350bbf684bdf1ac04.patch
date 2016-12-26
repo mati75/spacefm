@@ -1,0 +1,325 @@
+From a790d3f0f665601a873a50e350bbf684bdf1ac04 Mon Sep 17 00:00:00 2001
+From: Daniel Lopez <daniel.lopez999@gmail.com>
+Date: Thu, 15 Dec 2016 01:37:06 +0000
+Subject: [PATCH] Optionally close the panel/application when last tab is
+ closed
+
+---
+ data/ui/prefdlg.ui  | 25 +++++++++++++++++++------
+ data/ui/prefdlg2.ui | 25 +++++++++++++++++++------
+ src/main-window.c   | 47 ++++++++++++++++++++++++++++++++++++-----------
+ src/pref-dialog.c   | 11 +++++++++++
+ src/settings.c      |  6 ++++++
+ src/settings.h      |  1 +
+ 6 files changed, 92 insertions(+), 23 deletions(-)
+
+diff --git a/data/ui/prefdlg.ui b/data/ui/prefdlg.ui
+index 50ba3c6..47e584f 100644
+--- a/data/ui/prefdlg.ui
++++ b/data/ui/prefdlg.ui
+@@ -596,6 +596,19 @@
+                       </packing>
+                     </child>
+                     <child>
++                      <object class="GtkCheckButton" id="close_panel_when_no_tabs">
++                        <property name="visible">True</property>
++                        <property name="can_focus">True</property>
++                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
++                        <property name="label" translatable="yes">Close panel when last tab is closed</property>
++                        <property name="draw_indicator">True</property>
++                      </object>
++                      <packing>
++                        <property name="expand">False</property>
++                        <property name="position">1</property>
++                      </packing>
++                    </child>
++                    <child>
+                       <object class="GtkCheckButton" id="hide_close_tab_buttons">
+                         <property name="visible">True</property>
+                         <property name="can_focus">True</property>
+@@ -605,7 +618,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">1</property>
++                        <property name="position">2</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -618,7 +631,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">2</property>
++                        <property name="position">3</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -631,7 +644,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">3</property>
++                        <property name="position">4</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -644,7 +657,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">4</property>
++                        <property name="position">5</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -657,7 +670,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">5</property>
++                        <property name="position">6</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -694,7 +707,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">6</property>
++                        <property name="position">7</property>
+                       </packing>
+                     </child>
+                   </object>
+diff --git a/data/ui/prefdlg2.ui b/data/ui/prefdlg2.ui
+index 4619fa5..08faeb7 100644
+--- a/data/ui/prefdlg2.ui
++++ b/data/ui/prefdlg2.ui
+@@ -595,6 +595,19 @@
+                       </packing>
+                     </child>
+                     <child>
++                      <object class="GtkCheckButton" id="close_panel_when_no_tabs">
++                        <property name="visible">True</property>
++                        <property name="can_focus">True</property>
++                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
++                        <property name="label" translatable="yes">Close panel when last tab is closed</property>
++                        <property name="draw_indicator">True</property>
++                      </object>
++                      <packing>
++                        <property name="expand">False</property>
++                        <property name="position">1</property>
++                      </packing>
++                    </child>
++                    <child>
+                       <object class="GtkCheckButton" id="hide_close_tab_buttons">
+                         <property name="visible">True</property>
+                         <property name="can_focus">True</property>
+@@ -604,7 +617,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">1</property>
++                        <property name="position">2</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -617,7 +630,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">2</property>
++                        <property name="position">3</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -630,7 +643,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">3</property>
++                        <property name="position">4</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -643,7 +656,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">4</property>
++                        <property name="position">5</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -656,7 +669,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">5</property>
++                        <property name="position">6</property>
+                       </packing>
+                     </child>
+                     <child>
+@@ -693,7 +706,7 @@
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+-                        <property name="position">6</property>
++                        <property name="position">7</property>
+                       </packing>
+                     </child>
+                   </object>
+diff --git a/src/main-window.c b/src/main-window.c
+index eb373ff..6551dbe 100644
+--- a/src/main-window.c
++++ b/src/main-window.c
+@@ -2668,20 +2668,45 @@ void on_close_notebook_page( GtkButton* btn, PtkFileBrowser* file_browser )
+     }
+     if ( gtk_notebook_get_n_pages ( notebook ) == 0 )
+     {
+-        const char* path = xset_get_s( "go_set_default" );
+-        if ( !( path && path[0] != '\0' ) )
++        if (app_settings.close_panel_when_no_tabs)
+         {
+-            if ( geteuid() != 0 )
+-                path =  g_get_home_dir();
++            // Hide current panel
++            int current_panel_no = main_window->curpanel;
++            focus_panel(NULL, main_window, -3);
++
++            // If new current panel is not different from before (because there was no other panel),
++            // quit
++            if (current_panel_no == main_window->curpanel)
++            {
++                on_quit_activate( NULL, main_window );
++            }
++            // Else, update views based on new current panel
+             else
+-                path = "/";
++            {
++                a_browser = PTK_FILE_BROWSER( gtk_notebook_get_nth_page(
++                                                  GTK_NOTEBOOK( notebook ), 0 ) );
++                if ( GTK_IS_WIDGET( a_browser ) )
++                    ptk_file_browser_update_views( NULL, a_browser );
++            }
++            goto _done_close;
++        }
++        else
++        {
++            const char* path = xset_get_s( "go_set_default" );
++            if ( !( path && path[0] != '\0' ) )
++            {
++                if ( geteuid() != 0 )
++                    path =  g_get_home_dir();
++                else
++                    path = "/";
++            }
++            fm_main_window_add_new_tab( main_window, path );
++            a_browser = PTK_FILE_BROWSER( gtk_notebook_get_nth_page(
++                                        GTK_NOTEBOOK( notebook ), 0 ) );
++            if ( GTK_IS_WIDGET( a_browser ) )
++                ptk_file_browser_update_views( NULL, a_browser );
++            goto _done_close;
+         }
+-        fm_main_window_add_new_tab( main_window, path );
+-        a_browser = PTK_FILE_BROWSER( gtk_notebook_get_nth_page( 
+-                                    GTK_NOTEBOOK( notebook ), 0 ) );
+-        if ( GTK_IS_WIDGET( a_browser ) )
+-            ptk_file_browser_update_views( NULL, a_browser );
+-        goto _done_close;
+     }
+ 
+     // update view of new current tab
+diff --git a/src/pref-dialog.c b/src/pref-dialog.c
+index e1c2d37..a4be1be 100755
+--- a/src/pref-dialog.c
++++ b/src/pref-dialog.c
+@@ -60,6 +60,7 @@ struct _FMPrefDlg
+ 
+     /* Interface tab */
+     GtkWidget* always_show_tabs;
++    GtkWidget* close_panel_when_no_tabs;
+     GtkWidget* hide_close_tab_buttons;
+     //GtkWidget* hide_folder_content_border;
+ 
+@@ -241,6 +242,7 @@ static void on_response( GtkDialog* dlg, int response, FMPrefDlg* user_data )
+     GtkWidget * tab_label;
+     /* interface settings */
+     gboolean always_show_tabs;
++    gboolean close_panel_when_no_tabs;
+     gboolean hide_close_tab_buttons;
+     //gboolean hide_folder_content_border;
+ 
+@@ -290,6 +292,11 @@ static void on_response( GtkDialog* dlg, int response, FMPrefDlg* user_data )
+                 }
+             }
+         }
++        close_panel_when_no_tabs = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( data->close_panel_when_no_tabs ) );
++        if ( close_panel_when_no_tabs != app_settings.close_panel_when_no_tabs )
++        {
++            app_settings.close_panel_when_no_tabs = close_panel_when_no_tabs;
++        }
+         hide_close_tab_buttons = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( data->hide_close_tab_buttons ) );
+         if ( hide_close_tab_buttons != app_settings.hide_close_tab_buttons )
+         {
+@@ -1063,6 +1070,10 @@ gboolean fm_edit_preference( GtkWindow* parent, int page )
+         gtk_toggle_button_set_active ( GTK_TOGGLE_BUTTON( data->always_show_tabs ),
+                                        app_settings.always_show_tabs );
+ 
++        data->close_panel_when_no_tabs = (GtkWidget*)gtk_builder_get_object( builder, "close_panel_when_no_tabs" );
++        gtk_toggle_button_set_active ( GTK_TOGGLE_BUTTON( data->close_panel_when_no_tabs ),
++                                       app_settings.close_panel_when_no_tabs );
++
+         data->hide_close_tab_buttons = (GtkWidget*)gtk_builder_get_object( builder,
+                                                             "hide_close_tab_buttons" );
+         gtk_toggle_button_set_active ( GTK_TOGGLE_BUTTON( data->hide_close_tab_buttons ),
+diff --git a/src/settings.c b/src/settings.c
+index 2dea0ba..9b7a4d3 100755
+--- a/src/settings.c
++++ b/src/settings.c
+@@ -92,6 +92,7 @@ const int margin_pad_default = 6;
+ 
+ /* Default values of interface settings */
+ const gboolean always_show_tabs_default = TRUE;
++const gboolean close_panel_when_no_tabs_default = FALSE;
+ const gboolean hide_close_tab_buttons_default = FALSE;
+ const gboolean hide_side_pane_buttons_default = FALSE;
+ //const gboolean hide_folder_content_border_default = FALSE;
+@@ -416,6 +417,8 @@ static void parse_interface_settings( char* line )
+     *sep = '\0';
+     if ( 0 == strcmp( name, "always_show_tabs" ) )
+         app_settings.always_show_tabs = atoi( value );
++    else if ( 0 == strcmp( name, "close_panel_when_no_tabs" ) )
++        app_settings.close_panel_when_no_tabs = atoi( value );
+     else if ( 0 == strcmp( name, "show_close_tab_buttons" ) )
+         app_settings.hide_close_tab_buttons = !atoi( value );
+     //else if ( 0 == strcmp( name, "hide_side_pane_buttons" ) )
+@@ -647,6 +650,7 @@ void load_settings( char* config_dir )
+     
+     /* Interface */
+     app_settings.always_show_tabs = always_show_tabs_default;
++    app_settings.close_panel_when_no_tabs = close_panel_when_no_tabs_default;
+     app_settings.hide_close_tab_buttons = hide_close_tab_buttons_default;
+     //app_settings.hide_side_pane_buttons = hide_side_pane_buttons_default;
+     //app_settings.hide_folder_content_border = hide_folder_content_border_default;
+@@ -1819,6 +1823,8 @@ char* save_settings( gpointer main_window_ptr )
+         fputs( "\n[Interface]\n", file );
+         if ( app_settings.always_show_tabs != always_show_tabs_default )
+             fprintf( file, "always_show_tabs=%d\n", app_settings.always_show_tabs );
++        if ( app_settings.close_panel_when_no_tabs != close_panel_when_no_tabs_default )
++            fprintf( file, "close_panel_when_no_tabs=%d\n", app_settings.close_panel_when_no_tabs );
+         if ( app_settings.hide_close_tab_buttons != hide_close_tab_buttons_default )
+             fprintf( file, "show_close_tab_buttons=%d\n", !app_settings.hide_close_tab_buttons );
+         //if ( app_settings.hide_side_pane_buttons != hide_side_pane_buttons_default )
+diff --git a/src/settings.h b/src/settings.h
+index e25bdc3..888a0a3 100644
+--- a/src/settings.h
++++ b/src/settings.h
+@@ -96,6 +96,7 @@ typedef struct
+     
+     /* Interface */
+     gboolean always_show_tabs;
++    gboolean close_panel_when_no_tabs;
+     gboolean hide_close_tab_buttons;
+     //gboolean hide_side_pane_buttons;
+     //gboolean hide_folder_content_border;
