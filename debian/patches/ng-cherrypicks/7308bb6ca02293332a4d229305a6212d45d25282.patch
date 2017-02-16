@@ -1,0 +1,58 @@
+From 7308bb6ca02293332a4d229305a6212d45d25282 Mon Sep 17 00:00:00 2001
+From: Justin Kinnaird <jkinnaird1991@gmail.com>
+Date: Wed, 15 Feb 2017 18:27:00 -0600
+Subject: [PATCH] Fix for https://github.com/IgnorantGuru/spacefm/issues/670
+
+---
+ src/ptk/ptk-dir-tree-view.c | 34 ++++++++++++++++++++--------------
+ 1 file changed, 20 insertions(+), 14 deletions(-)
+
+diff --git a/src/ptk/ptk-dir-tree-view.c b/src/ptk/ptk-dir-tree-view.c
+index f82c361..94542aa 100644
+--- a/src/ptk/ptk-dir-tree-view.c
++++ b/src/ptk/ptk-dir-tree-view.c
+@@ -850,24 +850,30 @@ gboolean on_dir_tree_view_drag_motion ( GtkWidget *widget,
+         }
+ #if GTK_CHECK_VERSION (3, 0, 0)
+         /* hack to be able to call the default handler with the correct suggested_action */
+-        struct _GdkDragContext {
+-          GObject parent_instance;
++    struct _GdkDragContext {
++        GObject parent_instance;
+ 
+-          /*< private >*/
+-          GdkDragProtocol protocol;
+-
+-          gboolean is_source;
+-          GdkWindow *source_window;
+-          GdkWindow *dest_window;
++        /*< private >*/
++        GdkDragProtocol protocol;
++#if GTK_CHECK_VERSION (3,22,0)
++        GdkDisplay *display;
++#endif
++        gboolean is_source;
++        GdkWindow *source_window;
++        GdkWindow *dest_window;
++        GdkWindow *drag_window;
+ 
+-          GList *targets;
+-          GdkDragAction actions;
+-          GdkDragAction suggested_action;
+-          GdkDragAction action;
++        GList *targets;
++        GdkDragAction actions;
++        GdkDragAction suggested_action;
++        GdkDragAction action;
+ 
+-          guint32 start_time;
++        guint32 start_time;
+ 
+-          GdkDevice *device;
++        GdkDevice *device;
++#if GTK_CHECK_VERSION (3,22,0)
++        guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
++#endif
+         };
+         ((struct _GdkDragContext *)drag_context)->suggested_action = suggested_action;
+ #else

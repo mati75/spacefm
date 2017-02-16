@@ -1,0 +1,405 @@
+From e8434484918ae2325d8ac4479ef65037556a0b1d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Szilveszter=20Sz=C3=A9kely?= <szekelyszilv@gmail.com>
+Date: Thu, 28 Apr 2016 16:25:08 +0100
+Subject: [PATCH 1/4] Add support for Btrfs clone ioctl
+
+Btrfs clone ioctl can be used for O(1) copying within a file system
+utilizing copy-on-write.
+
+Passing --enable-btrfs-clone to ./configure enables this feature.
+
+The feature is dependent on the "btrfs/ioctl.h" header which is part of
+btrfs-progs.
+
+vfs_file_task_do_copy is modified to always try to call the ioctl,
+and fall back to the regular copying method if it fails.
+---
+ configure               | 31 ++++++++++++++++++++++++++++
+ configure.ac            | 12 +++++++++++
+ src/vfs/vfs-file-task.c | 54 +++++++++++++++++++++++++++++++++----------------
+ 3 files changed, 80 insertions(+), 17 deletions(-)
+
+diff --git a/configure b/configure
+index e5cc2e2..3a0ef25 100755
+--- a/configure
++++ b/configure
+@@ -847,6 +847,7 @@ with_preferable_sudo
+ enable_desktop_integration
+ enable_video_thumbnails
+ enable_pixmaps
++enable_btrfs_clone
+ '
+       ac_precious_vars='build_alias
+ host_alias
+@@ -1523,6 +1524,8 @@ Optional Features:
+                           (default: enable)
+   --enable-pixmaps        use share/pixmaps dir instead of share/icons dir to
+                           store icons (default: disable)
++  --enable-btrfs-clone    try to use btrfs clone ioctl to copy files (default:
++                          disable)
+ 
+ Optional Packages:
+   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+@@ -15584,6 +15587,34 @@ else
+ fi
+ 
+ 
++# Check whether --enable-btrfs-clone was given.
++if test "${enable_btrfs_clone+set}" = set; then :
++  enableval=$enable_btrfs_clone; use_btrfs_clone=$enableval
++else
++  use_btrfs_clone="no"
++fi
++
++
++if test x"$use_btrfs_clone" = x"yes"; then
++  for ac_header in sys/ioctl.h btrfs/ioctl.h
++do :
++  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
++ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
++if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
++  cat >>confdefs.h <<_ACEOF
++#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
++_ACEOF
++
++$as_echo "#define USE_BTRFS_CLONE 1" >>confdefs.h
++
++else
++  as_fn_error $? "Fatal Error: btrfs headers not found" "$LINENO" 5
++fi
++
++done
++
++fi
++
+ CPPFLAGS="$CPPFLAGS -fstrict-aliasing -fmessage-length=0"
+ 
+ CPPFLAGS="$CPPFLAGS -DDATADIR=\\\"$datadir\\\" -DHTMLDIR=\\\"$htmldir\\\""
+diff --git a/configure.ac b/configure.ac
+index 0a35e27..45f0209 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -273,6 +273,18 @@ AC_ARG_ENABLE(
+     use_pixmaps=$enableval, use_pixmaps="no")
+ AM_CONDITIONAL(NO_PIXMAPS, test ! x"$use_pixmaps" = x"yes")
+ 
++AC_ARG_ENABLE(
++    [btrfs-clone],
++    AS_HELP_STRING([--enable-btrfs-clone],
++        [try to use btrfs clone ioctl to copy files (default: disable)]),
++    use_btrfs_clone=$enableval, use_btrfs_clone="no")
++
++if test x"$use_btrfs_clone" = x"yes"; then
++  AC_CHECK_HEADERS([sys/ioctl.h btrfs/ioctl.h],
++        AC_DEFINE(USE_BTRFS_CLONE, 1, [Whether to enable btrfs clone]),
++        AC_MSG_ERROR([Fatal Error: btrfs headers not found]))
++fi
++
+ dnl advanced compiler tweaking
+ CPPFLAGS="$CPPFLAGS -fstrict-aliasing -fmessage-length=0"
+ 
+diff --git a/src/vfs/vfs-file-task.c b/src/vfs/vfs-file-task.c
+index 017d2ae..e5bddc9 100644
+--- a/src/vfs/vfs-file-task.c
++++ b/src/vfs/vfs-file-task.c
+@@ -38,6 +38,11 @@
+ #include "desktop-window.h"
+ #include "vfs-volume.h"
+ 
++#ifdef USE_BTRFS_CLONE
++#include <sys/ioctl.h>
++#include <btrfs/ioctl.h>
++#endif
++
+ const mode_t chmod_flags[] =
+     {
+         S_IRUSR, S_IWUSR, S_IXUSR,
+@@ -565,27 +570,42 @@ vfs_file_task_do_copy( VFSFileTask* task,
+                 //if ( task->avoid_changes )
+                 //    emit_created( dest_file );
+                 struct utimbuf times;
+-                while ( ( rsize = read( rfd, buffer, sizeof( buffer ) ) ) > 0 )
++#ifdef USE_BTRFS_CLONE
++                // Try to copy using BTRFS Clone ioctl first for O(1) perf
++                // on fail, copy using the traditional method
++                if ( ioctl( wfd, BTRFS_IOC_CLONE, rfd ) == 0 )
+                 {
+-                    if ( should_abort( task ) )
+-                    {
+-                        copy_fail = TRUE;
+-                        break;
+-                    }
+-                    
+-                    if ( write( wfd, buffer, rsize ) > 0 )
+-                    {
+-                        g_mutex_lock( task->mutex );
+-                        task->progress += rsize;
+-                        g_mutex_unlock( task->mutex );
+-                    }
+-                    else
++                    g_mutex_lock( task->mutex );
++                    task->progress += file_stat.st_size;
++                    g_mutex_unlock( task->mutex );
++                }
++                else
++                {
++#endif
++                    while ( ( rsize = read( rfd, buffer, sizeof( buffer ) ) ) > 0 )
+                     {
+-                        vfs_file_task_error( task, errno, _("Writing"), dest_file );
+-                        copy_fail = TRUE;
+-                        break;
++                        if ( should_abort( task ) )
++                        {
++                            copy_fail = TRUE;
++                            break;
++                        }
++
++                        if ( write( wfd, buffer, rsize ) > 0 )
++                        {
++                            g_mutex_lock( task->mutex );
++                            task->progress += rsize;
++                            g_mutex_unlock( task->mutex );
++                        }
++                        else
++                        {
++                            vfs_file_task_error( task, errno, _("Writing"), dest_file );
++                            copy_fail = TRUE;
++                            break;
++                        }
+                     }
++#ifdef USE_BTRFS_CLONE
+                 }
++#endif
+                 close( wfd );
+                 if ( copy_fail )
+                 {
+
+From 2fba4481c05af8df4d092686e152ebbc18be5a44 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Szilveszter=20Sz=C3=A9kely?= <szekelyszilv@gmail.com>
+Date: Sat, 30 Apr 2016 13:14:11 +0100
+Subject: [PATCH 2/4] Make Btrfs clone used by default
+
+Change definition from USE_ to HAVE_
+---
+ configure               | 19 +++++++++++--------
+ configure.ac            | 15 ++++++++-------
+ src/vfs/vfs-file-task.c |  6 +++---
+ 3 files changed, 22 insertions(+), 18 deletions(-)
+
+diff --git a/configure b/configure
+index 3a0ef25..f484dbf 100755
+--- a/configure
++++ b/configure
+@@ -1524,8 +1524,8 @@ Optional Features:
+                           (default: enable)
+   --enable-pixmaps        use share/pixmaps dir instead of share/icons dir to
+                           store icons (default: disable)
+-  --enable-btrfs-clone    try to use btrfs clone ioctl to copy files (default:
+-                          disable)
++  --disable-btrfs-clone   try to use btrfs clone ioctl to copy files (default:
++                          enable if installed)
+ 
+ Optional Packages:
+   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+@@ -15591,10 +15591,9 @@ fi
+ if test "${enable_btrfs_clone+set}" = set; then :
+   enableval=$enable_btrfs_clone; use_btrfs_clone=$enableval
+ else
+-  use_btrfs_clone="no"
++  use_btrfs_clone="yes"
+ fi
+ 
+-
+ if test x"$use_btrfs_clone" = x"yes"; then
+   for ac_header in sys/ioctl.h btrfs/ioctl.h
+ do :
+@@ -15604,15 +15603,18 @@ if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+   cat >>confdefs.h <<_ACEOF
+ #define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+ _ACEOF
+-
+-$as_echo "#define USE_BTRFS_CLONE 1" >>confdefs.h
+-
++ use_btrfs_clone="yes"
+ else
+-  as_fn_error $? "Fatal Error: btrfs headers not found" "$LINENO" 5
++  use_btrfs_clone="no"
+ fi
+ 
+ done
+ 
++  if test x"$use_btrfs_clone" = x"yes"; then
++
++$as_echo "#define HAVE_BTRFS_CLONE 1" >>confdefs.h
++
++  fi
+ fi
+ 
+ CPPFLAGS="$CPPFLAGS -fstrict-aliasing -fmessage-length=0"
+@@ -18686,6 +18688,7 @@ fi
+ echo Desktop manager integration.................. : $desktop_integration
+ echo Startup notification......................... : $use_sn
+ echo Video thumbnail support...................... : $video_thumbnails
++echo Btrfs clone support.......................... : $use_btrfs_clone
+ echo
+ echo 'Homepage: http://ignorantguru.github.io/spacefm/'
+ echo
+diff --git a/configure.ac b/configure.ac
+index 45f0209..ba8d121 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -275,14 +275,14 @@ AM_CONDITIONAL(NO_PIXMAPS, test ! x"$use_pixmaps" = x"yes")
+ 
+ AC_ARG_ENABLE(
+     [btrfs-clone],
+-    AS_HELP_STRING([--enable-btrfs-clone],
+-        [try to use btrfs clone ioctl to copy files (default: disable)]),
+-    use_btrfs_clone=$enableval, use_btrfs_clone="no")
+-
++    AS_HELP_STRING([--disable-btrfs-clone],
++        [try to use btrfs clone ioctl to copy files (default: enable if installed)]),
++    use_btrfs_clone=$enableval, use_btrfs_clone="yes")
+ if test x"$use_btrfs_clone" = x"yes"; then
+-  AC_CHECK_HEADERS([sys/ioctl.h btrfs/ioctl.h],
+-        AC_DEFINE(USE_BTRFS_CLONE, 1, [Whether to enable btrfs clone]),
+-        AC_MSG_ERROR([Fatal Error: btrfs headers not found]))
++  AC_CHECK_HEADERS([sys/ioctl.h btrfs/ioctl.h], use_btrfs_clone="yes", use_btrfs_clone="no")
++  if test x"$use_btrfs_clone" = x"yes"; then
++    AC_DEFINE(HAVE_BTRFS_CLONE, 1, [Use Btrfs clone])
++  fi
+ fi
+ 
+ dnl advanced compiler tweaking
+@@ -367,6 +367,7 @@ fi
+ echo Desktop manager integration.................. : $desktop_integration
+ echo Startup notification......................... : $use_sn
+ echo Video thumbnail support...................... : $video_thumbnails
++echo Btrfs clone support.......................... : $use_btrfs_clone
+ echo
+ echo 'Homepage: http://ignorantguru.github.io/spacefm/'
+ echo
+diff --git a/src/vfs/vfs-file-task.c b/src/vfs/vfs-file-task.c
+index e5bddc9..35de35f 100644
+--- a/src/vfs/vfs-file-task.c
++++ b/src/vfs/vfs-file-task.c
+@@ -38,7 +38,7 @@
+ #include "desktop-window.h"
+ #include "vfs-volume.h"
+ 
+-#ifdef USE_BTRFS_CLONE
++#ifdef HAVE_BTRFS_CLONE
+ #include <sys/ioctl.h>
+ #include <btrfs/ioctl.h>
+ #endif
+@@ -570,7 +570,7 @@ vfs_file_task_do_copy( VFSFileTask* task,
+                 //if ( task->avoid_changes )
+                 //    emit_created( dest_file );
+                 struct utimbuf times;
+-#ifdef USE_BTRFS_CLONE
++#ifdef HAVE_BTRFS_CLONE
+                 // Try to copy using BTRFS Clone ioctl first for O(1) perf
+                 // on fail, copy using the traditional method
+                 if ( ioctl( wfd, BTRFS_IOC_CLONE, rfd ) == 0 )
+@@ -603,7 +603,7 @@ vfs_file_task_do_copy( VFSFileTask* task,
+                             break;
+                         }
+                     }
+-#ifdef USE_BTRFS_CLONE
++#ifdef HAVE_BTRFS_CLONE
+                 }
+ #endif
+                 close( wfd );
+
+From 7ab6b171433416e5d6a8d2631090baaa3f8d424d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Szilveszter=20Sz=C3=A9kely?= <szekelyszilv@gmail.com>
+Date: Sat, 30 Apr 2016 13:16:10 +0100
+Subject: [PATCH 3/4] Add Btrfs clone dependencies to README
+
+---
+ README | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/README b/README
+index e39e19c..05c254b 100644
+--- a/README
++++ b/README
+@@ -98,6 +98,10 @@ DEPENDENCIES
+ 
+     Also, if you want to use startup notification: libstartup-notification0-dev
+ 
++    If you want to use clone in Btrfs when copying (as in cp --reflink):
++    btrfs-tools (btrfs-progs on ArchLinux and maybe others), only for compiling
++    Linux kernel >= 3.10, only works on Btrfs filesystem
++
+     For optional dbus support: dbus libdbus-1-3 libdbus-1-dev
+ 
+     RECOMMENDED: udevil|pmount|udisks gksu|kdesu|ktsuss|lxqt-sudo eject lsof
+
+From cdbd32ec7085dfe2f85b0bcaea585298c45502c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Szilveszter=20Sz=C3=A9kely?= <szekelyszilv@gmail.com>
+Date: Sat, 30 Apr 2016 13:48:05 +0100
+Subject: [PATCH 4/4] Add clone_file in VFS file tasks
+
+Code cleanup, reduce #ifdefs
+Add clone_file function that tries to clone using available methods in
+turn. Return success if one of the succeeds or failure if none of them
+do or are available.
+---
+ src/vfs/vfs-file-task.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/src/vfs/vfs-file-task.c b/src/vfs/vfs-file-task.c
+index 35de35f..c8d0646 100644
+--- a/src/vfs/vfs-file-task.c
++++ b/src/vfs/vfs-file-task.c
+@@ -352,6 +352,18 @@ void update_file_display( const char* path )
+ }
+ */
+ 
++static int clone_file( int wfd, int rfd )
++{
++    int err;
++#ifdef HAVE_BTRFS_CLONE
++    err = ioctl( wfd, BTRFS_IOC_CLONE, rfd );
++    if ( ! err ) {
++        return 0;
++    }
++#endif
++    return -1;
++}
++
+ static gboolean
+ vfs_file_task_do_copy( VFSFileTask* task,
+                        const char* src_file,
+@@ -570,10 +582,8 @@ vfs_file_task_do_copy( VFSFileTask* task,
+                 //if ( task->avoid_changes )
+                 //    emit_created( dest_file );
+                 struct utimbuf times;
+-#ifdef HAVE_BTRFS_CLONE
+-                // Try to copy using BTRFS Clone ioctl first for O(1) perf
+-                // on fail, copy using the traditional method
+-                if ( ioctl( wfd, BTRFS_IOC_CLONE, rfd ) == 0 )
++                // Try to clone first, then fall back to copying
++                if ( ! clone_file( wfd, rfd ) )
+                 {
+                     g_mutex_lock( task->mutex );
+                     task->progress += file_stat.st_size;
+@@ -581,7 +591,6 @@ vfs_file_task_do_copy( VFSFileTask* task,
+                 }
+                 else
+                 {
+-#endif
+                     while ( ( rsize = read( rfd, buffer, sizeof( buffer ) ) ) > 0 )
+                     {
+                         if ( should_abort( task ) )
+@@ -603,9 +612,7 @@ vfs_file_task_do_copy( VFSFileTask* task,
+                             break;
+                         }
+                     }
+-#ifdef HAVE_BTRFS_CLONE
+                 }
+-#endif
+                 close( wfd );
+                 if ( copy_fail )
+                 {

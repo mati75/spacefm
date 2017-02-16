@@ -9,3 +9,11 @@ d75271ee6c6a6c90921fbb325efcc45aa27bb59d.patch
 drop-gnome-common-macros.patch
 a790d3f0f665601a873a50e350bbf684bdf1ac04.patch
 fix-ftbfs.patch
+
+#ng-cherrypicks
+ng-cherrypicks/7308bb6ca02293332a4d229305a6212d45d25282.patch
+ng-cherrypicks/9d0012f7c1dd6f09e099cac92dd149d4418245a8.patch
+ng-cherrypicks/003d4ef2a72e3a8bdd150b7b16a07e0f6eb1ec3d.patch
+ng-cherrypicks/e0d0e9f7c47c0e7125b4e1e035b3da8be23ad3c1.patch
+ng-cherrypicks/e026a937e4befa9cc188957e3cae2f904439d75f.patch
+ng-cherrypicks/ac19c081210fd845af191f128791ebf9ab607a71.patch

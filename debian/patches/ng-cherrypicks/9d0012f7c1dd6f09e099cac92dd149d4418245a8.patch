@@ -1,0 +1,138 @@
+From 9d0012f7c1dd6f09e099cac92dd149d4418245a8 Mon Sep 17 00:00:00 2001
+From: Justin Kinnaird <jkinnaird1991@gmail.com>
+Date: Wed, 15 Feb 2017 22:50:54 -0600
+Subject: [PATCH] Fix GTK3 Desktop icon movement: Fixes: #1
+
+---
+ src/desktop/desktop-window.c | 35 +++++++++++++++++++++++++++--------
+ src/desktop/desktop-window.h |  4 +---
+ 2 files changed, 28 insertions(+), 11 deletions(-)
+
+diff --git a/src/desktop/desktop-window.c b/src/desktop/desktop-window.c
+index 61ccc05..0ce60aa 100644
+--- a/src/desktop/desktop-window.c
++++ b/src/desktop/desktop-window.c
+@@ -90,6 +90,7 @@ static gboolean on_button_press( GtkWidget* w, GdkEventButton* evt );
+ static gboolean on_button_release( GtkWidget* w, GdkEventButton* evt );
+ static gboolean on_mouse_move( GtkWidget* w, GdkEventMotion* evt );
+ static gboolean on_key_press( GtkWidget* w, GdkEventKey* evt );
++static gboolean is_mouse_pressed(GdkEvent* evt);
+ static void on_style_set( GtkWidget* w, GtkStyle* prev );
+ static void on_realize( GtkWidget* w );
+ static gboolean on_focus_in( GtkWidget* w, GdkEventFocus* evt );
+@@ -339,7 +340,6 @@ static void desktop_window_init(DesktopWindow *self)
+     self->insert_item = NULL;
+     self->renamed_item = self->renaming_item = NULL;
+     self->file_listed = FALSE;
+-
+     self->icon_render = gtk_cell_renderer_pixbuf_new();
+     g_object_set( self->icon_render, "follow-state", TRUE, NULL);
+     g_object_ref_sink(self->icon_render);
+@@ -1225,7 +1225,6 @@ gboolean on_button_press( GtkWidget* w, GdkEventButton* evt )
+     {
+         if( evt->button == 1 )  /* left button */
+         {
+-            self->button_pressed = TRUE;    /* store button state for drag & drop */
+             self->drag_start_x = evt->x;
+             self->drag_start_y = evt->y;
+         }
+@@ -1363,8 +1362,6 @@ gboolean on_button_release( GtkWidget* w, GdkEventButton* evt )
+     DesktopWindow* self = (DesktopWindow*)w;
+     DesktopItem* clicked_item = hit_test( self, evt->x, evt->y );
+ 
+-    self->button_pressed = FALSE;
+-
+     if( self->rubber_bending )
+     {
+         update_rubberbanding( self, evt->x, evt->y,
+@@ -1400,8 +1397,9 @@ gboolean on_button_release( GtkWidget* w, GdkEventButton* evt )
+     }
+ 
+     /* forward the event to root window */
+-    if( ! clicked_item )
++    if( ! clicked_item ) {
+         forward_event_to_rootwin( gtk_widget_get_screen(w), (GdkEvent*)evt );
++    }
+ 
+     return TRUE;
+ }
+@@ -1426,11 +1424,29 @@ static gboolean on_single_click_timeout( DesktopWindow* self )
+     return FALSE;
+ }
+ 
++
++// Reliably get the mouse button state.
++gboolean is_mouse_pressed(GdkEvent* evt)
++{
++    GdkModifierType mask = 0;
++    if (evt->type == GDK_MOTION_NOTIFY) {
++        GdkEventMotion* e = (GdkEventMotion*)evt;
++        if (e->device != NULL && e->window != NULL) {
++            gdk_device_get_state(e->device, e->window, NULL, &mask);
++        }
++    }else if (evt->type == GDK_BUTTON_PRESS || evt->type == GDK_BUTTON_RELEASE) {
++        GdkEventButton* e = (GdkEventButton*)evt;
++        if(e->device != NULL && e->window != NULL) {
++            gdk_device_get_state(e->device, e->window, NULL, &mask);
++        }
++    }
++    return (mask & GDK_BUTTON1_MASK || mask & GDK_BUTTON2_MASK || mask & GDK_BUTTON3_MASK);
++}
++
+ gboolean on_mouse_move( GtkWidget* w, GdkEventMotion* evt )
+ {
+     DesktopWindow* self = (DesktopWindow*)w;
+-
+-    if( ! self->button_pressed )
++    if(!is_mouse_pressed((GdkEvent*)evt))
+     {
+         if( self->single_click )
+         {
+@@ -1620,6 +1636,7 @@ gboolean on_drag_drop( GtkWidget* w, GdkDragContext* ctx, gint x, gint y, guint
+         return FALSE;
+     if( target == text_uri_list_atom || target == desktop_icon_atom )
+         gtk_drag_get_data( w, ctx, target, time );
++
+     return TRUE;
+ }
+ 
+@@ -1805,7 +1822,6 @@ void on_drag_data_received( GtkWidget* w, GdkDragContext* ctx, gint x, gint y,
+ {
+     DesktopWindow* self = (DesktopWindow*)w;
+     DesktopItem* item;
+-
+     if( gtk_selection_data_get_target( data ) == text_uri_list_atom )
+     {
+         gboolean text_hit = FALSE;
+@@ -1977,6 +1993,9 @@ void on_drag_data_received( GtkWidget* w, GdkDragContext* ctx, gint x, gint y,
+             g_list_free( sels );
+             */
+         }
++        gtk_grab_remove(w);
++        self->rubber_bending = FALSE;
++        self->dragging = FALSE;
+         gtk_drag_finish( ctx, TRUE, FALSE, time );
+     }
+ }
+diff --git a/src/desktop/desktop-window.h b/src/desktop/desktop-window.h
+index c039f80..687eda4 100644
+--- a/src/desktop/desktop-window.h
++++ b/src/desktop/desktop-window.h
+@@ -68,7 +68,7 @@ struct _DesktopWindow
+ 
+     /* all items on the desktop window */
+     GList* items;
+-
++    
+     /* margins of the whole desktop window */
+     int margin_top;
+     int margin_left;
+@@ -103,8 +103,6 @@ struct _DesktopWindow
+     gboolean single_click : 1;
+ 
+     /* <private> */
+-
+-    gboolean button_pressed : 1;
+     gboolean rubber_bending : 1;
+     gboolean dragging : 1;
+     gboolean drag_entered : 1;
