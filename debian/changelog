@@ -7,7 +7,7 @@ spacefm (1.0.5-3) UNRELEASED; urgency=medium
     + Add cherry-pick for optionally close the panel/application when last
     tab is closed.
     + Add fix-ftbfs.patch stolen from Gentoo to fix FTBFS wit glibc 2.24.
-    + Add cherry-picks from 1.0.6 relase of fork spacefm-ng.
+    + Add cherry-picks from 1.0.6 release of fork spacefm-ng.
   * Use fix for Unity menu issue as patch, not script.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 06 Jul 2016 23:24:41 +0200
