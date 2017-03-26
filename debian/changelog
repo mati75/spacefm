@@ -1,4 +1,4 @@
-spacefm (1.0.5-3) UNRELEASED; urgency=medium
+spacefm (1.0.5-3) experimental; urgency=medium
 
   * Bump debhelper version to 10.
   * debian/patches:
@@ -9,8 +9,9 @@ spacefm (1.0.5-3) UNRELEASED; urgency=medium
     + Add fix-ftbfs.patch stolen from Gentoo to fix FTBFS wit glibc 2.24.
     + Add cherry-picks from 1.0.6 release of fork spacefm-ng.
   * Use fix for Unity menu issue as patch, not script.
+  * Update debian/copyright.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 06 Jul 2016 23:24:41 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 05 Mar 2017 14:23:51 +0100
 
 spacefm (1.0.5-2) unstable; urgency=medium
 
