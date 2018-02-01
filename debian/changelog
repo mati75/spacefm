@@ -11,7 +11,7 @@ spacefm (1.0.5-3) experimental; urgency=medium
   * Use fix for Unity menu issue as patch, not script.
   * Update debian/copyright.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 05 Mar 2017 14:23:51 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 26 Mar 2017 14:35:41 +0200
 
 spacefm (1.0.5-2) unstable; urgency=medium
 
