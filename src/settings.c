@@ -1927,8 +1927,8 @@ const char* xset_get_user_tmp_dir()
         settings_user_tmp_dir = g_build_filename( settings_tmp_dir, name, NULL );
         g_free( name );
         count++;
-    } while ( count < 1000 && ( ret = mkdir( settings_user_tmp_dir,
-                        S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 ) );
+    } while ( count < 1000 && ( ( ret = mkdir( settings_user_tmp_dir,
+                    S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) ) != 0 ) );
     if ( ret != 0 )
     {
         g_free( settings_user_tmp_dir );
@@ -5134,6 +5134,7 @@ void on_install_plugin_cb( VFSFileTask* task, PluginData* plugin_data )
             else if ( use < PLUGIN_USE_BOOKMARKS )
             {
                 // handler
+                set->plugin_top = FALSE;  // prevent being added to Plugins menu
                 if ( plugin_data->job == PLUGIN_JOB_INSTALL )
                 {
                     // This dialog should never be seen - failsafe
@@ -10761,7 +10762,7 @@ void xset_defaults()
         set->line = g_strdup( "#devices-root-label" );
 
     set = xset_set( "dev_root_check", "lbl", _("_Check") );
-    xset_set_set( set, "desc", "/sbin/fsck %v" );
+    xset_set_set( set, "desc", "/sbin/fsck -r %v" );
     set->line = g_strdup( "#devices-root-check" );
        
     set = xset_set( "dev_root_fstab", "lbl", _("_Edit fstab") );
@@ -11320,7 +11321,7 @@ void xset_defaults()
     set->menu_style = XSET_MENU_STRING;
     xset_set_set( set, "icn", "gtk-network" );
     xset_set_set( set, "title", _("Open URL") );
-    xset_set_set( set, "desc", _("Enter URL in the format:\n\tPROTOCOL://USERNAME:PASSWORD@HOST:PORT/SHARE\n\nExamples:\n\tftp://mirrors.kernel.org\n\tsmb://user:pass@10.0.0.1:50/docs\n\tssh://user@sys.domain\n\nIncluding a password is unsafe.  To bookmark a URL, right-click on the mounted network in Devices and select Bookmark.\n") );
+    xset_set_set( set, "desc", _("Enter URL in the format:\n\tPROTOCOL://USERNAME:PASSWORD@HOST:PORT/SHARE\n\nExamples:\n\tftp://mirrors.kernel.org\n\tsmb://user:pass@10.0.0.1:50/docs\n\tssh://user@sys.domain\n\tmtp://\n\nIncluding a password is unsafe.  To bookmark a URL, right-click on the mounted network in Devices and select Bookmark.\n") );
     set->line = NULL;
 
     set = xset_set( "main_save_tabs", "lbl", _("Save Ta_bs") );

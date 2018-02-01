@@ -1607,7 +1607,7 @@ exo_icon_view_realize (GtkWidget *widget)
     gdk_window_set_user_data (priv->bin_window, widget);
 
 #if !GTK_CHECK_VERSION (3, 0, 0)
-    /* Attach style/background for GTK2 - this breaks 'dark theme version' styles
+    /* GTK2: Attach style/background - this breaks 'dark theme version' styles
      * in GTK3 - https://github.com/IgnorantGuru/spacefm/issues/578 */
 
     /* This widget is fully reimplementing realize, so must attach a style
@@ -1615,18 +1615,28 @@ exo_icon_view_realize (GtkWidget *widget)
      * gtk_widget_set_style, however if you do with a non-NULL style, GTK
      * considers the style hardcoded and therefore outside of its inherited 'rc
      * style' system, which results in exo_icon_view_style_set no longer being
-     * called on a theme change */
-    widget->style = gtk_style_attach (widget->style, widget->window);
+     * called on a theme change
+     * https://github.com/IgnorantGuru/spacefm/issues/627 shows that this correct
+     * method of setting the style causes a slowdown (??), so going back to the
+     * broken method */
+    //widget->style = gtk_style_attach (widget->style, widget->window);
+    gtk_widget_set_style( widget, gtk_style_attach(gtk_widget_get_style (widget),
+                                            gtk_widget_get_window(widget) ) );
 
     /* However the true widget window background remains black without the below
-     * call- the documentation recommends to call gtk_style_set_background,
-     * however this has no effect with any requested GtkStateType */
+     * call - the documentation recommends to call gtk_style_set_background,
+     * however this has no effect with any requested GtkStateType. Both the
+     * ExoIconView's window and presumably the earlier GTK window (??) need to
+     * have the background set - if you don't do the earlier window, the widget
+     * has a black background prior to loading directory contents - see issue 627 */
     gdk_window_set_background (priv->bin_window,
+           &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
+    gdk_window_set_background (gtk_widget_get_window (widget),
            &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
 
 #else
-    /* Adding style class (styling works fine for me without this, but one user
-     * so far has reported breakage) */
+    /* GTK3: Adding style class (styling works fine for me without this, but
+     * one user so far has reported breakage) */
     gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (widget)),
                                  GTK_STYLE_CLASS_VIEW);
 #endif
@@ -7380,8 +7390,9 @@ exo_icon_view_drag_data_delete (GtkWidget      *widget,
     if (source_row == NULL)
         return;
 
-    gtk_tree_drag_source_drag_data_delete (GTK_TREE_DRAG_SOURCE (model),
-                                           source_row);
+    if ( GTK_IS_TREE_DRAG_SOURCE( model ) )
+        gtk_tree_drag_source_drag_data_delete( GTK_TREE_DRAG_SOURCE (model),
+                                                source_row );
 
     gtk_tree_path_free (source_row);
 
