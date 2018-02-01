@@ -2,11 +2,11 @@ Source: spacefm
 Section: utils
 Priority: optional
 Maintainer: Mateusz Łukasik <mati75@linuxmint.pl>
-Build-Depends: debhelper (>= 10), libgtk2.0-dev (>= 2.24), 
- libcairo2-dev, libpango1.0-dev, libx11-dev, intltool, pkg-config, 
- libglib2.0-dev, libstartup-notification0-dev, 
+Build-Depends: debhelper (>= 10), libgtk2.0-dev (>= 2.24),
+ libcairo2-dev, libpango1.0-dev, libx11-dev, intltool, pkg-config,
+ libglib2.0-dev, libstartup-notification0-dev,
  libgdk-pixbuf2.0-dev, libudev-dev, hicolor-icon-theme, libgtk-3-dev,
- libffmpegthumbnailer-dev 
+ libffmpegthumbnailer-dev
 Standards-Version: 3.9.8
 Homepage: http://ignorantguru.github.io/spacefm/
 Vcs-Git: https://github.com/mati75/spacefm.git
@@ -14,7 +14,7 @@ Vcs-Browser: https://github.com/mati75/spacefm.git
 
 Package: spacefm
 Architecture: linux-any
-Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}), 
+Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
  desktop-file-utils, shared-mime-info
 Recommends: udisks2
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs, dbus
@@ -63,18 +63,18 @@ Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs, dbus
 Replaces: spacefm, spacefm-gtk3, spacefm-common (<< 1.0.5-2~)
 Conflicts: spacefm-hal, spacefm
 Breaks: spacefm-common (<< 1.0.5-2~)
-Description: Multi-panel tabbed file manager - GTK3 version  
- SpaceFM is a multi-panel tabbed file and desktop manager for Linux with 
- built-in VFS, udev or HAL-based device manager, customizable menu system 
+Description: Multi-panel tabbed file manager - GTK3 version
+ SpaceFM is a multi-panel tabbed file and desktop manager for Linux with
+ built-in VFS, udev or HAL-based device manager, customizable menu system
  and bash integration.
  .
- A descendant of PCManFM, SpaceFM's aims are to be bugfixed, efficient 
- (mainly C), hugely customisable (change and add to the GUI as you go 
- with Design Mode), powerful without scaring off newer users (due to 
- customisation), independent of particular distributions and desktop 
- environments, and device management featureful enough to replace the 
+ A descendant of PCManFM, SpaceFM's aims are to be bugfixed, efficient
+ (mainly C), hugely customisable (change and add to the GUI as you go
+ with Design Mode), powerful without scaring off newer users (due to
+ customisation), independent of particular distributions and desktop
+ environments, and device management featureful enough to replace the
  various udisks-based *kits when used alongside udevil.
  .
- Other highlights include optional desktop management, smart queuing 
- of file operations, user plugins and the ability to carry out specific 
+ Other highlights include optional desktop management, smart queuing
+ of file operations, user plugins and the ability to carry out specific
  commands as root.
