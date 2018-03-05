@@ -2,12 +2,15 @@ spacefm (1.0.6-1) UNRELEASED; urgency=medium
 
   * New upstream release. (Closes: #892054)
     + Drop all patches included upstream.
-  * Bump debhelper version to 10.
+  * debian/control:
+    + Bump debhelper version to 11.
+    + Bump to Standards-Version to 4.1.3.
   * debian/patches:
     + Add drop-gnome-common-macros.patch to drop deprecated gnome-common
     macros/variables. (Closes: #830003)
   * Update debian/copyright.
   * Drop changes from Ubuntu - fixed upstream.
+  * 
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 26 Mar 2017 14:35:41 +0200
 
