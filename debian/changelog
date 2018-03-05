@@ -11,6 +11,7 @@ spacefm (1.0.6-1) UNRELEASED; urgency=medium
     macros/variables. (Closes: #830003)
   * Update debian/copyright.
   * Drop changes from Ubuntu - fixed upstream.
+  * Drop postinst script and clean postrm. (Closes: #860846)
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 26 Mar 2017 14:35:41 +0200
 
