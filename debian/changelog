@@ -1,6 +1,6 @@
-spacefm (1.0.5+git20180130-1) UNRELEASED; urgency=medium
+spacefm (1.0.6-1) UNRELEASED; urgency=medium
 
-  * Merge latest git tree from next branch:
+  * New upstream release. (Closes: #892054)
     + Drop all patches included upstream.
   * Bump debhelper version to 10.
   * debian/patches:
