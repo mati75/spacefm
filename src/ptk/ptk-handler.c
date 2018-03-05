@@ -369,11 +369,11 @@ const Handler handlers_net[]=
     {
         "hand_net_+http",
         "http & webdav",
-        "http https webdav davfs mtab_fs=davfs*",
+        "http https webdav davfs davs dav mtab_fs=davfs*",
         "",
-        "# This handler opens http:// and webdav://\n\n# Set your web browser in Help|Options|Browser\n\n# set missing_davfs=1 if you always want to open http in web browser\n# set missing_davfs=0 if you always want to mount http with davfs\nmissing_davfs=\n\nif [ -z \"$missing_davfs\" ]; then\n    grep -s '^allowed_types *=.*davfs' /etc/udevil/udevil.conf 2>/dev/null\n    missing_davfs=$?  \nfi\nif [ \"$fm_url_proto\" = \"webdav\" ] || [ \"$fm_url_proto\" = \"davfs\" ] || \\\n            [ $missing_davfs -eq 0 ]; then\n    fm_url=\"${fm_url/webdav:\\/\\//http://}\"\n    fm_url=\"${fm_url/davfs:\\/\\//http://}\"\n    # attempt davfs mount in terminal\n    spacefm -s run-task cmd --terminal \\\n        \"udevil mount '$fm_url' || ( echo; echo 'Press Enter to close:'; read )\"\n    exit\nfi\n# open in web browser\nspacefm -s run-task web \"$fm_url\"\n",
+        "# This handler opens http:// and webdav://\n\n# Set your web browser in Help|Options|Browser\n\n# set missing_davfs=1 if you always want to open http in web browser\n# set missing_davfs=0 if you always want to mount http with davfs\nmissing_davfs=\n\nif [ -z \"$missing_davfs\" ]; then\n    grep -qs '^[[:space:]]*allowed_types[[:space:]]*=[^#]*davfs' \\\n                                    /etc/udevil/udevil.conf 2>/dev/null\n    missing_davfs=$?  \nfi\nif [ \"$fm_url_proto\" = \"webdav\" ] || [ \"$fm_url_proto\" = \"davfs\" ] || \\\n   [ \"$fm_url_proto\" = \"dav\" ] || [ \"$fm_url_proto\" = \"davs\" ] || \\\n                                    [ $missing_davfs -eq 0 ]; then\n    fm_url_proto=\"${fm_url_proto/webdav/http}\"\n    fm_url_proto=\"${fm_url_proto/davfs/http}\"\n    fm_url_proto=\"${fm_url_proto/davs/https}\"\n    fm_url_proto=\"${fm_url_proto/dav/http}\"\n    url=\"${fm_url_proto}://${fm_url_host}${fm_url_port:+:}${fm_url_port}${fm_url_path:-/}\"\n    [[ -z \"$fm_url_user$fm_url_password\" ]] && msg=\"\" || \\\n            msg=\"Warning: user:password in URL is not supported by davfs.\"\n    # attempt davfs mount in terminal\n    spacefm -s run-task cmd --terminal \\\n        \"echo $msg; echo 'udevil mount $url'; udevil mount '$url' || \" \\\n                        \"( echo; echo 'Press Enter to close:'; read )\"\n    exit\nfi\n# open in web browser\nspacefm -s run-task web \"$fm_url\"\n",
         FALSE,
-        "udevil umount \"%a\"",
+        "# Note: Unmount is usually performed by the 'fuse unmount' handler.\n\nudevil umount \"%a\"",
         FALSE,
         INFO_EXAMPLE,
         FALSE
@@ -407,7 +407,7 @@ const Handler handlers_net[]=
         "mtp",
         "mtp mtab_fs=fuse.jmtpfs mtab_fs=fuse.simple-mtpfs mtab_fs=fuse.mtpfs mtab_fs=fuse.DeviceFs(*",
         "",
-        "mtpmount=\"$(which jmtpfs || which simple-mtpfs || which mtpfs || which go-mtpfs)\"\nif [ -z \"$mtpmount\" ]; then\n    echo \"To mount mtp:// you must install jmtpfs, simple-mtpfs, mtpfs, or go-mtpfs,\"\n    echo \"or add a custom protocol handler.\"\n    exit 1\nelif [ \"${mtpmount##*/}\" = \"go-mtpfs\" ]; then\n    # Run go-mtpfs in background, as it does not exit after mount\n    outputtmp=\"$(mktemp --tmpdir spacefm-go-mtpfs-output-XXXXXXXX.tmp)\" || exit 1\n    go-mtpfs \"%a\" &> \"$outputtmp\" &\n    sleep 2s\n    [[ -e \"$outputtmp\" ]] && cat \"$outputtmp\" ; rm -f \"$outputtmp\"\n    # set success status only if positive that mountpoint is mountpoint\n    mountpoint \"%a\"\nelse\n    $mtpmount \"%a\"\nfi\n",
+        "mtpmount=\"$(which jmtpfs || which simple-mtpfs || which mtpfs || which go-mtpfs)\"\nif [ -z \"$mtpmount\" ]; then\n    echo \"To mount mtp:// you must install jmtpfs, simple-mtpfs, mtpfs, or go-mtpfs,\"\n    echo \"or add a custom protocol handler.\"\n    exit 1\nelif [ \"${mtpmount##*/}\" = \"go-mtpfs\" ]; then\n    # Run go-mtpfs in background, as it does not exit after mount\n    outputtmp=\"$(mktemp --tmpdir spacefm-go-mtpfs-output-XXXXXXXX)\" || exit 1\n    go-mtpfs \"%a\" &> \"$outputtmp\" &\n    sleep 2s\n    [[ -e \"$outputtmp\" ]] && cat \"$outputtmp\" ; rm -f \"$outputtmp\"\n    # set success status only if positive that mountpoint is mountpoint\n    mountpoint \"%a\"\nelse\n    $mtpmount \"%a\"\nfi\n",
         FALSE,
         "fusermount -u \"%a\"",
         FALSE,
@@ -477,7 +477,7 @@ const Handler handlers_net[]=
     {
         "hand_net_+fuse",
         "fuse unmount",
-        "mtab_fs=fuse.*",
+        "mtab_fs=fuse.* mtab_fs=fuse",
         "",
         "",
         FALSE,
@@ -1057,18 +1057,28 @@ void ptk_handler_add_new_default( int mode, const char* default_name,
     else
         return;
     set_conf = xset_get( handler_conf_xset[mode] );
-    list = g_strdup( set_conf->s );
 
-    if ( !list )
+    if ( !set_conf->s )
     {
         // create default list - eg sets arc_conf2 ->s
         list = g_strdup( "" );
     }
-    else if ( strstr( list, default_name ) )
+    else
     {
-        // already exists in list
+        // add a space to end of list and end of name before testing to avoid
+        // substring false positive
+        list = g_strdup_printf( "%s ", set_conf->s );
+        str = g_strdup_printf( "%s ", default_name );
+        if ( strstr( list, str ) )
+        {
+            // already exists in list
+            g_free( list );
+            g_free( str );
+            return;
+        }
         g_free( list );
-        return;
+        g_free( str );
+        list = g_strdup( set_conf->s );
     }
     
     for ( i = 0; i < nelements; i++ )
@@ -1133,6 +1143,8 @@ void ptk_handler_add_defaults( int mode, gboolean overwrite,
     int i, nelements;
     char* list;
     char* str;
+    char* testlist;
+    char* testname;
     XSet* set;
     XSet* set_conf;
     const Handler* handler;
@@ -1175,7 +1187,11 @@ void ptk_handler_add_defaults( int mode, gboolean overwrite,
         else
             handler = &handlers_file[i];
 
-        if ( add_missing && !strstr( list, handler->xset_name ) )
+        // add a space to end of list and end of name before testing to avoid
+        // substring false positive
+        testlist = g_strdup_printf( "%s ", list );
+        testname = g_strdup_printf( "%s ", handler->xset_name );
+        if ( add_missing && !strstr( testlist, testname ) )
         {
             // add a missing default handler to the list
             str = list;
@@ -1183,7 +1199,9 @@ void ptk_handler_add_defaults( int mode, gboolean overwrite,
                                             handler->xset_name, NULL );
             g_free( str );
         }
-        if ( add_missing || strstr( list, handler->xset_name ) )
+        g_free( testlist );
+        testlist = g_strdup_printf( "%s ", list );
+        if ( add_missing || strstr( testlist, testname ) )
         {
             set = xset_is( handler->xset_name );
             if ( !set || overwrite )
@@ -1209,6 +1227,8 @@ void ptk_handler_add_defaults( int mode, gboolean overwrite,
                 set->disable = TRUE;
             }
         }
+        g_free( testlist );
+        g_free( testname );
     }
     // update handler list
     g_free( set_conf->s );

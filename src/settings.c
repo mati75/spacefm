@@ -45,7 +45,7 @@
 #include "ptk-location-view.h"
 #include "exo-icon-chooser-dialog.h" /* for exo_icon_chooser_dialog_new */
 
-#define CONFIG_VERSION "37"   // 1.0.5
+#define CONFIG_VERSION "38"   // 1.0.6
 
 #define DEFAULT_TMP_DIR "/tmp"
 
@@ -1587,6 +1587,11 @@ void load_settings( char* config_dir )
                 set->x = g_strdup( "optical=1 removable=1" );
             }
         }
+    }
+    if ( ver < 38 && !xset_is( "hand_net_+fuse" ) /*only once*/ ) // < 1.0.6
+    {
+        // add missing fuse handler to bottom of list
+        ptk_handler_add_new_default( HANDLER_MODE_NET, "hand_net_+fuse", FALSE );
     }
 
     // add default bookmarks
@@ -8307,16 +8312,18 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
 
     // show menu
     gtk_widget_show_all( GTK_WIDGET( design_menu ) );
+    /* sfm 1.0.6 passing button (3) here when menu == NULL causes items in New
+     * submenu to not activate with some trackpads (eg two-finger right-click)
+     * to open original design menu.  Affected only bookmarks pane and toolbar
+     * where menu == NULL.  So pass 0 for button if !menu. */
     gtk_menu_popup( GTK_MENU( design_menu ), menu ? GTK_WIDGET( menu ) : NULL,
-                                        NULL, NULL, NULL, button, time );
+                                NULL, NULL, NULL, menu ? button : 0, time );
     if ( menu )
     {
         gtk_widget_set_sensitive( GTK_WIDGET( menu ), FALSE );    
         g_signal_connect( menu, "hide", G_CALLBACK( on_menu_hide ),
                                                             design_menu );
     }
-    //g_signal_connect( menu, "deactivate",  //doesn't work for menubar
-    //                  G_CALLBACK( xset_design_destroy), design_menu );
     g_signal_connect( design_menu, "selection-done",
                       G_CALLBACK( gtk_widget_destroy ), NULL );
     g_signal_connect( design_menu, "key_press_event",
@@ -8332,9 +8339,7 @@ GtkWidget* xset_design_show_menu( GtkWidget* menu, XSet* set, XSet* book_insert,
 gboolean xset_design_cb( GtkWidget* item, GdkEventButton* event, XSet* set )
 {
     int job = -1;
-        
-//printf("xset_design_cb\n");
-        
+    
     GtkWidget* menu = item ? 
                     (GtkWidget*)g_object_get_data( G_OBJECT(item), "menu" ) :
                     NULL;
