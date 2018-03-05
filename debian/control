@@ -15,7 +15,7 @@ Vcs-Browser: https://github.com/mati75/spacefm.git
 Package: spacefm
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
- desktop-file-utils, shared-mime-info
+ desktop-file-utils, shared-mime-info, e2fsprogs
 Recommends: udisks2
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs, dbus
 Replaces: spacefm-gtk3, spacefm (<< 0.9), spacefm-common (<< 1.0.5-2~)
@@ -57,7 +57,7 @@ Description: Multi-panel tabbed file manager - common files
 Package: spacefm-gtk3
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends}, spacefm-common (= ${source:Version}),
- desktop-file-utils, shared-mime-info
+ desktop-file-utils, shared-mime-info, e2fsprogs
 Recommends: udisks2
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs, dbus
 Replaces: spacefm, spacefm-gtk3, spacefm-common (<< 1.0.5-2~)
