@@ -6,8 +6,8 @@ spacefm (1.0.6-1) UNRELEASED; urgency=medium
   * debian/patches:
     + Add drop-gnome-common-macros.patch to drop deprecated gnome-common
     macros/variables. (Closes: #830003)
-  * Use fix for Unity menu issue as patch, not script.
   * Update debian/copyright.
+  * Drop changes from Ubuntu - fixed upstream.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 26 Mar 2017 14:35:41 +0200
 
