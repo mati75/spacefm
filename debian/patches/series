@@ -2,4 +2,4 @@ update_desktop_files.patch
 drop_spacefm-installer.patch
 fix-spelling-error.patch
 drop-gnome-common-macros.patch
-a790d3f0f665601a873a50e350bbf684bdf1ac04.patch
+add_optional_close_last_tab.patch
