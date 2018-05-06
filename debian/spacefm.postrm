@@ -20,9 +20,8 @@ set -e
 
 
 case "$1" in
-    upgrade)
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
         #do nothing
-        true
     ;;
     purge)
         #fix 782975
