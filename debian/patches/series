@@ -3,3 +3,4 @@ drop_spacefm-installer.patch
 fix-spelling-error.patch
 drop-gnome-common-macros.patch
 add_optional_close_last_tab.patch
+0001-glibc-2.28-compatibility.patch
