@@ -1,4 +1,4 @@
-spacefm (1.0.6-4) UNRELEASED; urgency=medium
+spacefm (1.0.6-4) unstable; urgency=medium
 
   * debian/patches:
     + Add 0001-glibc-2.28-compatibility.patch for fix FTBFS with
@@ -6,11 +6,11 @@ spacefm (1.0.6-4) UNRELEASED; urgency=medium
   * debian/control:
     + Bump to Standards-Version to 4.2.1.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 14 Dec 2018 23:59:46 +0100
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sat, 15 Dec 2018 17:13:04 +0100
 
 spacefm (1.0.6-3) unstable; urgency=medium
 
-  * Added all cases to postrm script. (Closes: #893237) 
+  * Added all cases to postrm script. (Closes: #893237)
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 29 Apr 2018 22:36:49 +0200
 
