@@ -1,3 +1,9 @@
+spacefm (1.0.6-5) UNRELEASED; urgency=medium
+
+  * 
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 26 Apr 2019 13:46:44 +0200
+
 spacefm (1.0.6-4) unstable; urgency=medium
 
   * debian/patches:
