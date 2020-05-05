@@ -5,6 +5,8 @@ spacefm (1.0.6-5) UNRELEASED; urgency=medium
   * Wrap long lines in changelog entries: 1.0.6-1.
   * Use secure URI in Homepage field.
   * Set debhelper-compat version in Build-Depends.
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
+    Repository-Browse.
 
  -- Debian Janitor <janitor@jelmer.uk>  Tue, 05 May 2020 02:26:03 +0000
 
