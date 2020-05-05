@@ -1,3 +1,16 @@
+spacefm (1.0.6-5) UNRELEASED; urgency=medium
+
+  * debian/copyright: use spaces rather than tabs to start continuation
+    lines.
+  * Wrap long lines in changelog entries: 1.0.6-1.
+  * Use secure URI in Homepage field.
+  * Set debhelper-compat version in Build-Depends.
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
+    Repository-Browse.
+  * Drop unnecessary dependency on dh-autoreconf.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Tue, 05 May 2020 02:26:03 +0000
+
 spacefm (1.0.6-4) unstable; urgency=medium
 
   * debian/patches:
@@ -33,7 +46,8 @@ spacefm (1.0.6-1) unstable; urgency=medium
   * debian/patches:
     + Add drop-gnome-common-macros.patch to drop deprecated gnome-common
     macros/variables. (Closes: #830003)
-    + Add add_optional_close_last_tab.patch to Optionally close the panel/application
+    + Add add_optional_close_last_tab.patch to Optionally close the
+      panel/application
     when last tab is closed.
   * Update debian/copyright.
   * Drop changes from Ubuntu - fixed upstream.
