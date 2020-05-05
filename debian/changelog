@@ -1,5 +1,6 @@
 spacefm (1.0.6-5) UNRELEASED; urgency=medium
 
+  [ Debian Janitor ]
   * debian/copyright: use spaces rather than tabs to start continuation
     lines.
   * Wrap long lines in changelog entries: 1.0.6-1.
@@ -8,6 +9,9 @@ spacefm (1.0.6-5) UNRELEASED; urgency=medium
   * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
     Repository-Browse.
   * Drop unnecessary dependency on dh-autoreconf.
+
+  [ Mateusz Łukasik ]
+  * Fix FTBFS with gcc-10. (Closes: #957829)
 
  -- Debian Janitor <janitor@jelmer.uk>  Tue, 05 May 2020 02:26:03 +0000
 

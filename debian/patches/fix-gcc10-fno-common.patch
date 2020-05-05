@@ -1,0 +1,94 @@
+Description: Fix FTBFS with gcc-10
+Author: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Debian-Bug: https://bugs.debian.org/957829
+
+--- a/src/settings.c	2018-03-05 01:04:33.000000000 +0900
++++ b/src/settings.c	2020-01-26 15:12:05.117419230 +0900
+@@ -118,6 +118,28 @@ XSet* book_icon_set_cached = NULL;
+ guint xset_autosave_timer = 0;
+ gboolean xset_autosave_request = FALSE;
+ 
++// cache these for speed in event handlers
++XSet* evt_win_focus;
++XSet* evt_win_move;
++XSet* evt_win_click;
++XSet* evt_win_key;
++XSet* evt_win_close;
++XSet* evt_pnl_show;
++XSet* evt_pnl_focus;
++XSet* evt_pnl_sel;
++XSet* evt_tab_new;
++XSet* evt_tab_chdir;
++XSet* evt_tab_focus;
++XSet* evt_tab_close;
++XSet* evt_device;
++
++// instance-wide command history
++GList* xset_cmd_history;
++
++// These will contain the su and gsu settings from /etc/spacefm/spacefm.conf
++char* settings_terminal_su;
++char* settings_graphical_su;
++
+ typedef void ( *SettingsParseFunc ) ( char* line );
+ 
+ static void color_from_str( GdkColor* ret, const char* value );
+--- a/src/settings.h	2018-03-05 01:04:33.000000000 +0900
++++ b/src/settings.h	2020-01-26 15:12:09.896433317 +0900
+@@ -120,7 +120,7 @@ const char* xset_get_user_tmp_dir();
+ ///////////////////////////////////////////////////////////////////////////////
+ //MOD extra settings below
+ 
+-GList* xsets;
++extern GList* xsets;
+ 
+ enum {
+     XSET_B_UNSET,
+@@ -311,22 +311,22 @@ typedef struct
+ } XMenuItem;
+ 
+ // cache these for speed in event handlers
+-XSet* evt_win_focus;
+-XSet* evt_win_move;
+-XSet* evt_win_click;
+-XSet* evt_win_key;
+-XSet* evt_win_close;
+-XSet* evt_pnl_show;
+-XSet* evt_pnl_focus;
+-XSet* evt_pnl_sel;
+-XSet* evt_tab_new;
+-XSet* evt_tab_chdir;
+-XSet* evt_tab_focus;
+-XSet* evt_tab_close;
+-XSet* evt_device;
++extern XSet* evt_win_focus;
++extern XSet* evt_win_move;
++extern XSet* evt_win_click;
++extern XSet* evt_win_key;
++extern XSet* evt_win_close;
++extern XSet* evt_pnl_show;
++extern XSet* evt_pnl_focus;
++extern XSet* evt_pnl_sel;
++extern XSet* evt_tab_new;
++extern XSet* evt_tab_chdir;
++extern XSet* evt_tab_focus;
++extern XSet* evt_tab_close;
++extern XSet* evt_device;
+ 
+ // instance-wide command history
+-GList* xset_cmd_history;
++extern GList* xset_cmd_history;
+ 
+ static const char* terminal_programs[] =  //for pref-dialog.c
+ {
+@@ -374,8 +374,8 @@ static const char* gsu_commands[] = // o
+ };
+ 
+ // These will contain the su and gsu settings from /etc/spacefm/spacefm.conf
+-char* settings_terminal_su;
+-char* settings_graphical_su;
++extern char* settings_terminal_su;
++extern char* settings_graphical_su;
+ 
+ typedef struct
+ {
