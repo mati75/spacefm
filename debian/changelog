@@ -1,4 +1,4 @@
-spacefm (1.0.6-5) UNRELEASED; urgency=medium
+spacefm (1.0.6-5) unstable; urgency=medium
 
   [ Debian Janitor ]
   * debian/copyright: use spaces rather than tabs to start continuation
@@ -12,8 +12,10 @@ spacefm (1.0.6-5) UNRELEASED; urgency=medium
 
   [ Mateusz Łukasik ]
   * Fix FTBFS with gcc-10. (Closes: #957829)
+    * debian/control:
+    + Bump to Standards-Version to 4.5.0.
 
- -- Debian Janitor <janitor@jelmer.uk>  Tue, 05 May 2020 02:26:03 +0000
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 13 Aug 2020 11:45:23 +0200
 
 spacefm (1.0.6-4) unstable; urgency=medium
 
