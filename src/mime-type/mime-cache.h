@@ -22,52 +22,55 @@
 #ifndef _MIME_CACHE_H_INCLUDED_
 #define _MIME_CACHE_H_INCLUDED_
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-struct _MimeCache
+typedef struct MimeCache
 {
     char* file_path;
-    gboolean has_reverse_suffix : 1; /* since mime.cache v1.1, shared mime info v0.4 */
-    gboolean has_str_weight : 1; /* since mime.cache v1.1, shared mime info v0.4 */
+    bool has_reverse_suffix : 1; /* since mime.cache v1.1, shared mime info v0.4 */
+    bool has_str_weight : 1;     /* since mime.cache v1.1, shared mime info v0.4 */
     const char* buffer;
-    guint size;
+    unsigned int size;
 
-    guint32 n_alias;
+    uint32_t n_alias;
     const char* alias;
 
-    guint32 n_parents;
+    uint32_t n_parents;
     const char* parents;
 
-    guint32 n_literals;
+    uint32_t n_literals;
     const char* literals;
 
-    guint32 n_globs;
+    uint32_t n_globs;
     const char* globs;
 
-    guint32 n_suffix_roots;
+    uint32_t n_suffix_roots;
     const char* suffix_roots;
 
-    guint32 n_magics;
-    guint32 magic_max_extent;
+    uint32_t n_magics;
+    uint32_t magic_max_extent;
     const char* magics;
-};
-typedef struct _MimeCache MimeCache;
+} MimeCache;
 
-MimeCache* mime_cache_new( const char* file_path );
-gboolean mime_cache_load( MimeCache* cache, const char* file_path );
-gboolean mime_cache_reload( MimeCache* cache );
-void mime_cache_free( MimeCache* cache );
+MimeCache* mime_cache_new(const char* file_path);
+bool mime_cache_load(MimeCache* cache, const char* file_path);
+bool mime_cache_reload(MimeCache* cache);
+void mime_cache_free(MimeCache* cache);
 
-const char* mime_cache_lookup_literal( MimeCache* cache, const char* filename );
-const char* mime_cache_lookup_glob( MimeCache* cache, const char* filename, int *glob_len );
-const char* mime_cache_lookup_suffix( MimeCache* cache, const char* filename, const char** suffix_pos );
-const char* mime_cache_lookup_magic( MimeCache* cache, const char* data, int len );
-const char** mime_cache_lookup_parents( MimeCache* cache, const char* mime_type );
-const char* mime_cache_lookup_alias( MimeCache* cache, const char* mime_type );
+const char* mime_cache_lookup_literal(MimeCache* cache, const char* filename);
+const char* mime_cache_lookup_glob(MimeCache* cache, const char* filename, int* glob_len);
+const char* mime_cache_lookup_suffix(MimeCache* cache, const char* filename,
+                                     const char** suffix_pos);
+const char* mime_cache_lookup_magic(MimeCache* cache, const char* data, int len);
+const char** mime_cache_lookup_parents(MimeCache* cache, const char* mime_type);
+const char* mime_cache_lookup_alias(MimeCache* cache, const char* mime_type);
 
 G_END_DECLS
 #endif

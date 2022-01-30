@@ -1,32 +1,33 @@
 /*
-*  C Interface: ptk-file-task
-*
-* Description: 
-*
-*
-* Author: Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>, (C) 2006
-*
-* Copyright: See COPYING file that comes with this distribution
-*
-*/
+ *  C Interface: ptk-file-task
+ *
+ * Description:
+ *
+ *
+ * Author: Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>, (C) 2006
+ *
+ * Copyright: See COPYING file that comes with this distribution
+ *
+ */
 
-#include "vfs-file-task.h"
+#include <stdbool.h>
+
+#include "../vfs/vfs-file-task.h"
+
 #include <gtk/gtk.h>
 #include "settings.h"
-
 
 #ifndef _PTK_FILE_TASK_
 #define _PTK_FILE_TASK_
 
-typedef struct _PtkFileTask PtkFileTask;
-
-enum {
+enum
+{
     PTASK_ERROR_FIRST,
     PTASK_ERROR_ANY,
     PTASK_ERROR_CONT
 };
-    
-struct _PtkFileTask
+
+typedef struct PtkFileTask
 {
     VFSFileTask* task;
 
@@ -49,39 +50,31 @@ struct _PtkFileTask
 
     GtkTextBuffer* log_buf;
     GtkTextMark* log_end;
-    gboolean log_appended;
-    guint err_count;
+    bool log_appended;
+    unsigned int err_count;
     char err_mode;
-    
-/*
-    int percent;
-    off64_t total_size;     // Total size of the files to be processed, in bytes
-    off64_t progress;       // Total size of current processed files, in btytes 
-    guint item_count;
-    guint old_err_count;
-*/
-    gboolean complete;
-    gboolean aborted;
-    gboolean pause_change;
-    gboolean pause_change_view;
-    gboolean force_scroll;
-    
+
+    bool complete;
+    bool aborted;
+    bool pause_change;
+    bool pause_change_view;
+    bool force_scroll;
+
     /* <private> */
-    guint timeout;
-    gboolean restart_timeout;
-    guint progress_timer;
+    unsigned int timeout;
+    bool restart_timeout;
+    unsigned int progress_timer;
     char progress_count;
     GFunc complete_notify;
-    gpointer user_data;
-    gboolean keep_dlg;
-    gboolean pop_detail;
+    void* user_data;
+    bool keep_dlg;
+    bool pop_detail;
     char* pop_handler;
-    
+
     GCond* query_cond;
     GCond* query_cond_last;
     char** query_new_dest;
-    GtkEntry* query_entry;
-    gboolean query_ret;
+    bool query_ret;
 
     char* dsp_file_count;
     char* dsp_size_tally;
@@ -90,38 +83,32 @@ struct _PtkFileTask
     char* dsp_curest;
     char* dsp_avgspeed;
     char* dsp_avgest;
+} PtkFileTask;
 
-};
+void ptk_file_task_lock(PtkFileTask* ptask);
+void ptk_file_task_unlock(PtkFileTask* ptask);
 
-PtkFileTask* ptk_file_task_new( VFSFileTaskType type,
-                                GList* src_files,
-                                const char* dest_dir,
-                                GtkWindow* parent_window,
-                                GtkWidget* task_view );
-PtkFileTask* ptk_file_exec_new( const char* item_name, const char* dir,
-                                    GtkWidget* parent, GtkWidget* task_view );
+PtkFileTask* ptk_file_task_new(VFSFileTaskType type, GList* src_files, const char* dest_dir,
+                               GtkWindow* parent_window, GtkWidget* task_view);
+PtkFileTask* ptk_file_exec_new(const char* item_name, const char* dir, GtkWidget* parent,
+                               GtkWidget* task_view);
 
-void ptk_file_task_destroy( PtkFileTask* ptask );
+void ptk_file_task_destroy(PtkFileTask* ptask);
 
-void ptk_file_task_set_complete_notify( PtkFileTask* ptask,
-                                        GFunc callback,
-                                        gpointer user_data );
+void ptk_file_task_set_complete_notify(PtkFileTask* ptask, GFunc callback, void* user_data);
 
-void ptk_file_task_set_chmod( PtkFileTask* ptask,
-                              guchar* chmod_actions );
+void ptk_file_task_set_chmod(PtkFileTask* ptask, unsigned char* chmod_actions);
 
-void ptk_file_task_set_chown( PtkFileTask* ptask,
-                              uid_t uid, gid_t gid );
+void ptk_file_task_set_chown(PtkFileTask* ptask, uid_t uid, gid_t gid);
 
-void ptk_file_task_set_recursive( PtkFileTask* ptask, gboolean recursive );
+void ptk_file_task_set_recursive(PtkFileTask* ptask, bool recursive);
 
-void ptk_file_task_run( PtkFileTask* ptask );
+void ptk_file_task_run(PtkFileTask* ptask);
 
-gboolean ptk_file_task_cancel( PtkFileTask* ptask );
+bool ptk_file_task_cancel(PtkFileTask* ptask);
 
-void ptk_file_task_pause( PtkFileTask* ptask, int state );
+void ptk_file_task_pause(PtkFileTask* ptask, int state);
 
-void ptk_file_task_progress_open( PtkFileTask* ptask );
+void ptk_file_task_progress_open(PtkFileTask* ptask);
 
 #endif
-

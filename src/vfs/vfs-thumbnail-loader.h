@@ -22,6 +22,8 @@
 #ifndef _VFS_THUMBNAIL_LOADER_H_
 #define _VFS_THUMBNAIL_LOADER_H_
 
+#include <stdbool.h>
+
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "vfs-dir.h"
@@ -30,13 +32,13 @@
 
 G_BEGIN_DECLS
 
-typedef struct _VFSThumbnailLoader VFSThumbnailLoader;
+typedef struct VFSThumbnailLoader VFSThumbnailLoader;
 
-VFSThumbnailLoader* vfs_thumbnail_loader_new( VFSDir* dir );
-void vfs_thumbnail_loader_free( VFSThumbnailLoader* loader );
+VFSThumbnailLoader* vfs_thumbnail_loader_new(VFSDir* dir);
+void vfs_thumbnail_loader_free(VFSThumbnailLoader* loader);
 
-void vfs_thumbnail_loader_request( VFSDir* dir, VFSFileInfo* file, gboolean is_big );
-void vfs_thumbnail_loader_cancel_all_requests( VFSDir* dir, gboolean is_big );
+void vfs_thumbnail_loader_request(VFSDir* dir, VFSFileInfo* file, bool is_big);
+void vfs_thumbnail_loader_cancel_all_requests(VFSDir* dir, bool is_big);
 
 /* Load thumbnail for the specified file
  *  If the caller knows mtime of the file, it should pass mtime to this function to
@@ -44,16 +46,10 @@ void vfs_thumbnail_loader_cancel_all_requests( VFSDir* dir, gboolean is_big );
  *  Otherwise, it should pass 0 for mtime, and the function will do stat() on the file
  *  to get mtime.
  */
-GdkPixbuf* vfs_thumbnail_load_for_uri(  const char* uri, int size, time_t mtime );
-GdkPixbuf* vfs_thumbnail_load_for_file( const char* file, int size, time_t mtime );
+GdkPixbuf* vfs_thumbnail_load_for_uri(const char* uri, int size, time_t mtime);
+GdkPixbuf* vfs_thumbnail_load_for_file(const char* file, int size, time_t mtime);
 
 void vfs_thumbnail_init();
-
-/*
-void vfs_thumbnail_delete_for _file();
-void vfs_thumbnail_delete_for _uri();
-void vfs_thumbnail_delete_all();
-*/
 
 G_END_DECLS
 

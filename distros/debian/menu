@@ -1,3 +1,0 @@
-?package(spacefm): needs=X11 \
-        section="Applications/File Management" \
-        title="SpaceFM" command="/usr/bin/spacefm"

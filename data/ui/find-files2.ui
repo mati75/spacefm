@@ -114,10 +114,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="fn_pattern">
+                      <object class="GtkComboBoxEntry" id="fn_pattern">
                         <property name="visible">True</property>
                         <property name="has_focus">True</property>
-                        <property name="has_entry">True</property>
                         <child internal-child="entry">
                           <object class="GtkEntry" id="fn_pattern_entry">
                             <property name="visible">True</property>
@@ -214,7 +213,7 @@
                             <child>
                               <object class="GtkCheckButton" id="all_files">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">All Files and Folders</property>
+                                <property name="label" translatable="yes">All Files and Directories</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -276,7 +275,7 @@
                                     <property name="visible">True</property>
                                     <property name="spacing">6</property>
                                     <child>
-                                      <object class="GtkButton" id="add_folder_btn">
+                                      <object class="GtkButton" id="add_directory_btn">
                                         <property name="visible">True</property>
                                         <property name="label">gtk-add</property>
                                         <property name="use_stock">True</property>
@@ -286,7 +285,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkButton" id="remove_folder_btn">
+                                      <object class="GtkButton" id="remove_directory_btn">
                                         <property name="visible">True</property>
                                         <property name="label">gtk-remove</property>
                                         <property name="use_stock">True</property>
@@ -310,7 +309,7 @@
                             <child>
                               <object class="GtkCheckButton" id="include_sub">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Search in subfolders</property>
+                                <property name="label" translatable="yes">Search in subdirectories</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                               </object>

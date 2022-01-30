@@ -1,0 +1,57 @@
+#preprocessor
+option(
+  'gtk2',
+  type : 'boolean',
+  value : true,
+  description : 'build gtk2 gui',
+)
+option(
+  'gtk3',
+  type : 'boolean',
+  value : false,
+  description : 'build gtk3 gui',
+)
+option(
+  'nls',
+  type : 'boolean',
+  value : false,
+  description : 'use native language support',
+)
+option(
+  'sn',
+  type : 'boolean',
+  value : false,
+  description : 'enable desktop startup notifications',
+)
+option(
+  'deprecated-hw',
+  type : 'boolean',
+  value : false,
+  description : 'enable support for firewire, audiocd, dvd, cdrom, floppy <TODO>',
+)
+option(
+  'mmap',
+  type : 'boolean',
+  value : true,
+  description : 'build with mmap support',
+)
+option(
+  'xxhash',
+  type : 'boolean',
+  value : true,
+  description : 'ignore freedesktop standards and use xxhash for thumbnail hasher',
+)
+
+#other
+#TODO bashpath, etc
+option('htmldir',
+  type : 'string',
+  value : '',
+  description : 'default is, /usr/share',
+)
+option('package-ui-dir',
+  type : 'string',
+  value : '',
+  description : 'default is, /usr/share/spacefm/ui',
+)
+

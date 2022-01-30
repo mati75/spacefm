@@ -1,130 +1,108 @@
 /*
-*  C Implementation: ptkfileiconrenderer
-*
-* Description: PtkFileIconRenderer is used to render file icons
-*
-*
-* Author: Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>, (C) 2006
-*
-* Copyright: See COPYING file that comes with this distribution
-*
-* Part of this class is taken from GtkCellRendererPixbuf written by
-* Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
-*
-*/
+ *  C Implementation: ptkfileiconrenderer
+ *
+ * Description: PtkFileIconRenderer is used to render file icons
+ *
+ *
+ * Author: Hong Jen Yee (PCMan) <pcman.tw (AT) gmail.com>, (C) 2006
+ *
+ * Copyright: See COPYING file that comes with this distribution
+ *
+ * Part of this class is taken from GtkCellRendererPixbuf written by
+ * Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
+ *
+ */
 
+#include <stdbool.h>
+#include <stdint.h>
 
 #include "ptk-file-icon-renderer.h"
 
-static void
-ptk_file_icon_renderer_init ( PtkFileIconRenderer *renderer );
+static void ptk_file_icon_renderer_init(PtkFileIconRenderer* renderer);
 
-static void
-ptk_file_icon_renderer_class_init ( PtkFileIconRendererClass *klass );
+static void ptk_file_icon_renderer_class_init(PtkFileIconRendererClass* klass);
 
-static void
-ptk_file_icon_renderer_get_property ( GObject *object,
-                                      guint param_id,
-                                      GValue *value,
-                                      GParamSpec *pspec );
+static void ptk_file_icon_renderer_get_property(GObject* object, unsigned int param_id,
+                                                GValue* value, GParamSpec* pspec);
 
-static void
-ptk_file_icon_renderer_set_property ( GObject *object,
-                                      guint param_id,
-                                      const GValue *value,
-                                      GParamSpec *pspec );
+static void ptk_file_icon_renderer_set_property(GObject* object, unsigned int param_id,
+                                                const GValue* value, GParamSpec* pspec);
 
-static void
-ptk_file_icon_renderer_finalize ( GObject *gobject );
+static void ptk_file_icon_renderer_finalize(GObject* gobject);
 
-static void
-ptk_file_icon_renderer_get_size ( GtkCellRenderer *cell,
-                                  GtkWidget *widget,
-#if GTK_CHECK_VERSION (3, 0, 0)
-                                  const GdkRectangle *cell_area,
-#else
-                                  GdkRectangle *cell_area,
+static void ptk_file_icon_renderer_get_size(GtkCellRenderer* cell, GtkWidget* widget,
+#if (GTK_MAJOR_VERSION == 3)
+                                            const GdkRectangle* cell_area,
+#elif (GTK_MAJOR_VERSION == 2)
+                                            GdkRectangle* cell_area,
 #endif
-                                  gint *x_offset,
-                                  gint *y_offset,
-                                  gint *width,
-                                  gint *height );
+                                            int* x_offset, int* y_offset, int* width, int* height);
 
-#if GTK_CHECK_VERSION (3, 0, 0)
-static void
-ptk_file_icon_renderer_render ( GtkCellRenderer *cell,
-                                cairo_t *cr,
-                                GtkWidget *widget,
-                                const GdkRectangle *background_area,
-                                const GdkRectangle *cell_area,
-                                GtkCellRendererState flags );
-#else
-static void
-ptk_file_icon_renderer_render ( GtkCellRenderer *cell,
-                                GdkWindow *window,
-                                GtkWidget *widget,
-                                GdkRectangle *background_area,
-                                GdkRectangle *cell_area,
-                                GdkRectangle *expose_area,
-                                guint flags );
+#if (GTK_MAJOR_VERSION == 3)
+static void ptk_file_icon_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget,
+                                          const GdkRectangle* background_area,
+                                          const GdkRectangle* cell_area,
+                                          GtkCellRendererState flags);
+#elif (GTK_MAJOR_VERSION == 2)
+static void ptk_file_icon_renderer_render(GtkCellRenderer* cell, GdkWindow* window,
+                                          GtkWidget* widget, GdkRectangle* background_area,
+                                          GdkRectangle* cell_area, GdkRectangle* expose_area,
+                                          unsigned int flags);
 #endif
 
 enum
 {
     PROP_INFO = 1,
-    PROP_FLAGS,
     PROP_FOLLOW_STATE
 };
 
-static gpointer parent_class;
+static void* parent_class;
 
 static GdkPixbuf* link_icon = NULL;
 
 /* GdkPixbuf RGBA C-Source image dump */
 #ifdef __SUNPRO_C
-#pragma align 4 (link_icon_data)
+#pragma align 4(link_icon_data)
 #endif
 #ifdef __GNUC__
-static const guint8 link_icon_data[] __attribute__ ((__aligned__ (4))) =
+static const uint8_t link_icon_data[] __attribute__((__aligned__(4))) =
 #else
-static const guint8 link_icon_data[] =
+static const uint8_t link_icon_data[] =
 #endif
-    { ""
-      /* Pixbuf magic (0x47646b50) */
-      "GdkP"
-      /* length: header (24) + pixel_data (400) */
-      "\0\0\1\250"
-      /* pixdata_type (0x1010002) */
-      "\1\1\0\2"
-      /* rowstride (40) */
-      "\0\0\0("
-      /* width (10) */
-      "\0\0\0\12"
-      /* height (10) */
-      "\0\0\0\12"
-      /* pixel_data: */
-      "\200\200\200\377\200\200\200\377\200\200\200\377\200\200\200\377\200"
-      "\200\200\377\200\200\200\377\200\200\200\377\200\200\200\377\200\200"
-      "\200\377\0\0\0\377\200\200\200\377\377\377\377\377\377\377\377\377\377"
-      "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
-      "\377\377\377\377\377\377\0\0\0\377\200\200\200\377\377\377\377\377\0"
-      "\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\377\377\377\377\377"
-      "\377\377\377\0\0\0\377\200\200\200\377\377\377\377\377\0\0\0\377\0\0"
-      "\0\377\0\0\0\377\0\0\0\377\377\377\377\377\377\377\377\377\377\377\377"
-      "\377\0\0\0\377\200\200\200\377\377\377\377\377\0\0\0\377\0\0\0\377\0"
-      "\0\0\377\0\0\0\377\0\0\0\377\377\377\377\377\377\377\377\377\0\0\0\377"
-      "\200\200\200\377\377\377\377\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0"
-      "\377\0\0\0\377\0\0\0\377\377\377\377\377\0\0\0\377\200\200\200\377\377"
-      "\377\377\377\0\0\0\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0"
-      "\0\377\0\0\0\377\377\377\377\377\0\0\0\377\200\200\200\377\377\377\377"
-      "\377\377\377\377\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0"
-      "\377\0\0\0\377\377\377\377\377\0\0\0\377\200\200\200\377\377\377\377"
-      "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
-      "\377\377\377\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0\377"
-      "\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377"
-      "\0\0\0\377\0\0\0\377"
-    };
-
+    {""
+     /* Pixbuf magic (0x47646b50) */
+     "GdkP"
+     /* length: header (24) + pixel_data (400) */
+     "\0\0\1\250"
+     /* pixdata_type (0x1010002) */
+     "\1\1\0\2"
+     /* rowstride (40) */
+     "\0\0\0("
+     /* width (10) */
+     "\0\0\0\12"
+     /* height (10) */
+     "\0\0\0\12"
+     /* pixel_data: */
+     "\200\200\200\377\200\200\200\377\200\200\200\377\200\200\200\377\200"
+     "\200\200\377\200\200\200\377\200\200\200\377\200\200\200\377\200\200"
+     "\200\377\0\0\0\377\200\200\200\377\377\377\377\377\377\377\377\377\377"
+     "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
+     "\377\377\377\377\377\377\0\0\0\377\200\200\200\377\377\377\377\377\0"
+     "\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\377\377\377\377\377"
+     "\377\377\377\0\0\0\377\200\200\200\377\377\377\377\377\0\0\0\377\0\0"
+     "\0\377\0\0\0\377\0\0\0\377\377\377\377\377\377\377\377\377\377\377\377"
+     "\377\0\0\0\377\200\200\200\377\377\377\377\377\0\0\0\377\0\0\0\377\0"
+     "\0\0\377\0\0\0\377\0\0\0\377\377\377\377\377\377\377\377\377\0\0\0\377"
+     "\200\200\200\377\377\377\377\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0"
+     "\377\0\0\0\377\0\0\0\377\377\377\377\377\0\0\0\377\200\200\200\377\377"
+     "\377\377\377\0\0\0\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0"
+     "\0\377\0\0\0\377\377\377\377\377\0\0\0\377\200\200\200\377\377\377\377"
+     "\377\377\377\377\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0"
+     "\377\0\0\0\377\377\377\377\377\0\0\0\377\200\200\200\377\377\377\377"
+     "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
+     "\377\377\377\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0\377"
+     "\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377"
+     "\0\0\0\377\0\0\0\377"};
 
 /***************************************************************************
  *
@@ -135,35 +113,32 @@ static const guint8 link_icon_data[] =
  *
  ***************************************************************************/
 
-GType
-ptk_file_icon_renderer_get_type ( void )
+GType ptk_file_icon_renderer_get_type(void)
 {
     static GType renderer_type = 0;
-    if ( G_UNLIKELY( !renderer_type ) )
+    if (G_UNLIKELY(!renderer_type))
     {
-        static const GTypeInfo renderer_info =
-            {
-                sizeof ( PtkFileIconRendererClass ),
-                NULL,                                                        /* base_init */
-                NULL,                                                        /* base_finalize */
-                ( GClassInitFunc ) ptk_file_icon_renderer_class_init,
-                NULL,                                                        /* class_finalize */
-                NULL,                                                        /* class_data */
-                sizeof ( PtkFileIconRenderer ),
-                0,                                                           /* n_preallocs */
-                ( GInstanceInitFunc ) ptk_file_icon_renderer_init,
-            };
+        static const GTypeInfo renderer_info = {
+            sizeof(PtkFileIconRendererClass),
+            NULL, /* base_init */
+            NULL, /* base_finalize */
+            (GClassInitFunc)ptk_file_icon_renderer_class_init,
+            NULL, /* class_finalize */
+            NULL, /* class_data */
+            sizeof(PtkFileIconRenderer),
+            0, /* n_preallocs */
+            (GInstanceInitFunc)ptk_file_icon_renderer_init,
+        };
 
         /* Derive from GtkCellRendererPixbuf */
-        renderer_type = g_type_register_static ( GTK_TYPE_CELL_RENDERER_PIXBUF,
-                                                 "PtkFileIconRenderer",
-                                                 &renderer_info,
-                                                 0 );
+        renderer_type = g_type_register_static(GTK_TYPE_CELL_RENDERER_PIXBUF,
+                                               "PtkFileIconRenderer",
+                                               &renderer_info,
+                                               0);
     }
 
     return renderer_type;
 }
-
 
 /***************************************************************************
  *
@@ -172,21 +147,16 @@ ptk_file_icon_renderer_get_type ( void )
  *
  ***************************************************************************/
 
-static void
-ptk_file_icon_renderer_init ( PtkFileIconRenderer *renderer )
+static void ptk_file_icon_renderer_init(PtkFileIconRenderer* renderer)
 {
-    if ( !link_icon )
+    if (!link_icon)
     {
-        link_icon = gdk_pixbuf_new_from_inline(
-                sizeof(link_icon_data),
-                link_icon_data,
-                FALSE, NULL );
-        g_object_add_weak_pointer( G_OBJECT(link_icon), (gpointer)&link_icon  );
+        link_icon = gdk_pixbuf_new_from_inline(sizeof(link_icon_data), link_icon_data, FALSE, NULL);
+        g_object_add_weak_pointer(G_OBJECT(link_icon), (void*)&link_icon);
     }
     else
-        g_object_ref( (link_icon) );
+        g_object_ref((link_icon));
 }
-
 
 /***************************************************************************
  *
@@ -194,39 +164,35 @@ ptk_file_icon_renderer_init ( PtkFileIconRenderer *renderer )
  *
  ***************************************************************************/
 
-static void
-ptk_file_icon_renderer_class_init ( PtkFileIconRendererClass *klass )
+static void ptk_file_icon_renderer_class_init(PtkFileIconRendererClass* klass)
 {
-    GtkCellRendererClass * parent_renderer_class = GTK_CELL_RENDERER_CLASS( klass );
-    GObjectClass *object_class = G_OBJECT_CLASS( klass );
+    GtkCellRendererClass* parent_renderer_class = GTK_CELL_RENDERER_CLASS(klass);
+    GObjectClass* object_class = G_OBJECT_CLASS(klass);
 
-    parent_class = g_type_class_peek_parent ( klass );
+    parent_class = g_type_class_peek_parent(klass);
     object_class->finalize = ptk_file_icon_renderer_finalize;
 
     /* Hook up functions to set and get our
-    *   custom cell renderer properties */
+     *   custom cell renderer properties */
     object_class->get_property = ptk_file_icon_renderer_get_property;
     object_class->set_property = ptk_file_icon_renderer_set_property;
 
     parent_renderer_class->get_size = ptk_file_icon_renderer_get_size;
     parent_renderer_class->render = ptk_file_icon_renderer_render;
 
-    g_object_class_install_property ( object_class,
-                                      PROP_INFO,
-                                      g_param_spec_pointer ( "info",
-                                                             "File info",
-                                                             "File info",
-                                                             G_PARAM_READWRITE ) );
-    g_object_class_install_property ( object_class,
-                                      PROP_FOLLOW_STATE,
-                                      g_param_spec_boolean ( "follow-state",
-                                                             "Follow State",
-                                                             "Whether the rendered pixbuf should be "
-                                                             "colorized according to the state",
-                                                             FALSE,
-                                                             G_PARAM_READWRITE ) );
+    g_object_class_install_property(
+        object_class,
+        PROP_INFO,
+        g_param_spec_pointer("info", "File info", "File info", G_PARAM_READWRITE));
+    g_object_class_install_property(object_class,
+                                    PROP_FOLLOW_STATE,
+                                    g_param_spec_boolean("follow-state",
+                                                         "Follow State",
+                                                         "Whether the rendered pixbuf should be "
+                                                         "colorized according to the state",
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
 }
-
 
 /***************************************************************************
  *
@@ -234,15 +200,14 @@ ptk_file_icon_renderer_class_init ( PtkFileIconRendererClass *klass )
  *
  ***************************************************************************/
 
-static void
-ptk_file_icon_renderer_finalize ( GObject *object )
+static void ptk_file_icon_renderer_finalize(GObject* object)
 {
     PtkFileIconRenderer* renderer = PTK_FILE_ICON_RENDERER(object);
-    if( renderer->info )
-        vfs_file_info_unref( renderer->info );
+    if (renderer->info)
+        vfs_file_info_unref(renderer->info);
 
-    g_object_unref( (link_icon) );
-    ( * G_OBJECT_CLASS ( parent_class ) ->finalize ) ( object );
+    g_object_unref((link_icon));
+    (*G_OBJECT_CLASS(parent_class)->finalize)(object);
 }
 
 /***************************************************************************
@@ -251,32 +216,26 @@ ptk_file_icon_renderer_finalize ( GObject *object )
  *
  ***************************************************************************/
 
-static void
-ptk_file_icon_renderer_get_property ( GObject *object,
-                                      guint param_id,
-                                      GValue *value,
-                                      GParamSpec *psec )
+static void ptk_file_icon_renderer_get_property(GObject* object, unsigned int param_id,
+                                                GValue* value, GParamSpec* psec)
 {
-    PtkFileIconRenderer * renderer = PTK_FILE_ICON_RENDERER( object );
+    PtkFileIconRenderer* renderer = PTK_FILE_ICON_RENDERER(object);
 
-    switch ( param_id )
+    switch (param_id)
     {
-        /*    case PROP_FLAGS:
-              g_value_set_long(value, renderer->flags);
-              break;
-        */
-    case PROP_INFO:
-        g_value_set_pointer( value, renderer->info ? vfs_file_info_ref(renderer->info) : NULL );
+        case PROP_INFO:
+            g_value_set_pointer(value, renderer->info ? vfs_file_info_ref(renderer->info) : NULL);
+            break;
 
-    case PROP_FOLLOW_STATE:
-        g_value_set_boolean ( value, renderer->follow_state );
+        case PROP_FOLLOW_STATE:
+            g_value_set_boolean(value, renderer->follow_state);
+            break;
 
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID ( object, param_id, psec );
-        break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, psec);
+            break;
     }
 }
-
 
 /***************************************************************************
  *
@@ -284,35 +243,24 @@ ptk_file_icon_renderer_get_property ( GObject *object,
  *
  ***************************************************************************/
 
-static void
-ptk_file_icon_renderer_set_property ( GObject *object,
-                                      guint param_id,
-                                      const GValue *value,
-                                      GParamSpec *pspec )
+static void ptk_file_icon_renderer_set_property(GObject* object, unsigned int param_id,
+                                                const GValue* value, GParamSpec* pspec)
 {
-    PtkFileIconRenderer * renderer = PTK_FILE_ICON_RENDERER ( object );
+    PtkFileIconRenderer* renderer = PTK_FILE_ICON_RENDERER(object);
 
-    switch ( param_id )
+    switch (param_id)
     {
-    case PROP_INFO:
-        if( renderer->info )
-            vfs_file_info_unref( renderer->info );
-        renderer->info = g_value_get_pointer( value );
-        break;
-
-        /*
-            case PROP_FLAGS:
-              renderer->flags = g_value_get_long(value);
-              break;
-        */
-
-    case PROP_FOLLOW_STATE:
-        renderer->follow_state = g_value_get_boolean ( value );
-        break;
-
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID( object, param_id, pspec );
-        break;
+        case PROP_INFO:
+            if (renderer->info)
+                vfs_file_info_unref(renderer->info);
+            renderer->info = g_value_get_pointer(value);
+            break;
+        case PROP_FOLLOW_STATE:
+            renderer->follow_state = g_value_get_boolean(value);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
+            break;
     }
 }
 
@@ -322,54 +270,43 @@ ptk_file_icon_renderer_set_property ( GObject *object,
  *
  ***************************************************************************/
 
-GtkCellRenderer *
-ptk_file_icon_renderer_new ( void )
+GtkCellRenderer* ptk_file_icon_renderer_new(void)
 {
-    return ( GtkCellRenderer* ) g_object_new( PTK_TYPE_FILE_ICON_RENDERER, NULL );
+    return (GtkCellRenderer*)g_object_new(PTK_TYPE_FILE_ICON_RENDERER, NULL);
 }
 
-
-static GdkPixbuf *
-create_colorized_pixbuf ( GdkPixbuf *src,
-                          GdkColor *new_color )
+static GdkPixbuf* create_colorized_pixbuf(GdkPixbuf* src, GdkColor* new_color)
 {
-    gint i, j;
-    gint width, height, has_alpha, src_row_stride, dst_row_stride;
-    gint red_value, green_value, blue_value;
-    guchar *target_pixels;
-    guchar *original_pixels;
-    guchar *pixsrc;
-    guchar *pixdest;
-    GdkPixbuf *dest;
+    int red_value = new_color->red / 255.0;
+    int green_value = new_color->green / 255.0;
+    int blue_value = new_color->blue / 255.0;
 
-    red_value = new_color->red / 255.0;
-    green_value = new_color->green / 255.0;
-    blue_value = new_color->blue / 255.0;
+    GdkPixbuf* dest = gdk_pixbuf_new(gdk_pixbuf_get_colorspace(src),
+                                     gdk_pixbuf_get_has_alpha(src),
+                                     gdk_pixbuf_get_bits_per_sample(src),
+                                     gdk_pixbuf_get_width(src),
+                                     gdk_pixbuf_get_height(src));
 
-    dest = gdk_pixbuf_new ( gdk_pixbuf_get_colorspace ( src ),
-                            gdk_pixbuf_get_has_alpha ( src ),
-                            gdk_pixbuf_get_bits_per_sample ( src ),
-                            gdk_pixbuf_get_width ( src ),
-                            gdk_pixbuf_get_height ( src ) );
+    int has_alpha = gdk_pixbuf_get_has_alpha(src);
+    int width = gdk_pixbuf_get_width(src);
+    int height = gdk_pixbuf_get_height(src);
+    int src_row_stride = gdk_pixbuf_get_rowstride(src);
+    int dst_row_stride = gdk_pixbuf_get_rowstride(dest);
+    unsigned char* target_pixels = gdk_pixbuf_get_pixels(dest);
+    unsigned char* original_pixels = gdk_pixbuf_get_pixels(src);
 
-    has_alpha = gdk_pixbuf_get_has_alpha ( src );
-    width = gdk_pixbuf_get_width ( src );
-    height = gdk_pixbuf_get_height ( src );
-    src_row_stride = gdk_pixbuf_get_rowstride ( src );
-    dst_row_stride = gdk_pixbuf_get_rowstride ( dest );
-    target_pixels = gdk_pixbuf_get_pixels ( dest );
-    original_pixels = gdk_pixbuf_get_pixels ( src );
-
-    for ( i = 0; i < height; i++ )
+    int i;
+    for (i = 0; i < height; i++)
     {
-        pixdest = target_pixels + i * dst_row_stride;
-        pixsrc = original_pixels + i * src_row_stride;
-        for ( j = 0; j < width; j++ )
+        unsigned char* pixdest = target_pixels + i * dst_row_stride;
+        unsigned char* pixsrc = original_pixels + i * src_row_stride;
+        int j;
+        for (j = 0; j < width; j++)
         {
-            *pixdest++ = ( *pixsrc++ * red_value ) >> 8;
-            *pixdest++ = ( *pixsrc++ * green_value ) >> 8;
-            *pixdest++ = ( *pixsrc++ * blue_value ) >> 8;
-            if ( has_alpha )
+            *pixdest++ = (*pixsrc++ * red_value) >> 8;
+            *pixdest++ = (*pixsrc++ * green_value) >> 8;
+            *pixdest++ = (*pixsrc++ * blue_value) >> 8;
+            if (has_alpha)
             {
                 *pixdest++ = *pixsrc++;
             }
@@ -378,225 +315,211 @@ create_colorized_pixbuf ( GdkPixbuf *src,
     return dest;
 }
 
-
 /***************************************************************************
-    *
-    *  ptk_file_icon_renderer_render: crucial - do the rendering.
-    *
+ *
+ *  ptk_file_icon_renderer_render: crucial - do the rendering.
+ *
  ***************************************************************************/
 
-#if GTK_CHECK_VERSION (3, 0, 0)
-static void
-ptk_file_icon_renderer_render ( GtkCellRenderer *cell,
-                                cairo_t *cr,
-                                GtkWidget *widget,
-                                const GdkRectangle *background_area,
-                                const GdkRectangle *cell_area,
-                                GtkCellRendererState flags )
-#else
-static void
-ptk_file_icon_renderer_render ( GtkCellRenderer *cell,
-                                GdkWindow *window,
-                                GtkWidget *widget,
-                                GdkRectangle *background_area,
-                                GdkRectangle *cell_area,
-                                GdkRectangle *expose_area,
-                                guint flags )
+#if (GTK_MAJOR_VERSION == 3)
+static void ptk_file_icon_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget,
+                                          const GdkRectangle* background_area,
+                                          const GdkRectangle* cell_area, GtkCellRendererState flags)
+#elif (GTK_MAJOR_VERSION == 2)
+static void ptk_file_icon_renderer_render(GtkCellRenderer* cell, GdkWindow* window,
+                                          GtkWidget* widget, GdkRectangle* background_area,
+                                          GdkRectangle* cell_area, GdkRectangle* expose_area,
+                                          unsigned int flags)
 #endif
 {
-    GtkCellRendererPixbuf * cellpixbuf = ( GtkCellRendererPixbuf * ) cell;
+    GtkCellRendererPixbuf* cellpixbuf = (GtkCellRendererPixbuf*)cell;
 
-    GdkPixbuf *pixbuf;
-    GdkPixbuf *pixbuf_expander_open;
-    GdkPixbuf *pixbuf_expander_closed;
-    GdkPixbuf *invisible = NULL;
-    GdkPixbuf *colorized = NULL;
+    GdkPixbuf* pixbuf;
+    GdkPixbuf* pixbuf_expander_open;
+    GdkPixbuf* pixbuf_expander_closed;
+    GdkPixbuf* invisible = NULL;
+    GdkPixbuf* colorized = NULL;
     GdkRectangle pix_rect;
     GdkRectangle draw_rect;
     VFSFileInfo* file;
-    gint xpad, ypad;
-    gboolean is_expander, is_expanded;
+    int xpad, ypad;
+    int is_expander;
+    int is_expanded;
 
     GtkCellRendererClass* parent_renderer_class;
 
-    parent_renderer_class = GTK_CELL_RENDERER_CLASS( parent_class );
+    parent_renderer_class = GTK_CELL_RENDERER_CLASS(parent_class);
 
-    parent_renderer_class->get_size ( cell, widget, cell_area,
-                                      &pix_rect.x,
-                                      &pix_rect.y,
-                                      &pix_rect.width,
-                                      &pix_rect.height );
+    parent_renderer_class->get_size(cell,
+                                    widget,
+                                    cell_area,
+                                    &pix_rect.x,
+                                    &pix_rect.y,
+                                    &pix_rect.width,
+                                    &pix_rect.height);
 
     pix_rect.x += cell_area->x;
     pix_rect.y += cell_area->y;
-    gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
+    gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
     pix_rect.width -= xpad * 2;
     pix_rect.height -= ypad * 2;
 
-#if GTK_CHECK_VERSION (3, 0, 0)
-    if ( !gdk_rectangle_intersect ( cell_area, &pix_rect, &draw_rect ) )
-        return ;
-#else
-    if ( !gdk_rectangle_intersect ( cell_area, &pix_rect, &draw_rect ) ||
-            !gdk_rectangle_intersect ( expose_area, &draw_rect, &draw_rect ) )
-        return ;
+#if (GTK_MAJOR_VERSION == 3)
+    if (!gdk_rectangle_intersect(cell_area, &pix_rect, &draw_rect))
+        return;
+#elif (GTK_MAJOR_VERSION == 2)
+    if (!gdk_rectangle_intersect(cell_area, &pix_rect, &draw_rect) ||
+        !gdk_rectangle_intersect(expose_area, &draw_rect, &draw_rect))
+        return;
 #endif
 
-    g_object_get ( G_OBJECT ( cellpixbuf ), "pixbuf", &pixbuf, NULL);
-    g_object_get ( G_OBJECT ( cellpixbuf ), "is-expander", &is_expander, NULL);
-    g_object_get ( G_OBJECT ( cellpixbuf ), "is-expanded", &is_expanded, NULL);
-    g_object_get ( G_OBJECT ( cellpixbuf ), "pixbuf-expander-open", &pixbuf_expander_open, NULL);
-    g_object_get ( G_OBJECT ( cellpixbuf ), "pixbuf-expander-closed", &pixbuf_expander_closed, NULL);
+    g_object_get(G_OBJECT(cellpixbuf), "pixbuf", &pixbuf, NULL);
+    g_object_get(G_OBJECT(cellpixbuf), "is-expander", &is_expander, NULL);
+    g_object_get(G_OBJECT(cellpixbuf), "is-expanded", &is_expanded, NULL);
+    g_object_get(G_OBJECT(cellpixbuf), "pixbuf-expander-open", &pixbuf_expander_open, NULL);
+    g_object_get(G_OBJECT(cellpixbuf), "pixbuf-expander-closed", &pixbuf_expander_closed, NULL);
 
-    if ( is_expander )
+    if (is_expander)
     {
-        g_object_get ( G_OBJECT ( cellpixbuf ), "is-expanded", &is_expanded, NULL);
-        if ( is_expanded &&
-                pixbuf_expander_open != NULL )
+        g_object_get(G_OBJECT(cellpixbuf), "is-expanded", &is_expanded, NULL);
+        if (is_expanded && pixbuf_expander_open != NULL)
         {
-            g_object_unref ( pixbuf );
+            g_object_unref(pixbuf);
             pixbuf = pixbuf_expander_open;
-            if ( pixbuf_expander_closed )
-                g_object_unref ( pixbuf_expander_closed );
+            if (pixbuf_expander_closed)
+                g_object_unref(pixbuf_expander_closed);
         }
-        else if ( !is_expanded &&
-                  pixbuf_expander_closed != NULL )
+        else if (!is_expanded && pixbuf_expander_closed != NULL)
         {
-            g_object_unref ( pixbuf );
+            g_object_unref(pixbuf);
             pixbuf = pixbuf_expander_closed;
-            if ( pixbuf_expander_open )
-                g_object_unref ( pixbuf_expander_open );
+            if (pixbuf_expander_open)
+                g_object_unref(pixbuf_expander_open);
         }
     }
     else
     {
-        if ( pixbuf_expander_open )
-            g_object_unref ( pixbuf_expander_open );
-        if ( pixbuf_expander_closed )
-            g_object_unref ( pixbuf_expander_closed );
+        if (pixbuf_expander_open)
+            g_object_unref(pixbuf_expander_open);
+        if (pixbuf_expander_closed)
+            g_object_unref(pixbuf_expander_closed);
     }
 
-    if ( !pixbuf )
-        return ;
+    if (!pixbuf)
+        return;
 
-    if ( PTK_FILE_ICON_RENDERER( cell ) ->follow_state )
+    if (PTK_FILE_ICON_RENDERER(cell)->follow_state)
     {
-        if ( gtk_widget_get_state ( widget ) == GTK_STATE_INSENSITIVE || !gtk_cell_renderer_get_sensitive(cell) )
+        if (gtk_widget_get_state(widget) == GTK_STATE_INSENSITIVE ||
+            !gtk_cell_renderer_get_sensitive(cell))
         {
-            GtkIconSource * source;
+            GtkIconSource* source;
 
-            source = gtk_icon_source_new ();
-            gtk_icon_source_set_pixbuf ( source, pixbuf );
+            source = gtk_icon_source_new();
+            gtk_icon_source_set_pixbuf(source, pixbuf);
             /* The size here is arbitrary; since size isn't
-            * wildcarded in the source, it isn't supposed to be
-            * scaled by the engine function
-            */
-            gtk_icon_source_set_size ( source, GTK_ICON_SIZE_SMALL_TOOLBAR );
-            gtk_icon_source_set_size_wildcarded ( source, FALSE );
+             * wildcarded in the source, it isn't supposed to be
+             * scaled by the engine function
+             */
+            gtk_icon_source_set_size(source, GTK_ICON_SIZE_SMALL_TOOLBAR);
+            gtk_icon_source_set_size_wildcarded(source, FALSE);
 
-            invisible = gtk_style_render_icon ( gtk_widget_get_style (widget),
-                                                source,
-                                                gtk_widget_get_direction ( widget ),
-                                                GTK_STATE_INSENSITIVE,
-                                                /* arbitrary */
-                                                ( GtkIconSize ) - 1,
-                                                widget,
-                                                "gtkcellrendererpixbuf" );
+            invisible = gtk_style_render_icon(gtk_widget_get_style(widget),
+                                              source,
+                                              gtk_widget_get_direction(widget),
+                                              GTK_STATE_INSENSITIVE,
+                                              /* arbitrary */
+                                              (GtkIconSize)-1,
+                                              widget,
+                                              "gtkcellrendererpixbuf");
 
-            gtk_icon_source_free ( source );
+            gtk_icon_source_free(source);
             pixbuf = invisible;
         }
-        else if ( ( flags & ( GTK_CELL_RENDERER_SELECTED /*|GTK_CELL_RENDERER_PRELIT*/ ) ) != 0 )
+        else if ((flags & (GTK_CELL_RENDERER_SELECTED /*|GTK_CELL_RENDERER_PRELIT*/)) != 0)
         {
+#if (GTK_MAJOR_VERSION == 3)
+            GtkStateFlags state;
+#elif (GTK_MAJOR_VERSION == 2)
             GtkStateType state;
-            GdkColor* color;
+#endif
+            GdkColor* color = NULL;
 
-            if ( ( flags & GTK_CELL_RENDERER_SELECTED ) != 0 )
+            if ((flags & GTK_CELL_RENDERER_SELECTED) != 0)
             {
-                if ( gtk_widget_has_focus ( widget ) )
+                if (gtk_widget_has_focus(widget))
                     state = GTK_STATE_SELECTED;
                 else
-#if GTK_CHECK_VERSION (3, 0, 0)
+#if (GTK_MAJOR_VERSION == 3)
                     state = GTK_STATE_SELECTED;
-#else
+#elif (GTK_MAJOR_VERSION == 2)
                     state = GTK_STATE_ACTIVE;
 #endif
-                color = &gtk_widget_get_style(widget)->base[ state ];
+                color = &gtk_widget_get_style(widget)->base[state];
             }
             else
             {
                 state = GTK_STATE_PRELIGHT;
             }
 
-            colorized = create_colorized_pixbuf ( pixbuf,
-                                                  color );
+            colorized = create_colorized_pixbuf(pixbuf, color);
 
             pixbuf = colorized;
         }
     }
-#if GTK_CHECK_VERSION (3, 0, 0)
-    cairo_save ( cr );
-#else
-    cairo_t *cr = gdk_cairo_create ( window );
+#if (GTK_MAJOR_VERSION == 3)
+    cairo_save(cr);
+#elif (GTK_MAJOR_VERSION == 2)
+    cairo_t* cr = gdk_cairo_create(window);
 #endif
-    cairo_set_operator ( cr, CAIRO_OPERATOR_OVER );
-    gdk_cairo_set_source_pixbuf ( cr, pixbuf, pix_rect.x, pix_rect.y );
-    gdk_cairo_rectangle ( cr, &draw_rect );
-    cairo_fill ( cr );
+    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+    gdk_cairo_set_source_pixbuf(cr, pixbuf, pix_rect.x, pix_rect.y);
+    gdk_cairo_rectangle(cr, &draw_rect);
+    cairo_fill(cr);
 
-    file = PTK_FILE_ICON_RENDERER( cell )->info;
-    if ( file )
+    file = PTK_FILE_ICON_RENDERER(cell)->info;
+    if (file)
     {
-        if ( vfs_file_info_is_symlink( file ) )
+        if (vfs_file_info_is_symlink(file))
         {
-            cairo_set_operator ( cr, CAIRO_OPERATOR_OVER );
-            gdk_cairo_set_source_pixbuf ( cr, link_icon,
-                                          pix_rect.x,
-                                          pix_rect.y );
+            cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+            gdk_cairo_set_source_pixbuf(cr, link_icon, pix_rect.x, pix_rect.y);
             draw_rect.x -= 2;
             draw_rect.y -= 2;
-            gdk_cairo_rectangle ( cr, &draw_rect );
-            cairo_fill ( cr );
+            gdk_cairo_rectangle(cr, &draw_rect);
+            cairo_fill(cr);
         }
     }
 
-#if GTK_CHECK_VERSION (3, 0, 0)
-    cairo_restore ( cr );
-#else
-    cairo_destroy ( cr );
+#if (GTK_MAJOR_VERSION == 3)
+    cairo_restore(cr);
+#elif (GTK_MAJOR_VERSION == 2)
+    cairo_destroy(cr);
 #endif
 
-    if ( invisible )
-        g_object_unref ( invisible );
+    if (invisible)
+        g_object_unref(invisible);
 
-    if ( colorized )
-        g_object_unref ( colorized );
-
+    if (colorized)
+        g_object_unref(colorized);
 }
 
-void ptk_file_icon_renderer_get_size ( GtkCellRenderer *cell,
-                                       GtkWidget *widget,
-#if GTK_CHECK_VERSION (3, 0, 0)
-                                       const GdkRectangle *cell_area,
-#else
-                                       GdkRectangle *cell_area,
+static void ptk_file_icon_renderer_get_size(GtkCellRenderer* cell, GtkWidget* widget,
+#if (GTK_MAJOR_VERSION == 3)
+                                            const GdkRectangle* cell_area,
+#elif (GTK_MAJOR_VERSION == 2)
+                                            GdkRectangle* cell_area,
 #endif
-                                       gint *x_offset,
-                                       gint *y_offset,
-                                       gint *width,
-                                       gint *height )
+                                            int* x_offset, int* y_offset, int* width, int* height)
 {
-    GTK_CELL_RENDERER_CLASS( parent_class )->get_size( cell, widget, cell_area,
-                                                       x_offset, y_offset,
-                                                       width, height );
-if(!width || ! height)
-return;
+    GTK_CELL_RENDERER_CLASS(parent_class)
+        ->get_size(cell, widget, cell_area, x_offset, y_offset, width, height);
+    if (!width || !height)
+        return;
 
-
-//g_debug( "w=%d, h=%d", *width, *height );
-    if ( *width > *height )
-        * height = *width;
-    else if ( *width < *height )
-        * width = *height;
+    // g_debug( "w=%d, h=%d", *width, *height );
+    if (*width > *height)
+        *height = *width;
+    else if (*width < *height)
+        *width = *height;
 }
-

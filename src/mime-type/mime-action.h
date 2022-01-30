@@ -22,11 +22,14 @@
 #ifndef _MIME_ACTION_H_INCLUDED_
 #define _MIME_ACTION_H_INCLUDED_
 
+#include <stdbool.h>
+
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-enum {
+enum
+{
     MIME_TYPE_ACTION_DEFAULT,
     MIME_TYPE_ACTION_APPEND,
     MIME_TYPE_ACTION_REMOVE
@@ -37,7 +40,7 @@ enum {
  * The returned string array was newly allocated, and should be
  * freed with g_strfreev() when no longer used.
  */
-char** mime_type_get_actions( const char* type );
+char** mime_type_get_actions(const char* type);
 
 /*
  * Add an applications used to open this mime-type
@@ -45,17 +48,17 @@ char** mime_type_get_actions( const char* type );
  *
  * custom_desktop: used to store name of the newly created user-custom desktop file, can be NULL.
  */
-void mime_type_add_action( const char* type, const char* desktop_id, char** custom_desktop );
+void mime_type_add_action(const char* type, const char* desktop_id, char** custom_desktop);
 
 /*
  * Check if an applications currently set to open this mime-type
  * desktop_id is the name of *.desktop file.
  */
-gboolean mime_type_has_action( const char* type, const char* desktop_id );
+// bool mime_type_has_action(const char* type, const char* desktop_id);
 
 /*
  * Get default applications used to open this mime-type
- * 
+ *
  * The returned string was newly allocated, and should be freed when no longer
  * used.  If NULL is returned, that means a default app is not set for this
  * mime-type.  This is very roughly based on specs:
@@ -63,7 +66,7 @@ gboolean mime_type_has_action( const char* type, const char* desktop_id );
  *
  * The old defaults.list is also checked.
  */
-char* mime_type_get_default_action( const char* type );
+char* mime_type_get_default_action(const char* type);
 
 /*
  * Set applications used to open or never used to open this mime-type
@@ -75,11 +78,10 @@ char* mime_type_get_default_action( const char* type );
  *
  * http://standards.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html
  */
-void mime_type_update_association( const char* type, const char* desktop_id,
-                                   int action );
+void mime_type_update_association(const char* type, const char* desktop_id, int action);
 
 /* Locate the file path of desktop file by desktop_id */
-char* mime_type_locate_desktop_file( const char* dir, const char* desktop_id );
+char* mime_type_locate_desktop_file(const char* dir, const char* desktop_id);
 
 G_END_DECLS
 
