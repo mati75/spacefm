@@ -1,8 +1,22 @@
-spacefm (1.0.6-5) UNRELEASED; urgency=medium
+spacefm (1.0.6-5) unstable; urgency=medium
 
-  * 
+  [ Debian Janitor ]
+  * debian/copyright: use spaces rather than tabs to start continuation
+    lines.
+  * Wrap long lines in changelog entries: 1.0.6-1.
+  * Use secure URI in Homepage field.
+  * Set debhelper-compat version in Build-Depends.
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
+    Repository-Browse.
+  * Drop unnecessary dependency on dh-autoreconf.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 26 Apr 2019 13:46:44 +0200
+  [ Mateusz Łukasik ]
+  * Fix FTBFS with gcc-10. (Closes: #957829)
+    * debian/control:
+    + Bump to Standards-Version to 4.5.0.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 13 Aug 2020 11:45:23 +0200
+>>>>>>> master
 
 spacefm (1.0.6-4) unstable; urgency=medium
 
@@ -39,7 +53,8 @@ spacefm (1.0.6-1) unstable; urgency=medium
   * debian/patches:
     + Add drop-gnome-common-macros.patch to drop deprecated gnome-common
     macros/variables. (Closes: #830003)
-    + Add add_optional_close_last_tab.patch to Optionally close the panel/application
+    + Add add_optional_close_last_tab.patch to Optionally close the
+      panel/application
     when last tab is closed.
   * Update debian/copyright.
   * Drop changes from Ubuntu - fixed upstream.
