@@ -22,6 +22,9 @@
 #ifndef _MIME_TYPE_H_INCLUDED_
 #define _MIME_TYPE_H_INCLUDED_
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <glib.h>
@@ -41,27 +44,24 @@ extern const char xdg_mime_type_plain_text[];
 #define XDG_MIME_TYPE_PLAIN_TEXT xdg_mime_type_plain_text
 
 /* Opaque data structure storing information of recognized mime-types */
-//typedef struct MimeInfo MimeInfo;
+// typedef struct MimeInfo MimeInfo;
 
 /* Initialize the library */
 void mime_type_init();
-
-/* Reload the shared-mime-database */
-gboolean mime_type_reload();
 
 /* Finalize the library and free related resources */
 void mime_type_finalize();
 
 /* Get additional info of the specified mime-type */
-//MimeInfo* mime_type_get_by_type( const char* type_name );
+// MimeInfo* mime_type_get_by_type( const char* type_name );
 
 /*
  * Get mime-type info of the specified file (quick, but less accurate):
  * Mime-type of the file is determined by cheking the filename only.
  * If statbuf != NULL, it will be used to determine if the file is a directory,
  * or if the file is an executable file.
-*/
-const char* mime_type_get_by_filename( const char* filename, struct stat64* statbuf );
+ */
+const char* mime_type_get_by_filename(const char* filename, struct stat* statbuf);
 
 /*
  * Get mime-type info of the specified file (slow, but more accurate):
@@ -75,61 +75,35 @@ const char* mime_type_get_by_filename( const char* filename, struct stat64* stat
  * If you have basename of the file, pass it to the function can improve the
  * efifciency, too. Otherwise, the function will try to get the basename of
  * the specified file again.
-*/
-const char* mime_type_get_by_file( const char* filepath, struct stat64* statbuf, const char* basename );
+ */
+const char* mime_type_get_by_file(const char* filepath, struct stat* statbuf, const char* basename);
 
-gboolean mime_type_is_text_file( const char * file_path, const char * mime_type );
+bool mime_type_is_text_file(const char* file_path, const char* mime_type);
 
-gboolean mime_type_is_executable_file( const char * file_path, const char * mime_type );
+bool mime_type_is_executable_file(const char* file_path, const char* mime_type);
 
 /* Check if the specified mime_type is the subclass of the specified parent type */
-gboolean mime_type_is_subclass( const char* type, const char* parent );
-
-/*
- * Get all parent type of this mime_type
- * The returned string array should be freed with g_strfreev().
- */
-char** mime_type_get_parents( const char* type );
-
-/*
- * Get all alias types of this mime_type
- * The returned string array should be freed with g_strfreev().
- */
-char** mime_type_get_alias( const char* type );
-
-/* Add reference to the MimeInfo */
-//MimeInfo* mime_type_ref( MimeInfo* info );
-
-/*
- * Decrease reference count of the MimeInfo:
- * When reference count of the MimeInfo struct is decreased to
- * zero, the data structure will be freed automatically.
-*/
-//void mime_type_unref( MimeInfo* info );
-
-/* Get the name of mime-type */
-//const char* mime_type_get_type( MimeInfo* info );
+// bool mime_type_is_subclass(const char* type, const char* parent);
 
 /* Get human-readable description and icon name of the mime-type
  * If locale is NULL, current locale will be used.
  * The returned string should be freed when no longer used.
  * The icon_name will only be set if points to NULL, and must be freed. */
-char* mime_type_get_desc_icon( const char* type, const char* locale,
-                                                 char** icon_name );
+char* mime_type_get_desc_icon(const char* type, const char* locale, char** icon_name);
 
 /*
  * Iterate through all mime caches
  * Can be used to hook file alteration monitor for the cache files to handle reloading.
  */
-void mime_cache_foreach( GFunc func, gpointer user_data );
+// void mime_cache_foreach(GFunc func, void* user_data);
 
 /*
  * Get mime caches
  */
-MimeCache** mime_type_get_caches( int* n );
+MimeCache** mime_type_get_caches(int* n);
 
 /* max magic extent of all caches */
-extern guint32 mime_cache_max_extent;
+extern uint32_t mime_cache_max_extent;
 
 G_END_DECLS
 #endif

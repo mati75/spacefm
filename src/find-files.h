@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-void fm_find_files( const char** search_dirs );
+void fm_find_files(const char** search_dirs);
 
 G_END_DECLS
 

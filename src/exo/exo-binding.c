@@ -20,15 +20,9 @@
  * MA 02110-1301 USA
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <stdbool.h>
 
-#include <exo/exo-binding.h>
-#include <exo/exo-private.h>
-
-/* Taken from exo v0.10.2 (Debian package libexo-1-0), according to changelog
- * commit f455681554ca205ffe49bd616310b19f5f9f8ef1 Dec 27 13:50:21 2012 */
+#include "exo-binding.h"
 
 /**
  * SECTION: exo-binding
@@ -79,16 +73,15 @@
  * button. No need to write signal handlers for this purpose any more.
  **/
 
-typedef struct
+typedef struct ExoBindingLink
 {
-    GObject             *dst_object;
-    GParamSpec          *dst_pspec;
-    gulong               dst_handler; /* only set for mutual bindings */
-    gulong               handler;
-    ExoBindingTransform  transform;
-    gpointer             user_data;
-}
-ExoBindingLink;
+    GObject* dst_object;
+    GParamSpec* dst_pspec;
+    unsigned long dst_handler; /* only set for mutual bindings */
+    unsigned long handler;
+    ExoBindingTransform transform;
+    void* user_data;
+} ExoBindingLink;
 
 /**
  * ExoBinding:
@@ -96,12 +89,12 @@ ExoBindingLink;
  * Opaque structure representing a one-way binding between two properties.
  * It is automatically removed if one of the bound objects is finalized.
  **/
-struct _ExoBinding
+typedef struct ExoBinding
 {
-    GObject         *src_object;
-    GDestroyNotify   destroy;
-    ExoBindingLink   blink;
-};
+    GObject* src_object;
+    GDestroyNotify destroy;
+    ExoBindingLink blink;
+} ExoBinding;
 
 /**
  * ExoMutualBinding:
@@ -109,186 +102,154 @@ struct _ExoBinding
  * Opaque structure representing a mutual binding between two properties.
  * It is automatically freed if one of the bound objects is finalized.
  **/
-struct _ExoMutualBinding
+typedef struct ExoMutualBinding
 {
-    GDestroyNotify  destroy;
-    ExoBindingLink  direct;
-    ExoBindingLink  reverse;
-};
+    GDestroyNotify destroy;
+    ExoBindingLink direct;
+    ExoBindingLink reverse;
+} ExoMutualBinding;
 
-
-
-static void
-exo_bind_properties_transfer (GObject             *src_object,
-                              GParamSpec          *src_pspec,
-                              GObject             *dst_object,
-                              GParamSpec          *dst_pspec,
-                              ExoBindingTransform  transform,
-                              gpointer             user_data)
+static void exo_bind_properties_transfer(GObject* src_object, GParamSpec* src_pspec,
+                                         GObject* dst_object, GParamSpec* dst_pspec,
+                                         ExoBindingTransform transform, void* user_data)
 {
-    const gchar *src_name;
-    const gchar *dst_name;
-    gboolean     result;
-    GValue       src_value = { 0, };
-    GValue       dst_value = { 0, };
+    const char* src_name;
+    const char* dst_name;
+    bool result;
+    GValue src_value = {
+        0,
+    };
+    GValue dst_value = {
+        0,
+    };
 
-    src_name = g_param_spec_get_name (src_pspec);
-    dst_name = g_param_spec_get_name (dst_pspec);
+    src_name = g_param_spec_get_name(src_pspec);
+    dst_name = g_param_spec_get_name(dst_pspec);
 
-    g_value_init (&src_value, G_PARAM_SPEC_VALUE_TYPE (src_pspec));
-    g_object_get_property (src_object, src_name, &src_value);
+    g_value_init(&src_value, G_PARAM_SPEC_VALUE_TYPE(src_pspec));
+    g_object_get_property(src_object, src_name, &src_value);
 
-    g_value_init (&dst_value, G_PARAM_SPEC_VALUE_TYPE (dst_pspec));
-    result = (*transform) (&src_value, &dst_value, user_data);
+    g_value_init(&dst_value, G_PARAM_SPEC_VALUE_TYPE(dst_pspec));
+    result = (*transform)(&src_value, &dst_value, user_data);
 
-    g_value_unset (&src_value);
+    g_value_unset(&src_value);
 
-    g_return_if_fail (result);
+    g_return_if_fail(result);
 
-    g_param_value_validate (dst_pspec, &dst_value);
-    g_object_set_property (dst_object, dst_name, &dst_value);
-    g_value_unset (&dst_value);
+    g_param_value_validate(dst_pspec, &dst_value);
+    g_object_set_property(dst_object, dst_name, &dst_value);
+    g_value_unset(&dst_value);
 }
 
-
-
-static void
-exo_bind_properties_notify (GObject    *src_object,
-                            GParamSpec *src_pspec,
-                            gpointer    data)
+static void exo_bind_properties_notify(GObject* src_object, GParamSpec* src_pspec, void* data)
 {
-    ExoBindingLink *blink = data;
+    ExoBindingLink* blink = data;
 
     /* block the destination handler for mutual bindings,
-   * so we don't recurse here.
-   */
+     * so we don't recurse here.
+     */
     if (blink->dst_handler != 0)
-        g_signal_handler_block (blink->dst_object, blink->dst_handler);
+        g_signal_handler_block(blink->dst_object, blink->dst_handler);
 
-    exo_bind_properties_transfer (src_object,
-                                  src_pspec,
-                                  blink->dst_object,
-                                  blink->dst_pspec,
-                                  blink->transform,
-                                  blink->user_data);
+    exo_bind_properties_transfer(src_object,
+                                 src_pspec,
+                                 blink->dst_object,
+                                 blink->dst_pspec,
+                                 blink->transform,
+                                 blink->user_data);
 
     /* unblock destination handler */
     if (blink->dst_handler != 0)
-        g_signal_handler_unblock (blink->dst_object, blink->dst_handler);
+        g_signal_handler_unblock(blink->dst_object, blink->dst_handler);
 }
 
-
-
-static void
-exo_binding_on_dst_object_destroy (gpointer  data,
-                                   GObject  *object)
+static void exo_binding_on_dst_object_destroy(void* data, GObject* object)
 {
-    ExoBinding *binding = data;
+    ExoBinding* binding = data;
 
     binding->blink.dst_object = NULL;
 
     /* calls exo_binding_on_disconnect() */
-    g_signal_handler_disconnect (binding->src_object, binding->blink.handler);
+    g_signal_handler_disconnect(binding->src_object, binding->blink.handler);
 }
 
-
-
-static void
-exo_binding_on_disconnect (gpointer  data,
-                           GClosure *closure)
+static void exo_binding_on_disconnect(void* data, GClosure* closure)
 {
-    ExoBindingLink *blink = data;
-    ExoBinding     *binding;
+    ExoBindingLink* blink = data;
+    ExoBinding* binding;
 
-    binding = (ExoBinding *) (((gchar *) blink) - G_STRUCT_OFFSET (ExoBinding, blink));
+    binding = (ExoBinding*)(((char*)blink) - G_STRUCT_OFFSET(ExoBinding, blink));
 
     if (binding->destroy != NULL)
-        binding->destroy (blink->user_data);
+        binding->destroy(blink->user_data);
 
     if (blink->dst_object != NULL)
-        g_object_weak_unref (blink->dst_object, exo_binding_on_dst_object_destroy, binding);
+        g_object_weak_unref(blink->dst_object, exo_binding_on_dst_object_destroy, binding);
 
-    g_slice_free (ExoBinding, binding);
+    g_slice_free(ExoBinding, binding);
 }
 
-
-
 /* recursively calls exo_mutual_binding_on_disconnect_object2() */
-static void
-exo_mutual_binding_on_disconnect_object1 (gpointer  data,
-                                          GClosure *closure)
+static void exo_mutual_binding_on_disconnect_object1(void* data, GClosure* closure)
 {
-    ExoMutualBinding *binding;
-    ExoBindingLink   *blink = data;
-    GObject          *object2;
+    ExoMutualBinding* binding;
+    ExoBindingLink* blink = data;
+    GObject* object2;
 
-    binding = (ExoMutualBinding *) (((gchar *) blink) - G_STRUCT_OFFSET (ExoMutualBinding, direct));
+    binding = (ExoMutualBinding*)(((char*)blink) - G_STRUCT_OFFSET(ExoMutualBinding, direct));
     binding->reverse.dst_object = NULL;
 
     object2 = binding->direct.dst_object;
     if (object2 != NULL)
     {
         if (binding->destroy != NULL)
-            binding->destroy (binding->direct.user_data);
+            binding->destroy(binding->direct.user_data);
         binding->direct.dst_object = NULL;
-        g_signal_handler_disconnect (object2, binding->reverse.handler);
-        g_slice_free (ExoMutualBinding, binding);
+        g_signal_handler_disconnect(object2, binding->reverse.handler);
+        g_slice_free(ExoMutualBinding, binding);
     }
 }
 
-
-
 /* recursively calls exo_mutual_binding_on_disconnect_object1() */
-static void
-exo_mutual_binding_on_disconnect_object2 (gpointer  data,
-                                          GClosure *closure)
+static void exo_mutual_binding_on_disconnect_object2(void* data, GClosure* closure)
 {
-    ExoMutualBinding *binding;
-    ExoBindingLink   *blink = data;
-    GObject          *object1;
+    ExoMutualBinding* binding;
+    ExoBindingLink* blink = data;
+    GObject* object1;
 
-    binding = (ExoMutualBinding *) (((gchar *) blink) - G_STRUCT_OFFSET (ExoMutualBinding, reverse));
+    binding = (ExoMutualBinding*)(((char*)blink) - G_STRUCT_OFFSET(ExoMutualBinding, reverse));
     binding->direct.dst_object = NULL;
 
     object1 = binding->reverse.dst_object;
     if (object1 != NULL)
     {
         binding->reverse.dst_object = NULL;
-        g_signal_handler_disconnect (object1, binding->direct.handler);
+        g_signal_handler_disconnect(object1, binding->direct.handler);
     }
 }
 
-
-
-static void
-exo_binding_link_init (ExoBindingLink     *blink,
-                       GObject            *src_object,
-                       const gchar        *src_property,
-                       GObject            *dst_object,
-                       GParamSpec         *dst_pspec,
-                       ExoBindingTransform transform,
-                       GClosureNotify      destroy_notify,
-                       gpointer            user_data)
+static void exo_binding_link_init(ExoBindingLink* blink, GObject* src_object,
+                                  const char* src_property, GObject* dst_object,
+                                  GParamSpec* dst_pspec, ExoBindingTransform transform,
+                                  GClosureNotify destroy_notify, void* user_data)
 {
-    gchar *signal_name;
+    char* signal_name;
 
-    blink->dst_object  = dst_object;
-    blink->dst_pspec   = dst_pspec;
+    blink->dst_object = dst_object;
+    blink->dst_pspec = dst_pspec;
     blink->dst_handler = 0;
-    blink->transform   = transform;
-    blink->user_data   = user_data;
+    blink->transform = transform;
+    blink->user_data = user_data;
 
-    signal_name = g_strconcat ("notify::", src_property, NULL);
-    blink->handler = g_signal_connect_data (src_object,
-                                            signal_name,
-                                            G_CALLBACK (exo_bind_properties_notify),
-                                            blink,
-                                            destroy_notify,
-                                            0);
-    g_free (signal_name);
+    signal_name = g_strconcat("notify::", src_property, NULL);
+    blink->handler = g_signal_connect_data(src_object,
+                                           signal_name,
+                                           G_CALLBACK(exo_bind_properties_notify),
+                                           blink,
+                                           destroy_notify,
+                                           0);
+    g_free(signal_name);
 }
-
-
 
 /**
  * exo_binding_new:
@@ -306,18 +267,17 @@ exo_binding_link_init (ExoBindingLink     *blink,
  * Returns: The descriptor of the binding. It is automatically
  *          removed if one of the objects is finalized.
  **/
-ExoBinding*
-exo_binding_new (GObject      *src_object,
-                 const gchar  *src_property,
-                 GObject      *dst_object,
-                 const gchar  *dst_property)
+ExoBinding* exo_binding_new(GObject* src_object, const char* src_property, GObject* dst_object,
+                            const char* dst_property)
 {
-    return exo_binding_new_full (src_object, src_property,
-                                 dst_object, dst_property,
-                                 NULL, NULL, NULL);
+    return exo_binding_new_full(src_object,
+                                src_property,
+                                dst_object,
+                                dst_property,
+                                NULL,
+                                NULL,
+                                NULL);
 }
-
-
 
 /**
  * exo_binding_new_full:
@@ -338,53 +298,47 @@ exo_binding_new (GObject      *src_object,
  * Returns: The descriptor of the binding. It is automatically
  *          removed if one of the objects is finalized.
  **/
-ExoBinding*
-exo_binding_new_full (GObject            *src_object,
-                      const gchar        *src_property,
-                      GObject            *dst_object,
-                      const gchar        *dst_property,
-                      ExoBindingTransform transform,
-                      GDestroyNotify      destroy_notify,
-                      gpointer            user_data)
+ExoBinding* exo_binding_new_full(GObject* src_object, const char* src_property, GObject* dst_object,
+                                 const char* dst_property, ExoBindingTransform transform,
+                                 GDestroyNotify destroy_notify, void* user_data)
 {
-    ExoBinding  *binding;
-    GParamSpec  *src_pspec;
-    GParamSpec  *dst_pspec;
+    ExoBinding* binding;
+    GParamSpec* src_pspec;
+    GParamSpec* dst_pspec;
 
-    g_return_val_if_fail (G_IS_OBJECT (src_object), NULL);
-    g_return_val_if_fail (G_IS_OBJECT (dst_object), NULL);
+    g_return_val_if_fail(G_IS_OBJECT(src_object), NULL);
+    g_return_val_if_fail(G_IS_OBJECT(dst_object), NULL);
 
-    src_pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (src_object), src_property);
-    dst_pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (dst_object), dst_property);
+    src_pspec = g_object_class_find_property(G_OBJECT_GET_CLASS(src_object), src_property);
+    dst_pspec = g_object_class_find_property(G_OBJECT_GET_CLASS(dst_object), dst_property);
 
     if (transform == NULL)
-        transform = (ExoBindingTransform) g_value_transform;
+        transform = (ExoBindingTransform)g_value_transform;
 
-    exo_bind_properties_transfer (src_object,
-                                  src_pspec,
-                                  dst_object,
-                                  dst_pspec,
-                                  transform,
-                                  user_data);
+    exo_bind_properties_transfer(src_object,
+                                 src_pspec,
+                                 dst_object,
+                                 dst_pspec,
+                                 transform,
+                                 user_data);
 
-    binding = g_slice_new (ExoBinding);
+    binding = g_slice_new(ExoBinding);
     binding->src_object = src_object;
     binding->destroy = destroy_notify;
 
-    exo_binding_link_init (&binding->blink,
-                           src_object,
-                           src_property,
-                           dst_object,
-                           dst_pspec,
-                           transform,
-                           exo_binding_on_disconnect,
-                           user_data);
+    exo_binding_link_init(&binding->blink,
+                          src_object,
+                          src_property,
+                          dst_object,
+                          dst_pspec,
+                          transform,
+                          exo_binding_on_disconnect,
+                          user_data);
 
-    g_object_weak_ref (dst_object, exo_binding_on_dst_object_destroy, binding);
+    g_object_weak_ref(dst_object, exo_binding_on_dst_object_destroy, binding);
 
     return binding;
 }
-
 
 /**
  * exo_mutual_binding_new:
@@ -401,18 +355,18 @@ exo_binding_new_full (GObject            *src_object,
  * Returns: The descriptor of the binding. It is automatically
  *          removed if one of the objects is finalized.
  **/
-ExoMutualBinding*
-exo_mutual_binding_new (GObject     *object1,
-                        const gchar *property1,
-                        GObject     *object2,
-                        const gchar *property2)
+ExoMutualBinding* exo_mutual_binding_new(GObject* object1, const char* property1, GObject* object2,
+                                         const char* property2)
 {
-    return exo_mutual_binding_new_full (object1, property1,
-                                        object2, property2,
-                                        NULL, NULL, NULL, NULL);
+    return exo_mutual_binding_new_full(object1,
+                                       property1,
+                                       object2,
+                                       property2,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL);
 }
-
-
 
 /**
  * exo_mutual_binding_new_full:
@@ -422,7 +376,8 @@ exo_mutual_binding_new (GObject     *object1,
  * @property2:         The second property to bind.
  * @transform:         Transformation function or %NULL.
  * @reverse_transform: The inverse transformation function or %NULL.
- * @destroy_notify:    Callback function called on disconnection with @user_data as argument or %NULL.
+ * @destroy_notify:    Callback function called on disconnection with @user_data as argument or
+ *%NULL.
  * @user_data:         User data associated with the binding.
  *
  * Mutually binds values of two properties.
@@ -437,70 +392,60 @@ exo_mutual_binding_new (GObject     *object1,
  * Returns: The descriptor of the binding. It is automatically
  *          removed if one of the objects is finalized.
  **/
-ExoMutualBinding*
-exo_mutual_binding_new_full (GObject            *object1,
-                             const gchar        *property1,
-                             GObject            *object2,
-                             const gchar        *property2,
-                             ExoBindingTransform transform,
-                             ExoBindingTransform reverse_transform,
-                             GDestroyNotify      destroy_notify,
-                             gpointer            user_data)
+ExoMutualBinding* exo_mutual_binding_new_full(GObject* object1, const char* property1,
+                                              GObject* object2, const char* property2,
+                                              ExoBindingTransform transform,
+                                              ExoBindingTransform reverse_transform,
+                                              GDestroyNotify destroy_notify, void* user_data)
 {
-    ExoMutualBinding  *binding;
-    GParamSpec        *pspec1;
-    GParamSpec        *pspec2;
+    ExoMutualBinding* binding;
+    GParamSpec* pspec1;
+    GParamSpec* pspec2;
 
-    g_return_val_if_fail (G_IS_OBJECT (object1), NULL);
-    g_return_val_if_fail (G_IS_OBJECT (object2), NULL);
+    g_return_val_if_fail(G_IS_OBJECT(object1), NULL);
+    g_return_val_if_fail(G_IS_OBJECT(object2), NULL);
 
-    pspec1 = g_object_class_find_property (G_OBJECT_GET_CLASS (object1), property1);
-    pspec2 = g_object_class_find_property (G_OBJECT_GET_CLASS (object2), property2);
+    pspec1 = g_object_class_find_property(G_OBJECT_GET_CLASS(object1), property1);
+    pspec2 = g_object_class_find_property(G_OBJECT_GET_CLASS(object2), property2);
 
     if (transform == NULL)
-        transform = (ExoBindingTransform) g_value_transform;
+        transform = (ExoBindingTransform)(void (*)(void))g_value_transform;
 
     if (reverse_transform == NULL)
-        reverse_transform = (ExoBindingTransform) g_value_transform;
+        reverse_transform = (ExoBindingTransform)(void (*)(void))g_value_transform;
 
-    exo_bind_properties_transfer (object1,
-                                  pspec1,
-                                  object2,
-                                  pspec2,
-                                  transform,
-                                  user_data);
+    exo_bind_properties_transfer(object1, pspec1, object2, pspec2, transform, user_data);
 
-    binding = g_slice_new (ExoMutualBinding);
+    binding = g_slice_new(ExoMutualBinding);
     binding->destroy = destroy_notify;
 
-    exo_binding_link_init (&binding->direct,
-                           object1,
-                           property1,
-                           object2,
-                           pspec2,
-                           transform,
-                           exo_mutual_binding_on_disconnect_object1,
-                           user_data);
+    exo_binding_link_init(&binding->direct,
+                          object1,
+                          property1,
+                          object2,
+                          pspec2,
+                          transform,
+                          exo_mutual_binding_on_disconnect_object1,
+                          user_data);
 
-    exo_binding_link_init (&binding->reverse,
-                           object2,
-                           property2,
-                           object1,
-                           pspec1,
-                           reverse_transform,
-                           exo_mutual_binding_on_disconnect_object2,
-                           user_data);
+    exo_binding_link_init(&binding->reverse,
+                          object2,
+                          property2,
+                          object1,
+                          pspec1,
+                          reverse_transform,
+                          exo_mutual_binding_on_disconnect_object2,
+                          user_data);
 
     /* tell each link about the reverse link for mutual
-   * bindings, to make sure that we do not ever recurse
-   * in notify (yeah, the GObject notify dispatching is
-   * really weird!).
-   */
+     * bindings, to make sure that we do not ever recurse
+     * in notify (yeah, the GObject notify dispatching is
+     * really weird!).
+     */
     binding->direct.dst_handler = binding->reverse.handler;
     binding->reverse.dst_handler = binding->direct.handler;
 
     return binding;
 }
-
 
 #define __EXO_BINDING_C__

@@ -1,4 +1,3 @@
-/* $Id: exo-private.c 22884 2006-08-26 12:40:43Z benny $ */
 /*-
  * Copyright (c) 2004-2006 os-cillation e.K.
  *
@@ -20,71 +19,34 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#ifdef HAVE_LIBINTL_H
-#include <libintl.h>
-#endif
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
+#include <stdbool.h>
 
 #include "exo-private.h"
 #include "exo-string.h"
 
-/*
-void
-_exo_i18n_init (void)
+void _exo_gtk_widget_send_focus_change(GtkWidget* widget, bool in)
 {
-  static gboolean inited = FALSE;
-
-  if (G_UNLIKELY (!inited))
-    {
-      inited = TRUE;
-
-      bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-      bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-#endif
-    }
-}
-*/
-
-
-void
-_exo_gtk_widget_send_focus_change (GtkWidget *widget,
-                                   gboolean   in)
-{
-#if !GTK_CHECK_VERSION (2, 22, 0)
+#if (GTK_MAJOR_VERSION == 2)
     if (in)
-        GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+        GTK_WIDGET_SET_FLAGS(widget, GTK_HAS_FOCUS);
     else
-        GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+        GTK_WIDGET_UNSET_FLAGS(widget, GTK_HAS_FOCUS);
 #endif
 
-    GdkEvent *fevent;
-    g_object_ref (G_OBJECT (widget));
-    fevent = gdk_event_new (GDK_FOCUS_CHANGE);
+    GdkEvent* fevent;
+
+    g_object_ref(G_OBJECT(widget));
+
+    fevent = gdk_event_new(GDK_FOCUS_CHANGE);
     fevent->focus_change.type = GDK_FOCUS_CHANGE;
-    fevent->focus_change.window = g_object_ref (gtk_widget_get_window (widget));
+    fevent->focus_change.window = g_object_ref(gtk_widget_get_window(widget));
     fevent->focus_change.in = in;
 
-#if GTK_CHECK_VERSION (2, 22, 0)
-    gtk_widget_send_focus_change (widget, fevent);
-#else
-    gtk_widget_event (widget, fevent);
+    gtk_widget_send_focus_change(widget, fevent);
 
-    g_object_notify (G_OBJECT (widget), "has-focus");
-#endif
-
-    g_object_unref (G_OBJECT (widget));
-    gdk_event_free (fevent);
-
+    g_object_unref(G_OBJECT(widget));
+    gdk_event_free(fevent);
 }
-
-
 
 /**
  * _exo_g_type_register_simple:
@@ -103,17 +65,12 @@ _exo_gtk_widget_send_focus_change (GtkWidget *widget,
  *
  * Return value: the newly registered #GType.
  **/
-GType
-_exo_g_type_register_simple (GType        type_parent,
-                             const gchar *type_name_static,
-                             guint        class_size,
-                             gpointer     class_init,
-                             guint        instance_size,
-                             gpointer     instance_init)
+GType _exo_g_type_register_simple(GType type_parent, const char* type_name_static,
+                                  unsigned int class_size, void* class_init,
+                                  unsigned int instance_size, void* instance_init)
 {
     /* generate the type info (on the stack) */
-    GTypeInfo info =
-    {
+    GTypeInfo info = {
         class_size,
         NULL,
         NULL,
@@ -127,10 +84,8 @@ _exo_g_type_register_simple (GType        type_parent,
     };
 
     /* register the static type */
-    return g_type_register_static (type_parent, I_(type_name_static), &info, 0);
+    return g_type_register_static(type_parent, I_(type_name_static), &info, 0);
 }
-
-
 
 /**
  * _exo_g_type_add_interface_simple:
@@ -141,17 +96,14 @@ _exo_g_type_register_simple (GType        type_parent,
  * Simple wrapper for g_type_add_interface_static(), which helps to avoid unnecessary
  * relocations for the #GInterfaceInfo<!---->s.
  **/
-void
-_exo_g_type_add_interface_simple (GType              instance_type,
-                                  GType              interface_type,
-                                  GInterfaceInitFunc interface_init_func)
+void _exo_g_type_add_interface_simple(GType instance_type, GType interface_type,
+                                      GInterfaceInitFunc interface_init_func)
 {
-    GInterfaceInfo info =
-    {
+    GInterfaceInfo info = {
         interface_init_func,
         NULL,
         NULL,
     };
 
-    g_type_add_interface_static (instance_type, interface_type, &info);
+    g_type_add_interface_static(instance_type, interface_type, &info);
 }

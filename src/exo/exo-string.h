@@ -1,4 +1,3 @@
-/* $Id: exo-string.h 47 2006-01-30 02:32:10Z pcmanx $ */
 /*-
  * Copyright (c) 2004 os-cillation e.K.
  *
@@ -25,17 +24,11 @@
 #ifndef __EXO_STRING_H__
 #define __EXO_STRING_H__
 
+#include <stdbool.h>
+
 #include <glib.h>
 
-G_BEGIN_DECLS;
-
-gchar    *exo_str_elide_underscores  (const gchar *text);
-
-gboolean  exo_str_is_equal           (const gchar *a,
-                                      const gchar *b);
-
-gchar   **exo_strndupv               (gchar      **strv,
-                                      gint         num);
+G_BEGIN_DECLS
 
 /**
  * exo_str_is_empty:
@@ -62,7 +55,7 @@ gchar   **exo_strndupv               (gchar      **strv,
  *
  * Since : 0.3.1.1
  **/
-#define I_(string) (g_intern_static_string ((string)))
+#define I_(string) (g_intern_static_string((string)))
 
 G_END_DECLS;
 

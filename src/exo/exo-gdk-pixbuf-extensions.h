@@ -22,31 +22,21 @@
 #ifndef __EXO_GDK_PIXBUF_EXTENSIONS_H__
 #define __EXO_GDK_PIXBUF_EXTENSIONS_H__
 
-#include <gdk/gdk.h>
+#include <stdbool.h>
 
-/* Taken from exo v0.10.2 (Debian package libexo-1-0), according to changelog
- * commit f455681554ca205ffe49bd616310b19f5f9f8ef1 Dec 27 13:50:21 2012 */
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
-GdkPixbuf *exo_gdk_pixbuf_scale_down                (GdkPixbuf       *source,
-                                                     gboolean         preserve_aspect_ratio,
-                                                     gint             dest_width,
-                                                     gint             dest_height) G_GNUC_WARN_UNUSED_RESULT;
+GdkPixbuf* exo_gdk_pixbuf_scale_down(GdkPixbuf* source, bool preserve_aspect_ratio, int dest_width,
+                                     int dest_height) G_GNUC_MALLOC G_GNUC_WARN_UNUSED_RESULT;
 
-GdkPixbuf *exo_gdk_pixbuf_colorize                  (const GdkPixbuf *source,
-                                                     const GdkColor  *color) G_GNUC_MALLOC G_GNUC_WARN_UNUSED_RESULT;
+GdkPixbuf* exo_gdk_pixbuf_colorize(const GdkPixbuf* source,
+                                   const GdkColor* color) G_GNUC_MALLOC G_GNUC_WARN_UNUSED_RESULT;
 
-GdkPixbuf *exo_gdk_pixbuf_spotlight                 (const GdkPixbuf *source) G_GNUC_MALLOC G_GNUC_WARN_UNUSED_RESULT;
-
-GdkPixbuf *exo_gdk_pixbuf_frame                     (const GdkPixbuf *source,
-                                                     const GdkPixbuf *frame,
-                                                     gint             left_offset,
-                                                     gint             top_offset,
-                                                     gint             right_offset,
-                                                     gint             bottom_offset) G_GNUC_MALLOC G_GNUC_WARN_UNUSED_RESULT;
+GdkPixbuf*
+exo_gdk_pixbuf_spotlight(const GdkPixbuf* source) G_GNUC_MALLOC G_GNUC_WARN_UNUSED_RESULT;
 
 G_END_DECLS
 
 #endif /* !__EXO_GDK_PIXBUF_EXTENSIONS_H__ */
-

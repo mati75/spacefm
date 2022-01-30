@@ -22,6 +22,8 @@
 #ifndef _PCMANFM_H_
 #define _PCMANFM_H_
 
+#include <stdbool.h>
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -32,7 +34,7 @@ void pcmanfm_ref();
 /* After closing any window/dialog/tool, this should be called.
  * If the last window is closed and we are not a deamon, pcmanfm will quit.
  */
-gboolean pcmanfm_unref();
+bool pcmanfm_unref();
 
 G_END_DECLS
 

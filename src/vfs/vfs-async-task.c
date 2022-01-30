@@ -19,35 +19,36 @@
  *      MA 02110-1301, USA.
  */
 
+#include <stdbool.h>
+
 #include "vfs-async-task.h"
-#include <gtk/gtk.h>
 
-static void vfs_async_task_class_init           (VFSAsyncTaskClass *klass);
-static void vfs_async_task_init             (VFSAsyncTask *task);
-static void vfs_async_task_finalize         (GObject *object);
+static void vfs_async_task_class_init(VFSAsyncTaskClass* klass);
+static void vfs_async_task_init(VFSAsyncTask* task);
+static void vfs_async_task_finalize(GObject* object);
 
-static void vfs_async_task_finish( VFSAsyncTask* task, gboolean is_cancelled );
-static void vfs_async_thread_cleanup( VFSAsyncTask* task, gboolean finalize );
+static void vfs_async_task_finish(VFSAsyncTask* task, bool is_cancelled);
+static void vfs_async_thread_cleanup(VFSAsyncTask* task, bool finalize);
 
-void vfs_async_task_real_cancel( VFSAsyncTask* task, gboolean finalize );
+void vfs_async_task_real_cancel(VFSAsyncTask* task, bool finalize);
 
 /* Local data */
-static GObjectClass *parent_class = NULL;
+static GObjectClass* parent_class = NULL;
 
-enum {
+enum
+{
     FINISH_SIGNAL,
     N_SIGNALS
 };
 
-static guint signals[ N_SIGNALS ] = { 0 };
+static unsigned int signals[N_SIGNALS] = {0};
 
 GType vfs_async_task_get_type(void)
 {
     static GType self_type = 0;
-    if (! self_type)
+    if (!self_type)
     {
-        static const GTypeInfo self_info =
-        {
+        static const GTypeInfo self_info = {
             sizeof(VFSAsyncTaskClass),
             NULL, /* base_init */
             NULL, /* base_finalize */
@@ -60,37 +61,49 @@ GType vfs_async_task_get_type(void)
             NULL /* value_table */
         };
 
-        self_type = g_type_register_static(G_TYPE_OBJECT, "VFSAsyncTask", &self_info, 0); }
+        self_type = g_type_register_static(G_TYPE_OBJECT, "VFSAsyncTask", &self_info, 0);
+    }
 
     return self_type;
 }
 
-static void vfs_async_task_class_init(VFSAsyncTaskClass *klass)
+static void vfs_async_task_class_init(VFSAsyncTaskClass* klass)
 {
-    GObjectClass *g_object_class;
+    GObjectClass* g_object_class;
     g_object_class = G_OBJECT_CLASS(klass);
     g_object_class->finalize = vfs_async_task_finalize;
     parent_class = (GObjectClass*)g_type_class_peek(G_TYPE_OBJECT);
 
     klass->finish = vfs_async_task_finish;
 
-    signals[ FINISH_SIGNAL ] =
-        g_signal_new ( "finish",
-                       G_TYPE_FROM_CLASS ( klass ),
-                       G_SIGNAL_RUN_FIRST,
-                       G_STRUCT_OFFSET ( VFSAsyncTaskClass, finish ),
-                       NULL, NULL,
-                       g_cclosure_marshal_VOID__BOOLEAN,
-                       G_TYPE_NONE, 1, G_TYPE_BOOLEAN );
+    signals[FINISH_SIGNAL] = g_signal_new("finish",
+                                          G_TYPE_FROM_CLASS(klass),
+                                          G_SIGNAL_RUN_FIRST,
+                                          G_STRUCT_OFFSET(VFSAsyncTaskClass, finish),
+                                          NULL,
+                                          NULL,
+                                          g_cclosure_marshal_VOID__BOOLEAN,
+                                          G_TYPE_NONE,
+                                          1,
+                                          G_TYPE_BOOLEAN);
 }
 
-static void vfs_async_task_init(VFSAsyncTask *task)
+static void vfs_async_task_init(VFSAsyncTask* task)
 {
-    task->lock = g_mutex_new();
+    g_mutex_init(&task->lock);
 }
 
+void vfs_async_task_lock(VFSAsyncTask* task)
+{
+    g_mutex_lock(task->lock);
+}
 
-VFSAsyncTask* vfs_async_task_new( VFSAsyncFunc task_func, gpointer user_data )
+void vfs_async_task_unlock(VFSAsyncTask* task)
+{
+    g_mutex_unlock(task->lock);
+}
+
+VFSAsyncTask* vfs_async_task_new(VFSAsyncFunc task_func, void* user_data)
 {
     VFSAsyncTask* task = (VFSAsyncTask*)g_object_new(VFS_ASYNC_TASK_TYPE, NULL);
     task->func = task_func;
@@ -98,90 +111,78 @@ VFSAsyncTask* vfs_async_task_new( VFSAsyncFunc task_func, gpointer user_data )
     return (VFSAsyncTask*)task;
 }
 
-gpointer vfs_async_task_get_data( VFSAsyncTask* task )
+void* vfs_async_task_get_data(VFSAsyncTask* task)
 {
     return task->user_data;
 }
 
-void vfs_async_task_set_data( VFSAsyncTask* task, gpointer user_data )
+static void vfs_async_task_finalize(GObject* object)
 {
-    task->user_data = user_data;
-}
-
-gpointer vfs_async_task_get_return_value( VFSAsyncTask* task )
-{
-    return task->ret_val;
-}
-
-void vfs_async_task_finalize(GObject *object)
-{
-    VFSAsyncTask *task;
+    VFSAsyncTask* task;
     /* FIXME: destroying the object without calling vfs_async_task_cancel
      currently induces unknown errors. */
     task = (VFSAsyncTask*)object;
 
     /* finalize = TRUE, inhibit the emission of signals */
-    vfs_async_task_real_cancel( task, TRUE );
-    vfs_async_thread_cleanup( task, TRUE );
+    vfs_async_task_real_cancel(task, TRUE);
+    vfs_async_thread_cleanup(task, TRUE);
 
-    g_mutex_free( task->lock );
     task->lock = NULL;
 
     if (G_OBJECT_CLASS(parent_class)->finalize)
-        (* G_OBJECT_CLASS(parent_class)->finalize)(object);
+        (*G_OBJECT_CLASS(parent_class)->finalize)(object);
 }
 
-gboolean on_idle( gpointer _task )
+static bool on_idle(void* _task)
 {
-    VFSAsyncTask *task = VFS_ASYNC_TASK(_task);
-    //GDK_THREADS_ENTER();   // not needed because this runs in main thread
-    vfs_async_thread_cleanup( task, FALSE );
-    //GDK_THREADS_LEAVE();
-    return TRUE;    /* the idle handler is removed in vfs_async_thread_cleanup. */
+    VFSAsyncTask* task = VFS_ASYNC_TASK(_task);
+    // gdk_threads_enter();   // not needed because this runs in main thread
+    vfs_async_thread_cleanup(task, FALSE);
+    // gdk_threads_leave();
+    return TRUE; /* the idle handler is removed in vfs_async_thread_cleanup. */
 }
 
-gpointer vfs_async_task_thread( gpointer _task )
+static void* vfs_async_task_thread(void* _task)
 {
-    VFSAsyncTask *task = VFS_ASYNC_TASK(_task);
-    gpointer ret = NULL;
-    ret = task->func( task, task->user_data );
+    VFSAsyncTask* task = VFS_ASYNC_TASK(_task);
+    void* ret = task->func(task, task->user_data);
 
-    vfs_async_task_lock( task );
-    task->idle_id = g_idle_add( on_idle, task );  // runs in main loop thread
+    vfs_async_task_lock(task);
+    task->idle_id = g_idle_add(on_idle, task); // runs in main loop thread
     task->ret_val = ret;
     task->finished = TRUE;
-    vfs_async_task_unlock( task );
+    vfs_async_task_unlock(task);
 
     return ret;
 }
 
-void vfs_async_task_execute( VFSAsyncTask* task )
+void vfs_async_task_execute(VFSAsyncTask* task)
 {
-    task->thread = g_thread_create( vfs_async_task_thread, task, TRUE, NULL );
+    task->thread = g_thread_new("async_task", vfs_async_task_thread, task);
 }
 
-void vfs_async_thread_cleanup( VFSAsyncTask* task, gboolean finalize )
+static void vfs_async_thread_cleanup(VFSAsyncTask* task, bool finalize)
 {
-    if( task->idle_id )
+    if (task->idle_id)
     {
-        g_source_remove( task->idle_id );
+        g_source_remove(task->idle_id);
         task->idle_id = 0;
     }
-    if( G_LIKELY( task->thread ) )
+    if (G_LIKELY(task->thread))
     {
-        g_thread_join( task->thread );
+        g_thread_join(task->thread);
         task->thread = NULL;
         task->finished = TRUE;
         /* Only emit the signal when we are not finalizing.
             Emitting signal on an object during destruction is not allowed. */
-        if( G_LIKELY( ! finalize ) )
-            g_signal_emit( task, signals[ FINISH_SIGNAL ], 0, task->cancelled );
+        if (G_LIKELY(!finalize))
+            g_signal_emit(task, signals[FINISH_SIGNAL], 0, task->cancelled);
     }
 }
 
-void vfs_async_task_real_cancel( VFSAsyncTask* task, gboolean finalize )
+void vfs_async_task_real_cancel(VFSAsyncTask* task, bool finalize)
 {
-    if( ! task->thread )
+    if (!task->thread)
         return;
 
     /*
@@ -198,45 +199,35 @@ void vfs_async_task_real_cancel( VFSAsyncTask* task, gboolean finalize )
      * to get things right.
      */
 
-    //sfm this deadlocks on quick dir change
-    //GDK_THREADS_LEAVE(); 
-    
-    vfs_async_task_lock( task );
-    task->cancel = TRUE;
-    vfs_async_task_unlock( task );
+    // sfm this deadlocks on quick dir change
+    // gdk_threads_leave();
 
-    vfs_async_thread_cleanup( task, finalize );
+    vfs_async_task_lock(task);
+    task->cancel = TRUE;
+    vfs_async_task_unlock(task);
+
+    vfs_async_thread_cleanup(task, finalize);
     task->cancelled = TRUE;
 
-    //GDK_THREADS_ENTER();
+    // gdk_threads_enter();
 }
 
-void vfs_async_task_cancel( VFSAsyncTask* task )
+void vfs_async_task_cancel(VFSAsyncTask* task)
 {
-    vfs_async_task_real_cancel( task, FALSE );
+    vfs_async_task_real_cancel(task, FALSE);
 }
 
-void vfs_async_task_lock( VFSAsyncTask* task )
-{
-    g_mutex_lock( task->lock );
-}
-
-void vfs_async_task_unlock( VFSAsyncTask* task )
-{
-    g_mutex_unlock( task->lock );
-}
-
-void vfs_async_task_finish( VFSAsyncTask* task, gboolean is_cancelled )
+static void vfs_async_task_finish(VFSAsyncTask* task, bool is_cancelled)
 {
     /* default handler of "finish" signal. */
 }
 
-gboolean vfs_async_task_is_finished( VFSAsyncTask* task )
+bool vfs_async_task_is_finished(VFSAsyncTask* task)
 {
     return task->finished;
 }
 
-gboolean vfs_async_task_is_cancelled( VFSAsyncTask* task )
+bool vfs_async_task_is_cancelled(VFSAsyncTask* task)
 {
     return task->cancel;
 }
