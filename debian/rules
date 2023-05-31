@@ -1,36 +1,11 @@
 #!/usr/bin/make -f
 
-FLAVORS = gtk2 gtk3
-
-CONFIGURE_FLAGS_gtk2 = --with-gtk2
-CONFIGURE_FLAGS_gtk3 = --with-gtk3
-CONFIGURE_COMMON_FLAGS += --disable-pixmaps
-
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
 	dh $@
 
-override_dh_auto_configure: $(FLAVORS:%=doconfigure-%)
+override_dh_auto_configure:
+	dh_auto_configure -- --with-gtk3 --disable-pixmaps
 
-doconfigure-%:
-	dh_auto_configure --builddirectory=debian/build-$* -- $(CONFIGURE_FLAGS_$*) $(CONFIGURE_COMMON_FLAGS)
-
-override_dh_auto_build: $(FLAVORS:%=dobuild-%)
-
-dobuild-%:
-	dh_auto_build --builddirectory=build/$*
-
-override_dh_auto_install: $(FLAVORS:%=doinstall-%)
-
-doinstall-%:
-	dh_auto_install --builddirectory=debian/build-$* --destdir=debian/tmp/$*
-
-override_dh_install:
-	find debian/tmp -name \*.la -delete
-	sh debian/clean_gtk3.sh
-	dh_install --fail-missing
-
-override_dh_auto_clean:
-	rm -rf debian/build-gtk2 debian/build-gtk3

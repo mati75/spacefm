@@ -1,3 +1,8 @@
-debian/tmp/gtk2/usr/bin/* /usr/bin
-debian/tmp/gtk2/usr/share/applications/* /usr/share/applications/
-debian/tmp/gtk2/etc/spacefm/spacefm.conf etc/spacefm
+usr/bin/* /usr/bin
+usr/share/applications/* /usr/share/applications/
+etc/spacefm/spacefm.conf etc/spacefm
+usr/share/icons/* /usr/share/icons/
+usr/share/locale/* /usr/share/locale/
+usr/share/mime/* /usr/share/mime/
+usr/share/spacefm/ui/* /usr/share/spacefm/ui/
+usr/share/doc/* usr/share/doc/
