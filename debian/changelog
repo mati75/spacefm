@@ -1,4 +1,4 @@
-spacefm (1.0.6-6) UNRELEASED; urgency=medium
+spacefm (1.0.6-6) unstable; urgency=medium
 
   [ Debian Janitor ]
   * Remove constraints unnecessary since buster:
@@ -15,9 +15,10 @@ spacefm (1.0.6-6) UNRELEASED; urgency=medium
   * Add patch for fix thumbnails location.
   * Build only GTK3 version, create spacefm-gtk3 and spacefm-common
     as transitional packages. (Closes: #967754)
-  * Bump to Standards-Version to 4.6.1.
+  * Bump to Standards-Version to 4.6.12
+  * Bump dh version to 13.
 
- -- Debian Janitor <janitor@jelmer.uk>  Tue, 01 Mar 2022 15:44:51 -0000
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Mon, 31 Jul 2023 22:46:14 +0200
 
 spacefm (1.0.6-5) unstable; urgency=medium
 
