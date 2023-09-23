@@ -1,3 +1,9 @@
+spacefm (1.0.6-7) unstable; urgency=medium
+
+  * Switch B-D to libgdk-pixbuf-2.0-dev. (Closes: #1037400)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 20 Sep 2023 21:00:18 +0200
+
 spacefm (1.0.6-6) unstable; urgency=medium
 
   [ Debian Janitor ]
