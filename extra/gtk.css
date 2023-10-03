@@ -1,0 +1,10 @@
+overshoot.top,
+overshoot.right,
+overshoot.bottom,
+overshoot.left {
+  background: none;
+}
+
+.undershoot {
+    background: none;
+}
