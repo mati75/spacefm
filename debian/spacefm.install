@@ -1,8 +1,25 @@
-usr/bin/* /usr/bin
-usr/share/applications/* /usr/share/applications/
-etc/spacefm/spacefm.conf etc/spacefm
-usr/share/icons/* /usr/share/icons/
-usr/share/locale/* /usr/share/locale/
-usr/share/mime/* /usr/share/mime/
-usr/share/spacefm/ui/* /usr/share/spacefm/ui/
-usr/share/doc/* usr/share/doc/
+usr/bin/spacefm
+usr/share/applications/spacefm-folder-handler.desktop
+usr/share/applications/spacefm.desktop
+usr/share/icons/Faenza/apps/48/spacefm-find.png
+usr/share/icons/Faenza/apps/48/spacefm-root.png
+usr/share/icons/Faenza/apps/48/spacefm.png
+usr/share/icons/hicolor/128x128/apps/spacefm-128-cube-blue.png
+usr/share/icons/hicolor/128x128/apps/spacefm-128-cube-green.png
+usr/share/icons/hicolor/128x128/apps/spacefm-128-cube-red.png
+usr/share/icons/hicolor/128x128/apps/spacefm-128-pyramid-blue.png
+usr/share/icons/hicolor/128x128/apps/spacefm-128-pyramid-green.png
+usr/share/icons/hicolor/128x128/apps/spacefm-128-pyramid-red.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-cube-blue.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-cube-green.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-cube-red.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-folder-blue.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-folder-red.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-pyramid-blue.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-pyramid-green.png
+usr/share/icons/hicolor/48x48/apps/spacefm-48-pyramid-red.png
+usr/share/icons/hicolor/48x48/apps/spacefm-find.png
+usr/share/icons/hicolor/48x48/apps/spacefm-root.png
+usr/share/icons/hicolor/48x48/apps/spacefm.png
+usr/share/spacefm/scripts/config-update
+usr/share/spacefm/scripts/config-update-git

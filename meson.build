@@ -1,219 +1,452 @@
 project(
-  'spacefm', ['c', 'cpp'],
-  version : '2.1.0',
-  license : 'GPL2 LGPL',
-  default_options : [
-  	  'prefix=/usr',
-  	  'sysconfdir=/etc',
-  ],
-  meson_version : '>= 0.49'
+    'spacefm', ['c', 'cpp'],
+    version : '3.0.0-dev',
+    license : 'GPL3',
+    default_options : [
+        'cpp_std=c++20',
+        'buildtype=debug',
+        'warning_level=3',
+        'optimization=2',
+        'prefix=/usr',
+        'sysconfdir=/etc',
+    ],
+    meson_version : '>= 1.0.0'
 )
 
-result = [ 'Passed options:' ]
+bash = find_program('bash', required : true)
+fish = find_program('fish', required : true)
+python = find_program('python3', required : true)
 
-c = meson.get_compiler('c')
-cpp = meson.get_compiler('cpp')
-c_id = c.get_id()
-cross = meson.is_cross_build()
-sh = find_program('sh')
-sed = find_program('sed')
-echo = find_program('echo')
+build_root = meson.project_build_root()
+source_root = meson.project_source_root()
+
 incdir = include_directories('src')
 
-builddir = meson.current_build_dir()
-sourcedir = meson.current_source_dir()
 package = meson.project_name()
 version = meson.project_version()
 prefix = get_option('prefix')
 bindir = join_paths(prefix, get_option('bindir'))
 datadir = join_paths(prefix, get_option('datadir'))
+libdir = join_paths(prefix, get_option('libdir'), package)
 sysconfdir = get_option('sysconfdir')
 localedir = join_paths(prefix, get_option('localedir'))
 mandir = join_paths(prefix, get_option('mandir'))
 
-ldflags_add = []
-cflags_add = []
+## compiler stuff
 
-ldflags_opt = []
-cflags_opt = []
+cc = meson.get_compiler('c')
+cpp = meson.get_compiler('cpp')
 
-cflags_opt += [
-  [ '-Wimplicit-fallthrough' ],
-  [ '-Wvla' ],
-  [ '-fomit-frame-pointer' ],
-  [ '-fno-common' ],
+# message(cc.get_id())
+# message(cpp.get_id())
+
+flags = []
+link_flags = []
+
+debug_flags = [
+    '-ggdb3',
+
+    '-pedantic',
+    '-pedantic-errors',
+    # '-Wfatal-errors',
+    # '-ftime-trace',
 ]
-ldflags_opt += [
-  [ '-Wl,-O2' ],
-  [ '-Wl,--as-needed' ],
+
+if get_option('buildtype') == 'debug'
+    flags += cpp.get_supported_arguments(debug_flags)
+endif
+
+release_flags = []
+
+if get_option('buildtype') == 'release'
+    flags += cpp.get_supported_arguments(release_flags)
+endif
+
+default_warning_flags = [
+    # '-Wconversion',
+    '-Wchar-subscripts',
+    '-Wcomment',
+    '-Wdisabled-optimization',
+    '-Wdouble-promotion',
+    '-Wfloat-equal',
+    '-Wformat=2',
+    '-Wimplicit-fallthrough',
+    '-Wimport',
+    '-Winit-self',
+    '-Wmissing-field-initializers',
+    '-Wmissing-format-attribute',
+    '-Wmissing-include-dirs',
+    '-Wmissing-noreturn',
+    '-Wparentheses',
+    '-Wpointer-arith',
+    '-Wsequence-point',
+    '-Wshadow',
+    '-Wsign-compare',
+    '-Wstack-protector',
+    '-Wstrict-aliasing',
+    '-Wswitch',
+    '-Wswitch-default',
+    '-Wswitch-enum',
+    '-Wtrigraphs',
+    '-Wundef',
+    '-Wuninitialized',
+    '-Wunknown-pragmas',
+    '-Wunreachable-code',
+    '-Wunused',
+    '-Wunused-function',
+    '-Wunused-label',
+    '-Wunused-parameter',
+    '-Wunused-value',
+    '-Wunused-result',
+    '-Wunused-variable',
+    '-Wunused-macros',
+    '-Wvariadic-macros',
+    '-Wvla',
+    '-Wwrite-strings',
+    '-Wignored-qualifiers',
+    '-Wstring-compare',
+    '-Walloca',
+    '-Wdate-time',
+
+    # Disabled Warnings
+    '-Wno-format-nonliteral',
+
+    # TODO
+    # '-Wcast-qual',
+    # '-Wconversion',
+    # '-Wint-conversion',
+
+    # TODO - fix these warnings
+    '-Wno-deprecated-declarations',
+
+    # Sanitizer
+    # '-fsanitize=undefined,address',
 ]
 
-add_global_arguments(cflags_opt, language: ['c', 'cpp'])
-add_global_link_arguments(ldflags_opt, language: ['c', 'cpp'])
+flags += cpp.get_supported_arguments(default_warning_flags)
 
+if cpp.has_multi_arguments('-Wformat', '-Werror=format-security')
+    flags += '-Werror=format-security'
+endif
 
-# TODO data paths
+# GCC only warning flags
+if cpp.get_id() == 'gcc'
+    default_warning_flags_gcc = [
+        '-Wformat-overflow=2',
+        '-Wformat-truncation',
+        '-Warray-bounds=2',
+        '-Warray-compare',
+        '-Wzero-length-bounds',
+        '-Wattribute-alias=2',
+        '-Wduplicated-branches',
+        '-Wduplicated-cond',
+        '-Wtrampolines',
+        '-Walloc-zero',
+        '-Wstringop-overflow=4',
 
-data_args = []
+        # '-Weffc++',
 
-data_args += '-DHTMLDIR="/usr/share"'
-data_args += '-DDATADIR="/usr/share"'
-data_args += '-DSYSCONFDIR="/etc"'
-data_args += '-DPACKAGE_UI_DIR="/usr/share/spacefm/ui"'
+        # Disabled Warnings
+        '-Wno-array-bounds',
+        '-Wno-stringop-overflow',
+        '-Wno-switch-default',
+        '-Wno-shadow',
+        '-Wno-maybe-uninitialized',
+        '-Wno-unused-result',
+        '-Wno-cast-function-type',
+    ]
 
-#htmldir_path = get_option('htmldir')
-#if htmldir_path == ''
-#  htmldir_path = join_paths(get_option('libdir'), 'dri')
-#endif
+    flags += cpp.get_supported_arguments(default_warning_flags_gcc)
+endif
 
-foreach a : data_args
-  add_project_arguments(a, language : ['c', 'cpp'])
-endforeach
+# Clang only warning flags
+if cpp.get_id() == 'clang'
+    default_warning_flags_clang = [
+        # Disabled Warnings
+    ]
 
+    flags += cpp.get_supported_arguments(default_warning_flags_clang)
+endif
 
-# preprocessor related - start
+if cpp.has_link_argument('-Wl,--as-needed')
+    link_flags += '-Wl,--as-needed'
+endif
 
-pre_args = [
+noexecstack = false
+if cpp.has_link_argument('-Wl,-z,noexecstack')
+    link_flags += '-Wl,-z,noexecstack'
+    noexecstack = true
+endif
+
+add_global_arguments(flags, language: ['c', 'cpp'])
+add_global_link_arguments(link_flags, language: ['c', 'cpp'])
+
+## dependencies
+
+# ztd use system or subproject
+ztd_dep = dependency('ztd', required : false)
+if not ztd_dep.found() # using subproject
+  ztd_proj = subproject('ztd', required : true)
+  ztd_dep = ztd_proj.get_variable('ztd_dep')
+endif
+
+# magic_enum use system or subproject
+magic_enum_dep = dependency('magic_enum', required : false)
+if not magic_enum_dep.found() # using subproject
+  magic_enum_proj = subproject('magic_enum', required : true)
+  magic_enum_dep = magic_enum_proj.get_variable('magic_enum_dep')
+endif
+
+# toml11 use system or subproject
+toml11_dep = dependency('toml11', required : false)
+if not toml11_dep.found() # using subproject
+  cmake = import('cmake')
+  toml11_proj = cmake.subproject('toml11', required : true)
+  toml11_dep = toml11_proj.dependency('toml11')
+endif
+
+libudev_dep = dependency('libudev', required : true)
+libffmpegthumbnailer_dep = dependency('libffmpegthumbnailer', required : true)
+openssl_dep = dependency('openssl', required : true)
+
+exo_dep = dependency('exo-2', required : true)
+# x11_dep = dependency('x11', required : true)
+spdlog_dep = dependency('spdlog', required : true)
+fmt_dep = dependency('fmt', required : true)
+sigc_dep = dependency('sigc++-3.0', required : true)
+pugixml_dep = dependency('pugixml', required : true)
+nlohmann_json_dep = dependency('nlohmann_json', required : true)
+cli11_dep = dependency('CLI11', required : true)
+
+# zmqpp does not provide a pkgconfig file
+libzmq_dep = dependency('libzmq', required : true)
+libzmqpp_dep = cc.find_library('zmqpp', has_headers: ['zmqpp/zmqpp.hpp'], required: true)
+
+# Gtk3 CPP
+gtkmm_dep = dependency('gtkmm-3.0', required : true)
+glibmm_dep = dependency('glibmm-2.4', required : true)
+giomm_dep = dependency('giomm-2.4', required : true)
+
+# Gtk4 CPP
+# gtkmm_dep = dependency('gtkmm-4.0', required : true)
+# glibmm_dep = dependency('glibmm-2.68', required : true)
+# giomm_dep = dependency('giomm-2.68', required : true)
+
+dependencies = [
+    gtkmm_dep,
+    glibmm_dep,
+    giomm_dep,
+
+    exo_dep,
+
+    magic_enum_dep,
+    toml11_dep,
+
+    spdlog_dep,
+    fmt_dep,
+    sigc_dep,
+    pugixml_dep,
+    nlohmann_json_dep,
+    cli11_dep,
+
+    libzmq_dep,
+    libzmqpp_dep,
+
+    libudev_dep,
+    libffmpegthumbnailer_dep,
+    openssl_dep,
+
+    ztd_dep,
+]
+
+## preprocessor static
+
+preprocessor = [
     '-DPACKAGE_NAME="spacefm"',
     '-DPACKAGE_NAME_FANCY="SpaceFM"',
     '-DPACKAGE_VERSION="@0@"'.format(meson.project_version()),
     '-DPACKAGE_BUGREPORT="TODO"',
     '-DPACKAGE_ONLINE_DOCS="TODO"',
-    '-DBASHPATH="/bin/bash"', # TODO - set in meson_options.txt
-    '-DSHELL_SETTINGS="set -o pipefail;shopt -s failglob"',
-    '-DHAVE_EUIDACCESS', # TODO - autodetect?
+
+    '-DFISH_PATH="@0@"'.format(fish.full_path()),
+
     '-DG_DISABLE_ASSERT',
     '-DG_DISABLE_CAST_CHECKS',
     '-DG_DISABLE_CHECKS',
     '-DG_LOG_DOMAIN="SpaceFM"',
+    #'-DG_DEBUG=fatal_warnings',
+
+    '-DMAGIC_ENUM_RANGE_MIN=0',
+    '-DMAGIC_ENUM_RANGE_MAX=2000',
+    # '-DMAGIC_ENUM_RANGE_MAX=32767',
+
+    '-DZMQ_PORT=59172',
+
+    '-DLIBDIR_PATH="@0@"'.format(libdir),
+
+    '-DGTK_DISABLE_DEPRECATED',
+    '-DGDK_DISABLE_DEPRECATED',
+
+    '-DGTKMM_DISABLE_DEPRECATED',
+    '-DGDKMM_DISABLE_DEPRECATED',
+    '-DGLIBMM_DISABLE_DEPRECATED',
+    '-DGIOMM_DISABLE_DEPRECATED',
+
+    # '-DZTD_LOGGER_USE_STD_FORMAT',
+    '-DZTD_DISABLE_GLOBAL_LOG_MACROS',
     ]
 
-if get_option('nls')
-  pre_args += '-DHAVE_NLS'
+foreach a : preprocessor
+    add_project_arguments(a, language : ['c', 'cpp'])
+endforeach
+
+## preprocessor features
+features = []
+
+if get_option('deprecated')
+    features += '-DHAVE_DEPRECATED'
 endif
 
-if get_option('sn')
-  pre_args += '-DHAVE_SN'
+if get_option('deprecated-ini-loading')
+  features += '-DHAVE_DEPRECATED_INI_CONFIG_LOADING'
 endif
 
-if get_option('deprecated-hw')
-  pre_args += '-DHAVE_DEPRECATED_HW'
+if get_option('nonlatin')
+  features += '-DHAVE_NONLATIN_KEYBOARD_SUPPORT'
 endif
 
-if get_option('mmap')
-  pre_args += '-DHAVE_MMAP'
-endif
+foreach a : features
+    add_project_arguments(a, language : ['c', 'cpp'])
+endforeach
 
-if get_option('gtk3')
-  dep_gtk = dependency('gtk+-3.0')
-elif get_option('gtk2')
-  dep_gtk = dependency('gtk+-2.0')
-else
-  error('unknown gtk version')
-endif
+## data paths
 
-if get_option('xxhash')
-  pre_args += '-DUSE_XXHASH'
-  lib_xxhash = meson.get_compiler('c').find_library('xxhash', required : false)
-else
-  lib_xxhash = meson.get_compiler('c').find_library('xxhash', required : false)
-endif
+data_args = [
+    '-DDATADIR="/usr/share"',
+    '-DSYSCONFDIR="/etc"',
+    '-DPACKAGE_SCRIPTS_PATH="/usr/share/spacefm/scripts"',
+    '-DFISH_FMLIB="/usr/share/spacefm/lib/fmlib.fish"',
+]
 
-foreach a : pre_args
+foreach a : data_args
   add_project_arguments(a, language : ['c', 'cpp'])
 endforeach
 
-# preprocessor related - end
+## Source files
 
-lib_math = meson.get_compiler('c').find_library('libm', required : true)
-lib_libbsd = meson.get_compiler('c').find_library('libbsd', required : true)
-lib_udev = meson.get_compiler('c').find_library('libudev', required : true)
-lib_ffmpeg = meson.get_compiler('c').find_library('libffmpegthumbnailer', required : true)
+sources = files(
+    'src/about.cxx',
+    'src/autosave.cxx',
+    'src/bookmarks.cxx',
+    'src/file-search.cxx',
+    'src/ipc.cxx',
+    'src/ipc-command.cxx',
+    'src/main.cxx',
+    'src/main-window.cxx',
+    'src/preference-dialog.cxx',
+    'src/program-timer.cxx',
+    'src/scripts.cxx',
+    'src/settings.cxx',
+    'src/single-instance.cxx',
+    'src/terminal-handlers.cxx',
+    'src/types.cxx',
+    'src/utils.cxx',
+    'src/window-reference.cxx',
 
-dep_x11 = dependency('x11')
-dep_glib = dependency('glib-2.0')
+    'src/compat/gtk4-porting.cxx',
+    'src/compat/type-conversion.cxx',
 
+    'src/commandline/commandline.cxx',
+    'src/commandline/socket.cxx',
+    'src/commandline/socket/subcommands.cxx',
+    'src/commandline/socket/get/subcommands.cxx',
+    'src/commandline/socket/get-task/subcommands.cxx',
+    'src/commandline/socket/run-task/subcommands.cxx',
+    'src/commandline/socket/set/subcommands.cxx',
+    'src/commandline/socket/set-task/subcommands.cxx',
 
-sources = [
-  'src/cust-dialog.c',
-  'src/find-files.c',
-  'src/go-dialog.c',
-  'src/item-prop.c',
-  'src/main.c',
-  'src/main-window.c',
-  'src/pref-dialog.c',
-  'src/settings.c',
-  'src/utils.c',
-  'src/mime-type/mime-action.c',
-  'src/mime-type/mime-cache.c',
-  'src/mime-type/mime-type.c',
-  'src/exo/exo-binding.c',
-  'src/exo/exo-cell-renderer-icon.c',
-  'src/exo/exo-gdk-pixbuf-extensions.c',
-  'src/exo/exo-gtk-extensions.c',
-  'src/exo/exo-icon-chooser-dialog.c',
-  'src/exo/exo-icon-chooser-model.c',
-  'src/exo/exo-icon-view.c',
-  'src/exo/exo-marshal.c',
-  'src/exo/exo-private.c',
-  'src/exo/exo-thumbnail-preview.c',
-  'src/exo/exo-tree-view.c',
-  'src/exo/exo-utils.c',
-  'src/ptk/ptk-app-chooser.c',
-  'src/ptk/ptk-clipboard.c',
-  'src/ptk/ptk-dir-tree.c',
-  'src/ptk/ptk-dir-tree-view.c',
-  'src/ptk/ptk-file-archiver.c',
-  'src/ptk/ptk-file-browser.c',
-  'src/ptk/ptk-file-icon-renderer.c',
-  'src/ptk/ptk-file-list.c',
-  'src/ptk/ptk-file-menu.c',
-  'src/ptk/ptk-file-misc.c',
-  'src/ptk/ptk-file-properties.c',
-  'src/ptk/ptk-file-task.c',
-  'src/ptk/ptk-handler.c',
-  'src/ptk/ptk-location-view.c',
-  'src/ptk/ptk-path-entry.c',
-  'src/ptk/ptk-text-renderer.c',
-  'src/ptk/ptk-utils.c',
-  'src/vfs/vfs-app-desktop.c',
-  'src/vfs/vfs-async-task.c',
-  'src/vfs/vfs-dir.c',
-  'src/vfs/vfs-execute.c',
-  'src/vfs/vfs-file-info.c',
-  'src/vfs/vfs-file-monitor.c',
-  'src/vfs/vfs-file-task.c',
-  'src/vfs/vfs-mime-type.c',
-  'src/vfs/vfs-thumbnail-loader.c',
-  'src/vfs/vfs-utils.c',
-  'src/vfs/vfs-volume.c',
-]
+    'src/xset/xset.cxx',
+    'src/xset/xset-custom.cxx',
+    'src/xset/xset-defaults.cxx',
+    'src/xset/xset-design.cxx',
+    'src/xset/xset-design-clipboard.cxx',
+    'src/xset/xset-dialog.cxx',
+    'src/xset/xset-keyboard.cxx',
+    'src/xset/xset-lookup.cxx',
+
+    'src/settings/app.cxx',
+    'src/settings/config-load.cxx',
+    'src/settings/config-save.cxx',
+
+    'src/settings/upgrade/config-upgrade.cxx',
+
+    'src/mime-type/mime-action.cxx',
+    'src/mime-type/mime-cache.cxx',
+    'src/mime-type/mime-type.cxx',
+
+    'src/ptk/ptk-app-chooser.cxx',
+    'src/ptk/ptk-archiver.cxx',
+    'src/ptk/ptk-bookmark-view.cxx',
+    'src/ptk/ptk-clipboard.cxx',
+    'src/ptk/ptk-dialog.cxx',
+    'src/ptk/ptk-dir-tree.cxx',
+    'src/ptk/ptk-dir-tree-view.cxx',
+    'src/ptk/ptk-file-actions-misc.cxx',
+    'src/ptk/ptk-file-actions-open.cxx',
+    'src/ptk/ptk-file-actions-rename.cxx',
+    'src/ptk/ptk-file-browser.cxx',
+    'src/ptk/ptk-file-list.cxx',
+    'src/ptk/ptk-file-menu.cxx',
+    'src/ptk/ptk-file-properties.cxx',
+    'src/ptk/ptk-file-task.cxx',
+    'src/ptk/ptk-keyboard.cxx',
+    'src/ptk/ptk-location-view.cxx',
+    'src/ptk/ptk-path-entry.cxx',
+    'src/ptk/ptk-task-view.cxx',
+    'src/ptk/ptk-utils.cxx',
+
+    'src/vfs/vfs-app-desktop.cxx',
+    'src/vfs/vfs-async-task.cxx',
+    'src/vfs/vfs-async-thread.cxx',
+    'src/vfs/vfs-device.cxx',
+    'src/vfs/vfs-dir.cxx',
+    'src/vfs/vfs-file-info.cxx',
+    'src/vfs/vfs-file-monitor.cxx',
+    'src/vfs/vfs-file-task.cxx',
+    'src/vfs/vfs-file-trash.cxx',
+    'src/vfs/vfs-mime-type.cxx',
+    'src/vfs/vfs-mime-monitor.cxx',
+    'src/vfs/vfs-thumbnail-loader.cxx',
+    'src/vfs/vfs-time.cxx',
+    'src/vfs/vfs-user-dirs.cxx',
+    'src/vfs/vfs-utils.cxx',
+    'src/vfs/vfs-volume.cxx',
+
+    'src/vfs/libudevpp/udev.cxx',
+    'src/vfs/libudevpp/udev_device.cxx',
+    'src/vfs/libudevpp/udev_enumerate.cxx',
+    'src/vfs/libudevpp/udev_monitor.cxx',
+
+    'src/vfs/linux/procfs.cxx',
+    'src/vfs/linux/sysfs.cxx',
+)
 
 target_name = 'spacefm'
 target_type = 'executable'
 
 spacefm = build_target(
-  target_name,
-  sources,
-  target_type: target_type,
-  include_directories: incdir,
-  install : true,
-  install_dir : bindir,
-  dependencies: [
-    dep_glib,
-    dep_gtk,
-    dep_x11,
-    lib_math,
-    lib_libbsd,
-    lib_udev,
-    lib_ffmpeg,
-    lib_xxhash,
-  ],
+    target_name,
+    sources,
+    target_type: target_type,
+    include_directories: incdir,
+    install : true,
+    install_dir : bindir,
+    dependencies: dependencies,
+    cpp_pch: 'pch/cxx_pch.hxx',
 )
 
-install_data('src/spacefm-auth', install_dir : bindir)
-install_data('etc/spacefm.conf', install_dir : sysconfdir / 'spacefm')
+## Install
 
 install_subdir('data/applications', install_dir : datadir)
-install_subdir('data/ui', install_dir : datadir / target_name)
 install_subdir('data/icons', install_dir : datadir)
+install_subdir('data/scripts', install_dir : datadir / target_name)

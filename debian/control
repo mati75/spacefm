@@ -3,10 +3,11 @@ Section: utils
 Priority: optional
 Maintainer: Mateusz Łukasik <mati75@linuxmint.pl>
 Build-Depends: debhelper-compat (= 13),
- libcairo2-dev, libpango1.0-dev, libx11-dev, intltool, pkg-config,
- libglib2.0-dev, libstartup-notification0-dev,
- libgdk-pixbuf-2.0-dev, libudev-dev, hicolor-icon-theme, libgtk-3-dev,
- libffmpegthumbnailer-dev
+ libx11-dev, pkg-config, libffmpegthumbnailer-dev,
+ libudev-dev, meson, fish, cmake, libztd-dev, libmagicenum-dev,
+ libtoml11-dev, libssl-dev, libexo-2-dev, libspdlog-dev, libsigc++-3.0-dev,
+ libpugixml-dev, nlohmann-json3-dev, libcli11-dev, libzmq3-dev, libzmqpp-dev,
+ libgtkmm-3.0-dev
 Standards-Version: 4.6.2
 Homepage: https://ignorantguru.github.io/spacefm/
 Vcs-Git: https://github.com/mati75/spacefm.git

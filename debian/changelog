@@ -1,3 +1,9 @@
+spacefm (3.0.0~git20230930-1) experimental; urgency=medium
+
+  * Test build with fork.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Tue, 03 Oct 2023 23:11:25 +0200
+
 spacefm (1.0.6-7) unstable; urgency=medium
 
   * Switch B-D to libgdk-pixbuf-2.0-dev. (Closes: #1037400)
@@ -44,7 +50,6 @@ spacefm (1.0.6-5) unstable; urgency=medium
     + Bump to Standards-Version to 4.5.0.
 
  -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 13 Aug 2020 11:45:23 +0200
->>>>>>> master
 
 spacefm (1.0.6-4) unstable; urgency=medium
 

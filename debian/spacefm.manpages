@@ -1,2 +1,10 @@
-debian/spacefm.1
-debian/spacefm-auth.1
+doc/spacefm.1
+doc/spacefm-design-menu.7
+doc/spacefm-devices.7
+doc/spacefm-gui.7
+doc/spacefm-handlers.7
+doc/spacefm-plugins.7
+doc/spacefm-scripts.7
+doc/spacefm-scripts-sys.7
+doc/spacefm-socket.7
+doc/spacefm-tasks.7
