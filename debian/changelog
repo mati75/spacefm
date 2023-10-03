@@ -1,3 +1,31 @@
+spacefm (1.0.6-7) unstable; urgency=medium
+
+  * Switch B-D to libgdk-pixbuf-2.0-dev. (Closes: #1037400)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Wed, 20 Sep 2023 21:00:18 +0200
+
+spacefm (1.0.6-6) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on libgtk2.0-dev.
+    + spacefm: Drop versioned constraint on spacefm and spacefm-common in
+      Replaces.
+    + spacefm: Drop versioned constraint on spacefm-common in Breaks.
+    + spacefm-common: Drop versioned constraint on spacefm in Replaces.
+    + spacefm-common: Drop versioned constraint on spacefm in Breaks.
+    + spacefm-gtk3: Drop versioned constraint on spacefm-common in Replaces.
+    + spacefm-gtk3: Drop versioned constraint on spacefm-common in Breaks.
+
+  [ Mateusz Łukasik ]
+  * Add patch for fix thumbnails location.
+  * Build only GTK3 version, create spacefm-gtk3 and spacefm-common
+    as transitional packages. (Closes: #967754)
+  * Bump to Standards-Version to 4.6.12
+  * Bump dh version to 13.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Mon, 31 Jul 2023 22:46:14 +0200
+
 spacefm (1.0.6-5) unstable; urgency=medium
 
   [ Debian Janitor ]

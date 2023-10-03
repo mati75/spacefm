@@ -1,0 +1,34 @@
+From 5ada5f7b19ee36d06155ca14251410cac2327eef Mon Sep 17 00:00:00 2001
+From: Victor Ananjevsky <victor@sanana.kiev.ua>
+Date: Fri, 2 Apr 2021 08:56:55 +0300
+Subject: [PATCH] thumbnails location changed according to
+ https://specifications.freedesktop.org/thumbnail-spec/thumbnail-spec-latest.html
+
+---
+ src/vfs/vfs-thumbnail-loader.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/vfs/vfs-thumbnail-loader.c b/src/vfs/vfs-thumbnail-loader.c
+index a088d76f9..4a5f09659 100644
+--- a/src/vfs/vfs-thumbnail-loader.c
++++ b/src/vfs/vfs-thumbnail-loader.c
+@@ -417,8 +417,8 @@ static GdkPixbuf* _vfs_thumbnail_load( const char* file_path, const char* uri,
+ #endif
+     strcpy( ( file_name + 32 ), ".png" );
+ 
+-    thumbnail_file = g_build_filename( g_get_home_dir(),
+-                                       ".thumbnails/normal",
++    thumbnail_file = g_build_filename( g_get_user_cache_dir(),
++                                       "thumbnails/normal",
+                                        file_name, NULL );
+ 
+     if( G_UNLIKELY( 0 == mtime ) )
+@@ -547,7 +547,7 @@ GdkPixbuf* vfs_thumbnail_load_for_file( const char* file, int size, time_t mtime
+ void vfs_thumbnail_init()
+ {
+     char* dir;
+-    dir = g_build_filename( g_get_home_dir(), ".thumbnails/normal", NULL );
++    dir = g_build_filename( g_get_user_cache_dir(), "thumbnails/normal", NULL );
+ 
+     if( G_LIKELY( g_file_test( dir, G_FILE_TEST_IS_DIR ) ) )
+         chmod( dir, 0700 );
