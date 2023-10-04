@@ -16,7 +16,7 @@ Vcs-Browser: https://github.com/mati75/spacefm.git
 Package: spacefm
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends},
- desktop-file-utils, shared-mime-info, e2fsprogs
+ desktop-file-utils, shared-mime-info, e2fsprogs, python3-loguru
 Recommends: udisks2
 Suggests: udevil, eject, lsof, wget, ktsuss, gksu, sshfs, dbus
 Replaces: spacefm-gtk3 (<< 1.0.6-6~), spacefm-common (<< 1.0.6-6~)
