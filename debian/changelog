@@ -1,3 +1,9 @@
+spacefm (1.0.6-8) UNRELEASED; urgency=medium
+
+  * Add patch from Gentoo to fix FTBFS with gcc-14. (Closes: #1075530)
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 11 Aug 2024 14:04:05 +0200
+
 spacefm (1.0.6-7) unstable; urgency=medium
 
   * Switch B-D to libgdk-pixbuf-2.0-dev. (Closes: #1037400)
