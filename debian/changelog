@@ -1,9 +1,14 @@
-spacefm (1.0.6-8) UNRELEASED; urgency=medium
+spacefm (1.0.6-8) unstable; urgency=medium
 
   * Add patch from Gentoo to fix FTBFS with gcc-14. (Closes: #1075530)
   * Bump to Standards-Version to 4.7.0
+  * Switch B-D to pkgconf.
+  * d/control: Drop duplicate Priority field.
+  * Update d/source/lintian-overrides
+  * Update d/copyright.
+  * Add Rules-Requires-Root.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Sun, 11 Aug 2024 14:04:05 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 29 Aug 2024 21:50:53 +0200
 
 spacefm (1.0.6-7) unstable; urgency=medium
 
