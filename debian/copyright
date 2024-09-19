@@ -47,12 +47,28 @@ License: GPL-2+
 
 Files: src/ptk/ptk-text-renderer.c
 Copyright: 2000, Red Hat, Inc., Jonathan Blandford <jrb@redhat.com>
-License: GPL-2+
+License: LGPL-3+
 
 Files: src/desktop/working-area.*
 Copyright: 2003-2004, Gary Kramlich
            2005, Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
-License: GPL-2+
+License: GPL-3+
+
+Files: src/ptk/ptk-text-renderer.h
+Copyright: 2000, Red Hat, Inc., Jonathan Blandford <jrb@redhat.com>
+License: LGPL-3+
+
+Files: src/mime-type/*
+Copyright: 2007, Hong Jen Yee (PCMan) <pcman.tw@gmail.com>\
+           2013-2015, IgnorantGuru <ignorantguru@gmx.com>
+License: GPL-3+
+
+Files: src/vfs/vfs-file-monitor.c
+Copyright: 2014, IgnorantGuru <ignorantguru@gmx.com>
+           2006, Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
+           2005, Red Hat, Inc.
+           2006, Mark McLoughlin
+License: LGPL-3+
 
 Files: debian/*
 Copyright: 2013-2024 Mateusz Łukasik <mati75@linuxmint.pl>

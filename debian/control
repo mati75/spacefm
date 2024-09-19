@@ -49,4 +49,6 @@ Architecture: all
 Section: oldlibs
 Depends: ${misc:Depends}, spacefm (>= 1.0.6-6~),
 Description: Multi-panel tabbed file manager (transitional package)
+ This package is replaced by spacefm.
+ .
  This is a transitional package. It can safely be removed.

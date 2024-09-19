@@ -8,7 +8,7 @@ spacefm (1.0.6-8) unstable; urgency=medium
   * Update d/copyright.
   * Add Rules-Requires-Root.
 
- -- Mateusz Łukasik <mati75@linuxmint.pl>  Thu, 29 Aug 2024 21:50:53 +0200
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 30 Aug 2024 20:19:46 +0200
 
 spacefm (1.0.6-7) unstable; urgency=medium
 
